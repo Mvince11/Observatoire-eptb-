@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- <script src="assets/inject-logos.js"></script> -->
+<script src="assets/sidebar-toggle.js"></script>
+<!-- <script src="assets/toggle.js"></script> --> 
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Try common Quarto IDs; fall back to your custom one if used
+  const collapse =
+    document.getElementById('quarto-navbar-collapse') ||
+    document.getElementById('navbarCollapse');
+
+  const toggler = document.querySelector('.navbar-toggler');
+
+  if (!collapse || !toggler) return; // nothing to do
+
+  // Create offcanvas container
+  const offcanvas = document.createElement('div');
+  offcanvas.className = 'offcanvas offcanvas-start site-offcanvas';
+  offcanvas.id = 'site-offcanvas';
+  offcanvas.setAttribute('tabindex', '-1');
+
+  // Header with image/logo and close button
+  const header = document.createElement('div');
+  header.className = 'offcanvas-header';
+
+  const img = document.createElement('img');
+  img.src = 'Images/logo_porteurs_projet_anc.png';
+  img.alt = 'Logo';
+  img.style.maxHeight = '64px';
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'btn-close';
+  closeBtn.setAttribute('data-bs-dismiss', 'offcanvas');
+
+  header.appendChild(img);
+  header.appendChild(closeBtn);
+
+  // Body: move existing navbar items here
+  const body = document.createElement('div');
+  body.className = 'offcanvas-body';
+
+  // Preserve current collapse content
+  while (collapse.firstChild) {
+    body.appendChild(collapse.firstChild);
+  }
+
+  offcanvas.appendChild(header);
+  offcanvas.appendChild(body);
+
+  // Insert offcanvas next to navbar
+  const navbar = document.querySelector('nav.navbar');
+  (navbar?.parentNode || document.body).appendChild(offcanvas);
+
+  // Hide original collapse (we moved its children)
+  collapse.classList.add('d-none');
+
+  // Retarget the burger to offcanvas
+  toggler.setAttribute('data-bs-toggle', 'offcanvas');
+  toggler.setAttribute('data-bs-target', '#site-offcanvas');
+  
+  // 👉 Ajoute le texte "Menu" à côté du burger
+  const menuText = document.createElement('span');
+  menuText.className = 'menu-text';
+  menuText.textContent = 'Menu';
+  toggler.appendChild(menuText);
+  
+});
+</script>

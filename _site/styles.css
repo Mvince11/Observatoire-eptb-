@@ -1,0 +1,743 @@
+/* --- NAVBAR PREMIUM --- */
+
+/* Hauteur, fond, ombre légère */
+.navbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e6e6e6;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Logo plus élégant */
+.navbar-brand img {
+  height: 80px !important;
+  width: auto;
+  margin-right: 12px;
+}
+
+.navbar-logo{
+  max-height: inherit;
+}
+
+
+/* Amélioration du collapse mobile */
+.navbar-toggler {
+  border: none !important;
+}
+
+.navbar .navbar-toggler{
+  order: 21;
+}
+
+.navbar-toggler-icon {
+  filter: brightness(0.2);
+}
+
+
+h1 {
+    position: relative;
+    padding-left: 50px; /* Ajustez cet espace selon vos besoins */
+}
+h1::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px; /* Largeur du rectangle */
+    height: 100%;
+    background-color: $orangeCerema;
+}
+
+input[type="number"], select {
+    border: 1px solid #ced4da; /* Couleur et épaisseur du cadre */
+    border-radius: 5px; /* Rayon des coins arrondis */
+    padding: 5px; /* Marge intérieure pour l'espace autour du texte */
+}
+
+p{
+  text-align: justify;
+}
+
+img{
+  border-radius: 10px;
+}
+
+/*-- sidebar--*/
+#bslib-sidebar-1{
+  background-color: rgba(255, 255, 255, 1); 
+}
+
+/*-- MAP LIBRE --*/
+
+.map-container { 
+    height: 72vh; 
+    width: 100%; /* 100% de la largeur de l'écran */
+}
+
+.mapFondDePlan {
+    position: absolute;
+    top: 10px;
+    left: 55px;
+    /* width: 180px; */
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #000000;
+    font: 13px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    padding: 10px;
+    z-index: 1000;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.mapLayers {
+    position: absolute;
+    top: 40px;
+    right: 9px;
+    /* width: 180px; */
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #000000;
+    font: 13px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    /* padding: 10px; */
+    z-index: 1000;
+    /* border-radius: 10px; */
+    /* border: 1px solid #ccc; */
+}
+
+#toggleMapMenuButton {
+    /* background: #fff; */
+    position: absolute;
+    z-index: 1000;
+    padding: 0px;
+    margin: 0px;
+    top: 0px;
+    right: 0px;
+    border-radius: 5px;
+    width: 31px;
+    height: 31px;
+    text-align: center;
+    /* border: 1px solid rgba(0, 0, 0, 0.4); */
+    font-family: 'Open Sans', sans-serif;
+}
+
+#layersList {
+    /* background: #fff; */
+    visibility: hidden;
+    /* Cache visuellement l'élément */
+    position: absolute;
+    z-index: 1000;
+    top: 31px;
+    right: 0px;
+    border-radius: 8px;
+    width: 180px;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.8);
+    font-family: 'Open Sans', sans-serif;
+
+    /* Animation de départ */
+    transform: scale(0.8);
+    /* Départ avec une taille réduite */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.4s ease;
+}
+
+/* Afficher le menu quand on survole le bouton ou le menu */
+.mapLayers:hover #layersList,
+#layersList:hover {
+    visibility: visible;
+    /* Rendre visible l'élément */
+    opacity: 1;
+    animation: popEffect 0.4s ease forwards;
+    /* Animation de pop */
+}
+
+/* Définir l'animation de pop */
+@keyframes popEffect {
+    0% {
+        transform: scale(0.0);
+        /* Départ plus petit */
+    }
+
+    50% {
+        transform: scale(1.1);
+        /* Agrandissement au-dessus de 100% */
+    }
+
+    100% {
+        transform: scale(1);
+        /* Retour à la taille normale */
+    }
+}
+
+#layersList a {
+    font-size: 12px;
+    color: #ffffff;
+    opacity: 0.75;
+    display: block;
+    margin: 0;
+    /* padding: 0; */
+    padding: 2px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+#layersList a:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+#layersList a:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#layersList a:hover {
+    background-color: #ffef60;
+    color: #000000;
+    opacity: 1;
+
+}
+
+#layersList a.active {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#layersList a.active:hover {
+    background: #ffef60;
+}
+
+  
+/*-- OJS --*/
+.observablehq td, .observablehq th {
+    white-space: normal;
+    word-break: break-word;
+}
+
+.maplibregl-control-container {
+    z-index: 10; /* Assurez-vous que les contrôles sont visibles */
+}
+
+
+
+.bslib-card .bslib-navs-card-title .nav{
+  margin-left: inherit;
+}
+
+/* Offcanvas global avec effet verre */
+.site-offcanvas {
+  width: auto;
+  background: rgba(255, 255, 255, 0.25); /* transparence */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.3); /* contour subtil */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);           /* ombre douce */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.offcanvas.offcanvas-start {
+  width: auto !important;
+}
+
+/* Header avec logo */
+.site-offcanvas .offcanvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.site-offcanvas .offcanvas-header img {
+  max-height: 80px !important;
+  object-fit: contain;
+  background-color: floralwhite;
+}
+
+/* Corps scrollable */
+.site-offcanvas .offcanvas-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem 0.75rem;
+}
+
+/* Liens */
+.site-offcanvas .nav-link {
+  display: block;          /* occupe toute la largeur */
+  width: 100%;             /* s'étend sur la cellule */
+  padding: 0.6rem 0.75rem; /* garde ton padding */
+  border-radius: 6px;      /* coins arrondis si besoin */
+  transition: background 0.3s ease, border-radius 0.3s ease;
+}
+
+.site-offcanvas .nav-link:hover {
+  background: rgba(255,255,255,0.3); /* halo translucide */
+  text-decoration: none;
+  border-radius: 17px;
+}
+
+.nav-link.dropdown-toggle.show:hover{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
+
+
+/* Dropdowns intégrés dans le flux */
+.site-offcanvas .dropdown-menu {
+  position: static !important;        /* intégré dans le flux */
+  transform: inherit !important;
+  width: 100%;
+  margin: 0;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.25); /* effet verre */
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  padding: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transition: all 0.25s ease;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+/* Items du dropdown */
+.site-offcanvas .dropdown-item {
+  padding: 0.5rem 1rem;
+  color: #000;
+  border-top: 1px solid #eee;
+  white-space: normal;
+  transition: background 0.3s ease;
+}
+
+.site-offcanvas .dropdown-item:hover {
+  background: rgba(255,255,255,0.4); /* effet verre renforcé au survol */
+  transition: background 0.3s ease, border-radius 0.3s ease;
+}
+
+.dropdown-menu.dropdown-menu-end.show > li > a {
+  border-radius: 0; /* pas d’arrondi par défaut */
+  transition: background 0.3s ease, border-radius 0.3s ease;
+}
+
+.dropdown-menu.dropdown-menu-end.show > li:first-child > a:hover {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.dropdown-menu.dropdown-menu-end.show > li:last-child > a:hover {
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}
+
+/* Séparateurs entre menus principaux */
+.site-offcanvas .navbar-nav > .nav-item {
+  border-top: 1px solid #e6e6e6;
+  margin-bottom: 10px;
+}
+
+/* Hauteur forcée pour ton bloc ms-auto */
+.ms-auto {
+  height: auto;
+}
+
+.navbar-nav-scroll{
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden; /* empêche les flèches de dépasser */
+}
+
+.navbar-nav-scroll .nav-link {
+  display: flex;
+  align-items: center; /* aligne texte + flèche */
+  justify-content: space-between; /* pousse la flèche à droite */
+}
+
+.navbar-nav-scroll .dropdown-menu {
+  max-width: 100%;   /* ne dépasse pas du conteneur */
+  overflow-wrap: break-word;
+}
+
+
+/* Bouton burger + texte */
+.navbar-toggler {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.25); /* translucide */
+  backdrop-filter: blur(6px) saturate(180%);
+  -webkit-backdrop-filter: blur(6px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-toggler:hover {
+  background: rgba(255,255,255,0.35);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Texte "Menu" */
+.navbar-toggler .menu-text {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #000;
+}
+
+/* Variante verre renforcé */
+.navbar-toggler .glass-text {
+  color: #000;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+}
+
+.navbar-toggler:focus{
+  box-shadow: none;
+}
+
+ .navbar-nav.navbar-nav-scroll.ms-auto >.nav-item, .navbar-nav.navbar-nav-scroll.ms-auto >.nav-item.dropdown{
+  border: 1px solid antiquewhite;
+  border-radius: 25px;
+}
+
+.navbar .navbar-collapse {
+  margin-left: auto;
+  overflow: visible;
+  
+  opacity: 1;
+  border-radius: 8px;
+  height: 80px;
+}
+
+#photos_crues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vw;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+#photos_crues img {
+  max-width: 100%;
+  width: 48%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+#quarto-document-content {
+  padding-top: 150px; 
+}
+
+#quarto-margin-sidebar{
+  padding-top: 150px;
+}
+
+#quarto-sidebar{
+  margin-top: 150px;
+  background-color: #464749;
+}
+
+.navbar .dropdown-header{
+  background-color: khaki;
+  text-transform: inherit;
+}
+
+.text-start{
+  font-size: 1.3em;
+  color: white;
+}
+
+.sidebar-item-container{
+  font-size: 0.9em;
+}
+
+div.sidebar-item-container{
+  color: white;
+  padding: 5px;
+  border: 1px solid;
+  border-color: darkgray;
+  background-color: gray;
+  border-radius: 4px;
+}
+
+.sidebar #quarto-search{
+  background-color: white;
+  border: 1px solid;
+  border-radius: 15px;
+  width: 15% !important;
+}
+
+.quarto-dashboard #quarto-header #quarto-dashboard-header > nav{
+  margin-top: 125px;
+  position: inherit;
+}
+
+.px-1 {
+  display: block;
+  display: block;
+  margin-bottom: 8px;
+  border: 1px solid aliceblue;
+  border-radius: 25px;
+  text-align: center;
+  padding: 3px;
+  font-size: 22px;
+}
+
+.px-1:hover{
+  background: rgba(255,255,255,0.4); /* effet verre renforcé au survol */
+  transition: background 0.3s ease, border-radius 0.3s ease;
+}
+
+
+.bi-envelope{
+  color:white;
+}
+/*.px-1 > i {
+  font-size: 1.5rem;
+}*/
+
+.bi-linkedin{
+  color: #3f72ce;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  bottom: 150%; /* distance au-dessus du bouton */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.mapLayers .form-check {
+  display: flex;
+  align-items: center;
+}
+
+.mapLayers .form-check-input {
+  margin-right: 8px;
+}
+
+.mapLayers .form-check-label {
+  flex: 1;
+  text-align: left;
+}
+
+.mapLayers .form-check-input {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #198754; /* Bordure verte */
+}
+
+.mapLayers .form-check-input:checked {
+  background-color: #198754; /* Fond vert quand cochée */
+  border-color: #198754;
+}
+
+#dashboard-collapse{
+  height: auto;
+  margin-bottom: 8px;
+  margin-top: 0 !important;
+}
+
+.navbar-nav .nav-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px; /* espace pour la barre */
+}
+
+
+/* On cible les liens de la navbar */
+.navbar-nav.navbar-nav-scroll.me-auto >.nav-item {
+  position: relative; /* nécessaire pour positionner le ::after */
+}
+
+/* État initial : pas de soulignement visible */
+.navbar-nav.navbar-nav-scroll.me-auto >.nav-item::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #f48019; /* couleur du soulignement */
+  transform-origin: bottom right;
+  transition: transform 0.45s ease-out;
+}
+
+/* Au survol ou si actif : on étend la barre */
+.navbar-nav.navbar-nav-scroll.me-auto > .nav-item:hover::after,
+.navbar-nav.navbar-nav-scroll.me-auto > .nav-item.active::after{
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/*.navbar-nav .dropdown-menu{
+  max-width: max-content;
+}*/
+
+.navbar-title {
+  color: orangered;
+  /*font-size: 1.4em;*/
+  white-space: normal;    /* autorise le retour à la ligne */
+  max-width: 150px;       /* optionnel, pour forcer la coupure */
+  text-align: center;     /* optionnel, pour centrer */
+}
+
+.navbar-title-text{
+  color: initial;
+}
+
+.navbar-brand .navbar-title {
+  font-weight: bold;
+  font-size: 1rem;       /* ajuste la taille du titre */
+  line-height: 1.2;       /* évite que ça saute trop */
+  text-align: center;     /* centre le texte sous le logo */
+}
+
+.navbar-brand {
+  display: flex;
+  flex-direction: column; /* empile logo puis texte */
+  align-items: center;    /* centre logo et texte */
+}
+
+.navbar .navbar-container > .navbar-brand-container {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+@media (max-width: 768px) {
+  #photos_crues img {
+    width: 100%;
+  }
+}
+
+@media (max-width: 2000px){
+  .navbar .navbar-collapse{
+    height: auto;
+    padding-left: inherit;
+  }
+  
+  .bi-envelope,
+  .bi-linkedin {
+    font-size: 1.1rem;
+  }
+  
+  .bi-envelope{
+    color: white;
+  }
+  
+  /*.px-1 {
+  padding-right: .25rem !important;
+  padding-left: .25rem !important;
+  display: flex;
+  margin-bottom: 10px;
+  border: 1px solid antiquewhite;
+  border-radius: 20px;
+  padding: 6px;
+  justify-content: center;
+}*/
+}
+
+@media (min-width: 992px) {
+  .navbar-toggler {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+  }
+  .menu-text {
+    display: inline-block;
+    font-weight: 600;
+  }
+}
+
+
+@media (max-width: 717px){
+  .navbar-logo {
+  max-height: 50px;
+}
+.navbar-brand .navbar-title {
+  font-size: 0.8rem;       
+}
+}
+
+@media (max-width: 573px){
+  .navbar-logo {
+  max-height: 40px;
+}
+.navbar-brand .navbar-title {
+  font-size: 0.6rem;       
+}
+
+.navbar-brand-container{
+  display: block;
+}
+
+.site-offcanvas .offcanvas-body {
+  padding: 3rem 0.10rem;
+}
+}
+
+@media (min-width: 1429px) and (max-width: 1477px){
+  
+ .navbar-title {
+  max-width: 250px !important;       /* optionnel, pour forcer la coupure */
+}
+}
+
+@media (min-width: 1400px) and (max-width: 1428px){
+  .navbar-title {
+  max-width: 220px !important;       /* optionnel, pour forcer la coupure */
+}
+}
+
+@media (min-width: 868px){
+  .navbar-title {
+  color: orangered;
+  /*font-size: 1.4em;*/
+  white-space: normal;    /* autorise le retour à la ligne */
+  max-width: 300px;       /* optionnel, pour forcer la coupure */
+  text-align: center;     /* optionnel, pour centrer */
+}
+
+.navbar-brand .navbar-title {
+  font-weight: bold;
+  font-size: 1.1rem;       /* ajuste la taille du titre */
+  line-height: 1.2;       /* évite que ça saute trop */
+  text-align: center;     /* centre le texte sous le logo */
+}
+}

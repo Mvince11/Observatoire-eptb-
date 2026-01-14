@@ -1,0 +1,154 @@
+project:
+  type: website
+  title: "Observatoire de la vulnérabilité aux inondations Vienne - Clain"
+
+website:
+  back-to-top-navigation: true
+  #title: "Observatoire de la vulnérabilité <br> aux inondations Vienne - Clain"
+  navbar:
+     search: false
+     logo: Images/logo_porteurs_projet_transparent.png
+     collapse-below: xxl
+     tools-collapse: true
+     right:
+     
+        - href: index.qmd
+          text: Accueil
+  #        icon: house
+          
+        - href: mieux_comprendre.qmd
+          text: Mieux comprendre les inondations
+        #- sidebar:Objectifs
+        
+        - text: "Objectif n°1: Augmenter la sécurité des populations"
+          menu:
+           - href: batiments_plain_pied.qmd
+             text: Bâtiments plain-pied
+           - href: etablissements_sensibles.qmd
+             text: Etablissements sensibles
+           - href: enjeux_susceptibles_dysfonctionner.qmd
+             text: Etablissements utiles à la gestion de crise
+           - href: campings.qmd
+             text: Campings
+           - href: routes.qmd
+             text: Routes
+           - href: pcs.qmd
+             text: Plan communal de sauvegarde (PCS)
+           - href: dicrim.qmd
+             text: Document d'information communal sur les risques majeurs (DICRIM)
+             
+        - text: "Objectif n°2: Stabiliser/réduire le coût des dommages"
+          menu:
+           - href: dommages_habitations.qmd
+             text: Dommages aux habitations
+           - href: dommages_entreprises.qmd
+             text: Dommages aux entreprises
+           - href: dommages_cultures.qmd
+             text: Dommages aux cultures
+           - href: monuments.qmd
+             text: Patrimoines et monuments historiques
+           - href: espaces_naturels.qmd
+             text: Espaces naturels
+           - href: installations_polluantes.qmd
+             text: Installations polluantes
+           - href: eau_potable.qmd
+             text: Station d'alimentation en eau potable
+           - href: reseaux.qmd
+             text: Réseaux
+           - href: voies_ferrees.qmd
+             text: Voies ferrées
+           - href: reseaux_bus.qmd
+             text: Réseau de bus
+             
+        - text: "Objectif n°3: Raccourcir le délai de retour à la normale"
+          menu:
+           - href: habitants_zones_inondables.qmd
+             text: Nombre et proportion d'habitants en zone inondable
+           - href: surfaces_habitations.qmd
+             text: Surface des habitations
+           - href: retour_normale_logements.qmd
+             text: Logements
+           - href: employes.qmd
+             text: Employés
+           - href: surface_agricole.qmd
+             text: Surface agricole
+           - href: reseau_routier.qmd
+             text: Routes inondées
+            
+        - text: Â propos
+          menu:
+          - text: EPTB-vienne.fr
+            href: https://www.eptb-vienne.fr
+            target: _blank
+        
+     tools: 
+         - href: https://fr.linkedin.com/company/eptb-vienne
+           aria-label: LinkedIn
+           icon: linkedin
+           text: LinkedIn
+         - text: Nous contacter
+           href: https://eptb-vienne.fr/contact
+           icon: envelope
+           
+  page-footer:
+    left: "Site créé avec [Quarto](https://quarto.org/)"
+    center: "©CEREMA"
+    background: light
+    right: 
+      - icon: linkedin
+        href: https://fr.linkedin.com/company/cerema
+      - icon: twitter-x 
+        href: https://x.com/ceremacom
+      - icon: youtube
+        href: https://www.youtube.com/@cerema3139
+          
+           
+  # sidebar:
+  #    - id: Objectifs
+  #      title: "Objectifs"
+  #      style: "docked"
+  #      search: true
+  #      background: light
+  #      collapse-level: 2
+  #      contents: 
+  #        - section: "Objectif n°1"
+  #          contents:         
+  #        - text: Description de l'objectif n°1
+  #          href: objectif1.qmd
+  #        - text: Bâtiments de plain-pied
+  #          href: batiments_plain_pied.qmd
+           
+  
+  #      - text: Objectif n°1:Augmenter la sécurité des populations
+  #        href: objectif1.qmd
+  #      - text: ▼
+  #        menu:
+  #        - text: Bâtiments de plain-pied
+  # sidebar:
+  #   style: "docked"  # ou "docked" pour qu’elle reste fixée
+  #   contents:
+  #       - text: "Accueil"
+  #         href: index.qmd
+  #       - href: mieux_comprendre.qmd
+  #         text: "Comprendre les inondations"
+  #       - text: "Â propos"
+  #        menu:
+  #        - text: EPTB-vienne.fr
+  #          href: https://www.eptb-vienne.fr
+  #          target: _blank
+        
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    toc: true
+    toc-title: Sur cette page
+    toc-location: right
+    toc-depth: 2
+    link-external-newwindow: true
+    include-in-header: assets/inject-script.html
+    #include-after-body: assets/logo.html
+    
+
+editor: visual
+

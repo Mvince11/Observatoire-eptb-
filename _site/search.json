@@ -1,0 +1,121 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "",
+    "text": "L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population. La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national. Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire."
+  },
+  {
+    "objectID": "index.html#pourquoi-un-observatoire",
+    "href": "index.html#pourquoi-un-observatoire",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Pourquoi un observatoire ?",
+    "text": "Pourquoi un observatoire ?\n\n\n\n L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population. La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national. Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire."
+  },
+  {
+    "objectID": "index.html#des-indicateurs-pour-connaître-la-vulnérabilité",
+    "href": "index.html#des-indicateurs-pour-connaître-la-vulnérabilité",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Des indicateurs pour connaître la vulnérabilité",
+    "text": "Des indicateurs pour connaître la vulnérabilité\n\n\n L’observatoire permet la visualisation de plusieurs indicateurs, calculés à partir d’une méthode nationale. Ils s’appuient tous sur une crue dite centennale c’est-à-dire qui a «une chance» sur 100 de se produire tous les ans. Ces indicateurs permettent de décrire la vulnérabilité mais ils peuvent également être utilisés pour évaluer l'efficacité des actions menées sur le terrain qui visent à réduire le risque. Ils sont répartis selon 3 objectifs :  • Objectif 1 : Augmenter la sécurité des populations exposées,  • Objectif 2 : Stabiliser à court terme et réduire à moyen terme le coût des dommages,  • Objectif 3 : Raccourcir fortement le délai de retour à la normale des territoires sinistrés.  \n\n\n\n  Les indicateurs ont été actuellement calculés sur le territoire de Grand Poitiers et quelques communes qui jalonnent la Vienne dont Châtellerault. Dans le futur, ils ont vocation à être étendus au périmètre de la stratégie locale de gestion du risque inondation Vienne – Clain. Cet observatoire vous permet de consulter pour chaque indicateur de vulnérabilité un onglet dédié comprenant une carte dynamique, des graphiques et des résultats bruts et une fiche téléchargeable et imprimable avec les éléments de construction de l'indicateur et la carte de vulnérabilité."
+  },
+  {
+    "objectID": "index.html#les-auteurs-de-lobservatoire",
+    "href": "index.html#les-auteurs-de-lobservatoire",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Les auteurs de l’observatoire",
+    "text": "Les auteurs de l’observatoire\n\n\n L’observatoire est le fruit d’une collaboration entre l’Etablissement Public Territorial du Bassin (EPTB) de la Vienne et le CEREMA. Plusieurs collectivités et services de l’Etat ont contribué également à son élaboration (Grand Poitiers, Grand Châtellerault, CC. Vienne et Gartempe, Département de la Vienne, DDT de la Vienne, DREAL Nouvelle Aquitaine). Le financement de ce projet s’insère dans un Programme d’Action de Prévention des Inondations (PAPI) financé par l’Etat (Fonds Barnier) et l’Europe (Plan Loire). \n\n\n\n \n\n\n  \n  \n  \n    \n       Nous contacter\n    \n    (contact@eptb-vienne.fr)"
+  },
+  {
+    "objectID": "js/readme.html",
+    "href": "js/readme.html",
+    "title": "Pour mémoire",
+    "section": "",
+    "text": "version 4.5.1 téléchargée le 8 août 2024 https://unpkg.com/maplibre-gl@4.5.1/dist/maplibre-gl.js https://unpkg.com/maplibre-gl@4.5.1/dist/maplibre-gl.css\n&lt;script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'&gt;&lt;/script&gt;\n&lt;link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' /&gt;\n\n\n\nversion 3.0.7 téléchargée le 8 août 2024 https://unpkg.com/pmtiles@3.0.7/dist/pmtiles.js\n\n\n\nversion 7.0.0 téléchargée le 8 août 2024\nhttps://cdn.jsdelivr.net/npm/@turf/turf@latest/turf.min.js\n\n\n\ninclude-in-header: text: | \n\n&lt;script src=\"https://cdn.jsdelivr.net/npm/maplibre-gl@4.2.0/dist/maplibre-gl.min.js\"&gt;&lt;/script&gt;\n&lt;link href=\"https://cdn.jsdelivr.net/npm/maplibre-gl@4.2.0/dist/maplibre-gl.min.css\" rel=\"stylesheet\"&gt;\n&lt;script src=\"https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js\"&gt;&lt;/script&gt;"
+  },
+  {
+    "objectID": "js/readme.html#maplibre",
+    "href": "js/readme.html#maplibre",
+    "title": "Pour mémoire",
+    "section": "",
+    "text": "version 4.5.1 téléchargée le 8 août 2024 https://unpkg.com/maplibre-gl@4.5.1/dist/maplibre-gl.js https://unpkg.com/maplibre-gl@4.5.1/dist/maplibre-gl.css\n&lt;script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'&gt;&lt;/script&gt;\n&lt;link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' /&gt;"
+  },
+  {
+    "objectID": "js/readme.html#pmtiles",
+    "href": "js/readme.html#pmtiles",
+    "title": "Pour mémoire",
+    "section": "",
+    "text": "version 3.0.7 téléchargée le 8 août 2024 https://unpkg.com/pmtiles@3.0.7/dist/pmtiles.js"
+  },
+  {
+    "objectID": "js/readme.html#turf",
+    "href": "js/readme.html#turf",
+    "title": "Pour mémoire",
+    "section": "",
+    "text": "version 7.0.0 téléchargée le 8 août 2024\nhttps://cdn.jsdelivr.net/npm/@turf/turf@latest/turf.min.js"
+  },
+  {
+    "objectID": "js/readme.html#pour-mémoire-les-cdn-qui-fonctionnaient",
+    "href": "js/readme.html#pour-mémoire-les-cdn-qui-fonctionnaient",
+    "title": "Pour mémoire",
+    "section": "",
+    "text": "include-in-header: text: | \n\n&lt;script src=\"https://cdn.jsdelivr.net/npm/maplibre-gl@4.2.0/dist/maplibre-gl.min.js\"&gt;&lt;/script&gt;\n&lt;link href=\"https://cdn.jsdelivr.net/npm/maplibre-gl@4.2.0/dist/maplibre-gl.min.css\" rel=\"stylesheet\"&gt;\n&lt;script src=\"https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js\"&gt;&lt;/script&gt;"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html",
+    "href": "Images/apropos_mentions_legales.html",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "",
+    "text": "Établissement Public Territorial du Bassin de la Vienne Bâtiment Galiléo 20 rue Atlantis 87068 Limoges Cedex Tel : 05 55 06 39 42 email : contact@eptb-vienne.fr  Directeur de la publication : Stéphane LORIOT, directeur de l’Établissement Public Territorial du Bassin de la Vienne"
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html#editeur",
+    "href": "Images/apropos_mentions_legales.html#editeur",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "",
+    "text": "Établissement Public Territorial du Bassin de la Vienne Bâtiment Galiléo 20 rue Atlantis 87068 Limoges Cedex Tel : 05 55 06 39 42 email : contact@eptb-vienne.fr  Directeur de la publication : Stéphane LORIOT, directeur de l’Établissement Public Territorial du Bassin de la Vienne"
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html#crédits",
+    "href": "Images/apropos_mentions_legales.html#crédits",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Crédits",
+    "text": "Crédits\n\n Photos Nouvelle République Centre Presse Illustrations Mayane Établissement Public Territorial du Bassin de la Vienne"
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html#droits-de-reproduction",
+    "href": "Images/apropos_mentions_legales.html#droits-de-reproduction",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Droits de reproduction",
+    "text": "Droits de reproduction\n\n En application de la loi du 11 mars 1957 (art. 41) et du code de la propriété intellectuelle du 1er juillet 1992 : l’ensemble des textes, illustrations, photographies, plans, dessins, animations, vidéos, sons contenus sur ce site ne peuvent être utilisés ou reproduits sans l’autorisation de l’éditeur. Pour toute demande de reproduction ou d’utilisation d’éléments contenus sur ce site, contactez l’Établissement Public Territorial du Bassin de la Vienne à l’adresse ci-dessus."
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html#confidentialité",
+    "href": "Images/apropos_mentions_legales.html#confidentialité",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Confidentialité",
+    "text": "Confidentialité\n\n Cookies Les cookies envoyés par le serveur ont uniquement pour fonction d’améliorer le confort de navigation sur le site. Leur non acceptation par votre navigateur n’entraîne aucune restriction concernant l’accès au contenu. La durée de vie des cookies envoyés est limitée à la durée de la session en cours.\nConfidentialité des données Nous nous engageons à protéger vos données personnelles et votre vie privée. Nous utilisons les informations que vous nous transmettez pour traiter vos demandes et vous faire part de notre réponse.\nCommunication de vos données personnelles à des tiers Nous ne vendons, ni ne louons ni ne communiquons gratuitement à des tiers les informations vous concernant.\nModification de vos informations En application de l’article 27 de la loi Informatique et Libertés du 6 janvier 1978, vous disposez d’un droit d’accès et de rectification sur les données vous concernant. Pour exercer ces droits, il vous suffit de contacter par mail, courrier ou formulaire de contact l’éditeur de ce site."
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html#hébergement",
+    "href": "Images/apropos_mentions_legales.html#hébergement",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Hébergement",
+    "text": "Hébergement\n\n Ce site est hébergé via le service shinyapps.io de RStudio."
+  },
+  {
+    "objectID": "Images/apropos_mentions_legales.html#conception",
+    "href": "Images/apropos_mentions_legales.html#conception",
+    "title": "Observatoire de la vulnérabilité aux inondations Vienne - Clain",
+    "section": "Conception",
+    "text": "Conception\n\n Ce site a été conçu et développé par le Cerema."
+  }
+]

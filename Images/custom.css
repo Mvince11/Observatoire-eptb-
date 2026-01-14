@@ -1,0 +1,473 @@
+img#logo {
+  height:120px;
+  margin-left:-20px;
+  
+}
+
+
+@media only screen and (max-width: 640px) {
+img#logo {
+  height:77px;
+}
+}
+
+@media only screen and (max-width: 568px) {
+img#logo {
+  height:65px;
+}
+}
+
+h1.waiter {
+  font-weight:600;
+  font-size:2.5em;
+  color:#F58220;
+}
+
+p.waiter{
+  font-size:2em;
+  color:#F58220;
+}
+
+i.waiter{
+  font-size:1em;
+  color:#F58220;
+}
+
+span.waiter{
+  font-size:2em;
+  color:#F58220;
+}
+
+/* fenêtre d'introduction */
+.a_propos {
+    padding-left: 40px;
+    font-size: 1.3em;
+    background-color: white;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    padding-top: 5px;
+}
+
+.a_propos h1, h2, h3 {
+    color: #F58220;
+}
+
+.map_label {
+  color: white;
+  font-weight: 500;
+}
+
+.a_propos h1 {
+  letter-spacing: 0.05em;
+  margin-bottom: 25px;
+  font-weight: 600;
+  font-size: 2.2em;
+  margin-bottom: 30px;
+}
+.objectif_1 h1{
+    padding-left: 40px;
+    font-size: 1.3em;
+    background-color: white;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    padding-top: 5px;
+}
+
+
+
+/* Box */
+
+
+/* Carte leaflet */
+#mymap {
+  height: calc(90vh - 120px) !important;
+}
+
+/* Carte leaflet - 2 */
+#mymap2 {
+  height: calc(90vh - 120px) !important;
+}
+
+
+/* ValueBox */
+.small-box {
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    margin-bottom: 6px; 
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+}
+
+.small-box h3 {
+    font-size: 2em;
+}
+
+.small-box p {
+    font-size: 1.5em;
+}
+
+/* Notification message */
+.shiny-notification-message, .shiny-notification-warning{
+    font-size: 1.3em;
+    padding:10px;
+}
+
+/* Boxes */
+.box {
+    position: relative;
+    border-radius: 3px;
+    background: #fff;
+    border-top: 3px solid white;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+}
+
+.info-box {min-height: 80px;} 
+.info-box-icon {height: 80px; line-height: 80px;} 
+.info-box-content {padding-top: 0px; padding-bottom: 0px;}
+
+.info-box {
+    display: block;
+    min-height: 90px;
+    background: #fff;
+    width: 100%;
+    /* box-shadow: 0 1px 1px rgba(0,0,0,.1); */
+    border-radius: 2px;
+    margin-bottom: 15px;
+}
+
+/* libellés des contrôles du menu de gauche */
+label.control-label {
+    font-size: 0.9em;
+}
+
+/* map popup */
+.map_popup {
+    font-size: 1.4em;
+    padding: 8px;
+    /*min-height:150px;
+    width: 200px;
+    overflow-wrap: anywhere;*/
+}
+
+/* Zooms */
+.zoom_unselected {
+    color: white;
+    font-size: 1.3em;
+    border-radius: 5px;
+    padding: 7px;
+    background-color: #7FBCD2;
+}
+
+.zoom_selected {
+    color: white;
+    font-size: 1.3em;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 7px;
+    background-color: #F58220;
+}
+
+/* [start] Styles CartoFriches */
+
+/* header */
+.main-header {
+    position: relative;
+    max-height: 140px;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 2px 2px rgba(0,0,0,.1);
+}
+
+@media only screen and (max-width: 640px) {
+.main-header {
+    position: relative;
+    max-height: 140px;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 2px 2px rgba(0,0,0,.1);
+}
+
+}
+
+/* contenu à gauche, arrière-plan */
+.content {
+    overflow: visible;
+    background-color: #E6E7E8;
+}
+
+@media only screen and (max-width: 640px) {
+.content {
+    overflow: visible;
+    background-color: #E6E7E8;
+    padding-top: 25px;
+}
+}
+
+/* écran de chargement */
+.pg-loading-screen .pg-loading-logo-header img {
+    display: inline-block !important;
+    width: 500px;
+}
+
+
+ .shiny-notification {
+             position:fixed;
+             top: calc(50% - 250px);
+             left: calc(40%);
+             word-spacing: 7px;
+             font-family:  calibri;
+             background-color:#ebf6f9;
+             border:none; 
+             width:450px;
+             font-weight: bold;
+             font-size: 35px;
+             text-align : center;
+             border-radius: 40px;
+             color :#dc7633;
+             opacity: 1;
+             }
+   
+
+@media only screen and (max-width: 640px) {
+.pg-loading-screen .pg-loading-logo-header img {
+    display: inline-block !important;
+    width: 90%;
+}
+}
+
+/* partie gauche du logo */
+.skin-blue .main-header .logo {
+    background-color: white;
+    color: #F58220;
+    border-bottom: 0 solid transparent;
+    font-size: 1.8em;
+    height: 105px;
+    padding-top: 0px;
+}
+
+@media only screen and (max-width: 640px) {
+.skin-blue .main-header .logo {
+    font-size: 1.8em;
+    height: 86px;
+    padding-top:10px;
+}
+}
+
+.skin-blue .main-header .logo:hover {
+    background-color: white;
+}
+
+/* partie droite */
+.skin-blue .main-header .navbar {
+    background-color: #F58220;
+    background-color: white;
+}
+
+/* partie du milieu */
+
+.skin-blue .main-header .navbar .sidebar-toggle {
+  color:white;
+    background-color: #FAB072;
+    background-color: white;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  color:white;
+    background-color: white;
+}
+
+/* item avec les petits traits */
+.skin-blue .main-header .navbar .sidebar-toggle {
+    color: #F58220;
+    background-color: white;
+    font-size: 2em;
+    padding-top: 45px;
+}
+
+@media only screen and (max-width: 640px) {
+.skin-blue .main-header .navbar .sidebar-toggle {
+    font-size: 1.5em;
+    padding-top: 10px;
+}
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    color: #F58220;
+    background-color: white;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    background-color: white;
+}
+
+/* Infoboxes */
+
+.info-box-text {
+    text-transform: uppercase;
+    font-size: 1.3em;
+}
+
+.info-box-number {
+    font-size: 18px;
+}
+
+.info-box-content .checkbox {
+    /* color: grey; */
+    font-size: 16px;
+}
+
+.bg-blue {
+    background-color: #289DB7!important;
+}
+
+.bg-yellow {
+    background-color: #F58220!important;
+}
+
+/* Boutons */
+.btn {
+    font-size: 1em;
+}
+
+/* menu à gauche */
+
+ul.sidebar-menu {
+    padding-top: 75px;
+}
+
+@media only screen and (max-width: 640px) {
+ul.sidebar-menu {
+    padding-top: 71px;
+}
+}
+
+.main-sidebar .user-panel, .sidebar-menu, .sidebar-menu>li.header {
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 1.1em;
+}
+
+/* Item de menu à gauche */
+.skin-blue .sidebar-menu>li.active>a, .skin-blue .sidebar-menu>li:hover>a {
+    color: #fff;
+    background: #1e282c;
+    border-left-color: #F58220;
+}
+
+/* sous menu */
+.skin-blue .treeview-menu>li>a {
+    color: #8aa4af;
+    font-size: 1em;
+}
+
+/* Fenêtre modal d'introduction */
+.modal-body {
+    position: relative;
+    padding: 15px;
+    font-size: 1.3em;
+}
+
+.modal-title {
+    margin: 0;
+    line-height: 1.42857143;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #F58220;
+}
+
+/* Liens : souligné */
+a:active, a:focus, a:hover {
+    outline: 0;
+    text-decoration: none;
+    color: #72afd2;
+}
+
+/* modal Info site */
+.popup_body h4 {
+    font-size: 1.3em;
+    color: #F58220;
+}
+
+/* items de menu */
+.skin-blue .sidebar a {
+    color: #BCBDC0;
+}
+
+/* Textes menu gauche */
+.skin-blue .treeview-menu>li>a {
+    color: #BCBDC0;
+    font-size: 1em;
+}
+
+.skin-blue .left-side, .skin-blue .main-sidebar, .skin-blue .wrapper {
+    background-color: #464749;
+}
+
+.skin-blue .sidebar-menu>li>.treeview-menu {
+    margin: 0 1px;
+    background: #545556;
+    padding: 5px;
+}
+
+/*[end] Styles CartoFriches*/
+
+input[type="number"] {
+  max-width: 80%;
+}
+
+#old_dashboard{
+  background-color:orange
+}
+
+div.outer {
+  position: fixed; 
+  top: 41px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Customize fonts */
+body, label, input, button, select { 
+  font-family: 'Helvetica Neue', Helvetica;
+  font-weight: 200;
+}
+h1, h2, h3, h4 { font-weight: 400; }
+
+#controls {
+  /* Appearance */
+  background-color: white;
+  color:black;
+  padding: 5px 5px 5px 5px;
+  cursor: move;
+  /* Fade out while not hovering */
+  opacity: 0.65;
+  zoom: 0.9;
+  transition: opacity 500ms 1s;
+}
+#controls:hover {
+  /* Fade in while hovering */
+  opacity: 0.95;
+  transition-delay: 0;
+}
+
+/* Position and style citation */
+#cite {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 12px;
+}
+
+/* If not using map tiles, show a white background */
+.leaflet-container {
+  background-color: white !important;
+}
+
+/*.leaflet-control{
+  width:200px;
+}*/

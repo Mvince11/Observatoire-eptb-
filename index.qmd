@@ -1,0 +1,104 @@
+---
+title: ""
+lang: fr
+toc: false
+format: 
+  html:
+    page-layout: custom
+---
+
+## Pourquoi un observatoire ?
+
+```{=html}
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population.<br> La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national.<br> Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire.<br><br> </font>
+
+</p>
+<div>
+  <div id="photos_crues">
+    <img src="Images/crue_poitiers.jpg" alt="Crue Poitiers" />
+    <img src="Images/crue_chatellerault.jpg" alt="Crue Châtellerault"/>
+  </div>
+</div>
+<br/><br/>
+```
+
+## Des indicateurs pour connaître la vulnérabilité
+
+```{=html}
+<p align="justify">
+
+<font size="4.5px" face="calibri"> L’observatoire permet la visualisation de plusieurs indicateurs, calculés à partir d’une méthode nationale. Ils s’appuient tous sur une crue dite centennale c’est-à-dire qui a «une chance» sur 100 de se produire tous les ans.<br> Ces indicateurs permettent de décrire la vulnérabilité mais ils peuvent également être utilisés pour évaluer l'efficacité des actions menées sur le terrain qui visent à réduire le risque.<br><br> Ils sont répartis selon 3 objectifs : <br> • Objectif 1 : Augmenter la sécurité des populations exposées, <br> • Objectif 2 : Stabiliser à court terme et réduire à moyen terme le coût des dommages, <br> • Objectif 3 : Raccourcir fortement le délai de retour à la normale des territoires sinistrés. <br> </font>
+
+</p>
+<p align="justify">
+<br> <font size="4.5px" face="calibri"> Les indicateurs ont été actuellement calculés sur le territoire de Grand Poitiers et quelques communes qui jalonnent la Vienne dont Châtellerault. Dans le futur, ils ont vocation à être étendus au périmètre de la stratégie locale de gestion du risque inondation Vienne – Clain.<br> Cet observatoire vous permet de consulter pour chaque indicateur de vulnérabilité un onglet dédié comprenant une carte dynamique, des graphiques et des résultats bruts et une fiche téléchargeable et imprimable avec les éléments de construction de l'indicateur et la carte de vulnérabilité. </font>
+
+</p>
+```
+
+<br>
+
+## Les auteurs de l’observatoire
+
+```{=html}
+<p align="justify">
+
+<font size="4.5px" face="calibri"> L’observatoire est le fruit d’une collaboration entre l’Etablissement Public Territorial du Bassin (EPTB) de la Vienne et le CEREMA. Plusieurs collectivités et services de l’Etat ont contribué également à son élaboration (Grand Poitiers, Grand Châtellerault, CC. Vienne et Gartempe, Département de la Vienne, DDT de la Vienne, DREAL Nouvelle Aquitaine). Le financement de ce projet s’insère dans un Programme d’Action de Prévention des Inondations (PAPI) financé par l’Etat (Fonds Barnier) et l’Europe (Plan Loire). <br></font>
+
+</p>
+
+<br> 
+
+<div class="header-flex">
+  
+  <!-- Contact à gauche -->
+  <div class="contact-left">
+    <a href="mailto:contact@eptb-vienne.fr" target="_blank">
+      <i class="bi bi-envelope" style="color:black;"></i> Nous contacter
+    </a>
+    <span>(contact@eptb-vienne.fr)</span>
+  </div>
+
+  <!-- Logo à droite -->
+  <img src="Images/logo_financeurs.png" height="70" width="350" alt="Financeurs"/>
+
+</div>
+
+<style>
+.header-flex {
+  display: flex;
+  justify-content: space-between; /* Contact à gauche, logo à droite */
+  align-items: center;
+  margin: 20px 0;
+}
+
+.contact-left {
+  text-align: left;
+  font-size: 1.05rem;
+}
+
+.contact-left a {
+  font-weight: 600;
+  color: #0a6ebd;
+  text-decoration: none;
+  margin-right: 6px;
+}
+
+.contact-left a:hover {
+  text-decoration: underline;
+}
+
+#pourquoi-un-observatoire{
+  margin-top: 150px;
+}
+
+#quarto-content{
+  margin-left:10vw;
+  margin-right:10vw;
+}
+</style>
+
+```
