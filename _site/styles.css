@@ -226,7 +226,7 @@ img{
 
 /* Offcanvas global avec effet verre */
 .site-offcanvas {
-  width: auto;
+  /*width: auto;*/
   background: rgba(255, 255, 255, 0.25); /* transparence */
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
@@ -239,8 +239,14 @@ img{
   border-bottom-right-radius: 10px;
 }
 
-.offcanvas.offcanvas-start {
+.offcanvas.offcanvas-start, .site-offcanvas {
   width: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 100vh;
+  max-height: max-content;
 }
 
 /* Header avec logo */
@@ -263,6 +269,7 @@ img{
   flex: 1;
   overflow-y: auto;
   padding: 3rem 0.75rem;
+  text-align: center;
 }
 
 /* Liens */

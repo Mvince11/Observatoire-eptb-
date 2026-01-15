@@ -1,21 +1,27 @@
 ---
 title: ""
 lang: fr
-toc: false
-format: 
+format:
   html:
-    page-layout: custom
+    grid:
+      sidebar-width: 0px
+      body-width: 1200px
 ---
 
-## Pourquoi un observatoire ?
 
+## Pourquoi un observatoire ?
 ```{=html}
+
 
 <p align="justify">
 
 <font size="4.5px" face="calibri"> L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population.<br> La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national.<br> Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire.<br><br> </font>
 
 </p>
+```
+
+
+```{=html}
 <div>
   <div id="photos_crues">
     <img src="Images/crue_poitiers.jpg" alt="Crue Poitiers" />
@@ -25,8 +31,8 @@ format:
 <br/><br/>
 ```
 
-## Des indicateurs pour connaître la vulnérabilité
 
+## Des indicateurs pour connaître la vulnérabilité
 ```{=html}
 <p align="justify">
 
@@ -42,7 +48,6 @@ format:
 <br>
 
 ## Les auteurs de l’observatoire
-
 ```{=html}
 <p align="justify">
 
@@ -91,14 +96,21 @@ format:
   text-decoration: underline;
 }
 
-#pourquoi-un-observatoire{
-  margin-top: 150px;
-}
 
-#quarto-content{
+/*#quarto-content{
   margin-left:10vw;
   margin-right:10vw;
+}*/
+
+@media (max-width:873px){
+.header-flex {
+ display:block;
+ text-align:center;
+}
+
+.contact-left {
+  text-align: center;
+}
 }
 </style>
-
 ```
