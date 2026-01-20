@@ -53,9 +53,5 @@ document.addEventListener('DOMContentLoaded', function () {
   toggler.setAttribute('data-bs-toggle', 'offcanvas');
   toggler.setAttribute('data-bs-target', '#site-offcanvas');
   
-  // 👉 Ajoute le texte "Menu" à côté du burger
-  const menuText = document.createElement('span');
-  menuText.className = 'menu-text';
-  menuText.textContent = 'Menu';
-  toggler.appendChild(menuText);
+  
 });
