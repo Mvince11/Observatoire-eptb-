@@ -114,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Try common Quarto IDs; fall back to your custom one if used
+  // Trouve le collapse généré par Quarto
 
   const collapse =
 
@@ -126,13 +126,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const toggler = document.querySelector('.navbar-toggler');
 
-
-
-  if (!collapse || !toggler) return; // nothing to do
+  if (!collapse || !toggler) return;
 
 
 
-  // Create offcanvas container
+  // Crée le conteneur offcanvas
 
   const offcanvas = document.createElement('div');
 
@@ -144,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Header with image/logo and close button
+  // Header avec logo + bouton de fermeture
 
   const header = document.createElement('div');
 
@@ -158,7 +156,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   img.alt = 'Logo';
 
-  img.style.maxHeight = '64px';
+  img.style.maxHeight = '84px';
+
+  img.style.objectFit = 'contain';
 
 
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Body: move existing navbar items here
+  // Body : deux colonnes (menu à gauche, image à droite)
 
   const body = document.createElement('div');
 
@@ -186,23 +186,79 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Preserve current collapse content
+  const leftCol = document.createElement('div');
+
+  leftCol.className = 'offcanvas-menu-col';
+
+
+
+  const rightCol = document.createElement('div');
+
+  rightCol.className = 'offcanvas-image-col';
+
+
+
+
+
+  const sideImg = document.createElement('img');
+
+  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
+
+  sideImg.alt = 'Illustration';
+
+
+
+  rightCol.appendChild(sideImg);
+
+
+
+  // Déplacer les éléments du collapse dans la colonne gauche
 
   while (collapse.firstChild) {
 
-    body.appendChild(collapse.firstChild);
+    leftCol.appendChild(collapse.firstChild);
 
   }
 
 
 
+  // Injecter les colonnes dans le body
+
+  body.appendChild(leftCol);
+
+  body.appendChild(rightCol);
+
+
+
+  // Finalisation
+
   offcanvas.appendChild(header);
 
   offcanvas.appendChild(body);
 
+  
+
+  leftCol.className = "offcanvas-menu-col";
+
+  rightCol.className = "offcanvas-image-col";
+
+  
+
+  const textOverlay = document.createElement('div');
+
+  textOverlay.className = 'offcanvas-image-text';
+
+  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
+
+  
+
+  rightCol.appendChild(textOverlay);
 
 
-  // Insert offcanvas next to navbar
+
+
+
+  // Insère l’offcanvas dans le DOM
 
   const navbar = document.querySelector('nav.navbar');
 
@@ -210,33 +266,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Hide original collapse (we moved its children)
+  // Cache l’ancien collapse
 
   collapse.classList.add('d-none');
 
 
 
-  // Retarget the burger to offcanvas
+  // Retarget le burger vers l’offcanvas
 
   toggler.setAttribute('data-bs-toggle', 'offcanvas');
 
   toggler.setAttribute('data-bs-target', '#site-offcanvas');
 
-  
-
-  // 👉 Ajoute le texte "Menu" à côté du burger
-
-  const menuText = document.createElement('span');
-
-  menuText.className = 'menu-text';
-
-  menuText.textContent = 'Menu';
-
-  toggler.appendChild(menuText);
-
-  
-
 });
+
+
 
 </script>
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
@@ -249,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script src="site_libs/reactwidget-2.0.0/react-tools.js"></script>
 
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
 
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 
@@ -1464,8 +1508,8 @@ Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.</p>
         <p>
 </p><div class="cell" data-expandable="false">
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-2710a58a4c4a970c8155" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-2710a58a4c4a970c8155">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Code INSEE":["86095","86014","86088","86253","86062","86239","86114","86032","86298","86163","86124","86020","86261","86046","86091","86028","86213","86070","86233","86202","86058","86135","86226","86031","86024","86133","86194","86027","86158","86066","86041","86174","86139","86019","86115","86214","86116","86222","86244","86045","86256","86198","86157","86268","86080","86263","86297","86100","86083"],"Commune":["Dissay","Availles-en-Châtellerault","Croutelle","Sanxay","Chasseneuil-du-Poitou","Sainte-Radégonde","Jardres","Bonneuil-Matours","Vouneuil-sur-Vienne","Montamisé","Lavoux","Bellefonds","Sèvres-Anxaumont","Cenon-sur-Vienne","Curzay-sur-Vonne","Bignoux","Rouillé","Chauvigny","Valdivienne","La Puye","La Chapelle-Moulière","Liniers","Saint-Julien-l'Ars","Bonnes","Béruges","Ligugé","Poitiers","Biard","Migné-Auxances","Châtellerault","Buxerolles","Naintré","Lusignan","Beaumont Saint-Cyr","Jaunay-Marigny","Saint-Benoît","Jazeneuil","Saint-Georges-lès-Baillargeaux","Saint-Sauvant","Celle-Lévescault","Savigny-Lévescault","Pouillé","Mignaloux-Beauvoir","Tercé","Cloué","Smarves","Vouneuil-sous-Biard","Fontaine-le-Comte","Coulombiers"],"Population":[" 3 233"," 1 757","   851","   548"," 4 704","   169"," 1 273"," 2 104"," 2 198"," 3 630"," 1 180","   254"," 2 181"," 1 778","   410"," 1 054"," 2 468"," 7 049"," 2 747","   606","   705","   561"," 2 660"," 1 729"," 1 469"," 3 349","88 291"," 1 751"," 6 071","31 840","10 023"," 5 911"," 2 649"," 3 035"," 7 530"," 7 233","   804"," 4 168"," 1 258"," 1 356"," 1 168","   657"," 4 577"," 1 116","   496"," 2 810"," 5 896"," 3 853"," 1 164"],"Population en zone fortement inondable":["  1","  6","  0","  5","  4","  0","  0"," 55"," 34","  0","  0","  0","  0","  1","  0","  0","  0"," 47"," 28","  0","  3","  0","  0"," 28","  0"," 85","226","  0"," 10"," 59","  5","  5","  5","  0","  0"," 95","  0","  1","  0","  0","  0","  0","  0","  0","  0"," 12","  0","  0","  0"]},"columns":[{"id":"Code INSEE","name":"Code INSEE","type":"character"},{"id":"Commune","name":"Commune","type":"character"},{"id":"Population","name":"Population","type":"character"},{"id":"Population en zone fortement inondable","name":"Population en zone fortement inondable","type":"character"}],"resizable":true,"filterable":true,"defaultPageSize":10,"highlight":true,"striped":true,"theme":{"borderColor":"#E0E0E0","stripedColor":"#f5f5f5","highlightColor":"#7591e5","cellPadding":"8px 12px","style":{"fontSize":"14px","fontFamily":"sans-serif"}},"dataKey":"9b926186ddc492c1a36d5e3db69e5a55"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-e8d27b1e8e229bee78ae" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e8d27b1e8e229bee78ae">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Code INSEE":["86095","86014","86088","86253","86062","86239","86114","86032","86298","86163","86124","86020","86261","86046","86091","86028","86213","86070","86233","86202","86058","86135","86226","86031","86024","86133","86194","86027","86158","86066","86041","86174","86139","86019","86115","86214","86116","86222","86244","86045","86256","86198","86157","86268","86080","86263","86297","86100","86083"],"Commune":["Dissay","Availles-en-Châtellerault","Croutelle","Sanxay","Chasseneuil-du-Poitou","Sainte-Radégonde","Jardres","Bonneuil-Matours","Vouneuil-sur-Vienne","Montamisé","Lavoux","Bellefonds","Sèvres-Anxaumont","Cenon-sur-Vienne","Curzay-sur-Vonne","Bignoux","Rouillé","Chauvigny","Valdivienne","La Puye","La Chapelle-Moulière","Liniers","Saint-Julien-l'Ars","Bonnes","Béruges","Ligugé","Poitiers","Biard","Migné-Auxances","Châtellerault","Buxerolles","Naintré","Lusignan","Beaumont Saint-Cyr","Jaunay-Marigny","Saint-Benoît","Jazeneuil","Saint-Georges-lès-Baillargeaux","Saint-Sauvant","Celle-Lévescault","Savigny-Lévescault","Pouillé","Mignaloux-Beauvoir","Tercé","Cloué","Smarves","Vouneuil-sous-Biard","Fontaine-le-Comte","Coulombiers"],"Population":[" 3 233"," 1 757","   851","   548"," 4 704","   169"," 1 273"," 2 104"," 2 198"," 3 630"," 1 180","   254"," 2 181"," 1 778","   410"," 1 054"," 2 468"," 7 049"," 2 747","   606","   705","   561"," 2 660"," 1 729"," 1 469"," 3 349","88 291"," 1 751"," 6 071","31 840","10 023"," 5 911"," 2 649"," 3 035"," 7 530"," 7 233","   804"," 4 168"," 1 258"," 1 356"," 1 168","   657"," 4 577"," 1 116","   496"," 2 810"," 5 896"," 3 853"," 1 164"],"Population en zone fortement inondable":["  1","  6","  0","  5","  4","  0","  0"," 55"," 34","  0","  0","  0","  0","  1","  0","  0","  0"," 47"," 28","  0","  3","  0","  0"," 28","  0"," 85","226","  0"," 10"," 59","  5","  5","  5","  0","  0"," 95","  0","  1","  0","  0","  0","  0","  0","  0","  0"," 12","  0","  0","  0"]},"columns":[{"id":"Code INSEE","name":"Code INSEE","type":"character"},{"id":"Commune","name":"Commune","type":"character"},{"id":"Population","name":"Population","type":"character"},{"id":"Population en zone fortement inondable","name":"Population en zone fortement inondable","type":"character"}],"resizable":true,"filterable":true,"defaultPageSize":10,"highlight":true,"striped":true,"theme":{"borderColor":"#E0E0E0","stripedColor":"#f5f5f5","highlightColor":"#7591e5","cellPadding":"8px 12px","style":{"fontSize":"14px","fontFamily":"sans-serif"}},"dataKey":"9b926186ddc492c1a36d5e3db69e5a55"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
         <p></p>

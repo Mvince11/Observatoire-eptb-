@@ -224,14 +224,13 @@ img{
   margin-left: inherit;
 }
 
-/* Offcanvas global avec effet verre */
+/* -----------------------------------------------------------
+   OFFCANVAS GLOBAL
+----------------------------------------------------------- */
 .site-offcanvas {
-  /*width: auto;*/
-  background: rgba(255, 255, 255, 0.25); /* transparence */
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-right: 1px solid rgba(255, 255, 255, 0.3); /* contour subtil */
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);           /* ombre douce */
+  background: #ffffff; /* fond blanc opaque */
+  border-right: 1px solid #ddd;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -239,17 +238,19 @@ img{
   border-bottom-right-radius: 10px;
 }
 
-.offcanvas.offcanvas-start, .site-offcanvas {
-  width: auto !important;
+/* Force largeur plein écran */
+.offcanvas.offcanvas-start,
+.site-offcanvas {
   width: 100% !important;
   max-width: 100% !important;
   left: 0 !important;
   right: 0 !important;
   height: 100vh;
-  max-height: max-content;
 }
 
-/* Header avec logo */
+/* -----------------------------------------------------------
+   HEADER
+----------------------------------------------------------- */
 .site-offcanvas .offcanvas-header {
   display: flex;
   align-items: center;
@@ -264,46 +265,99 @@ img{
   background-color: floralwhite;
 }
 
-/* Corps scrollable */
-.site-offcanvas .offcanvas-body {
-  flex: 1;
+/* -----------------------------------------------------------
+   BODY
+----------------------------------------------------------- */
+
+.site-offcanvas .offcanvas-body{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+  
+.offcanvas-menu-col{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  align-items: center;
+  padding: 0;
   overflow-y: auto;
-  padding: 3rem 0.75rem;
-  text-align: center;
 }
 
-/* Liens */
+.offcanvas-menu-col .navbar-nav{
+  width: 450px;
+  /*margin-left: auto !important;
+  margin-right: auto !important;*/
+}
+
+.offcanvas-image-col{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.offcanvas-image-col img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  border-radius: inherit;
+}
+
+.offcanvas-image-text{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  padding: 2rem;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 0 3px 12px rgba(0,0,0,.6);
+  background: rgba(0,0,0,0.15);
+}
+
+/* -----------------------------------------------------------
+   LIENS
+----------------------------------------------------------- */
 .site-offcanvas .nav-link {
-  display: block;          /* occupe toute la largeur */
-  width: 100%;             /* s'étend sur la cellule */
-  padding: 0.6rem 0.75rem; /* garde ton padding */
-  border-radius: 6px;      /* coins arrondis si besoin */
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
   transition: background 0.3s ease, border-radius 0.3s ease;
 }
 
 .site-offcanvas .nav-link:hover {
-  background: rgba(255,255,255,0.3); /* halo translucide */
-  text-decoration: none;
+  background: rgba(255,255,255,0.3);
   border-radius: 17px;
 }
 
-.nav-link.dropdown-toggle.show:hover{
+.nav-link.dropdown-toggle.show:hover {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
 }
 
-
-/* Dropdowns intégrés dans le flux */
+/* Dropdown */
 .site-offcanvas .dropdown-menu {
-  position: static !important;        /* intégré dans le flux */
+  position: static !important;
   transform: inherit !important;
   width: 100%;
   margin: 0;
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 8px;
-  background: rgba(255,255,255,0.25); /* effet verre */
+  background: rgba(255,255,255,0.25);
   backdrop-filter: blur(10px) saturate(180%);
   -webkit-backdrop-filter: blur(10px) saturate(180%);
   padding: 0;
@@ -313,7 +367,6 @@ img{
   border-bottom-right-radius: 24px;
 }
 
-/* Items du dropdown */
 .site-offcanvas .dropdown-item {
   padding: 0.5rem 1rem;
   color: #000;
@@ -323,34 +376,83 @@ img{
 }
 
 .site-offcanvas .dropdown-item:hover {
-  background: rgba(255,255,255,0.4); /* effet verre renforcé au survol */
-  transition: background 0.3s ease, border-radius 0.3s ease;
+  background: rgba(255,255,255,0.4);
 }
 
-.dropdown-menu.dropdown-menu-end.show > li > a {
-  border-radius: 0; /* pas d’arrondi par défaut */
-  transition: background 0.3s ease, border-radius 0.3s ease;
-}
-
-.dropdown-menu.dropdown-menu-end.show > li:first-child > a:hover {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-.dropdown-menu.dropdown-menu-end.show > li:last-child > a:hover {
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
-}
-
-/* Séparateurs entre menus principaux */
+/* Séparateurs */
 .site-offcanvas .navbar-nav > .nav-item {
   border-top: 1px solid #e6e6e6;
   margin-bottom: 10px;
 }
 
+/* Texte centré dans l'image */
+.offcanvas-image-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* centre parfait */
+  color: white;
+  font-size: 2.3rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.6);
+  padding: 1rem 2rem;
+  max-width: 80%;
+}
+
+
+/* -----------------------------------------------------------
+   RESPONSIVE : IMAGE EN DESSOUS
+----------------------------------------------------------- */
+@media (max-width: 992px) {
+
+  .site-offcanvas .offcanvas-body {
+    display: grid;
+    grid-template-columns: 1fr;   /* ⭐ une seule colonne */
+    grid-template-rows: auto auto; /* ⭐ menu puis image */
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .offcanvas-menu-col {
+    order: 1;                     /* ⭐ menu en premier */
+    justify-content: flex-start;  /* ⭐ plus de centrage vertical */
+    align-items: center;
+    overflow-y: visible;          /* ⭐ évite les dropdowns tronqués */
+    padding: 1rem 0;
+  }
+
+  .offcanvas-image-col {
+    order: 2;
+    width: 100%;                    /* ⭐ occupe toute la largeur */
+    height: auto;
+    margin: 0;                      /* ⭐ supprime la marge autour */
+    padding: 0;
+    overflow: visible;
+  }
+
+  .offcanvas-image-col img {
+    width: 100%;                    /* ⭐ aucune marge horizontale */
+    height: auto;
+    display: block;                 /* ⭐ supprime l’espace fantôme */
+    margin: 0;                      /* ⭐ aucune marge verticale */
+    padding: 0;
+    object-fit: cover;
+  }
+
+  .offcanvas-image-text {
+    font-size: 2rem;
+    padding: 1.5rem;
+  }
+}
+
+
+
+
 /* Hauteur forcée pour ton bloc ms-auto */
 .ms-auto {
   height: auto;
+  margin-left: 0 !important;
 }
 
 .navbar-nav-scroll{
@@ -511,7 +613,7 @@ div.sidebar-item-container{
 
 
 .bi-envelope{
-  color:white;
+  color:black;
 }
 /*.px-1 > i {
   font-size: 1.5rem;
@@ -584,7 +686,7 @@ div.sidebar-item-container{
   position: relative;
   display: inline-block;
   padding-bottom: 4px; /* espace pour la barre */
-}
+  }
 
 
 /* On cible les liens de la navbar */
@@ -665,7 +767,7 @@ div.sidebar-item-container{
   }
   
   .bi-envelope{
-    color: white;
+    color: black;
   }
   
   /*.px-1 {
@@ -714,9 +816,9 @@ div.sidebar-item-container{
   display: block;
 }
 
-.site-offcanvas .offcanvas-body {
+/*.site-offcanvas .offcanvas-body {
   padding: 3rem 0.10rem;
-}
+}*/
 }
 
 @media (min-width: 1429px) and (max-width: 1477px){

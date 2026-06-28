@@ -5,29 +5,29 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  // Try common Quarto IDs; fall back to your custom one if used
+  // Trouve le collapse généré par Quarto
   const collapse =
     document.getElementById('quarto-navbar-collapse') ||
     document.getElementById('navbarCollapse');
 
   const toggler = document.querySelector('.navbar-toggler');
+  if (!collapse || !toggler) return;
 
-  if (!collapse || !toggler) return; // nothing to do
-
-  // Create offcanvas container
+  // Crée le conteneur offcanvas
   const offcanvas = document.createElement('div');
   offcanvas.className = 'offcanvas offcanvas-start site-offcanvas';
   offcanvas.id = 'site-offcanvas';
   offcanvas.setAttribute('tabindex', '-1');
 
-  // Header with image/logo and close button
+  // Header avec logo + bouton de fermeture
   const header = document.createElement('div');
   header.className = 'offcanvas-header';
 
   const img = document.createElement('img');
   img.src = 'Images/logo_porteurs_projet_anc.png';
   img.alt = 'Logo';
-  img.style.maxHeight = '64px';
+  img.style.maxHeight = '84px';
+  img.style.objectFit = 'contain';
 
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
@@ -37,34 +37,56 @@ document.addEventListener('DOMContentLoaded', function () {
   header.appendChild(img);
   header.appendChild(closeBtn);
 
-  // Body: move existing navbar items here
+  // Body : deux colonnes (menu à gauche, image à droite)
   const body = document.createElement('div');
   body.className = 'offcanvas-body';
 
-  // Preserve current collapse content
+  const leftCol = document.createElement('div');
+  leftCol.className = 'offcanvas-menu-col';
+
+  const rightCol = document.createElement('div');
+  rightCol.className = 'offcanvas-image-col';
+
+
+  const sideImg = document.createElement('img');
+  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
+  sideImg.alt = 'Illustration';
+
+  rightCol.appendChild(sideImg);
+
+  // Déplacer les éléments du collapse dans la colonne gauche
   while (collapse.firstChild) {
-    body.appendChild(collapse.firstChild);
+    leftCol.appendChild(collapse.firstChild);
   }
 
+  // Injecter les colonnes dans le body
+  body.appendChild(leftCol);
+  body.appendChild(rightCol);
+
+  // Finalisation
   offcanvas.appendChild(header);
   offcanvas.appendChild(body);
+  
+  leftCol.className = "offcanvas-menu-col";
+  rightCol.className = "offcanvas-image-col";
+  
+  const textOverlay = document.createElement('div');
+  textOverlay.className = 'offcanvas-image-text';
+  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
+  
+  rightCol.appendChild(textOverlay);
 
-  // Insert offcanvas next to navbar
+
+  // Insère l’offcanvas dans le DOM
   const navbar = document.querySelector('nav.navbar');
   (navbar?.parentNode || document.body).appendChild(offcanvas);
 
-  // Hide original collapse (we moved its children)
+  // Cache l’ancien collapse
   collapse.classList.add('d-none');
 
-  // Retarget the burger to offcanvas
+  // Retarget le burger vers l’offcanvas
   toggler.setAttribute('data-bs-toggle', 'offcanvas');
   toggler.setAttribute('data-bs-target', '#site-offcanvas');
-  
-  // 👉 Ajoute le texte "Menu" à côté du burger
-  const menuText = document.createElement('span');
-  menuText.className = 'menu-text';
-  menuText.textContent = 'Menu';
-  toggler.appendChild(menuText);
-  
 });
+
 </script>
