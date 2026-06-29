@@ -24,8 +24,6 @@ include-in-header:
     <script src="js/offcanvas.js" type="text/javascript"></script>
 ---
 
-
-
 ```{=html}
 <div id="nav-menu-objectif-n°1"></div>
 ```
@@ -771,7 +769,6 @@ map = {
         </p>
 ```
 
-
 ```{=html}
       </div>
       <div id="tab2" class="tab">
@@ -959,8 +956,6 @@ Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.
 
 ![Bâtiments 3D](Images/batiments_3d.jpg){fig-align="left" width="75%"}
 
-
-
 ```{=html}
 </p>
       </div>
@@ -1130,7 +1125,6 @@ Plot.plot({
 
 ```
 
-
 ```{=html}
         </p>
       </div> 
@@ -1196,5 +1190,4 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   });
 });
 </script>
-
 ```

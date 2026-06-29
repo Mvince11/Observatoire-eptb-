@@ -68,7 +68,9 @@ img{
   background-color: rgba(255, 255, 255, 1); 
 }
 
-/*-- MAP LIBRE --*/
+/* -----------------------------------------------------------
+   MAP LIBRE
+----------------------------------------------------------- */
 
 .map-container { 
     height: 72vh; 
@@ -227,26 +229,26 @@ img{
 /* -----------------------------------------------------------
    OFFCANVAS GLOBAL
 ----------------------------------------------------------- */
-.site-offcanvas {
-  background: #ffffff; /* fond blanc opaque */
-  border-right: 1px solid #ddd;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
+  .site-offcanvas {
+    background: #ffffff; /* fond blanc opaque */
+    border-right: 1px solid #ddd;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
 
-/* Force largeur plein écran */
-.offcanvas.offcanvas-start,
-.site-offcanvas {
-  width: 100% !important;
-  max-width: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 100vh;
-}
+  /* Force largeur plein écran */
+  .offcanvas.offcanvas-start,
+  .site-offcanvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 100vh;
+  }
 
 /* -----------------------------------------------------------
    HEADER
@@ -329,6 +331,16 @@ img{
 /* -----------------------------------------------------------
    LIENS
 ----------------------------------------------------------- */
+.site-offcanvas .dropdown-menu {
+  position: static !important;
+  width: auto;
+  min-width: 100%;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 0.25rem 0;
+}
+
 .site-offcanvas .nav-link {
   display: block;
   width: 100%;
@@ -401,127 +413,64 @@ img{
 }
 
 
-/* -----------------------------------------------------------
-   RESPONSIVE : IMAGE EN DESSOUS
------------------------------------------------------------ */
-@media (max-width: 992px) {
-
-  .site-offcanvas .offcanvas-body {
-    display: grid;
-    grid-template-columns: 1fr;   /* ⭐ une seule colonne */
-    grid-template-rows: auto auto; /* ⭐ menu puis image */
-    height: auto;
-    overflow-y: auto;
-  }
-
-  .offcanvas-menu-col {
-    order: 1;                     /* ⭐ menu en premier */
-    justify-content: flex-start;  /* ⭐ plus de centrage vertical */
-    align-items: center;
-    overflow-y: visible;          /* ⭐ évite les dropdowns tronqués */
-    padding: 1rem 0;
-  }
-
-  .offcanvas-image-col {
-    order: 2;
-    width: 100%;                    /* ⭐ occupe toute la largeur */
-    height: auto;
-    margin: 0;                      /* ⭐ supprime la marge autour */
-    padding: 0;
-    overflow: visible;
-  }
-
-  .offcanvas-image-col img {
-    width: 100%;                    /* ⭐ aucune marge horizontale */
-    height: auto;
-    display: block;                 /* ⭐ supprime l’espace fantôme */
-    margin: 0;                      /* ⭐ aucune marge verticale */
-    padding: 0;
-    object-fit: cover;
-  }
-
-  .offcanvas-image-text {
-    font-size: 2rem;
-    padding: 1.5rem;
-  }
-}
-
-
-
-
 /* Hauteur forcée pour ton bloc ms-auto */
-.ms-auto {
-  height: auto;
-  margin-left: 0 !important;
-}
-
-.navbar-nav-scroll{
-  max-height: none;
-  overflow-y: auto;
-  overflow-x: hidden; /* empêche les flèches de dépasser */
-}
-
-.navbar-nav-scroll .nav-link {
-  display: flex;
-  align-items: center; /* aligne texte + flèche */
-  justify-content: space-between; /* pousse la flèche à droite */
-}
-
-.navbar-nav-scroll .dropdown-menu {
-  max-width: 100%;   /* ne dépasse pas du conteneur */
-  overflow-wrap: break-word;
-}
-
-
-/* Bouton burger + texte */
-.navbar-toggler {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.25); /* translucide */
-  backdrop-filter: blur(6px) saturate(180%);
-  -webkit-backdrop-filter: blur(6px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
-  padding: 0.4rem 0.6rem;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.navbar-toggler:hover {
-  background: rgba(255,255,255,0.35);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* Texte "Menu" */
-.navbar-toggler .menu-text {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #000;
-}
-
-/* Variante verre renforcé */
-.navbar-toggler .glass-text {
-  color: #000;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
-}
-
-.navbar-toggler:focus{
-  box-shadow: none;
-}
-
- .navbar-nav.navbar-nav-scroll.ms-auto >.nav-item, .navbar-nav.navbar-nav-scroll.ms-auto >.nav-item.dropdown{
-  border: 1px solid antiquewhite;
-  border-radius: 25px;
-}
-
-.navbar .navbar-collapse {
-  margin-left: auto;
-  overflow: visible;
+  .ms-auto {
+    height: auto;
+    margin-left: 0 !important;
+  }
   
-  opacity: 1;
-  border-radius: 8px;
-  height: 80px;
-}
+  .navbar-nav-scroll{
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden; /* empêche les flèches de dépasser */
+  }
+  
+  /* Bouton burger + texte */
+  .navbar-toggler {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.25); /* translucide */
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .navbar-toggler:hover {
+    background: rgba(255,255,255,0.35);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  /* Texte "Menu" */
+  .navbar-toggler .menu-text {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #000;
+  }
+  
+  /* Variante verre renforcé */
+  .navbar-toggler .glass-text {
+    color: #000;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+  }
+
+  .navbar-toggler:focus{
+    box-shadow: none;
+  }
+
+ 
+
+  .navbar .navbar-collapse {
+    margin-left: auto;
+    overflow: visible;
+    
+    opacity: 1;
+    border-radius: 8px;
+    height: 80px;
+  }
 
 #photos_crues {
   display: flex;
@@ -560,10 +509,6 @@ img{
   background-color: #464749;
 }
 
-.navbar .dropdown-header{
-  background-color: khaki;
-  text-transform: inherit;
-}
 
 .text-start{
   font-size: 1.3em;
@@ -723,7 +668,7 @@ div.sidebar-item-container{
   color: orangered;
   /*font-size: 1.4em;*/
   white-space: normal;    /* autorise le retour à la ligne */
-  max-width: 150px;       /* optionnel, pour forcer la coupure */
+  max-width: 560px;       /* optionnel, pour forcer la coupure */
   text-align: center;     /* optionnel, pour centrer */
 }
 
@@ -794,44 +739,72 @@ div.sidebar-item-container{
   }
 }
 
+/* -----------------------------------------------------------
+   RESPONSIVE : IMAGE EN DESSOUS
+----------------------------------------------------------- */
+@media (max-width: 992px) {
 
-@media (max-width: 717px){
-  .navbar-logo {
-  max-height: 50px;
-}
-.navbar-brand .navbar-title {
-  font-size: 0.8rem;       
-}
+  .site-offcanvas .offcanvas-body {
+    display: grid;
+    grid-template-columns: 1fr;   /* ⭐ une seule colonne */
+    grid-template-rows: auto auto; /* ⭐ menu puis image */
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .offcanvas-menu-col {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  }
+
+
+  .offcanvas-image-col {
+    order: 2;
+    width: 100%;                    /* ⭐ occupe toute la largeur */
+    height: auto;
+    margin: 0;                      /* ⭐ supprime la marge autour */
+    padding: 0;
+    overflow: visible;
+  }
+
+  .offcanvas-image-col img {
+    width: 100%;                    /* ⭐ aucune marge horizontale */
+    height: auto;
+    display: block;                 /* ⭐ supprime l’espace fantôme */
+    margin: 0;                      /* ⭐ aucune marge verticale */
+    padding: 0;
+    object-fit: cover;
+  }
+
+  .offcanvas-image-text {
+    font-size: 2rem;
+    padding: 1.5rem;
+  }
 }
 
-@media (max-width: 573px){
-  .navbar-logo {
-  max-height: 40px;
-}
-.navbar-brand .navbar-title {
-  font-size: 0.6rem;       
-}
 
-.navbar-brand-container{
+@media (min-width: 666px) and (max-width: 992px){
+   .navbar-brand-container{
   display: block;
-}
-
-/*.site-offcanvas .offcanvas-body {
-  padding: 3rem 0.10rem;
-}*/
-}
-
-@media (min-width: 1429px) and (max-width: 1477px){
+  }
   
- .navbar-title {
-  max-width: 250px !important;       /* optionnel, pour forcer la coupure */
-}
+  .collapse-box{
+    margin: 40px 0 20px;
+  }
 }
 
-@media (min-width: 1400px) and (max-width: 1428px){
-  .navbar-title {
-  max-width: 220px !important;       /* optionnel, pour forcer la coupure */
-}
+@media(max-width: 665px){
+  
+  .navbar-brand-container{
+  display: block;
+  }
+  
+  .collapse-box{
+    margin: 60px 0 20px;
+  }
 }
 
 @media (min-width: 868px){
@@ -839,7 +812,7 @@ div.sidebar-item-container{
   color: orangered;
   /*font-size: 1.4em;*/
   white-space: normal;    /* autorise le retour à la ligne */
-  max-width: 300px;       /* optionnel, pour forcer la coupure */
+  max-width: 560px;       /* optionnel, pour forcer la coupure */
   text-align: center;     /* optionnel, pour centrer */
 }
 
@@ -849,4 +822,6 @@ div.sidebar-item-container{
   line-height: 1.2;       /* évite que ça saute trop */
   text-align: center;     /* centre le texte sous le logo */
 }
+
+
 }

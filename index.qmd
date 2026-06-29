@@ -8,8 +8,8 @@ format:
       body-width: 1200px
 ---
 
-
 ## Pourquoi un observatoire ?
+
 ```{=html}
 
 
@@ -19,7 +19,6 @@ format:
 
 </p>
 ```
-
 
 ```{=html}
 <div>
@@ -31,8 +30,8 @@ format:
 <br/><br/>
 ```
 
-
 ## Des indicateurs pour connaître la vulnérabilité
+
 ```{=html}
 <p align="justify">
 
@@ -48,6 +47,7 @@ format:
 <br>
 
 ## Les auteurs de l’observatoire
+
 ```{=html}
 <p align="justify">
 

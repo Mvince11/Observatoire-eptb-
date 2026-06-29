@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e55257969e79e1b23715b75ca28f8bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -114,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Try common Quarto IDs; fall back to your custom one if used
+  // Trouve le collapse généré par Quarto
 
   const collapse =
 
@@ -126,13 +126,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const toggler = document.querySelector('.navbar-toggler');
 
-
-
-  if (!collapse || !toggler) return; // nothing to do
+  if (!collapse || !toggler) return;
 
 
 
-  // Create offcanvas container
+  // Crée le conteneur offcanvas
 
   const offcanvas = document.createElement('div');
 
@@ -144,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Header with image/logo and close button
+  // Header avec logo + bouton de fermeture
 
   const header = document.createElement('div');
 
@@ -158,7 +156,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   img.alt = 'Logo';
 
-  img.style.maxHeight = '64px';
+  img.style.maxHeight = '84px';
+
+  img.style.objectFit = 'contain';
 
 
 
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Body: move existing navbar items here
+  // Body : deux colonnes (menu à gauche, image à droite)
 
   const body = document.createElement('div');
 
@@ -186,23 +186,79 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Preserve current collapse content
+  const leftCol = document.createElement('div');
+
+  leftCol.className = 'offcanvas-menu-col';
+
+
+
+  const rightCol = document.createElement('div');
+
+  rightCol.className = 'offcanvas-image-col';
+
+
+
+
+
+  const sideImg = document.createElement('img');
+
+  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
+
+  sideImg.alt = 'Illustration';
+
+
+
+  rightCol.appendChild(sideImg);
+
+
+
+  // Déplacer les éléments du collapse dans la colonne gauche
 
   while (collapse.firstChild) {
 
-    body.appendChild(collapse.firstChild);
+    leftCol.appendChild(collapse.firstChild);
 
   }
 
 
 
+  // Injecter les colonnes dans le body
+
+  body.appendChild(leftCol);
+
+  body.appendChild(rightCol);
+
+
+
+  // Finalisation
+
   offcanvas.appendChild(header);
 
   offcanvas.appendChild(body);
 
+  
+
+  leftCol.className = "offcanvas-menu-col";
+
+  rightCol.className = "offcanvas-image-col";
+
+  
+
+  const textOverlay = document.createElement('div');
+
+  textOverlay.className = 'offcanvas-image-text';
+
+  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
+
+  
+
+  rightCol.appendChild(textOverlay);
 
 
-  // Insert offcanvas next to navbar
+
+
+
+  // Insère l’offcanvas dans le DOM
 
   const navbar = document.querySelector('nav.navbar');
 
@@ -210,33 +266,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Hide original collapse (we moved its children)
+  // Cache l’ancien collapse
 
   collapse.classList.add('d-none');
 
 
 
-  // Retarget the burger to offcanvas
+  // Retarget le burger vers l’offcanvas
 
   toggler.setAttribute('data-bs-toggle', 'offcanvas');
 
   toggler.setAttribute('data-bs-target', '#site-offcanvas');
 
-  
-
-  // 👉 Ajoute le texte "Menu" à côté du burger
-
-  const menuText = document.createElement('span');
-
-  menuText.className = 'menu-text';
-
-  menuText.textContent = 'Menu';
-
-  toggler.appendChild(menuText);
-
-  
-
 });
+
+
 
 </script>
 
@@ -277,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°1-augmenter-la-sécurité-des-populations">    
         <li>
-    <a class="dropdown-item" href="../batiments_plain_pied.qmd">
+    <a class="dropdown-item" href="../batiments_plain_pied.html">
  <span class="dropdown-text">Bâtiments plain-pied</span></a>
   </li>  
         <li>
