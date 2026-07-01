@@ -1,0 +1,26 @@
+---
+title: "Objectif n°2 : Stabiliser/réduire le coût des dommages"
+sidebar: objectifs
+lang: fr
+toc: false
+---
+
+<img src="Images/Objectif2.png" height="150px" width="148px" align="center" style="float:center; margin-right:1000px;"/>
+
+<h2>Stabiliser/réduire le coût des dommages.</h2>
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> Face à une constante augmentation du coût des inondations pour la société, la politique de sauvegarde des populations et des biens vise à développer des orientations sur la maîtrise des coûts. </font>
+
+</p>
+
+<h3>Liste des indicateurs de l'objectif 2</h3>
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> <b>- Dommages aux habitations</b> : Dommages aux bâtiments d’habitation en fonction de la hauteur d’eau et de la durée de submersion <br/> <b>- Dommages aux entreprises</b> : Dommages aux entreprises en fonction de la hauteur d’eau et de la durée de submersion <br/> <b>- Dommages aux cultures</b> : Dommages aux cultures en fonction de la hauteur d’eau et de la durée de submersion <br/> <b>- Patrimoine et monuments historiques </b> : Nombre de musées, bâtiments patrimoniaux et monuments historiques susceptibles d’être endommagés <br/> <b>- Espaces naturels</b> : Surface d’espaces naturels protégés vulnérables <br/> <b>- Installations polluantes</b> : Nombre d’installations susceptibles de déverser des produits polluants <br/> <b>- Stations d'alimentation en eau potable</b> : Nombre de stations d’alimentation en eau potable (AEP) en zone inondable <br/> <b>- Réseaux</b> : Nombre de postes électriques (répartition et distribution) en zone inondable <br/> <b>- Voies ferrées</b> : Linéaire de voies ferrées impactées par la zone inondable <br/> <b>- Réseau de bus</b> : Linéaire de réseaux de bus urbain et de bus de transport départemental impactés par la zone inondable <br/>
+
+</font>
+
+</p>

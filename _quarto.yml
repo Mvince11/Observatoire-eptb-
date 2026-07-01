@@ -81,6 +81,10 @@ website:
             href: https://www.eptb-vienne.fr
             target: _blank
         
+        - icon: person-circle
+          href: login.qmd
+          text: " Mode administrateur - Espace réservé aux personnes identifiées"
+        
      tools: 
          - href: https://fr.linkedin.com/company/eptb-vienne
            aria-label: LinkedIn

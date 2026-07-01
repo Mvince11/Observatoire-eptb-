@@ -31,16 +31,45 @@ document.addEventListener('DOMContentLoaded', function () {
   header.appendChild(img);
   header.appendChild(closeBtn);
 
-  // Body : déplacer tous les enfants du collapse
+  // Body : deux colonnes (menu à gauche, image à droite)
   const body = document.createElement('div');
   body.className = 'offcanvas-body';
 
+  const leftCol = document.createElement('div');
+  leftCol.className = 'offcanvas-menu-col';
+
+  const rightCol = document.createElement('div');
+  rightCol.className = 'offcanvas-image-col';
+
+
+  const sideImg = document.createElement('img');
+  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
+  sideImg.alt = 'Illustration';
+
+  rightCol.appendChild(sideImg);
+
+  // Déplacer les éléments du collapse dans la colonne gauche
   while (collapse.firstChild) {
-    body.appendChild(collapse.firstChild);
+    leftCol.appendChild(collapse.firstChild);
   }
 
+  // Injecter les colonnes dans le body
+  body.appendChild(leftCol);
+  body.appendChild(rightCol);
+
+  // Finalisation
   offcanvas.appendChild(header);
   offcanvas.appendChild(body);
+  
+  leftCol.className = "offcanvas-menu-col";
+  rightCol.className = "offcanvas-image-col";
+  
+  const textOverlay = document.createElement('div');
+  textOverlay.className = 'offcanvas-image-text';
+  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
+  
+  rightCol.appendChild(textOverlay);
+
 
   // Insère l’offcanvas dans le DOM
   const navbar = document.querySelector('nav.navbar');
@@ -52,6 +81,4 @@ document.addEventListener('DOMContentLoaded', function () {
   // Retarget le burger vers l’offcanvas
   toggler.setAttribute('data-bs-toggle', 'offcanvas');
   toggler.setAttribute('data-bs-target', '#site-offcanvas');
-  
-  
 });

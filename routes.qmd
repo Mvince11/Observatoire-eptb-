@@ -3,13 +3,13 @@ title: "Carte Intercative"
 lang: fr
 back-to-top-navigation: false
 format:
-  html:
-    page-layout: custom
-    sidebar-width: 0px
+  dashboard:
+    orientation: columns
+    #page-layout: full
     
 resources:
   - Images/icons/*.svg
-  - layers/data_s12a.json
+  - layers/data_s16b.json
   - layers/batiments_hauteur.geojson
     
 include-in-header:
@@ -24,6 +24,8 @@ include-in-header:
     <script src="js/offcanvas.js" type="text/javascript"></script>
 ---
 
+##  {.sidebar}
+
 ```{=html}
 <div id="nav-menu-objectif-n°1"></div>
 ```
@@ -35,183 +37,47 @@ bbox_sru = FileAttachment("layers/bb.json").json()
 ```
 
 ```{=html}
-<style>
-/* Conteneur global */
-.collapse-box {
-  margin: 20px 0;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
+<div style="color:#dc7633; text-align:inherit !important; font-size:1.3em; font-weight:bold; font-family: calibri;margin-bottom:10%;">
+Linéaire d’itinéraires routiers interceptés par des zones d’aléa dangereuses pour une personne 
+ </div>
 
-/* En-tête cliquable */
-.collapse-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fafafa;
-  padding: 18px 22px;
-  cursor: pointer;
-  font-family: avenir;
-  font-size: 1.15em;
-  font-weight: 600;
-  color: #333;
-  transition: background 0.25s ease;
-}
-
-.collapse-header span:first-child {
-  padding-left: 44px; 
-  opacity: 0.7;
-}
+<div style="text-align:inherit !important; font-size:1.1em; font-family: calibri;margin-bottom:10%;"> Les itinéraires routiers traversant des zones d'aléa dangereuses pour une personne, sont également dangereux pour un automobiliste. Si la prise de risque inconsidérée est le premier facteur à l'origine des nombreux accidents relevés, notamment lors du franchissement de passages à gué, la gestion des itinéraires dangereux est une priorité pour limiter l'exposition. Cet indicateur permet de visualiser le linéaire de routes situées dans des zones inondables où les hauteurs d'eau sont supérieures à 1 m.</div>
 
 
-.collapse-header:hover {
-  background: #f0f0f0;
-}
+<a href=https://fiches.eptb-vienne.fr/ind_16b.pdf target=_blank><i class="fa fa-exclamation-circle"></i> Télécharger la fiche indicateur et la carte</a> 
 
-/* Flèche SVG moderne */
-.collapse-arrow {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0.7;
-}
 
-.collapse-header.active .collapse-arrow {
-  transform: rotate(90deg);
-  opacity: 1;
-}
-
-/* Contenu dépliant */
-.collapse-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.45s ease, padding 0.3s ease;
-  background: #ffffff;
-  padding: 0 0;
-}
-
-.collapse-content.open {
-  padding: 20px 0 30px 0;
-</style>
-
-<div class="collapse-box">
-
-  <h1 style="color:orangered; font-size:1.5rem; margin: 20px; font-family:avenir; opacity: 0.7;">
-    Nombre de personnes occupant des bâtiments de plain-pied fortement inondables
-  </h1>
-
-  <!-- TITRE CLIQUABLE -->
-  <div class="collapse-header">
-    <span>Plus d'informations concernant cet indicateur</span>
-
-    <!-- Flèche SVG moderne -->
-    <svg class="collapse-arrow" viewBox="0 0 24 24">
-      <path d="M8 5l8 7-8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
-
-  <!-- CONTENU DÉPLIANT -->
-  <div class="collapse-content">
-
-    <div style="
-      margin-left:10vw; 
-      margin-right:10vw; 
-      margin-top:20px; 
-      border:1px solid #ddd; 
-      border-radius:10px; 
-      padding:30px; 
-      background-color:white;
-    ">
-
-      <div class="flex-columns" style="display:flex; justify-content:space-between; align-items:flex-start; gap:40px;">
-
-        <!-- COLONNE GAUCHE -->
-        <div style="flex:1;">
-
-          <p style="font-size:1.1em; font-family:avenir;">
-            Le niveau des eaux peut monter relativement vite pour piéger des personnes dans des locaux ne disposant pas d’un accès vers un étage refuge.
-          </p>
-
-          <a href="https://fiches.eptb-vienne.fr/ind_12a.pdf" target="_blank"
-             style="display:block; margin-bottom:14px; text-align:left; font-size:1.05em;">
-            <i class="fa fa-exclamation-circle"></i> Télécharger la fiche indicateur et la carte
-          </a>
-
-        </div>
-
-        <!-- COLONNE DROITE -->
-        <div style="flex:0 0 35%;">
-
-          <p style="
-              padding:12px; 
-              border:1px solid #ddd; 
-              border-radius:12px; 
-              background:#f7f7f7; 
-              font-size:1.05em; 
-              text-align:center;
-            ">
-            La zone inondable correspond à l'aléa centennal construit à partir des données disponibles et notamment réglementaires mais en aucun cas             ne se substitue aux documents réglementaires en vigueur.
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+<div style="width: auto; padding:5px; border: 1px solid #A0A0A0; border-radius:15px; text-align: center !important; background: #F2F2F2; font-size:1.1em;margin-top:10%;">
+La zone inondable correspond à l'aléa centennal construit à partir des données disponibles et notamment réglementaires mais en aucun cas ne se substitue aux documents réglementaires en vigueur.
 </div>
-
-<script>
-document.querySelectorAll(".collapse-header").forEach(header => {
-  const content = header.nextElementSibling;
-
-  header.addEventListener("click", () => {
-    header.classList.toggle("active");
-
-    if (content.style.maxHeight) {
-      content.style.maxHeight = null;
-      content.classList.remove("open");
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-      content.classList.add("open");
-    }
-  });
-
-  // ⭐ ResizeObserver correctement attaché
-  const ro = new ResizeObserver(() => {
-    if (content.classList.contains("open")) {
-      content.style.maxHeight = content.scrollHeight + 20 + "px";
-    }
-  });
-
-  ro.observe(content);
-});
-
-</script>
 ```
 
-```{=html}
-<div class="tabset">
-  <!-- Boutons -->
-  <div class="tab-buttons">
-    <button class="tab-btn active" data-tab="tab1">Cartographie</button>
-    <button class="tab-btn" data-tab="tab4">Données de la commune</button> 
-    <button class="tab-btn" data-tab="tab5">Tableau de données</button>
-    <button class="tab-btn" data-tab="tab6">Graphiques</button>
-    <button class="tab-btn" data-tab="tab2">Informations relatives à l'indicateur</button>
-    <button class="tab-btn" data-tab="tab3">Bâtiments en 3D : Mode d'emploi</button>
-  </div>
-  
-    <!-- Contenu --> 
-    <div class="tab-content">
-      <div id="tab1" class="tab active" style="margin-top:-40px;">
-        <p style="margin-left:10vw; margin-right:10vw;">
-      
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(sf)
+library(dplyr)
+library(jsonlite)
+library(tidyr)
+
+# Charger le GeoJSON
+indicateurs <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
+  st_drop_geometry() %>%
+  select(nom, s16b) %>%
+   mutate(s16b = replace_na(s16b, 0))
+
+# Sauvegarder au format JSON dans le dossier _site
+write_json(indicateurs, "layers/data_s16b.json", auto_unbox = TRUE)
+
+# indicateursGeojson16 <- st_read("layers/indicateurs.geojson", quiet=TRUE)%>%
+#   mutate(s16b = replace_na(s16b, 0))
+# st_write(indicateursGeojson16, "layers/indicateursGeojson16.geojson", driver = "GeoJSON", delete_dsn = TRUE)
 ```
+
+# Cartographie
+
+## Column {width="60%"}
 
 ```{ojs}
 //| echo: false
@@ -240,7 +106,7 @@ batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
 
 
 map = {
-  const container = html`<div class="map-container" id="map" style="height: 600px; width: 90%; margin-left: 5vw;"></div>`;
+  const container = html`<div class="map-container" id="map" style="height: 665px; width: 100%;"></div>`;
   yield container;
 
   <!-- const sourcePlanIGN = { -->
@@ -253,6 +119,13 @@ map = {
     style: 'normal',
     format: 'image/jpeg',
     layer: 'HR.ORTHOIMAGERY.ORTHOPHOTOS'
+  };
+  
+  const sourceOSM = {
+    tiles: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minzoom: 0,
+    maxzoom: 19
   };
 
   const map = new maplibregl.Map({
@@ -311,7 +184,7 @@ map = {
       minzoom: 0,
       maxzoom: 22
     });
-    
+
     map.addSource('raster-osm', {
   type: 'raster',
   tiles: [
@@ -337,17 +210,13 @@ map = {
       source: 'raster-ortho',
       layout: { visibility: 'none' }
     });
-    
-     map.addLayer({
+
+    map.addLayer({
       id: 'OSM',
       type: 'raster',
       source: 'raster-osm',
       layout: { visibility: 'visible' } // tu peux le laisser caché au départ si tu veux le basculer ensuite
     });
-    
-    //fetch('layers/indicateurs.geojson')
-     //.then(response => response.json())
-     //.then(indicateursGeojson => { 
               
     
     const layersData = [
@@ -355,29 +224,37 @@ map = {
       { data: region, type: 'line', id: 'regionLayer', color: 'red', layout: {visibility:'none'} },
       { data: departement, type: 'line', id: 'departementLayer', color: '#a772b9', width: 2,  layout:{visibility:'none'}},
       { data: epci, type: 'line', id: 'epciLayer', color: '#567ae3', layout: {visibility:'none'} },
-      { data: indicateursGeojson, // GeoJSON contenant une propriété 's12a' -->
-        type: 'fill',
-        id: 'indicateurs12aLayer',
-        opacity: 0.5,
-        width: 1,
-        dynamicColor: { 
-        property: 's12a',
-        mapping: { 
-           //'-1': '#f1eeed',
-           //'0': '#ffffff', 
-           '10': '#ffffff',
-           '50': '#ffaaaa', 
-           '100': '#ff5555'
-          }, 
-         default: '#d9d9d9'
-        }
-        , layout: {visibility:'visible'}
-         },
+      {  data: indicateursGeojson, // GeoJSON contenant une propriété 's31atx'
+          type: 'fill',
+          id: 'indicateurs16bLayer',
+          opacity: 0.9,
+          width: 1,
+          dynamicColor: { 
+            property: 's16b',
+            // La logique exacte de la légende à appliquer :
+            // - 0 ou null => #d9d9d9
+            // - < 150     => #f9f0d9
+            // - < 500000  => #fdb77a
+            // - < 2000000 => #ec603F
+            // - >= 2000000 => #b30000
+            mapping: {
+              '0': '#d9d9d9',
+              '2': '#fff5eb',
+              '6': '#fdbd83',
+              '15': '#ee6510',
+              '25': '#7f2704'
+              
+            },
+            default: '#d9d9d9' // utilisé si null, undefined ou < 150
+          },
+          layout: { visibility: 'visible' }
+        },
+        { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
+      layout: {visibility:'visible'} },
       { data: zone_inondable, type: 'fill', id: 'zoneinondableLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
       layout: {visibility:'visible'} },
-      { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
-      layout: {visibility:'visible'} },
-      { data: batiments, type: 'fill-extrusion', id: 'batimentsLayer', width:2, opacity: 1, colorByType: 'ff_dteloctxt', heightProperty: 'hauteur',layout: {visibility:'none'}}
+      { data: batiments, type: 'fill-extrusion', id: 'batimentsLayer', width:2, opacity: 1, colorByType: 'ff_dteloctxt',
+        heightProperty: 'hauteur',layout: {visibility:'none'}}
       
     ];
     
@@ -397,12 +274,12 @@ map = {
         
         // Contenu de la légende
         legend.innerHTML = `
-          <strong>Population en zone <br>fortement inondable</strong><br>
+          <strong>Linéaire d'itinéraires <br> routiers interceptés <br> en km</strong><br>
           <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
-          <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
-          <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
-          <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
-          <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
+          <div><span style="background:#fff5eb;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> 0-2 </div>
+          <div><span style="background:#fdbd83;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 2-6 </div>
+          <div><span style="background:#ee6510;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 6-15 </div>
+          <div><span style="background:#7f2704;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 15 </div>
         `;
         
         // L’ajouter à la carte (le container MapLibre)
@@ -410,7 +287,7 @@ map = {
         
         //afin de lier la légende à l'indicateur
         function updateLegendVisibility() {
-        const visibility = map.getLayoutProperty('indicateurs12aLayer', 'visibility');
+        const visibility = map.getLayoutProperty('indicateurs16bLayer', 'visibility');
         if (visibility === 'none') {
           legend.style.display = 'none';
         } else {
@@ -484,10 +361,10 @@ map = {
               'case',
               ['!', ['has', layer.dynamicColor.property]], '#d9d9d9',                       // Propriété absente
               ['any', ['==', ['get', layer.dynamicColor.property], null], ['==', ['get', layer.dynamicColor.property], 0]], '#d9d9d9', // null ou 0
-              ['<', ['get', layer.dynamicColor.property], 10], '#ffffff',
-              ['<', ['get', layer.dynamicColor.property], 50], '#ffaaaa',
-              ['<', ['get', layer.dynamicColor.property], 100], '#ff5555',
-              ['>=', ['get', layer.dynamicColor.property], 100], '#ff0000',
+              ['<', ['get', layer.dynamicColor.property], 2], '#fff5eb',
+              ['<', ['get', layer.dynamicColor.property], 6], '#fdbd83',
+              ['<', ['get', layer.dynamicColor.property], 15], '#ee6510',
+              ['>', ['get', layer.dynamicColor.property], 15], '#7f2704',
               '#d9d9d9' // fallback
             ];
           } else {
@@ -521,31 +398,13 @@ map = {
           layerConfig.paint['fill-extrusion-base'] = 0;
           layerConfig.paint['fill-extrusion-opacity'] = layer.opacity || 0.9;
         }
-      
+
         map.addLayer(layerConfig);
         
-        map.addLayer({
-                  id: 'indicateurs12aLabels',
+         map.addLayer({
+                  id: 'indicateurs16bLabels',
                   type: 'symbol',
-                  source: 'indicateurs12aLayer', // le même id que ta source GeoJSON
-                  layout: {
-                    'text-field': ['get', 'nom'],
-                    'text-size': 11,
-                    'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-                    'text-offset': [0, 0.6],
-                    'text-anchor': 'top'
-                  },
-                  paint: {
-                    'text-color': '#000000',
-                    'text-halo-color': '#ffffff',
-                    'text-halo-width': 1
-                  }
-                });
-                
-                map.addLayer({
-                  id: 'indicateurs12aLabels',
-                  type: 'symbol',
-                  source: 'indicateurs12aLayer', // le même id que ta source GeoJSON
+                  source: 'indicateurs16bLayer', // le même id que ta source GeoJSON
                   layout: {
                     'text-field': ['get', 'nom'],
                     'text-size': 11,
@@ -561,28 +420,28 @@ map = {
                 });
                 
         map.addLayer({
-                 id: 'indicateurs12a-hover',
+                 id: 'indicateurs16b-hover',
                  type: 'line',
-                 source: 'indicateurs12aLayer', // même source
+                 source: 'indicateurs16bLayer', // même source
                  paint: {
                    'line-color': '#000',
                    'line-width': 2
                   },
                  filter: ['==', 'nom', ''] // vide au début
                   });
-
-      
-      map.on('click', 'indicateurs12aLayer', (e) => {
+        
+        
+      map.on('click', 'indicateurs16bLayer', (e) => {
         const feature = e.features[0];
         const image= feature.properties.image;
         const nom = feature.properties.nom || 'Non disponible';
         
         const population = feature.properties.population
-        ? feature.properties.population.toLocaleString('fr-FR') + ' habitants'
-        : 'Non disponible';
-        
-        const s12aValue = feature.properties.s12a || '0';
-        const dommages = (Number(s12aValue) || 0).toLocaleString('fr-FR');
+          ? feature.properties.population.toLocaleString('fr-FR') + ' habitants'
+          : 'Non disponible';
+      
+        const s16bValue = parseFloat(feature.properties.s16b);
+        const dommages = (Number(s16bValue) || 0).toLocaleString('fr-FR');
         const batimentsValue = feature.properties.nb_batiments;
         const batiments = !isNaN(parseFloat(batimentsValue))
           ? parseInt(batimentsValue).toLocaleString('fr-FR')
@@ -609,17 +468,18 @@ map = {
             padding: 4px !important;
             border: 1px solid;
             border-radius: 8px;
-            width: 270px;
+            width: max-content;
             box-shadow: rgba(101, 147, 220, 0.2) 0px 4px 8px 0px;
             border-color: rgba(101, 147, 220, 0.5);
           }
         </style>
-           <div style="font-family: sans-serif; font-size: 13px; margin:10px;">
-          <div style="background-color: #d1ee9c; border: 1px solid; border-radius:8px; margin-bottom:16px; padding:10px;"><strong>
+          <div style="font-family: sans-serif; font-size: 13px; margin:10px;">
+          <div style="background-color: #69774f; border: 1px solid; border-radius:8px; margin-bottom:16px; padding:10px; color:white;"><strong>
           <center>${nom}</center>
           </strong></div>
-          <p style="text-align:center !important"><strong>- Population :</strong> ${population}</p>
-          <p style="text-align:center !important"><strong>- Nombre de personnes en zone fortement inondable :</strong> ${dommages}</p>
+            <p style="margin:auto;"><strong>Population :</strong> ${population}</p>
+            <p style="margin:auto;"><strong>Linéaire d'itinéraires routiers <br> interceptés en km :</strong> ${dommages}</p>
+          </div>
         `;
       
         new maplibregl.Popup({closeButton: false})
@@ -630,7 +490,11 @@ map = {
           // Mettre à jour le conteneur HTML avec les informations spécifiques du marqueur 
          document.getElementById('donnees').innerHTML = `
           <div style="text-align:center; font-family:sans-serif; font-size:16px;">
-            <img src="${image}" style="width:300px; margin-bottom:10px;"><br>
+            <div>
+            <img src="${image}" style="width:300px; margin-bottom:10px;padding: 2px; background-color: darkgoldenrod;
+                                margin-top: 13px;box-shadow: rgba(149, 31, 81, 0.77) 0px 4px 8px 0px;">
+            </div>
+            <br>
             
             <strong style="font-size:1.1em;"><i class="bi bi-geo-alt-fill"></i> Commune :</strong> ${nom}<br>
             <strong style="font-size:1.1em;"><i class="bi bi-people-fill"></i> Nombre d'habitants :</strong> ${population}<br>
@@ -649,29 +513,29 @@ map = {
             </ul>
         
             <div style="margin-top:10px;">
-              <strong style="font-size:1.1em;"><i class="bi bi-droplet-half"></i> Nombre de personnes en zone fortement inondable :</strong> ${dommages}
+              <strong style="font-size:1.1em;"><i class="fas fa-road"></i> Linéaire d'itinéraires routiers interceptés en km :</strong> ${dommages}
             </div>
           </div>
-         `;
+        `;
       });
 
 
-      map.on('mousemove', 'indicateurs12aLayer', (e) => {
+
+      map.on('mousemove', 'indicateurs16bLayer', (e) => {
         if (e.features.length > 0) {
           const nomCommune = e.features[0].properties.nom;
       
-          map.setFilter('indicateurs12a-hover', ['==', 'nom', nomCommune]);
+          map.setFilter('indicateurs16b-hover', ['==', 'nom', nomCommune]);
       
           map.getCanvas().style.cursor = 'pointer';
         }
       });
 
-        map.on('mouseleave', 'indicateurs12aLayer', () => {
-          map.setFilter('indicateurs12a-hover', ['==', 'nom', '']);
+        map.on('mouseleave', 'indicateurs16bLayer', () => {
+          map.setFilter('indicateurs16b-hover', ['==', 'nom', '']);
           map.getCanvas().style.cursor = '';
         });
       });
-    
 
     // Interface de contrôle des couches
     const mapLayersDiv = document.createElement('div');
@@ -691,10 +555,10 @@ map = {
       bassinvienneLayer: 'Bassin de la Vienne',
       regionLayer: 'Région',
       departementLayer: 'Département',
-      epciLayer: 'EPCI',
-      zoneinondableLayer: 'Zonage Inondable',
+      epciLayer: 'Etablissement Public de Coopération Intercommunale',
       coursdeauLayer: "Cours d'eau",
-      indicateurs12aLayer: 'Bâtiments de plain-pied',
+      zoneinondableLayer: 'Zonage Inondable',
+      indicateurs16bLayer: "Linéaire d'itinéraires routiers interceptés en km",
       batimentsLayer: "Bâtiments"
     };
 
@@ -762,17 +626,179 @@ map = {
     });
   });
 };
+
+
 ```
 
-```{=html}
-        </p>
+## Column {.tabset width="40%"}
+
+### Données de la commune {.flow}
+
+#### Row
+
+```{ojs}
+//| echo: false
+//| padding: 5px
+//| expandable: false
+md`
+<div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;">
+    Cliquez sur une commune pour voir les informations ici.<br>
+</div>
+
+`
+
+
 ```
 
-```{=html}
-      </div>
-      <div id="tab2" class="tab">
-        <p>
+### Tableau de données {.flow}
+
+#### Row
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| expandable: false
+
+library(sf)
+library(dplyr)
+library(reactable)
+library(tidyr)
+
+indicateur_s16b <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
+  select(insee_com, nom, population, s16b) %>%
+  mutate(
+    s16b = replace_na(s16b, 0)
+  ) %>%
+  st_drop_geometry() %>%
+  rename(
+    Commune = nom,
+    `Code INSEE` = insee_com,
+    Population = population,
+    "Linéaire d'itinéraires routiers interceptés en km" = s16b
+  ) %>%
+  mutate(
+    Population = format(Population, big.mark = " ", scientific = FALSE),
+    #"Linéaire d'itinéraires routiers interceptés en km" = format("Linéaire d'itinéraires routiers interceptés en km", big.mark = " ", scientific = FALSE)
+  )
+
+# Affichage avec reactable
+reactable(indicateur_s16b,
+          filterable = TRUE,
+          striped = TRUE,
+          sortable = TRUE,
+          resizable = TRUE,
+          pagination = TRUE,
+          defaultPageSize = 10,
+          highlight = TRUE,
+          theme = reactableTheme(
+            borderColor = "#E0E0E0",
+            stripedColor = "#f5f5f5",
+            highlightColor = "#7591e5",
+            cellPadding = "8px 12px",
+            style = list(fontSize = "14px", fontFamily = "sans-serif")
+          ))
+
+
 ```
+
+### Graphiques {.flow}
+
+#### Row
+
+```{ojs}
+//| echo: false
+//| padding: 5px
+//| expandable: false
+
+import { Plot as PlotTaux } from "@observablehq/plot";
+import { Inputs as InputsTaux } from "@observablehq/inputs";
+
+// Charger les données
+data = FileAttachment("layers/data_s16b.json").json()
+
+// Label du slider
+html`<label for="slider-s16b" style="display: block;
+  margin-top: 1em;
+  font-weight: bold;
+  margin-bottom: 1em;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 5px;
+  text-align: center;
+  margin-right: 20%;
+  margin-left: 20%;">
+  Linéaire d'itinéraires routiers interceptés en km
+</label>`
+
+// Slider
+
+
+data_s16b = FileAttachment("layers/data_s16b.json").json()
+
+viewof slider_s16b = InputsTaux.range([0, 27], {
+  value: 10,
+  step: 3//
+  //label: "Linéaire d'itinéraires routiers interceptés en km"
+})
+
+sorted_s16b = data_s16b
+  .map(d => ({ ...d, s16b: +d.s16b || 0 }))
+  .filter(d => d.s16b <= slider_s16b)
+  .sort((a, b) => a.s16b - b.s16b)
+
+PlotTaux.plot({
+  marks: [
+    PlotTaux.barY(sorted_s16b, {
+      x: d => d.nom,
+      y: d => d.s16b,
+        fill: d => {
+        const val = d.s16b;
+        if (val === 0) return "#d9d9d9";
+        if (val < 2) return "#fff5eb";
+        if (val < 6) return "#fdbd83";
+        if (val < 15) return "#ee6510";
+        if (val >= 15) return "#7f2704";
+        return "#67000d"; // >4
+        
+      }
+    }),
+    PlotTaux.text(sorted_s16b, {
+      x: d => d.nom,
+      y: d => d.s16b,
+      text: d => d.s16b.toLocaleString("fr-FR"),
+      dy: -8,
+      fontSize: 9,
+      fill: "black",
+      textAnchor: "middle"
+    })
+  ],
+  y: {
+    grid: true,
+    label: "Linéaire d'itinéraires routiers interceptés en km",
+    domain: [0, Math.max(...sorted_s16b.map(d => d.s16b))],
+    tickFormat: d => d.toLocaleString("fr-FR", { maximumFractionDigits: 0 })
+  },
+  x: {
+    label: "Commune",
+    tickRotate: -45,
+    labelAnchor: "right"
+  },
+  style: {
+    fontSize: "11px",
+    fontFamily: "sans-serif",
+    fontWeight: "bold"
+  },
+  width: window.innerWidth * 0.95,
+  height: window.innerHeight * 0.65,
+  marginBottom: 120,
+  marginTop: 50,
+  marginLeft: 80
+})
+```
+
+# Informations relatives à l'indicateur {.flow}
 
 ```{ojs}
 //| echo: false
@@ -789,28 +815,29 @@ md`
     <col style="width:20%;">
   </colgroup>
   <tr>
-    <th style="background-color:bisque; border:1px solid;" colspan="2">Numéro d'indicateur</th>
-    <th style="border:1px solid;">Ind1/2a</th>
-    <th style="background-color:bisque; border:1px solid;">Date de mise à jour</th>
+    <th style="background-color:#E6CD75; border:1px solid;" colspan="2">Numéro d'indicateur</th>
+    <th style="border:1px solid;">Ind1/6b</th>
+    <th style="background-color:#E6CD75; border:1px solid;">Date de mise à jour</th>
     <th style="border:1px solid;">31/05/2025</th>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Intitulé</td>
-    <td colspan="3" style="border:1px solid;">Nombre de personnes occupant des bâtiments (logements et activités) de plain-pied
-        fortement inondables (plus de 1,5 m d’eau)</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Intitulé</td>
+    <td colspan="3" style="border:1px solid;">Linéaire d’itinéraires routiers interceptés par des zones d’aléa dangereuses pour une
+personne</td>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Objectif de la SNGRI</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Objectif de la SNGRI</td>
     <td colspan="3" style="border:1px solid;">Objectif n°1 : Augmenter la sécurité des populations exposées</td>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Axe de vulnérabilité</td>
-    <td colspan="3" style="border:1px solid;">Axe 1/1 La mise en danger des personnes au sein des bâtiments</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Axe de vulnérabilité</td>
+    <td colspan="3" style="border:1px solid;">Axe 1/2 La mise en danger des personnes due aux dysfonctionnements des infrastructures et
+des réseaux</td>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Source de vulnérabilité</td>
-    <td colspan="3" style="border:1px solid;">S1/2 Inondation de bâtiments et risque de rupture des ouvrants dans les zones pouvant
-        comporter une hauteur d’eau importante</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Source de vulnérabilité</td>
+    <td colspan="3" style="border:1px solid;">S1/6 Présence d’eau et/ou de courants dans les espaces ouverts fréquentés par des piétons
+ou des véhicules</td>
   </tr>
 </table>
 
@@ -825,34 +852,32 @@ md`
     <col style="width:20%;">
   </colgroup>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Modalités du calcul</td>
-    <td colspan="3" style="border:1px solid;">On sélectionne les bâtiments (habitation ou activité) de plain-pied qui intersectent la 
-        zone d’aléa supérieure à 1,5 m et on comptabilise le nombre de personnes (habitants ou employés). Le résultat est ensuite 
-        agrégé à la commune.</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Modalités du calcul</td>
+    <td colspan="3" style="border:1px solid;">On considère qu’à un mètre, la hauteur d’eau est dangereuse pour le déplacement d’une
+personne. On sélectionne donc tous les tronçons de routes qui se situent dans la zone inondée de plus d’1 mètre. Pour cela, nous utilisons les informations d’altitude présentes dans la couche des routes de la BD TOPO. On croise avec la couche de la zone inondée
+(Modèle numérique de Surface Libre en Eau, MNSLE), et par soustraction, nous obtenons la hauteur d’eau sur chaque tronçon de route.</td>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Échelle de représentation</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Échelle de représentation</td>
     <td colspan="3" style="border:1px solid;">Communale</td>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Points de vigilance</td>
-    <td colspan="3" style="border:1px solid;">Pour les effectifs des employés, les valeurs renseignées dans SIREN sont des fourchettes         de valeurs hautes et basses. Ici, le choix de prendre la valeur haute a été retenu pour éviter de minimiser le total.
-        Lors de l’affectation des personnes au bâtiment, pour des carreaux à faible densité de personnes, des valeurs décimales ont pu         être attribuées aux bâtiments.</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Points de vigilance</td>
+    <td colspan="3" style="border:1px solid;">La méthode décrite ci-dessus ne fonctionne que si nous disposons du MNSLE sur le territoire inondé, lui-même obtenu à partir des isocotes d’inondation. À défaut, il faut croiser la couche route avec la zone inondée > 1 m, mais certaines routes surélevées (remblais, pont, etc.) peuvent être sélectionnées à tort. Notons que les routes de la BD TOPO n’ont pas toutes ces informations d’altitude renseignées. Pour celles-ci, on sélectionnera les tronçons inondés via un croisement avec la couche de hauteur d’eau supérieure à 1 mètre. Enfin, le millésime 2020 inclut directement dans l’objet géométrique les informations
+d’altitude, ce qui nécessite une opération supplémentaire pour récupérer cette valeur enattribut.</td>
   </tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Table cible</td>
-    <td colspan="3" style="border:1px solid;">p_obj1_securite_personnes. s12a_pop_plainpied_zi_fort</td>
-  </tr>
-  <tr>
-  <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Variables mobilisées</td>
-    <td colspan="3" style="border:1px solid;">Zd : hauteur d’eau > 1.5m,
-        Pop1 : habitants,
-        Pop2 : employés</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Table cible</td>
+    <td colspan="3" style="border:1px solid;">p_obj1_securite_personnes.s16b_routes_zi</td>
   </tr>
   <tr>
   <tr>
-    <td colspan="2" style="background-color:bisque; border:1px solid; font-weight: bold;">Indicateur commun SLGRI Vienne/Clain</td>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Variables mobilisées</td>
+    <td colspan="3" style="border:1px solid;">Zc : Hauteur d’eau > 1m, <br> Res2 : Voies de transport (routes)</td>
+  </tr>
+  <tr>
+  <tr>
+    <td colspan="2" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Indicateur commun SLGRI Vienne/Clain</td>
     <td colspan="3" style="border:1px solid;">non</td>
   </tr>
   <tr>
@@ -875,60 +900,51 @@ md`
   </colgroup>
 
   <tr>
-    <td colspan="10" style="background-color:bisque; border:1px solid; font-weight: bold;">Données sources</td>
+    <td colspan="10" style="background-color:#E6CD75; border:1px solid; font-weight: bold;">Données sources</td>
   </tr>
   <tr>
-    <th style="background-color:bisque; border:1px solid;" colspan="2">Désignation</th>
-    <th style="background-color:bisque; border:1px solid;">Millésime</th>
-    <th style="background-color:bisque; border:1px solid;">Nationale/locale</th>
-    <th style="background-color:bisque; border:1px solid;">Format</th>
-    <th style="background-color:bisque; border:1px solid;">Type</th>
-    <th style="background-color:bisque; border:1px solid;" colspan="2">Producteur</th>
-    <th style="background-color:bisque; border:1px solid;" colspan="2">Nom fichier</th>
+    <th style="background-color:#E6CD75; border:1px solid;" colspan="2">Désignation</th>
+    <th style="background-color:#E6CD75; border:1px solid;">Millésime</th>
+    <th style="background-color:#E6CD75; border:1px solid;">Nationale/locale</th>
+    <th style="background-color:#E6CD75; border:1px solid;">Format</th>
+    <th style="background-color:#E6CD75; border:1px solid;">Type</th>
+    <th style="background-color:#E6CD75; border:1px solid;" colspan="2">Producteur</th>
+    <th style="background-color:#E6CD75; border:1px solid;" colspan="2">Nom fichier</th>
   </tr>
   <tr>
-    <td colspan="2" style="border:1px solid;">Hauteur d’eau >1.5m</td>
+    <td colspan="2" style="border:1px solid;">Zone de hauteur d’eau supérieure à 1m</td>
     <td style="border:1px solid;">2019</td>
     <td style="border:1px solid;">Locale</td>
     <td style="border:1px solid;">Shape</td>
     <td style="border:1px solid;">Polygone</td>
     <td colspan="2" style="border:1px solid;">Cerema</td>
-    <td colspan="2" style="border:1px solid;">zd_sup_1m50.shp</td>
+    <td colspan="2" style="border:1px solid;">zc_sup_1m.shp</td>
   </tr>
   <tr>
-    <td colspan="2" style="border:1px solid;">Bâtiment BDTOPO</td>
+    <td colspan="2" style="border:1px solid;">Routes BDTOPO</td>
+    <td style="border:1px solid;">2020</td>
+    <td style="border:1px solid;">Nationale</td>
+    <td style="border:1px solid;">Shape</td>
+    <td style="border:1px solid;">Ligne</td>
+    <td colspan="2" style="border:1px solid;">IGN</td>
+    <td colspan="2" style="border:1px solid;">Troncon_de_route.shp</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Surface libre en eau</td>
+    <td style="border:1px solid;">2019</td>
+    <td style="border:1px solid;">Locale</td>
+    <td style="border:1px solid;">Shape</td>
+    <td style="border:1px solid;">Polygone</td>
+    <td colspan="2" style="border:1px solid;">Cerema</td>
+    <td colspan="2" style="border:1px solid;">mnsle_voronoi.shp</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Communes (BDTOPO)</td>
     <td style="border:1px solid;">2020</td>
     <td style="border:1px solid;">Nationale</td>
     <td style="border:1px solid;">Shape</td>
     <td style="border:1px solid;">Polygone</td>
     <td colspan="2" style="border:1px solid;">IGN</td>
-    <td colspan="2" style="border:1px solid;">Batiment.shp</td>
-  </tr>
-  <tr>
-    <td colspan="2" style="border:1px solid;">Population carreau 200m INSEE</td>
-    <td style="border:1px solid;">2015</td>
-    <td style="border:1px solid;">Nationale</td>
-    <td style="border:1px solid;">Shape</td>
-    <td style="border:1px solid;">Polygone</td>
-    <td colspan="2" style="border:1px solid;">INSEE</td>
-    <td colspan="2" style="border:1px solid;">filosofi2015_carreaux_200m.shp</td>
-  </tr>
-  <tr>
-    <td colspan="2" style="border:1px solid;">Effectif des entreprises</td>
-    <td style="border:1px solid;">2021</td>
-    <td style="border:1px solid;">Nationale</td>
-    <td style="border:1px solid;">Shape</td>
-    <td style="border:1px solid;">Point</td>
-    <td colspan="2" style="border:1px solid;">INSEE</td>
-    <td colspan="2" style="border:1px solid;">geo_siret.shp</td>
-  </tr>
-  <tr>
-    <td colspan="2" style="border:1px solid;">Communes</td>
-    <td style="border:1px solid;">2020</td>
-    <td style="border:1px solid;">Nationale</td>
-    <td style="border:1px solid;">Shape</td>
-    <td style="border:1px solid;">Polygone</td>
-    <td colspan="2" style="border:1px solid;">Cerema</td>
     <td colspan="2" style="border:1px solid;">Commune.shp</td>
   </tr>
 </table>
@@ -937,13 +953,7 @@ md`
 `
 ```
 
-```{=html}
-        
-        </p>
-      </div>
-      <div id="tab3" class="tab"> 
-        <p>
-```
+# Bâtiments en 3D : Mode d'emploi {.flow}
 
 <i class="bi bi-box"></i> **Incliner et faire tourner la carte**\
 Maintenez enfoncé le bouton droit de la souris sur ce symbole <img src="Images/bouton_inclinaison.jpg" style="margin-bottom:auto; width:2%;"/> et déplacez le pour incliner le point de vue ou faire tourner la carte.
@@ -954,239 +964,3 @@ Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.
 <i class="bi bi-info-circle"></i> **Une illustration pour bien comprendre la carte interactive**
 
 ![Bâtiments 3D](Images/batiments_3d.jpg){fig-align="left" width="75%"}
-
-```{=html}
-</p>
-      </div>
-      <div id="tab4" class="tab"> 
-        <p>
-```
-
-```{ojs}
-//| echo: false
-//| padding: 5px
-//| expandable: false
-md`
-<div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;">
-    Cliquez sur une commune pour voir les informations ici.<br>
-</div>
-
-`
-
-
-```
-
-```{=html}
-        </p>
-      </div>
-      <div id="tab5" class="tab">
-        <p>
-```
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| expandable: false
-
-library(sf)
-library(dplyr)
-library(reactable)
-
-# Charger et transformer les données
-indicateur_s12a <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
-  mutate(s12a = ifelse(is.na(s12a), 0, s12a)) %>%
-  st_drop_geometry() %>%
-  select(insee_com, nom, population, s12a) %>%
-  rename(
-    Commune = nom,
-    `Code INSEE` = insee_com,
-    Population = population,
-    `Population en zone fortement inondable` = s12a
-  ) %>%
-  mutate(
-    Population = format(Population, big.mark = " ", scientific = FALSE),
-    `Population en zone fortement inondable` = format(`Population en zone fortement inondable`, big.mark = " ", scientific = FALSE)
-  )
-
-# Afficher avec reactable
-reactable(indicateur_s12a,
-          filterable = TRUE,
-          striped = TRUE,
-          sortable = TRUE,
-          resizable = TRUE,
-          pagination = TRUE,
-          defaultPageSize = 10,
-          highlight = TRUE,
-          theme = reactableTheme(
-            borderColor = "#E0E0E0",
-            stripedColor = "#f5f5f5",
-            highlightColor = "#7591e5",
-            cellPadding = "8px 12px",
-            style = list(fontSize = "14px", fontFamily = "sans-serif")
-          ))
-
-```
-
-```{=html}
-        </p>
-      </div>
-      <div id="tab6" class="tab">
-        <p>
-```
-
-```{r}
-#| echo: false
-library(sf)
-library(dplyr)
-library(jsonlite)
-
-# Charger le GeoJSON
-indicateurs <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
-  st_drop_geometry() %>%
-  select(nom, s12a) %>%
-  filter(!is.na(s12a))
-
-# Sauvegarder au format JSON dans le dossier _site
-write_json(indicateurs, "layers/data_s12a.json", auto_unbox = TRUE)
-```
-
-```{ojs}
-//| echo: false
-//| padding: 5px
-//| expandable: false
-import { Plot } from "@observablehq/plot";
-import { Inputs } from "@observablehq/inputs";
-
-// Charger les données depuis le fichier généré par R
-data = FileAttachment("layers/data_s12a.json").json()
-
-html`<label for="slider-s12a" style="display: block;
-  margin-top: 1em;
-  font-weight: bold;
-  margin-bottom: 1em;
-  border: 1px solid rgba(0, 0, 0, 0.6);
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
-  padding: 5px;
-  text-align: center;
-  margin-right: 20%;
-  margin-left: 20%;">
-  Population en zone inondable
-</label>`
-
-// Créer le slider
-viewof slider = Inputs.range(
-  [0, 230], 
-  { value: 230, step: 10, 
-  id: "slider-s12a"
-  }
-)
-
-html`<div style="margin-top: 30px;"></div>`
-
-// Fonction de tri croissant
-sorted = data
-  .filter(d => d.s12a <= slider)
-  .sort((a, b) => a.s12a - b.s12a);
-  
-
-Plot.plot({
-  marks: [
-    Plot.barY(sorted, { x: "nom", y: "s12a", 
-    fill: d => {
-        const val = d.s12a;
-        if (val === 0) return "#d9d9d9";        // null ou 0
-        if (val < 10) return "#f9e9e9";
-        if (val < 50) return "#ffaaaa";
-        if (val < 100) return "#ff5555";
-        if (val >= 100) return "#ff0000";
-        return "#b30000";
-      }
-      }),
-    Plot.text(sorted, { x: "nom", y: "s12a", text: d => `${d.s12a}`, dy: -10 })
-  ],
-  y: { grid: true, label: "Population en zone fortement inondable" },
-  x: { label: "Commune",
-        tickRotate: -45,
-        labelAnchor: "right",
-        labelOffset: 30},
-  width: window.innerWidth * 0.95,
-   height: window.innerHeight * 0.85,
-  height: 600,
-  style: {
-    fontSize: "10px",
-    fill: "black",
-    fontWeight: "bold"
-  },
-  marginBottom: 130
-})
-
-```
-
-```{=html}
-        </p>
-      </div> 
-    </div>
-</div> 
-
-<style>
-/* Conteneur global */
-.tabset {
-  margin-top: 20px;
-}
-
-/* Boutons */
-.tab-buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-  margin-left: 10vw;
-}
-
-.tab-btn {
-  padding: 10px 18px;
-  background: #e6e6e6;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.tab-btn.active {
-  background: #dc7633;
-  color: white;
-}
-
-/* Contenu */
-.tab-content .tab {
-  display: none;
-  padding: 10px 0;
-}
-
-.tab-content .tab.active {
-  display: block;
-}
-</style>
-
-
-<script>
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-
-    // désactiver tous les boutons
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-
-    // masquer tous les onglets
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-
-    // activer le bouton cliqué
-    btn.classList.add("active");
-
-    // activer l’onglet correspondant
-    document.getElementById(btn.dataset.tab).classList.add("active");
-  });
-});
-</script>
-```

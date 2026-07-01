@@ -1,0 +1,26 @@
+---
+title: "Objectif n°3 : Raccourcir le délai de retour à la normale"
+sidebar: objectifs
+lang: fr
+toc: false
+---
+
+<img src="Images/Objectif3.png" height="150px" width="148px" align="center" style="float:center; margin-right:1000px;"/>
+
+## Raccourcir le délai de retour à la normale.
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> Dès lors que les inondations sont inévitables, la capacité des territoires à s'organiser pour gérer les crises et rebondir après un événement concourt à réduire les impacts potentiels des inondations sur la santé humaine, l'activité économique, le patrimoine et l'environnement. </font>
+
+</p>
+
+<h3>Liste des indicateurs de l'objectif 3</h3>
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> <b>- Habitants</b> : Nombre et proportion d’habitants en zone inondable <br/> <b>- Surface des habitations</b> : Surface des emprises des bâtiments d’habitation pouvant être inondés <br/> <b>- Logements</b> : Nombre de logements dont la durée de retour à la normale est supérieure à 6 mois <br/> <b>- Employés </b> : Nombre d’employés en zone inondable <br/> <b>- Surface agricole</b> : Proportion de la surface agricole communale impactée par la zone inondable <br/> <b>- Routes inondées</b> : Proportion de réseau routier de desserte locale potentiellement inondable <br/>
+
+</font>
+
+</p>

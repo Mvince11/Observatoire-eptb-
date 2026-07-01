@@ -1,0 +1,923 @@
+---
+title: "Carte Intercative"
+lang: fr
+back-to-top-navigation: false
+format:
+  dashboard:
+    orientation: columns
+    #page-layout: full
+    
+resources:
+  - Images/icons/*.svg
+  - layers/data_s27a.json
+    
+include-in-header:
+  text: |
+    <script src="js/maplibre.js"></script>
+    <link href="js/maplibre.css" rel="stylesheet">
+    <script src="js/jquery_3.5.min.js" type="text/javascript"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="js/photon-geocoder-autocomplete.min.css" type="text/css">
+    <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
+    <script src="js/offcanvas.js" type="text/javascript"></script>
+---
+
+##  {.sidebar}
+
+```{=html}
+<div id="nav-menu-objectif-n°2"></div>
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+bbox_sru = FileAttachment("layers/bb.json").json()
+```
+
+```{=html}
+<div style="color:#dc7633; text-align:inherit !important; font-size:1.3em; font-weight:bold; font-family: calibri;margin-bottom:10%;">
+ Dommages aux entreprises en fonction de la hauteur d’eau et de la durée de submersion
+ </div>
+
+<div style="text-align:inherit !important; font-size:1.1em; font-family: calibri;margin-bottom:10%;"> Selon les caractéristiques de l’inondation, il est possible, d’évaluer le montant des pertes à attendre selon le type d’entreprises.</div>
+
+
+<a href=https://fiches.eptb-vienne.fr/ind_27a.pdf target=_blank><i class="fa fa-exclamation-circle"></i> Télécharger la fiche indicateur et la carte</a> 
+
+
+<div style="width: auto; padding:5px; border: 1px solid #A0A0A0; border-radius:15px; text-align: center !important; background: #F2F2F2; font-size:1.1em;margin-top:10%;">
+La zone inondable correspond à l'aléa centennal construit à partir des données disponibles et notamment réglementaires mais en aucun cas ne se substitue aux documents réglementaires en vigueur.
+</div>
+```
+
+# Cartographie
+
+## Column {width="60%"}
+
+```{ojs}
+//| echo: false
+//| output: false
+
+bassin_vienne = FileAttachment("layers/bassin_vienne.geojson").json();
+departement = FileAttachment("layers/departement.geojson").json();
+region = FileAttachment("layers/region.geojson").json();
+epci = FileAttachment("layers/epci.geojson").json();
+perimetre = FileAttachment("layers/perimetre.json").json();
+slgri = FileAttachment("layers/slgri.json").json();
+tri = FileAttachment("layers/tri.json").json();
+zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
+indicateurs = FileAttachment("layers/indicateurs.json").json();
+cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
+indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
+batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
+
+```
+
+```{ojs}
+//| echo: false
+//| padding: 0px
+//| expandable: false
+//| fill: true
+
+
+map = {
+  const container = html`<div class="map-container" id="map" style="height: 665px; width: 100%;"></div>`;
+  yield container;
+
+  <!-- const sourcePlanIGN = { -->
+  <!--   style: 'normal', -->
+  <!--   format: 'image/png', -->
+  <!--   layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2' -->
+  <!-- }; -->
+
+  const sourceOrtho = {
+    style: 'normal',
+    format: 'image/jpeg',
+    layer: 'HR.ORTHOIMAGERY.ORTHOPHOTOS'
+  };
+  
+  const sourceOSM = {
+    tiles: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    minzoom: 0,
+    maxzoom: 19
+  };
+
+  const map = new maplibregl.Map({
+    container: container,
+    style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+    <!-- center: [-0.04, 46.3051],  -->
+    zoom: 11
+  });
+
+  map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+  map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-left');
+  map.addControl(new maplibregl.ScaleControl({ maxWidth: 80, unit: 'metric' }));
+  
+
+  const toggleStyle = (useOrtho) => {
+    if (useOrtho) {
+      map.setLayoutProperty('orthoIGN', 'visibility', 'visible');
+      map.setLayoutProperty('OSM', 'visibility', 'none');
+    } else {
+      map.setLayoutProperty('orthoIGN', 'visibility', 'none');
+      map.setLayoutProperty('OSM', 'visibility', 'visible');
+    }
+  };
+
+  map.on('load', () => {
+    map.fitBounds(
+    [
+      [-0.04, 46.3051],   // Sud-Ouest
+      [0.7741, 46.8565]   // Nord-Est
+    ],
+    {
+      padding: 20,
+      linear: true,
+      duration: 0
+    }
+  );
+    // Ajout des fonds raster IGN
+    <!-- map.addSource('raster-planign', { -->
+    <!--   type: 'raster', -->
+    <!--   tiles: [ -->
+    <!--     `https://data.geopf.fr/wmts?SERVICE=WMTS&style=${sourcePlanIGN.style}&VERSION=1.0.0&REQUEST=GetTile&format=${sourcePlanIGN.format}&layer=${sourcePlanIGN.layer}&tilematrixset=PM&TileMatrix={z}&TileCol={x}&TileRow={y}` -->
+    <!--   ], -->
+    <!--   tileSize: 256, -->
+    <!--   attribution: '© <a href="https://www.ign.fr/">IGN</a>', -->
+    <!--   minzoom: 0, -->
+    <!--   maxzoom: 22 -->
+    <!-- }); -->
+
+    map.addSource('raster-ortho', {
+      type: 'raster',
+      tiles: [
+        `https://data.geopf.fr/wmts?SERVICE=WMTS&style=${sourceOrtho.style}&VERSION=1.0.0&REQUEST=GetTile&format=${sourceOrtho.format}&layer=${sourceOrtho.layer}&tilematrixset=PM&TileMatrix={z}&TileCol={x}&TileRow={y}`
+      ],
+      tileSize: 256,
+      attribution: '© <a href="https://www.ign.fr/">IGN</a>',
+      minzoom: 0,
+      maxzoom: 22
+    });
+    
+    map.addSource('raster-osm', {
+  type: 'raster',
+  tiles: [
+    'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+  ],
+  tileSize: 256,
+  attribution:
+    '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  minzoom: 0,
+  maxzoom: 19
+    });
+
+    <!-- map.addLayer({ -->
+    <!--   id: 'planIGN', -->
+    <!--   type: 'raster', -->
+    <!--   source: 'raster-planign', -->
+    <!--   layout: { visibility: 'visible' } -->
+    <!-- }); -->
+
+    map.addLayer({
+      id: 'orthoIGN',
+      type: 'raster',
+      source: 'raster-ortho',
+      layout: { visibility: 'none' }
+    });
+    
+    map.addLayer({
+      id: 'OSM',
+      type: 'raster',
+      source: 'raster-osm',
+      layout: { visibility: 'visible' } // tu peux le laisser caché au départ si tu veux le basculer ensuite
+    });
+    
+    //fetch('layers/indicateurs.geojson')
+     //.then(response => response.json())
+     //.then(indicateursGeojson => { 
+              
+    
+    const layersData = [
+      { data: bassin_vienne, type: 'line', id: 'bassinvienneLayer', color: 'green', layout: {visibility:'none'}},
+      { data: region, type: 'line', id: 'regionLayer', color: 'red', layout: {visibility:'none'} },
+      { data: departement, type: 'line', id: 'departementLayer', color: '#a772b9', width: 2,  layout:{visibility:'none'}},
+      { data: epci, type: 'line', id: 'epciLayer', color: '#567ae3', layout: {visibility:'none'} },
+      {  data: indicateursGeojson, // GeoJSON contenant une propriété 's27a'
+          type: 'fill',
+          id: 'indicateurs27aLayer',
+          opacity: 0.9,
+          width: 1,
+          dynamicColor: { 
+            property: 's27a',
+            // La logique exacte de la légende à appliquer :
+            // - 0 ou null => #d9d9d9
+            // - < 150     => #f9f0d9
+            // - < 500000  => #fdb77a
+            // - < 2000000 => #ec603F
+            // - >= 2000000 => #b30000
+            mapping: {
+              '150000': '#f9f0d9',
+              '500000': '#fdb77a',
+              '2000000': '#ec603F',
+              '6000000': '#b30000'
+            },
+            default: '#d9d9d9' // utilisé si null, undefined ou < 150
+          },
+          layout: { visibility: 'visible' }
+        },
+        { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
+      layout: {visibility:'visible'} },
+      { data: zone_inondable, type: 'fill', id: 'zoneinondableLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
+      layout: {visibility:'visible'} },
+      { data: batiments, type: 'fill-extrusion', id: 'batimentsLayer', width:2, opacity: 1, colorByType: 'ff_dteloctxt', heightProperty: 'hauteur',layout: {visibility:'none'}}
+      
+    ];
+    
+    // Créer le conteneur
+        const legend = document.createElement('div');
+        legend.id = 'legend';
+        legend.style.position = 'absolute';
+        legend.style.top = '82%';
+        legend.style.right = '10px';
+        legend.style.transform = 'translateY(-50%)';
+        legend.style.background = 'white';
+        legend.style.padding = '10px';
+        legend.style.fontSize = '12px';
+        legend.style.borderRadius = '4px';
+        legend.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+        legend.style.zIndex = '1'; // pour passer au-dessus de la carte
+        
+        // Contenu de la légende
+        legend.innerHTML = `
+          <strong>Dommages aux <br> entreprises en M€</strong><br>
+          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
+          <div><span style="background:#f9f0d9;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 0.150 </div>
+          <div><span style="background:#fdb77a;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0.150-0.500 </div>
+          <div><span style="background:#ec603F;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0.500-2 </div>
+          <div><span style="background:#b30000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 2 </div>
+        `;
+        
+        // L’ajouter à la carte (le container MapLibre)
+        map.getContainer().appendChild(legend);
+        
+        //afin de lier la légende à l'indicateur
+        function updateLegendVisibility() {
+        const visibility = map.getLayoutProperty('indicateurs27aLayer', 'visibility');
+        if (visibility === 'none') {
+          legend.style.display = 'none';
+        } else {
+          legend.style.display = 'block';
+        }
+      }
+
+        map.on('idle', updateLegendVisibility);
+        
+        // Créer le conteneur de légende des bâtiments
+        const batimentLegend = document.createElement('div');
+        batimentLegend.id = 'batiment-legend';
+        batimentLegend.style.position = 'absolute';
+        batimentLegend.style.top = '81%';
+        batimentLegend.style.left = '10px';
+        batimentLegend.style.transform = 'translateY(-50%)';
+        batimentLegend.style.background = 'white';
+        batimentLegend.style.padding = '10px';
+        batimentLegend.style.fontSize = '12px';
+        batimentLegend.style.borderRadius = '4px';
+        batimentLegend.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+        batimentLegend.style.zIndex = '1';
+        
+        // Contenu de la légende
+        batimentLegend.innerHTML = `
+          <strong>Type de bâtiment</strong><br>
+          <div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
+          <div><span style="background:#2ca02c;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Appartement</div>
+          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Aucun local</div>
+          <div><span style="background:#9467bd;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Dépendance</div>
+          <div><span style="background:#ff7f0e;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Maison</div>
+          <div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
+        `;
+        
+        // L’ajouter à la carte
+        map.getContainer().appendChild(batimentLegend);
+        batimentLegend.style.display = 'none'; // Permet de supprimer l'affichage de la légende au chargement de la page
+        
+        // Lier la visibilité à la couche bâtiment
+        function updateBatimentLegendVisibility() {
+          const visibility = map.getLayoutProperty('batimentsLayer', 'visibility');
+          //batimentLegend.style.display = (visibility === 'none') ? 'none' : 'block';
+          if (visibility === 'none') {
+          batimentLegend.style.display = 'none';
+        } else {
+          batimentLegend.style.display = 'block';
+        }
+        }
+        
+        map.on('idle', updateBatimentLegendVisibility);
+     
+    // Ajout des couches vectorielles
+      layersData.forEach(layer => {
+        map.addSource(layer.id, {
+          type: 'geojson',
+          data: layer.data
+        });
+      
+        const layerConfig = {
+          id: layer.id,
+          type: layer.type,
+          source: layer.id,
+          paint: {},
+          layout: layer.layout
+        };
+      
+        if (layer.type === 'fill') {
+          if (layer.dynamicColor) {
+            const prop = ['get', layer.dynamicColor.property];
+            layerConfig.paint['fill-color'] = [
+              'case',
+              ['!', ['has', layer.dynamicColor.property]], '#d9d9d9',                       // Propriété absente
+              ['any', ['==', ['get', layer.dynamicColor.property], null], ['==', ['get', layer.dynamicColor.property], 0]], '#d9d9d9', // null ou 0
+              ['<', ['get', layer.dynamicColor.property], 150000], '#f9f0d9',
+              ['<', ['get', layer.dynamicColor.property], 500000], '#fdb77a',
+              ['<', ['get', layer.dynamicColor.property], 2000000], '#ec603F',
+              ['>=', ['get', layer.dynamicColor.property], 2000000], '#b30000',
+              '#d9d9d9' // fallback
+            ];
+          } else {
+            layerConfig.paint['fill-color'] = layer.color || '#000000';
+          }
+        
+          layerConfig.paint['fill-opacity'] = layer.opacity || 0.4;
+          layerConfig.paint['fill-outline-color'] = '#000000';
+        
+        } else if (layer.type === 'line') {
+          layerConfig.paint['line-color'] = layer.color || '#000000';
+          layerConfig.paint['line-width'] = layer.width || 1;
+        }else if (layer.type === 'fill-extrusion') {
+          if (layer.colorByType === 'ff_dteloctxt') {
+            layerConfig.paint['fill-extrusion-color'] = [
+              'match',
+              ['get', 'ff_dteloctxt'],
+              'ACTIVITE', '#1f77b4',
+              'APPARTEMENT', '#2ca02c',
+              'AUCUN LOCAL', '#d9d9d9',
+              'DEPENDANCE', '#9467bd',
+              'MAISON', '#ff7f0e',
+              'MIXTE', '#e377c2',
+              '#000000' // fallback
+            ];
+          } else {
+            layerConfig.paint['fill-extrusion-color'] = layer.color || '#000000';
+          }
+        
+          layerConfig.paint['fill-extrusion-height'] = ['get', layer.heightProperty || 'hauteur'];
+          layerConfig.paint['fill-extrusion-base'] = 0;
+          layerConfig.paint['fill-extrusion-opacity'] = layer.opacity || 0.9;
+        }
+
+        map.addLayer(layerConfig);
+        
+         map.addLayer({
+                  id: 'indicateurs27aLabels',
+                  type: 'symbol',
+                  source: 'indicateurs27aLayer', // le même id que ta source GeoJSON
+                  layout: {
+                    'text-field': ['get', 'nom'],
+                    'text-size': 11,
+                    'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                    'text-offset': [0, 0.6],
+                    'text-anchor': 'top'
+                  },
+                  paint: {
+                    'text-color': '#000000',
+                    'text-halo-color': '#ffffff',
+                    'text-halo-width': 1
+                  }
+                });
+        
+      
+      map.on('click', 'indicateurs27aLayer', (e) => {
+        const feature = e.features[0];
+      
+        const nom = feature.properties.nom || 'Non disponible';
+      
+        const population = feature.properties.population
+          ? feature.properties.population.toLocaleString('fr-FR') + ' habitants'
+          : 'Non disponible';
+      
+        const s27aValue = parseFloat(feature.properties.s27a);
+        const dommages = !isNaN(s27aValue)
+          ? s27aValue.toLocaleString('fr-FR') + ' €'
+          : '0 €';
+      
+        const popupContent = `
+        <style>
+          .maplibregl-popup-content {
+            padding: 4px !important;
+            border: 1px solid;
+            border-radius: 8px;
+            width: max-content;
+            box-shadow: rgba(101, 147, 220, 0.2) 0px 4px 8px 0px;
+            border-color: rgba(101, 147, 220, 0.5);
+          }
+        </style>
+          <div style="font-family: sans-serif; font-size: 13px; margin:10px;">
+          <div style="background-color: #d1ee9c; border: 1px solid; border-radius:8px; margin-bottom:16px; padding:10px;"><strong>
+          <center>${nom}</center>
+          </strong></div>
+            <p><strong>Population :</strong> ${population}</p>
+            <p><strong>Dommages aux entreprises :</strong> ${dommages}</p>
+          </div>
+        `;
+      
+      
+        new maplibregl.Popup({closeButton: false})
+          .setLngLat(e.lngLat)
+          .setHTML(popupContent)
+          .addTo(map);
+          
+          // Mettre à jour le conteneur HTML avec les informations spécifiques du marqueur 
+         document.getElementById('donnees').innerHTML = `
+         <strong style="font-size:1.2em"><i class="bi bi-geo-alt-fill"></i> Commune :</strong> ${nom}<br>
+         <strong style="font-size:1.2em"><i class="bi bi-people-fill"></i> Nombre d'habitants :</strong> ${population}<br>
+         <strong style="font-size:1.2em"><i class="bi bi-droplet-half"></i> Dommages financiers causés aux entreprises :</strong> ${dommages}
+         `;
+      });
+
+
+
+      map.on('mouseenter', 'indicateurs27aLayer', () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'indicateurs27aLayer', () => {
+        map.getCanvas().style.cursor = '';
+      });
+    });
+
+    // Interface de contrôle des couches
+    const mapLayersDiv = document.createElement('div');
+    mapLayersDiv.classList.add('mapLayers');
+    mapLayersDiv.style.position = 'absolute';
+    mapLayersDiv.style.zIndex = '1000';
+    mapLayersDiv.innerHTML = `
+      <button id="toggleMapMenuButton" class="btn btn-light aria-label="Afficher les couches" title="Afficher les couches">
+        <img src="Images/icons/layers-half.svg" alt="Icône SVG" width="25" height="25">
+      </button>
+      <div id="layersList" style="display: none; background: white; padding: 10px; border: 1px solid #ccc;"></div>
+    `;
+    map.getContainer().appendChild(mapLayersDiv);
+
+    const toggleableLayerIds = layersData.map(layer => layer.id);
+    const aliasLayerIds = {
+      bassinvienneLayer: 'Bassin de la Vienne',
+      regionLayer: 'Région',
+      departementLayer: 'Département',
+      epciLayer: 'EPCI',
+      coursdeauLayer: "Cours d'eau",
+      zoneinondableLayer: 'Zonage Inondable',
+      indicateurs27aLayer: 'Dommages financiers des entreprises',
+      batimentsLayer: "Bâtiments"
+    };
+
+    function toggleLayerVisibility(id, visible) {
+      const visibility = visible ? 'visible' : 'none';
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, 'visibility', visibility);
+      }
+    }
+
+    const layersListDiv = mapLayersDiv.querySelector('#layersList');
+    
+    toggleableLayerIds.forEach(id => {
+      const name = aliasLayerIds[id] || id;
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = id;
+      checkbox.className = 'form-check-input';
+      
+      // ✅ Lire la visibilité actuelle directement dans la carte
+      map.once('idle', () => {
+        const visibility = map.getLayoutProperty(id, 'visibility');
+        checkbox.checked = visibility === 'visible';
+      });
+  
+      checkbox.addEventListener('change', () => toggleLayerVisibility(id, checkbox.checked));
+
+      const label = document.createElement('label');
+      label.htmlFor = id;
+      label.className = 'form-check-label';
+      label.innerText = name;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'form-check';
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(label);
+
+      layersListDiv.appendChild(wrapper);
+    });
+
+    document.getElementById('toggleMapMenuButton').addEventListener('click', () => {
+      layersListDiv.style.display = layersListDiv.style.display === 'none' ? 'block' : 'none';
+    });
+     
+
+    // Menu bascule fond de plan
+    const mapMenuDiv = document.createElement('div');
+    mapMenuDiv.classList.add('mapFondDePlan');
+    mapMenuDiv.style.position = 'absolute';
+    mapMenuDiv.style.zIndex = '1000';
+    mapMenuDiv.innerHTML = `
+      <strong>Fond de plan :</strong>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="orthoCheckbox">
+        <label class="form-check-label" for="orthoCheckbox">Photos aériennes</label>
+      </div>
+    `;
+    map.getContainer().appendChild(mapMenuDiv);
+
+    document.getElementById('orthoCheckbox').addEventListener('change', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleStyle(this.checked);
+    });
+  });
+};
+
+
+```
+
+## Column {.tabset width="40%"}
+
+### Données de la commune {.flow}
+
+#### Row
+
+```{ojs}
+//| echo: false
+//| padding: 5px
+//| expandable: false
+md`
+<div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;">
+    Cliquez sur une commune pour voir les informations ici.<br>
+</div>
+
+`
+
+
+```
+
+### Tableau de données {.flow}
+
+#### Row
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| expandable: false
+
+library(sf)
+library(dplyr)
+library(reactable)
+library(tidyr)
+
+# Charger et transformer les données
+indicateur_s27a <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
+  mutate(s27a = replace_na(s27a, 0)) %>%
+  st_drop_geometry() %>%
+  select(insee_com, nom, population, s27a) %>%
+  rename(
+    Commune = nom,
+    `Code INSEE` = insee_com,
+    Population = population,
+    `Dommages financiers causés aux entreprises en €` = s27a
+  ) %>%
+ mutate(
+    Population = format(Population, big.mark = " ", scientific = FALSE),
+    `Dommages financiers causés aux entreprises en €` = format(`Dommages financiers causés aux entreprises en €`, big.mark = " ", scientific = FALSE)
+  )
+
+# Afficher avec reactable
+reactable(indicateur_s27a,
+          filterable = TRUE,
+          striped = TRUE,
+          sortable = TRUE,
+          resizable = TRUE,
+          pagination = TRUE,
+          defaultPageSize = 10,
+          highlight = TRUE,
+          theme = reactableTheme(
+            borderColor = "#E0E0E0",
+            stripedColor = "#f5f5f5",
+            highlightColor = "#7591e5",
+            cellPadding = "8px 12px",
+            style = list(fontSize = "14px", fontFamily = "sans-serif")
+          ))
+
+```
+
+### Graphiques {.flow}
+
+#### Row
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(sf)
+library(dplyr)
+library(jsonlite)
+
+# Charger le GeoJSON
+indicateurs <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
+  st_drop_geometry() %>%
+  select(nom, s27a) %>%
+  filter(!is.na(s27a))
+
+# Sauvegarder au format JSON dans le dossier _site
+write_json(indicateurs, "layers/data_s27a.json", auto_unbox = TRUE)
+```
+
+```{ojs}
+//| echo: false
+//| padding: 5px
+//| expandable: false
+
+import { Plot } from "@observablehq/plot";
+import { Inputs } from "@observablehq/inputs";
+
+// Charger les données
+data = FileAttachment("layers/data_s27a.json").json()
+
+// Label du slider
+html`<label for="slider-s27a" style="display: block;
+  margin-top: 1em;
+  font-weight: bold;
+  margin-bottom: 1em;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 5px;
+  text-align: center;
+  margin-right: 20%;
+  margin-left: 20%;">
+  Dommages financiers causés aux entreprises (€)
+</label>`
+
+// Slider
+viewof slider = Inputs.range(
+  [0, 6000000], 
+  {
+    value: 3000000,
+    step: 100000,
+    id: "slider-s27a"
+  }
+)
+
+// Espace avant le graphique
+html`<div style="margin-top: 30px;"></div>`
+
+// Données filtrées et triées
+    sorted = data
+      .map(d => ({
+        ...d,
+        s27a: isNaN(+d.s27a) ? 0 : +d.s27a  // attrape null, undefined, "", "NaN", etc.
+      }))
+      .filter(d => d.s27a <= slider)
+      .sort((a, b) => a.s27a - b.s27a)
+
+
+
+// Graphique
+Plot.plot({
+  marks: [
+    Plot.barY(sorted, {
+      x: d => d.nom,
+      y: d => d.s27a,
+      fill: d => {
+        const val = d.s27a;
+        if (val === 0) return "#d9d9d9";        // null ou 0
+        if (val < 150000) return "#f9f0d9";
+        if (val < 500000) return "#fdb77a";
+        if (val < 2000000) return "#ec603F";
+        return "#b30000";
+      }
+ 
+    }),
+    Plot.text(sorted, {
+      x: d => d.nom,
+      y: d => d.s27a,
+      text: d => d.s27a.toLocaleString("fr-FR"),
+      dy: -8,
+      fontSize: 9,
+      fill: "black",
+      textAnchor: "middle"
+    })
+  ],
+  y: {
+    grid: true,
+    label: "Montant (€)",
+    domain: [0, Math.max(...sorted.map(d => d.s27a))],
+    tickFormat: d => d.toLocaleString("fr-FR", { maximumFractionDigits: 0 })
+  },
+  x: {
+    label: "Commune",
+    tickRotate: -45,
+    labelAnchor: "right"
+  },
+  style: {
+    fontSize: "11px",
+    fontFamily: "sans-serif",
+    fontWeight: "bold"
+  },
+  width: window.innerWidth * 0.95,
+  height: window.innerHeight * 0.65,
+  marginBottom: 120,
+  marginTop: 50,
+  marginLeft: 80  // ← solution au texte tronqué
+})
+
+```
+
+# Informations relatives à l'indicateur {.flow}
+
+```{ojs}
+//| echo: false
+//| padding: 5px
+//| expandable: false
+md`
+
+<table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
+  <colgroup>
+    <col style="width:20%;">
+    <col style="width:20%;">
+    <col style="width:20%;">
+    <col style="width:20%;">
+    <col style="width:20%;">
+  </colgroup>
+  <tr>
+    <th style="background-color:#c4e3ff; border:1px solid;" colspan="2">Numéro d'indicateur</th>
+    <th style="border:1px solid;">Ind2/7a</th>
+    <th style="background-color:#c4e3ff; border:1px solid;">Date de mise à jour</th>
+    <th style="border:1px solid;">31/05/2025</th>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Intitulé</td>
+    <td colspan="3" style="border:1px solid;">Dommages aux entreprises en fonction de paramètres hydrauliques</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Objectif de la SNGRI</td>
+    <td colspan="3" style="border:1px solid;">Objectif n°2 : Stabiliser à court terme et réduire à moyen terme le coût des dommages liés à l’inondation</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Axe de vulnérabilité</td>
+    <td colspan="3" style="border:1px solid;">Axe 2/3 Les dommages aux activités et aux biens</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Source de vulnérabilité</td>
+    <td colspan="3" style="border:1px solid;">S2/7 Inondation des bâtiments, du mobilier et des stocks, et pertes d’activité des entreprises</td>
+  </tr>
+</table>
+
+<br>
+
+<table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
+  <colgroup>
+    <col style="width:20%;">
+    <col style="width:20%;">
+    <col style="width:20%;">
+    <col style="width:20%;">
+    <col style="width:20%;">
+  </colgroup>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Modalités du calcul</td>
+    <td colspan="3" style="border:1px solid;">Application de la méthode du référentiel national.
+    On utilise le tableau du guide AMC sur les dommages aux entreprises (pour l’aléa fluvial), qui
+    dépendent du type d’activité de l’entreprise (code NACE), de la durée et de la hauteur de
+    submersion. On considère que la durée de submersion est supérieure à 48 h dans tous les cas.
+    Les points Geo-Siren ont été affectés aux bâtiments de la BDTOPO, soit directement si le point se
+    trouve dans le bâtiment, soit au bâtiment dans la parcelle la plus proche.
+    La couche des bâtiments (type ACTIVITE) est croisée avec la zone inondable contenant
+    l’information de hauteur d’eau.</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Échelle de représentation</td>
+    <td colspan="3" style="border:1px solid;">Communale</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Points de vigilance</td>
+    <td colspan="3" style="border:1px solid;">Les points de la base geo-siren ont différents niveaux de précision, qui vont du             numéro du bâtiment, à la rue et au centre de la commune. Seuls les points géocodés au bâtiments ont été
+    pris en compte. Cela représente plus de 80% des points sur la zone d’étude.
+    Le calcul du coût des dommages aux entreprises dépend de la surface du bâtiment, de la hauteur
+    d'eau, de la durée de submersion et du type d'activité. La perte d'activité n'est pas considérée
+    dans l'estimation du coût.</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Table cible</td>
+    <td colspan="3" style="border:1px solid;">p_obj2_cout_dommages.s27a_dommages_entreprises</td>
+  </tr>
+  <tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Variables mobilisées</td>
+    <td colspan="3" style="border:1px solid;">Zx : zone inondable, Zf : durée de submersion, Oc3 : activité</td>
+  </tr>
+  <tr>
+  <tr>
+    <td colspan="2" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Indicateur commun SLGRI Vienne/Clain</td>
+    <td colspan="3" style="border:1px solid;">non</td>
+  </tr>
+  <tr>
+</table>
+
+<br>
+
+<table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
+  <colgroup>
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+    <col style="width:10%;">
+  </colgroup>
+
+  <tr>
+    <td colspan="10" style="background-color:#c4e3ff; border:1px solid; font-weight: bold;">Données sources</td>
+  </tr>
+  <tr>
+    <th style="background-color:#c4e3ff; border:1px solid;" colspan="2">Désignation</th>
+    <th style="background-color:#c4e3ff; border:1px solid;">Millésime</th>
+    <th style="background-color:#c4e3ff; border:1px solid;">Nationale/locale</th>
+    <th style="background-color:#c4e3ff; border:1px solid;">Format</th>
+    <th style="background-color:#c4e3ff; border:1px solid;">Type</th>
+    <th style="background-color:#c4e3ff; border:1px solid;" colspan="2">Producteur</th>
+    <th style="background-color:#c4e3ff; border:1px solid;" colspan="2">Nom fichier</th>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Zone inondable</td>
+    <td style="border:1px solid;">2019</td>
+    <td style="border:1px solid;">Locale</td>
+    <td style="border:1px solid;">Shape</td>
+    <td style="border:1px solid;">Polygone</td>
+    <td colspan="2" style="border:1px solid;">Cerema</td>
+    <td colspan="2" style="border:1px solid;">Zx_zone_inondable.shp</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Hauteurs d’eau par pas de 10 cm</td>
+    <td style="border:1px solid;">2019</td>
+    <td style="border:1px solid;">Locale</td>
+    <td style="border:1px solid;">Shape</td>
+    <td style="border:1px solid;">Polygone</td>
+    <td colspan="2" style="border:1px solid;">Cerema</td>
+    <td colspan="2" style="border:1px solid;">hauteur_pas_10cm.shp</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Base geo-siren des entreprises</td>
+    <td style="border:1px solid;">2021</td>
+    <td style="border:1px solid;">Nationale</td>
+    <td style="border:1px solid;">Shape</td>
+    <td style="border:1px solid;">Point</td>
+    <td colspan="2" style="border:1px solid;">INSEE</td>
+    <td colspan="2" style="border:1px solid;">geo_siret.shp</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Fonction de dommages aux entreprises du guide AMC</td>
+    <td style="border:1px solid;">2016</td>
+    <td style="border:1px solid;">Nationale</td>
+    <td style="border:1px solid;">Csv</td>
+    <td style="border:1px solid;">Tableau</td>
+    <td colspan="2" style="border:1px solid;">CGDD</td>
+    <td colspan="2" style="border:1px solid;">amc_dommages_fluvial_entreprise</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border:1px solid;">Communes (BDTOPO)</td>
+    <td style="border:1px solid;">2020</td>
+    <td style="border:1px solid;">Nationale</td>
+    <td style="border:1px solid;">Shape</td>
+    <td style="border:1px solid;">Polygone</td>
+    <td colspan="2" style="border:1px solid;">IGN</td>
+    <td colspan="2" style="border:1px solid;">Commune.shp</td>
+  </tr>
+</table>
+
+
+`
+```
+
+# Bâtiments en 3D : Mode d'emploi {.flow}
+
+<i class="bi bi-box"></i> **Incliner et faire tourner la carte**\
+Maintenez enfoncé le bouton droit de la souris sur ce symbole <img src="Images/bouton_inclinaison.jpg" style="margin-bottom:auto; width:2%;"/> et déplacez le pour incliner le point de vue ou faire tourner la carte.
+
+<i class="bi bi-mouse2"></i> **Zoomer sur la carte**\
+Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.
+
+<i class="bi bi-info-circle"></i> **Une illustration pour bien comprendre la carte interactive**
+
+![Bâtiments 3D](Images/batiments_3d.jpg){fig-align="left" width="75%"}

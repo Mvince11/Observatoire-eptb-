@@ -1,0 +1,26 @@
+---
+title: "Objectif n°1 : Augmenter la sécurité des populations"
+sidebar: objectifs
+lang: fr
+toc: false
+---
+
+<img src="Images/Objectif1.png" height="150px" width="148px" align="center" style="float:center; margin-right:1000px;"/>
+
+## Les inondations peuvent faire courir un risque grave, voire mortel, aux populations.
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> La priorité est de limiter au maximum le risque de pertes de vies humaines en développant la prévision, l'alerte, la mise en sécurité et la formation aux comportements qui sauvent.</br> La prévention la plus efficace pour limiter les dommages liés aux inondations reste, bien évidemment, d'éviter l'urbanisation en zone inondable. </br> Les démarches de prévention des risques d'inondation ont ainsi vocation à augmenter la sécurité des enjeux déjà implantés en zone inondable. </font>
+
+</p>
+
+## Liste des indicateurs de l'objectif 1
+
+<p align="justify">
+
+<font size="4.5px" face="calibri"> <b>- Bâtiments de plain-pied</b> : Nombre de personnes occupant des bâtiments (logements et activités) de plain-pied fortement inondables (plus de 1,5 m d’eau) <br/> <b>- Établissements sensibles</b> : Nombre d’établissements sensibles (crèches, écoles, hôpitaux, maisons de retraite, établissements pénitentiaires) en zone inondable <br/> <b>- Établissements utiles à la gestion de crise</b> : Nombre d’enjeux utiles à la gestion de crise susceptibles de dysfonctionner <br/> <b>- Campings </b> : Nombre de personnes en campings (et autres enjeux similaires gérés) potentiellement impactées par une zone d’aléa dangereuse pour une personne <br/> <b>- Routes</b> : Linéaire d’itinéraires routiers interceptés par des zones d’aléa dangereuses pour une personne <br/> <b>- Plan communal de sauvegarde (PCS)</b> : Nombre de personnes habitant une commune inondable dont le plan communal de sauvegarde (PCS) n’a pas été réalisé (non réalisé ou en cours de réalisation) ou a plus de 5 ans <br/> <b>- Document d'information communal sur les risques majeurs (DICRIM)</b> : Nombre de personnes habitant une commune inondable dont le DICRIM n’a pas été réalisé (non réalisé ou en cours de réalisation) ou a plus de 5 ans <br/>
+
+</font>
+
+</p>
