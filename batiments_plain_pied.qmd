@@ -319,8 +319,10 @@ document.querySelectorAll(".collapse-header").forEach(header => {
 <div class="tabset">
   <!-- Boutons -->
   <div class="tab-buttons">
-    <button class="tab-btn active" data-tab="tab1">Cartographie</button>
-    <button class="tab-btn" data-tab="tab4">Données de la commune</button> 
+    <button class="tab-btn active" data-tab="tab1"> 
+    <i class="bi bi-map"></i>Cartographie</button>
+    <button class="tab-btn" data-tab="tab4">
+    <i class="bi bi-building"></i>Données de la commune</button> 
     <button class="tab-btn" data-tab="tab5">Tableau de données</button>
     <button class="tab-btn" data-tab="tab6">Graphiques</button>
     <button class="tab-btn" data-tab="tab2">Informations relatives à l'indicateur</button>
