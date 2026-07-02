@@ -1,101 +1,170 @@
 ---
-title: "Mode expert"
+title: ""
 format:
   html:
     page-layout: custom
+    sidebar-width: 0px
     toc: false
 ---
 
 ```{=html}
-<div class="login-container">
-  <div class="login-box">
-    <img src="Images/logo_porteurs_projet_transparent.png" class="login-logo">
-      <h2 style="text-align:initial;">Login</h2>
-      <p class="login-subtitle">Accès réservé aux utilisateurs autorisés</p>
-      
-      <form class="form-group">
-        <label for="username">Identifiant</label>
-        <input type="text" id="username" name="username" placeholder="Votre identifiant">
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" placeholder="Votre mot de passe">
-        <button type="submit" class="login-btn">Se connecter</button>
-      </form>
-    </div>
+<div class="login-wrapper animated-login">
+  <div class="login-card animated-card">
+    
+    <img src="Images/logo_porteurs_projet_transparent.png" class="login-logo-modern">
+
+    <h2 class="login-title">Connexion</h2>
+    <p class="login-subtitle-modern">Accès réservé aux utilisateurs autorisés</p>
+
+    <form class="login-form">
+      <label for="username">Identifiant</label>
+      <input type="text" id="username" name="username" placeholder="Votre identifiant">
+
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" name="password" placeholder="Votre mot de passe">
+
+      <button type="submit" class="login-btn-modern">Se connecter</button>
+    </form>
+
+  </div>
 </div>
 
 <style>
-.login-container {
+/* Animation fade-in + slide-up */
+.animated-login {
+  animation: fadeIn 1s ease forwards;
+}
+
+.animated-card {
+  animation: slideUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* --- CONTENEUR GLOBAL --- */
+.login-wrapper {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
+  background: linear-gradient(135deg, #f0f4f8, #dfe7ec);
+  padding: 20px;
 }
 
-.login-box {
-  width: 360px;
-  padding: 30px;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  text-align: center;
+/* --- CARTE VERRE --- */
+.login-card {
+  width: 380px;
+  padding: 40px 35px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.55);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+
+  /* Effet verre compatible Firefox */
+  position: relative;
+  overflow: hidden;
 }
 
-.login-logo {
-  width: 200px;
+.login-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.35);
+  filter: blur(18px);
+  z-index: -1;
+}
+
+/* --- LOGO --- */
+.login-logo-modern {
+  width: 180px;
   margin-bottom: 20px;
-}
-
-.login-subtitle {
-  color: #666;
-  margin-bottom: 25px;
-}
-
-label {
   display: block;
-  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- TITRE --- */
+.login-title {
+  font-family: "Inter", "Avenir", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+}
+
+/* --- SOUS-TITRE --- */
+.login-subtitle-modern {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+/* --- FORMULAIRE --- */
+.login-form label {
+  display: block;
   margin-top: 15px;
   font-weight: 600;
+  color: #333;
+  font-family: "Inter", sans-serif;
 }
 
-input {
+.login-form input {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.login-btn {
-  width: 100%;
-  margin-top: 25px;
   padding: 12px;
-  background: #007bff;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+
+.login-form input:focus {
+  border-color: #ef7757;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(239,119,87,0.25);
+  outline: none;
+}
+
+/* --- BOUTON --- */
+.login-btn-modern {
+  width: 100%;
+  margin-top: 30px;
+  padding: 14px;
+  background: #ef7757;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-.login-btn:hover {
-  background: #0056b3;
+.login-btn-modern:hover {
+  background: #d96548;
+  box-shadow: 0 6px 18px rgba(239,119,87,0.35);
 }
 
-
-#title-block-header{
-  margin-top: 150px;
-  margin-left: 5vw;
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+  .login-card {
+    width: 90%;
+    padding: 30px 25px;
+  }
 }
 
-h1{
-  font-family: "Helvetica Neue","Inter",Helvetica,Arial,sans-serif;
-  font-size: 2.5rem;
-  font-weight: 400;
-  padding-left: 0;
-}
-
-h1::before{
-  display:none;
-}
 </style>
+
 ```
