@@ -725,6 +725,9 @@ div.sidebar-item-container{
   margin-left: 6px;
 }
 
+.collapse-box{
+    margin: 40px !important;
+  }
 
 @media (max-width: 768px) {
   #photos_crues img {

@@ -11,6 +11,7 @@ resources:
   - Images/icons/*.svg
   - layers/data_s12a.json
   - layers/batiments_hauteur.geojson
+  - layers/indicateurs.geojson
     
 include-in-header:
   text: |
@@ -133,9 +134,26 @@ bbox_sru = FileAttachment("layers/bb.json").json()
 
 .tabset {
   margin-top: 30px;
+  padding: 25px 0;
+  border-radius: 22px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Boutons */
+/* Effet verre compatible Firefox */
+.tabset::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.45);
+  filter: blur(18px);
+  z-index: -1;
+}
+
+/* ----------------------------- */
+/*        BOUTONS TABS           */
+/* ----------------------------- */
+
 .tab-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -156,15 +174,44 @@ bbox_sru = FileAttachment("layers/bb.json").json()
   display: flex;
   align-items: center;
   gap: 10px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
 }
 
+/* Icônes */
 .tab-btn i {
   font-size: 1.2rem;
-  opacity: 0.8;
+  opacity: 0.85;
+  transition: transform 0.35s ease, opacity 0.25s ease;
+  animation: slowRotate 12s linear infinite;
 }
 
+/* Rotation lente continue */
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Rotation douce au hover */
+.tab-btn:hover i {
+  transform: rotate(20deg);
+  opacity: 1;
+}
+
+/* Pulse sur active */
+.tab-btn.active i {
+  animation: slowRotate 12s linear infinite, pulseIcon 1.2s ease infinite;
+  color: white;
+  opacity: 1;
+}
+
+@keyframes pulseIcon {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* Hover */
 .tab-btn:hover {
   background: rgba(255,255,255,0.75);
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
@@ -178,12 +225,10 @@ bbox_sru = FileAttachment("layers/bb.json").json()
   box-shadow: 0 6px 18px rgba(239,119,87,0.35);
 }
 
-.tab-btn.active i {
-  opacity: 1;
-  color: white;
-}
+/* ----------------------------- */
+/*        CONTENU TABS           */
+/* ----------------------------- */
 
-/* Contenu */
 .tab-content {
   margin-top: 10px;
 }
@@ -197,7 +242,7 @@ bbox_sru = FileAttachment("layers/bb.json").json()
   display: block;
 }
 
-/* Animation */
+/* Animation apparition */
 @keyframes fadeSlide {
   from {
     opacity: 0;
@@ -320,13 +365,23 @@ document.querySelectorAll(".collapse-header").forEach(header => {
   <!-- Boutons -->
   <div class="tab-buttons">
     <button class="tab-btn active" data-tab="tab1"> 
-    <i class="bi bi-map"></i>Cartographie</button>
+    <i class="bi bi-map"></i>Cartographie
+    </button>
     <button class="tab-btn" data-tab="tab4">
-    <i class="bi bi-building"></i>Données de la commune</button> 
-    <button class="tab-btn" data-tab="tab5">Tableau de données</button>
-    <button class="tab-btn" data-tab="tab6">Graphiques</button>
-    <button class="tab-btn" data-tab="tab2">Informations relatives à l'indicateur</button>
-    <button class="tab-btn" data-tab="tab3">Bâtiments en 3D : Mode d'emploi</button>
+    <i class="bi bi-building"></i>Données de la commune
+    </button> 
+    <button class="tab-btn" data-tab="tab5">
+     <i class="bi bi-table"></i>Tableau de données
+     </button>
+    <button class="tab-btn" data-tab="tab6">
+     <i class="bi bi-bar-chart"></i>Graphiques
+     </button>
+    <button class="tab-btn" data-tab="tab2">
+    <i class="bi bi-info-circle"></i>Informations relatives à l'indicateur
+    </button>
+    <button class="tab-btn" data-tab="tab3">
+    <i class="bi bi-box"></i>Bâtiments en 3D : Mode d'emploi
+    </button>
   </div>
   
     <!-- Contenu --> 
@@ -500,7 +555,7 @@ map = {
       layout: {visibility:'visible'} },
       { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
       layout: {visibility:'visible'} },
-      { data: batiments, type: 'fill-extrusion', id: 'batimentsLayer', width:2, opacity: 1, colorByType: 'ff_dteloctxt', heightProperty: 'hauteur',layout: {visibility:'none'}}
+      { data: batiments, type: 'fill-extrusion', id: 'batimentsLayer', width:2, opacity: 1, colorByType: 'ff_dteloctxt', heightProperty: 'hauteur',layout: {visibility:'none'} }
       
     ];
     
@@ -1065,21 +1120,24 @@ md`
         </p>
       </div>
       <div id="tab3" class="tab"> 
-        <p>
+      <p>
 ```
 
+::: {style="width:100%; max-width:1000px; margin: 0 auto; padding: 20px 0;"}
 <i class="bi bi-box"></i> **Incliner et faire tourner la carte**\
-Maintenez enfoncé le bouton droit de la souris sur ce symbole <img src="Images/bouton_inclinaison.jpg" style="margin-bottom:auto; width:2%;"/> et déplacez le pour incliner le point de vue ou faire tourner la carte.
+Maintenez enfoncé le bouton droit de la souris sur ce symbole <img src="Images/bouton_inclinaison.jpg" style="margin-bottom:auto;"/> et déplacez le pour incliner le point de vue ou faire tourner la carte.
 
 <i class="bi bi-mouse2"></i> **Zoomer sur la carte**\
 Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.
 
 <i class="bi bi-info-circle"></i> **Une illustration pour bien comprendre la carte interactive**
 
-![Bâtiments 3D](Images/batiments_3d.jpg){fig-align="left" width="75%"}
+![Bâtiments 3D](Images/batiments_3d.jpg){fig-align="center" width="100%"}
+:::
 
 ```{=html}
-</p>
+
+    </p>
       </div>
       <div id="tab4" class="tab"> 
         <p>
@@ -1090,8 +1148,8 @@ Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.
 //| padding: 5px
 //| expandable: false
 md`
-<div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;">
-    Cliquez sur une commune pour voir les informations ici.<br>
+<div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;text-align:center;">
+    Cliquez sur une commune de la rubrique "Cartographie" pour voir les informations ici.<br>
 </div>
 
 `
