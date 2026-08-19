@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 0830a445-d28a-41f0-8d74-20dfd6062283
+      url: https://website.quarto.pub/observatoire_eptb

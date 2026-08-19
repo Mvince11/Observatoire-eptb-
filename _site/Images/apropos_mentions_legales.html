@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-15eb64f7005c045a211628c87f1925d0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -76,11 +76,19 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<style>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
+
+</style>
+
+
+
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Try common Quarto IDs; fall back to your custom one if used
+  // Trouve le collapse généré par Quarto
 
   const collapse =
 
@@ -92,13 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const toggler = document.querySelector('.navbar-toggler');
 
-
-
-  if (!collapse || !toggler) return; // nothing to do
+  if (!collapse || !toggler) return;
 
 
 
-  // Create offcanvas container
+  // Crée le conteneur offcanvas
 
   const offcanvas = document.createElement('div');
 
@@ -110,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Header with image/logo and close button
+  // Header avec logo + bouton de fermeture
 
   const header = document.createElement('div');
 
@@ -124,7 +130,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   img.alt = 'Logo';
 
-  img.style.maxHeight = '64px';
+  img.style.maxHeight = '84px';
+
+  img.style.objectFit = 'contain';
 
 
 
@@ -144,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Body: move existing navbar items here
+  // Body : deux colonnes (menu à gauche, image à droite)
 
   const body = document.createElement('div');
 
@@ -152,23 +160,79 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Preserve current collapse content
+  const leftCol = document.createElement('div');
+
+  leftCol.className = 'offcanvas-menu-col';
+
+
+
+  const rightCol = document.createElement('div');
+
+  rightCol.className = 'offcanvas-image-col';
+
+
+
+
+
+  const sideImg = document.createElement('img');
+
+  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
+
+  sideImg.alt = 'Illustration';
+
+
+
+  rightCol.appendChild(sideImg);
+
+
+
+  // Déplacer les éléments du collapse dans la colonne gauche
 
   while (collapse.firstChild) {
 
-    body.appendChild(collapse.firstChild);
+    leftCol.appendChild(collapse.firstChild);
 
   }
 
 
 
+  // Injecter les colonnes dans le body
+
+  body.appendChild(leftCol);
+
+  body.appendChild(rightCol);
+
+
+
+  // Finalisation
+
   offcanvas.appendChild(header);
 
   offcanvas.appendChild(body);
 
+  
+
+  leftCol.className = "offcanvas-menu-col";
+
+  rightCol.className = "offcanvas-image-col";
+
+  
+
+  const textOverlay = document.createElement('div');
+
+  textOverlay.className = 'offcanvas-image-text';
+
+  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
+
+  
+
+  rightCol.appendChild(textOverlay);
 
 
-  // Insert offcanvas next to navbar
+
+
+
+  // Insère l’offcanvas dans le DOM
 
   const navbar = document.querySelector('nav.navbar');
 
@@ -176,33 +240,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  // Hide original collapse (we moved its children)
+  // Cache l’ancien collapse
 
   collapse.classList.add('d-none');
 
 
 
-  // Retarget the burger to offcanvas
+  // Retarget le burger vers l’offcanvas
 
   toggler.setAttribute('data-bs-toggle', 'offcanvas');
 
   toggler.setAttribute('data-bs-target', '#site-offcanvas');
 
-  
-
-  // 👉 Ajoute le texte "Menu" à côté du burger
-
-  const menuText = document.createElement('span');
-
-  menuText.className = 'menu-text';
-
-  menuText.textContent = 'Menu';
-
-  toggler.appendChild(menuText);
-
-  
-
 });
+
+
 
 </script>
 
@@ -234,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="menu-text">Accueil</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../mieux_comprendre.qmd"> 
+    <a class="nav-link" href="../mieux_comprendre.html"> 
 <span class="menu-text">Mieux comprendre les inondations</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -243,31 +295,31 @@ document.addEventListener('DOMContentLoaded', function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°1-augmenter-la-sécurité-des-populations">    
         <li>
-    <a class="dropdown-item" href="../batiments_plain_pied.qmd">
+    <a class="dropdown-item" href="../batiments_plain_pied.html">
  <span class="dropdown-text">Bâtiments plain-pied</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../etablissements_sensibles.qmd">
+    <a class="dropdown-item" href="../etablissements_sensibles.html">
  <span class="dropdown-text">Etablissements sensibles</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../enjeux_susceptibles_dysfonctionner.qmd">
+    <a class="dropdown-item" href="../enjeux_susceptibles_dysfonctionner.html">
  <span class="dropdown-text">Etablissements utiles à la gestion de crise</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../campings.qmd">
+    <a class="dropdown-item" href="../campings.html">
  <span class="dropdown-text">Campings</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../routes.qmd">
+    <a class="dropdown-item" href="../routes.html">
  <span class="dropdown-text">Routes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../pcs.qmd">
+    <a class="dropdown-item" href="../pcs.html">
  <span class="dropdown-text">Plan communal de sauvegarde (PCS)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../dicrim.qmd">
+    <a class="dropdown-item" href="../dicrim.html">
  <span class="dropdown-text">Document d’information communal sur les risques majeurs (DICRIM)</span></a>
   </li>  
     </ul>
@@ -278,43 +330,43 @@ document.addEventListener('DOMContentLoaded', function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°2-stabiliserréduire-le-coût-des-dommages">    
         <li>
-    <a class="dropdown-item" href="../dommages_habitations.qmd">
+    <a class="dropdown-item" href="../dommages_habitations.html">
  <span class="dropdown-text">Dommages aux habitations</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../dommages_entreprises.qmd">
+    <a class="dropdown-item" href="../dommages_entreprises.html">
  <span class="dropdown-text">Dommages aux entreprises</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../dommages_cultures.qmd">
+    <a class="dropdown-item" href="../dommages_cultures.html">
  <span class="dropdown-text">Dommages aux cultures</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../monuments.qmd">
+    <a class="dropdown-item" href="../monuments.html">
  <span class="dropdown-text">Patrimoines et monuments historiques</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../espaces_naturels.qmd">
+    <a class="dropdown-item" href="../espaces_naturels.html">
  <span class="dropdown-text">Espaces naturels</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../installations_polluantes.qmd">
+    <a class="dropdown-item" href="../installations_polluantes.html">
  <span class="dropdown-text">Installations polluantes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../eau_potable.qmd">
+    <a class="dropdown-item" href="../eau_potable.html">
  <span class="dropdown-text">Station d’alimentation en eau potable</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../reseaux.qmd">
+    <a class="dropdown-item" href="../reseaux.html">
  <span class="dropdown-text">Réseaux</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../voies_ferrees.qmd">
+    <a class="dropdown-item" href="../voies_ferrees.html">
  <span class="dropdown-text">Voies ferrées</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../reseaux_bus.qmd">
+    <a class="dropdown-item" href="../reseaux_bus.html">
  <span class="dropdown-text">Réseau de bus</span></a>
   </li>  
     </ul>
@@ -325,27 +377,27 @@ document.addEventListener('DOMContentLoaded', function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°3-raccourcir-le-délai-de-retour-à-la-normale">    
         <li>
-    <a class="dropdown-item" href="../habitants_zones_inondables.qmd">
+    <a class="dropdown-item" href="../habitants_zones_inondables.html">
  <span class="dropdown-text">Nombre et proportion d’habitants en zone inondable</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../surfaces_habitations.qmd">
+    <a class="dropdown-item" href="../surfaces_habitations.html">
  <span class="dropdown-text">Surface des habitations</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../retour_normale_logements.qmd">
+    <a class="dropdown-item" href="../retour_normale_logements.html">
  <span class="dropdown-text">Logements</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../employes.qmd">
+    <a class="dropdown-item" href="../employes.html">
  <span class="dropdown-text">Employés</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../surface_agricole.qmd">
+    <a class="dropdown-item" href="../surface_agricole.html">
  <span class="dropdown-text">Surface agricole</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../reseau_routier.qmd">
+    <a class="dropdown-item" href="../reseau_routier.html">
  <span class="dropdown-text">Routes inondées</span></a>
   </li>  
     </ul>
@@ -361,6 +413,11 @@ document.addEventListener('DOMContentLoaded', function () {
   </li>  
     </ul>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../login.html"> <i class="bi bi-person-circle" role="img">
+</i> 
+<span class="menu-text">Mode administrateur - Espace réservé aux personnes identifiées</span></a>
+  </li>  
 </ul>
               <div class="quarto-navbar-tools">
     <a href="https://fr.linkedin.com/company/eptb-vienne" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
@@ -527,7 +584,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/0830a445-d28a-41f0-8d74-20dfd6062283\.netlify\.app\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

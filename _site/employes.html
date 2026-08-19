@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.6.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Carte Intercative – Observatoire de la vulnérabilité aux inondations Vienne - Clain</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -24,9 +21,8 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -37,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -68,16 +64,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d13ccc345313c7456bece8e0495ffaea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-dashboard/quarto-dashboard.js"></script>
+<script src="site_libs/quarto-dashboard/stickythead.js"></script>
+<script src="site_libs/quarto-dashboard/datatables.min.js" kdttablesentinel="true"></script>
+<script src="site_libs/quarto-dashboard/pdfmake.min.js" kdttablesentinel="true"></script>
+<script src="site_libs/quarto-dashboard/vfs_fonts.js" kdttablesentinel="true"></script>
+<script src="site_libs/quarto-dashboard/web-components.js" type="module"></script>
+<script src="site_libs/quarto-dashboard/components.js"></script>
+<link href="site_libs/quarto-dashboard/datatables.min.css" rel="stylesheet" kdttablesentinel="true">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,191 +108,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Recherche"
   }
 }</script>
-
-
-<!-- <script src="assets/inject-logos.js"></script> -->
-
-<script src="assets/sidebar-toggle.js"></script>
-
-<!-- <script src="assets/toggle.js"></script> --> 
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-
-
-
-<script>
-
-document.addEventListener('DOMContentLoaded', function () {
-
-  // Trouve le collapse généré par Quarto
-
-  const collapse =
-
-    document.getElementById('quarto-navbar-collapse') ||
-
-    document.getElementById('navbarCollapse');
-
-
-
-  const toggler = document.querySelector('.navbar-toggler');
-
-  if (!collapse || !toggler) return;
-
-
-
-  // Crée le conteneur offcanvas
-
-  const offcanvas = document.createElement('div');
-
-  offcanvas.className = 'offcanvas offcanvas-start site-offcanvas';
-
-  offcanvas.id = 'site-offcanvas';
-
-  offcanvas.setAttribute('tabindex', '-1');
-
-
-
-  // Header avec logo + bouton de fermeture
-
-  const header = document.createElement('div');
-
-  header.className = 'offcanvas-header';
-
-
-
-  const img = document.createElement('img');
-
-  img.src = 'Images/logo_porteurs_projet_anc.png';
-
-  img.alt = 'Logo';
-
-  img.style.maxHeight = '84px';
-
-  img.style.objectFit = 'contain';
-
-
-
-  const closeBtn = document.createElement('button');
-
-  closeBtn.type = 'button';
-
-  closeBtn.className = 'btn-close';
-
-  closeBtn.setAttribute('data-bs-dismiss', 'offcanvas');
-
-
-
-  header.appendChild(img);
-
-  header.appendChild(closeBtn);
-
-
-
-  // Body : deux colonnes (menu à gauche, image à droite)
-
-  const body = document.createElement('div');
-
-  body.className = 'offcanvas-body';
-
-
-
-  const leftCol = document.createElement('div');
-
-  leftCol.className = 'offcanvas-menu-col';
-
-
-
-  const rightCol = document.createElement('div');
-
-  rightCol.className = 'offcanvas-image-col';
-
-
-
-
-
-  const sideImg = document.createElement('img');
-
-  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
-
-  sideImg.alt = 'Illustration';
-
-
-
-  rightCol.appendChild(sideImg);
-
-
-
-  // Déplacer les éléments du collapse dans la colonne gauche
-
-  while (collapse.firstChild) {
-
-    leftCol.appendChild(collapse.firstChild);
-
-  }
-
-
-
-  // Injecter les colonnes dans le body
-
-  body.appendChild(leftCol);
-
-  body.appendChild(rightCol);
-
-
-
-  // Finalisation
-
-  offcanvas.appendChild(header);
-
-  offcanvas.appendChild(body);
-
-  
-
-  leftCol.className = "offcanvas-menu-col";
-
-  rightCol.className = "offcanvas-image-col";
-
-  
-
-  const textOverlay = document.createElement('div');
-
-  textOverlay.className = 'offcanvas-image-text';
-
-  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
-
-  
-
-  rightCol.appendChild(textOverlay);
-
-
-
-
-
-  // Insère l’offcanvas dans le DOM
-
-  const navbar = document.querySelector('nav.navbar');
-
-  (navbar?.parentNode || document.body).appendChild(offcanvas);
-
-
-
-  // Cache l’ancien collapse
-
-  collapse.classList.add('d-none');
-
-
-
-  // Retarget le burger vers l’offcanvas
-
-  toggler.setAttribute('data-bs-toggle', 'offcanvas');
-
-  toggler.setAttribute('data-bs-target', '#site-offcanvas');
-
-});
-
-
-
-</script>
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <script src="site_libs/core-js-2.5.3/shim.min.js"></script>
@@ -304,9 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 
-<link href="site_libs/reactable-0.4.5/reactable.css" rel="stylesheet">
+<link href="site_libs/reactable-0.4.4/reactable.css" rel="stylesheet">
 
-<script src="site_libs/reactable-binding-0.4.5/reactable.js"></script>
+<script src="site_libs/reactable-binding-0.4.4/reactable.js"></script>
 
 <script src="js/maplibre.js"></script>
 <link href="js/maplibre.css" rel="stylesheet">
@@ -318,10 +136,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="js/offcanvas.js" type="text/javascript"></script>
 
 
-<link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="quarto-dashboard nav-fixed dashboard-fill dashboard-sidebar fullcontent">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -329,8 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./Images/logo_porteurs_projet_transparent.png" alt="" class="navbar-logo light-content">
-    <img src="./Images/logo_porteurs_projet_transparent.png" alt="" class="navbar-logo dark-content">
+    <img src="./Images/logo_porteurs_projet_transparent.png" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Observatoire de la vulnérabilité aux inondations Vienne - Clain</span>
@@ -486,80 +303,40 @@ document.addEventListener('DOMContentLoaded', function () {
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-</header>
+<header id="quarto-dashboard-header">
+<nav class="navbar navbar-expand-md slim" data-bs-theme="dark">
+  <div class="navbar-container container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-controls="dashboard-collapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>    
+
+
+    <div class="navbar-brand-container">       
+
+      <div class="navbar-title">
+        <div class="navbar-title-text"><a href="#">Carte Intercative</a></div>
+        
+        
+      </div>
+    </div>
+<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-cartographie" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#cartographie" data-scrolling="false" href="#cartographie" aria-controls="cartographie" aria-selected="true"><span class="nav-link-text">Cartographie</span></a></li><li class="nav-item" role="presentation"><a id="tab-informations-relatives-à-lindicateur" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#informations-relatives-à-lindicateur" data-scrolling="false" href="#informations-relatives-à-lindicateur" aria-controls="informations-relatives-à-lindicateur" aria-selected="false"><span class="nav-link-text">Informations relatives à l’indicateur</span></a></li><li class="nav-item" role="presentation"><a id="tab-bâtiments-en-3d-mode-demploi" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#bâtiments-en-3d-mode-demploi" data-scrolling="false" href="#bâtiments-en-3d-mode-demploi" aria-controls="bâtiments-en-3d-mode-demploi" aria-selected="false"><span class="nav-link-text">Bâtiments en 3D : Mode d’emploi</span></a></li></ul></div></div>
+</nav>
+</header></header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-layout-custom page-navbar quarto-dashboard-content bslib-gap-spacing html-fill-container bslib-page-fill quarto-dashboard-pages dashboard-sidebar-container">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Sur cette page</h2>
-   
-  <ul class="collapse">
-  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"></a></li>
-  <li><a href="#cartographie" id="toc-cartographie" class="nav-link" data-scroll-target="#cartographie">Cartographie</a>
-  <ul class="collapse">
-  <li><a href="#column" id="toc-column" class="nav-link" data-scroll-target="#column">Column</a></li>
-  <li><a href="#column-1" id="toc-column-1" class="nav-link" data-scroll-target="#column-1">Column</a></li>
-  </ul></li>
-  <li><a href="#informations-relatives-à-lindicateur" id="toc-informations-relatives-à-lindicateur" class="nav-link" data-scroll-target="#informations-relatives-à-lindicateur">Informations relatives à l’indicateur</a></li>
-  <li><a href="#bâtiments-en-3d-mode-demploi" id="toc-bâtiments-en-3d-mode-demploi" class="nav-link" data-scroll-target="#bâtiments-en-3d-mode-demploi">Bâtiments en 3D : Mode d’emploi</a></li>
-  </ul>
-</nav>
-    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Carte Intercative</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="section" class="level2 sidebar">
-<h2 class="sidebar anchored" data-anchor-id="section"></h2>
-<div id="nav-menu-objectif-n°3"></div>
-<div class="cell hidden">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="35" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 34;"><span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>bbox_sru <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/bb.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display hidden">
-<div id="ojs-cell-1" data-nodetype="declaration">
-
-</div>
-</div>
-</div>
-<div style="color:#dc7633; text-align:inherit !important; font-size:1.3em; font-weight:bold; font-family: calibri;margin-bottom:10%;">
-Nombre d’employés en zone inondable 
- </div>
-
-<div style="text-align:inherit !important; font-size:1.1em; font-family: calibri;margin-bottom:10%;">Une première approche de la capacité d’un territoire à «revenir à la normale», c’est-à-dire à un état stable où les fonctions précédentes (habitat, activité, services publics, transports …) sont restaurées sans être nécessairement identiques, consiste à évaluer les employés touchés directement par l’événement, et leur proportion au sein du «territoire de vie».</div>
-
-
-<a href="https://fiches.eptb-vienne.fr/ind_31b.pdf" target="_blank"><i class="fa fa-exclamation-circle"></i> Télécharger la fiche indicateur et la carte</a> 
-
-
-<div style="width: auto; padding:5px; border: 1px solid #A0A0A0; border-radius:15px; text-align: center !important; background: #F2F2F2; font-size:1.1em;margin-top:10%;">
-La zone inondable correspond à l'aléa centennal construit à partir des données disponibles et notamment réglementaires mais en aucun cas ne se substitue aux documents réglementaires en vigueur.
-</div>
-</section>
-<section id="cartographie" class="level1">
-<h1>Cartographie</h1>
-<section id="column" class="level2" width="60%">
-<h2 width="60%" class="anchored" data-anchor-id="column">Column</h2>
-<div class="cell hidden">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="86" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 85;"><span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>bassin_vienne <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/bassin_vienne.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
+<div class="bslib-sidebar-layout html-fill-item html-fill-container" data-bslib-sidebar-open="desktop" data-bslib-sidebar-init="true" data-bslib-sidebar-border="false" data-bslib-sidebar-border-radius="false"><div class="main html-fill-container html-fill-item"><div class="sidebar-content html-fill-item html-fill-container">
+<div class="tab-content bslib-grid html-fill-item html-fill-container" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div id="cartographie" class="dashboard-page tab-pane show active html-fill-item html-fill-container" data-orientation="columns" aria-labelledby="tab-cartographie">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 60fr) minmax(3em, 40fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="cell hidden html-fill-item html-fill-container">
+<div class="sourceCode cell-code hidden html-fill-item html-fill-container" id="cb2" data-startfrom="86" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 85;"><span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>bassin_vienne <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/bassin_vienne.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
 <span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>departement <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/departement.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
 <span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/region.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
 <span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>epci <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/epci.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
@@ -570,87 +347,88 @@ La zone inondable correspond à l'aléa centennal construit à partir des donné
 <span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="co">//indicateurs = FileAttachment("layers/indicateurs.json").json();</span></span>
 <span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>cours_d_eau <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/cours_d_eau.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
 <span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>indicateursGeojson <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/indicateurs.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>batiments <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/batiments_hauteur.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-1" data-nodetype="declaration">
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>batiments <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/batiments_hauteur.geojson"</span>)<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-1" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-2" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-2" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-3" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-3" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-4" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-4" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-5" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-5" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-6" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-6" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-7" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-7" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-8" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-8" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-9" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-9" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-10" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-10" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display hidden">
-<div>
-<div id="ojs-cell-2-11" data-nodetype="declaration">
+<div class="cell-output cell-output-display hidden html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-2-11" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
 </div>
-<div class="cell" data-padding="0px" data-expandable="false" data-fill="true">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="105" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 104;"><span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>map <span class="op">=</span> {</span>
+<div class="card cell html-fill-item html-fill-container bslib-card" data-fill="true" data-bslib-card-init="" data-require-bs-caller="card()">
+<div class="card-body html-fill-item html-fill-container" style="padding: 0px;">
+<div class="sourceCode cell-code hidden html-fill-item html-fill-container" id="cb3" data-startfrom="105" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 104;"><span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>map <span class="op">=</span> {</span>
 <span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> container <span class="op">=</span> <span class="fu">html</span><span class="vs">`&lt;div class="map-container" id="map" style="height: 665px; width: 100%;"&gt;&lt;/div&gt;`</span><span class="op">;</span></span>
 <span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> container<span class="op">;</span></span>
 <span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a></span>
@@ -1166,53 +944,63 @@ La zone inondable correspond à l'aléa centennal construit à partir des donné
 <span id="cb3-618"><a href="#cb3-618" aria-hidden="true" tabindex="-1"></a>      <span class="fu">toggleStyle</span>(<span class="kw">this</span><span class="op">.</span><span class="at">checked</span>)<span class="op">;</span></span>
 <span id="cb3-619"><a href="#cb3-619" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
 <span id="cb3-620"><a href="#cb3-620" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
-<span id="cb3-621"><a href="#cb3-621" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div id="ojs-cell-3" data-nodetype="declaration">
+<span id="cb3-621"><a href="#cb3-621" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div id="ojs-cell-3" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-</section>
-<section id="column-1" class="level2 tabset" width="40%">
-<h2 class="tabset anchored" width="40%" data-anchor-id="column-1">Column</h2>
-<section id="données-de-la-commune" class="level3 flow">
-<h3 class="flow anchored" data-anchor-id="données-de-la-commune">Données de la commune</h3>
-<section id="row" class="level4">
-<h4 class="anchored" data-anchor-id="row">Row</h4>
-<div class="cell" data-padding="5px" data-expandable="false">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="640" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 639;"><span id="cb4-640"><a href="#cb4-640" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`</span></span>
+<script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div><div class="card tabset html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-header bslib-navs-card-title"><div class="card-title html-fill-item html-fill-container"><span style="display: inline">
+
+</span></div><ul class="nav nav-tabs card-header-tabs" role="tablist" data-tabsetid="card-tabset-2"><li class="nav-item" role="presentation"><a href="#card-tabset-2-1" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="Données de la commune" aria-selected="true" class="nav-link active">Données de la commune</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-2-2" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="Tableau de données" aria-selected="false" class="nav-link">Tableau de données</a></li><li class="nav-item" role="presentation"><a href="#card-tabset-2-3" role="tab" data-toggle="tab" data-bs-toggle="tab" data-value="Graphiques" aria-selected="false" class="nav-link">Graphiques</a></li></ul></div>
+
+
+
+<div class="tab-content html-fill-item html-fill-container" data-tabset-id="card-tabset-2"><div class="tab-pane active show html-fill-item html-fill-container" role="tabpanel" id="card-tabset-2-1"><div class="card-body html-fill-item html-fill-container" data-title="Données de la commune">
+<div class="flow bslib-grid" data-layout="flow" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()">
+<div class="card-body html-fill-item html-fill-container" style="padding: 5px;">
+<div class="sourceCode cell-code hidden html-fill-item html-fill-container" id="cb4" data-startfrom="640" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 639;"><span id="cb4-640"><a href="#cb4-640" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`</span></span>
 <span id="cb4-641"><a href="#cb4-641" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;"&gt;</span></span>
 <span id="cb4-642"><a href="#cb4-642" aria-hidden="true" tabindex="-1"></a><span class="vs">    Cliquez sur une commune pour voir les informations ici.&lt;br&gt;</span></span>
 <span id="cb4-643"><a href="#cb4-643" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;</span></span>
 <span id="cb4-644"><a href="#cb4-644" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-645"><a href="#cb4-645" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div id="ojs-cell-4" data-nodetype="expression">
+<span id="cb4-645"><a href="#cb4-645" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div id="ojs-cell-4" data-nodetype="expression" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="tableau-de-données" class="level3 flow">
-<h3 class="flow anchored" data-anchor-id="tableau-de-données">Tableau de données</h3>
-<section id="row-1" class="level4">
-<h4 class="anchored" data-anchor-id="row-1">Row</h4>
-<div class="cell" data-expandable="false">
-<div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-68aff316433e1882856d" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-68aff316433e1882856d">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Code INSEE":["86095","86014","86088","86253","86062","86239","86114","86032","86298","86163","86124","86020","86261","86046","86091","86028","86213","86070","86233","86202","86058","86135","86226","86031","86024","86133","86194","86027","86158","86066","86041","86174","86139","86019","86115","86214","86116","86222","86244","86045","86256","86198","86157","86268","86080","86263","86297","86100","86083"],"Commune":["Dissay","Availles-en-Châtellerault","Croutelle","Sanxay","Chasseneuil-du-Poitou","Sainte-Radégonde","Jardres","Bonneuil-Matours","Vouneuil-sur-Vienne","Montamisé","Lavoux","Bellefonds","Sèvres-Anxaumont","Cenon-sur-Vienne","Curzay-sur-Vonne","Bignoux","Rouillé","Chauvigny","Valdivienne","La Puye","La Chapelle-Moulière","Liniers","Saint-Julien-l'Ars","Bonnes","Béruges","Ligugé","Poitiers","Biard","Migné-Auxances","Châtellerault","Buxerolles","Naintré","Lusignan","Beaumont Saint-Cyr","Jaunay-Marigny","Saint-Benoît","Jazeneuil","Saint-Georges-lès-Baillargeaux","Saint-Sauvant","Celle-Lévescault","Savigny-Lévescault","Pouillé","Mignaloux-Beauvoir","Tercé","Cloué","Smarves","Vouneuil-sous-Biard","Fontaine-le-Comte","Coulombiers"],"Population":[" 3 233"," 1 757","   851","   548"," 4 704","   169"," 1 273"," 2 104"," 2 198"," 3 630"," 1 180","   254"," 2 181"," 1 778","   410"," 1 054"," 2 468"," 7 049"," 2 747","   606","   705","   561"," 2 660"," 1 729"," 1 469"," 3 349","88 291"," 1 751"," 6 071","31 840","10 023"," 5 911"," 2 649"," 3 035"," 7 530"," 7 233","   804"," 4 168"," 1 258"," 1 356"," 1 168","   657"," 4 577"," 1 116","   496"," 2 810"," 5 896"," 3 853"," 1 164"],"Nombre d'employés en zone inondable":[0,6,0,3,26,0,0,38,26,0,0,12,0,1060,0,0,0,765,26,0,0,0,0,6,0,75,1722,6,109,307,4,131,62,0,177,160,6,0,0,0,0,0,0,0,0,6,0,0,0]},"columns":[{"id":"Code INSEE","name":"Code INSEE","type":"character"},{"id":"Commune","name":"Commune","type":"character"},{"id":"Population","name":"Population","type":"character"},{"id":"Nombre d'employés en zone inondable","name":"Nombre d'employés en zone inondable","type":"numeric"}],"resizable":true,"filterable":true,"defaultPageSize":10,"highlight":true,"striped":true,"theme":{"borderColor":"#E0E0E0","stripedColor":"#f5f5f5","highlightColor":"#7591e5","cellPadding":"8px 12px","style":{"fontSize":"14px","fontFamily":"sans-serif"}},"dataKey":"87501946ae37e537a737c79ad8473eff"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 </div>
 </div>
-</section>
-</section>
-<section id="graphiques" class="level3 flow">
-<h3 class="flow anchored" data-anchor-id="graphiques">Graphiques</h3>
-<section id="row-2" class="level4">
-<h4 class="anchored" data-anchor-id="row-2">Row</h4>
-<div class="cell" data-padding="5px" data-expandable="false">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb5" data-startfrom="712" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 711;"><span id="cb5-712"><a href="#cb5-712" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { Plot <span class="im">as</span> PlotTaux } <span class="im">from</span> <span class="st">"@observablehq/plot"</span><span class="op">;</span></span>
+</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-2-2"><div class="card-body html-fill-item html-fill-container" data-title="Tableau de données">
+<div class="flow bslib-grid" data-layout="flow" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()">
+<div class="card-body html-fill-item html-fill-container">
+<div class="cell-output-display html-fill-item html-fill-container">
+<div class="reactable html-widget html-fill-item html-fill-container" id="htmlwidget-2053fc905dd0305bf7b6" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-2053fc905dd0305bf7b6">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Code INSEE":["86095","86014","86088","86253","86062","86239","86114","86032","86298","86163","86124","86020","86261","86046","86091","86028","86213","86070","86233","86202","86058","86135","86226","86031","86024","86133","86194","86027","86158","86066","86041","86174","86139","86019","86115","86214","86116","86222","86244","86045","86256","86198","86157","86268","86080","86263","86297","86100","86083"],"Commune":["Dissay","Availles-en-Châtellerault","Croutelle","Sanxay","Chasseneuil-du-Poitou","Sainte-Radégonde","Jardres","Bonneuil-Matours","Vouneuil-sur-Vienne","Montamisé","Lavoux","Bellefonds","Sèvres-Anxaumont","Cenon-sur-Vienne","Curzay-sur-Vonne","Bignoux","Rouillé","Chauvigny","Valdivienne","La Puye","La Chapelle-Moulière","Liniers","Saint-Julien-l'Ars","Bonnes","Béruges","Ligugé","Poitiers","Biard","Migné-Auxances","Châtellerault","Buxerolles","Naintré","Lusignan","Beaumont Saint-Cyr","Jaunay-Marigny","Saint-Benoît","Jazeneuil","Saint-Georges-lès-Baillargeaux","Saint-Sauvant","Celle-Lévescault","Savigny-Lévescault","Pouillé","Mignaloux-Beauvoir","Tercé","Cloué","Smarves","Vouneuil-sous-Biard","Fontaine-le-Comte","Coulombiers"],"Population":[" 3 233"," 1 757","   851","   548"," 4 704","   169"," 1 273"," 2 104"," 2 198"," 3 630"," 1 180","   254"," 2 181"," 1 778","   410"," 1 054"," 2 468"," 7 049"," 2 747","   606","   705","   561"," 2 660"," 1 729"," 1 469"," 3 349","88 291"," 1 751"," 6 071","31 840","10 023"," 5 911"," 2 649"," 3 035"," 7 530"," 7 233","   804"," 4 168"," 1 258"," 1 356"," 1 168","   657"," 4 577"," 1 116","   496"," 2 810"," 5 896"," 3 853"," 1 164"],"Nombre d'employés en zone inondable":[0,6,0,3,26,0,0,38,26,0,0,12,0,1060,0,0,0,765,26,0,0,0,0,6,0,75,1722,6,109,307,4,131,62,0,177,160,6,0,0,0,0,0,0,0,0,6,0,0,0]},"columns":[{"id":"Code INSEE","name":"Code INSEE","type":"character"},{"id":"Commune","name":"Commune","type":"character"},{"id":"Population","name":"Population","type":"character"},{"id":"Nombre d'employés en zone inondable","name":"Nombre d'employés en zone inondable","type":"numeric"}],"resizable":true,"filterable":true,"defaultPageSize":10,"highlight":true,"striped":true,"theme":{"borderColor":"#E0E0E0","stripedColor":"#f5f5f5","highlightColor":"#7591e5","cellPadding":"8px 12px","style":{"fontSize":"14px","fontFamily":"sans-serif"}},"dataKey":"87501946ae37e537a737c79ad8473eff"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+</div></div><div class="tab-pane html-fill-item html-fill-container" role="tabpanel" id="card-tabset-2-3"><div class="card-body html-fill-item html-fill-container" data-title="Graphiques">
+<div class="flow bslib-grid" data-layout="flow" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()">
+<div class="card-body html-fill-item html-fill-container" style="padding: 5px;">
+<div class="sourceCode cell-code hidden html-fill-item html-fill-container" id="cb5" data-startfrom="712" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 711;"><span id="cb5-712"><a href="#cb5-712" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { Plot <span class="im">as</span> PlotTaux } <span class="im">from</span> <span class="st">"@observablehq/plot"</span><span class="op">;</span></span>
 <span id="cb5-713"><a href="#cb5-713" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { Inputs <span class="im">as</span> InputsTaux } <span class="im">from</span> <span class="st">"@observablehq/inputs"</span><span class="op">;</span></span>
 <span id="cb5-714"><a href="#cb5-714" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-715"><a href="#cb5-715" aria-hidden="true" tabindex="-1"></a><span class="co">// Charger les données</span></span>
@@ -1231,36 +1019,36 @@ La zone inondable correspond à l'aléa centennal construit à partir des donné
 <span id="cb5-728"><a href="#cb5-728" aria-hidden="true" tabindex="-1"></a><span class="vs">  margin-right: 20%;</span></span>
 <span id="cb5-729"><a href="#cb5-729" aria-hidden="true" tabindex="-1"></a><span class="vs">  margin-left: 20%;"&gt;</span></span>
 <span id="cb5-730"><a href="#cb5-730" aria-hidden="true" tabindex="-1"></a><span class="vs">  Nombre d'employés en zone inondable</span></span>
-<span id="cb5-731"><a href="#cb5-731" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/label&gt;`</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-1" data-nodetype="declaration">
+<span id="cb5-731"><a href="#cb5-731" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/label&gt;`</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-1" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-2" data-nodetype="declaration">
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-2" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-3" data-nodetype="declaration">
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-3" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-4" data-nodetype="expression">
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-4" data-nodetype="expression" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb6" data-startfrom="736" data-source-offset="-584"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 735;"><span id="cb6-736"><a href="#cb6-736" aria-hidden="true" tabindex="-1"></a>data_s31b <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/data_s31b.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span>
+<div class="sourceCode cell-code hidden html-fill-item html-fill-container" id="cb6" data-startfrom="736" data-source-offset="-584"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 735;"><span id="cb6-736"><a href="#cb6-736" aria-hidden="true" tabindex="-1"></a>data_s31b <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/data_s31b.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span>
 <span id="cb6-737"><a href="#cb6-737" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-738"><a href="#cb6-738" aria-hidden="true" tabindex="-1"></a>viewof slider_s31b <span class="op">=</span> InputsTaux<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1800</span>]<span class="op">,</span> {</span>
 <span id="cb6-739"><a href="#cb6-739" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">900</span><span class="op">,</span></span>
@@ -1320,44 +1108,52 @@ La zone inondable correspond à l'aléa centennal construit à partir des donné
 <span id="cb6-793"><a href="#cb6-793" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginBottom</span><span class="op">:</span> <span class="dv">120</span><span class="op">,</span></span>
 <span id="cb6-794"><a href="#cb6-794" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginTop</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
 <span id="cb6-795"><a href="#cb6-795" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">80</span></span>
-<span id="cb6-796"><a href="#cb6-796" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-5" data-nodetype="declaration">
+<span id="cb6-796"><a href="#cb6-796" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-5" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-6" data-nodetype="declaration">
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-6" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-7" data-nodetype="declaration">
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-7" data-nodetype="declaration" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<div id="ojs-cell-5-8" data-nodetype="expression">
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+<div id="ojs-cell-5-8" data-nodetype="expression" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
 </div>
-</section>
-</section>
-</section>
-</section>
-<section id="informations-relatives-à-lindicateur" class="level1 flow">
-<h1 class="flow">Informations relatives à l’indicateur</h1>
-<div class="cell" data-padding="5px" data-expandable="false">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb7" data-startfrom="804" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 803;"><span id="cb7-804"><a href="#cb7-804" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`</span></span>
+<script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+</div></div></div><bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div><div id="informations-relatives-à-lindicateur" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container" data-orientation="columns" aria-labelledby="tab-informations-relatives-à-lindicateur">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()">
+<div class="card-body html-fill-item html-fill-container" style="padding: 5px;">
+<div class="sourceCode cell-code hidden html-fill-item html-fill-container" id="cb7" data-startfrom="804" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 803;"><span id="cb7-804"><a href="#cb7-804" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`</span></span>
 <span id="cb7-805"><a href="#cb7-805" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-806"><a href="#cb7-806" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;"&gt;</span></span>
 <span id="cb7-807"><a href="#cb7-807" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;colgroup&gt;</span></span>
@@ -1497,32 +1293,78 @@ La zone inondable correspond à l'aléa centennal construit à partir des donné
 <span id="cb7-941"><a href="#cb7-941" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/table&gt;</span></span>
 <span id="cb7-942"><a href="#cb7-942" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-943"><a href="#cb7-943" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-944"><a href="#cb7-944" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code></pre></div><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div id="ojs-cell-6" data-nodetype="expression">
+<span id="cb7-944"><a href="#cb7-944" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display html-fill-item html-fill-container">
+<div id="ojs-cell-6" data-nodetype="expression" class="html-fill-item html-fill-container">
 
 </div>
 </div>
 </div>
-</section>
-<section id="bâtiments-en-3d-mode-demploi" class="level1 flow">
-<h1 class="flow">Bâtiments en 3D : Mode d’emploi</h1>
+<script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div><div id="bâtiments-en-3d-mode-demploi" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container" data-orientation="columns" aria-labelledby="tab-bâtiments-en-3d-mode-demploi">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
 <p><i class="bi bi-box"></i> <strong>Incliner et faire tourner la carte</strong><br>
 Maintenez enfoncé le bouton droit de la souris sur ce symbole <img src="Images/bouton_inclinaison.jpg" style="margin-bottom:auto; width:2%;"> et déplacez le pour incliner le point de vue ou faire tourner la carte.</p>
 <p><i class="bi bi-mouse2"></i> <strong>Zoomer sur la carte</strong><br>
 Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.</p>
 <p><i class="bi bi-info-circle"></i> <strong>Une illustration pour bien comprendre la carte interactive</strong></p>
-<div class="quarto-figure quarto-figure-left">
+<div class="quarto-figure quarto-figure-left html-fill-item html-fill-container">
 <figure class="figure">
 <p><img src="Images/batiments_3d.jpg" class="img-fluid figure-img" style="width:75.0%"></p>
 <figcaption>Bâtiments 3D</figcaption>
 </figure>
 </div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div><div id="3ade8a4a-fb1d-4a6c-8409-ac45482d5fc9" class="hidden html-fill-item html-fill-container">
+
+</div>
+</div>
+</div>
+</div>
+</div></div><aside id="bslib-sidebar-1" class="sidebar html-fill-container html-fill-item"><div class="html-fill-container html-fill-item">
+<div id="nav-menu-objectif-n°3"></div>
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="35" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 34;"><span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>bbox_sru <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"layers/bb.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div id="ojs-cell-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div style="color:#dc7633; text-align:inherit !important; font-size:1.3em; font-weight:bold; font-family: calibri;margin-bottom:10%;">
+Nombre d’employés en zone inondable 
+ </div>
+
+<div style="text-align:inherit !important; font-size:1.1em; font-family: calibri;margin-bottom:10%;">Une première approche de la capacité d’un territoire à «revenir à la normale», c’est-à-dire à un état stable où les fonctions précédentes (habitat, activité, services publics, transports …) sont restaurées sans être nécessairement identiques, consiste à évaluer les employés touchés directement par l’événement, et leur proportion au sein du «territoire de vie».</div>
 
 
-</section>
+<a href="https://fiches.eptb-vienne.fr/ind_31b.pdf" target="_blank"><i class="fa fa-exclamation-circle"></i> Télécharger la fiche indicateur et la carte</a> 
 
-</main> <!-- /main -->
+
+<div style="width: auto; padding:5px; border: 1px solid #A0A0A0; border-radius:15px; text-align: center !important; background: #F2F2F2; font-size:1.1em;margin-top:10%;">
+La zone inondable correspond à l'aléa centennal construit à partir des données disponibles et notamment réglementaires mais en aucun cas ne se substitue aux documents réglementaires en vigueur.
+</div>
+</div></aside>
+<button class="collapse-toggle" type="button" title="Toggle sidebar" aria-expanded="true" aria-controls="bslib-sidebar-1">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="bi bi-chevron-left collapse-icon" style="fill:currentColor;" aria-hidden="true" role="img">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+    </svg>
+</button>
+<script data-bslib-sidebar-init="">
+bslib.Sidebar.initCollapsibleAll()
+</script>
+</div>
+
+
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImJib3hfc3J1ID0gRmlsZUF0dGFjaG1lbnQoXCJsYXllcnMvYmIuanNvblwiKS5qc29uKClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuYmFzc2luX3ZpZW5uZSA9IEZpbGVBdHRhY2htZW50KFwibGF5ZXJzL2Jhc3Npbl92aWVubmUuZ2VvanNvblwiKS5qc29uKCk7XG5kZXBhcnRlbWVudCA9IEZpbGVBdHRhY2htZW50KFwibGF5ZXJzL2RlcGFydGVtZW50Lmdlb2pzb25cIikuanNvbigpO1xucmVnaW9uID0gRmlsZUF0dGFjaG1lbnQoXCJsYXllcnMvcmVnaW9uLmdlb2pzb25cIikuanNvbigpO1xuZXBjaSA9IEZpbGVBdHRhY2htZW50KFwibGF5ZXJzL2VwY2kuZ2VvanNvblwiKS5qc29uKCk7XG5wZXJpbWV0cmUgPSBGaWxlQXR0YWNobWVudChcImxheWVycy9wZXJpbWV0cmUuanNvblwiKS5qc29uKCk7XG5zbGdyaSA9IEZpbGVBdHRhY2htZW50KFwibGF5ZXJzL3NsZ3JpLmpzb25cIikuanNvbigpO1xudHJpID0gRmlsZUF0dGFjaG1lbnQoXCJsYXllcnMvdHJpLmpzb25cIikuanNvbigpO1xuem9uZV9pbm9uZGFibGUgPSBGaWxlQXR0YWNobWVudChcImxheWVycy96b25lX2lub25kYWJsZS5nZW9qc29uXCIpLmpzb24oKTtcbi8vaW5kaWNhdGV1cnMgPSBGaWxlQXR0YWNobWVudChcImxheWVycy9pbmRpY2F0ZXVycy5qc29uXCIpLmpzb24oKTtcbmNvdXJzX2RfZWF1ID0gRmlsZUF0dGFjaG1lbnQoXCJsYXllcnMvY291cnNfZF9lYXUuZ2VvanNvblwiKS5qc29uKCk7XG5pbmRpY2F0ZXVyc0dlb2pzb24gPSBGaWxlQXR0YWNobWVudChcImxheWVycy9pbmRpY2F0ZXVycy5nZW9qc29uXCIpLmpzb24oKTtcbmJhdGltZW50cyA9IEZpbGVBdHRhY2htZW50KFwibGF5ZXJzL2JhdGltZW50c19oYXV0ZXVyLmdlb2pzb25cIikuanNvbigpO1xuXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcblxubWFwID0ge1xuICBjb25zdCBjb250YWluZXIgPSBodG1sYDxkaXYgY2xhc3M9XCJtYXAtY29udGFpbmVyXCIgaWQ9XCJtYXBcIiBzdHlsZT1cImhlaWdodDogNjY1cHg7IHdpZHRoOiAxMDAlO1wiPjwvZGl2PmA7XG4gIHlpZWxkIGNvbnRhaW5lcjtcblxuICA8IS0tIGNvbnN0IHNvdXJjZVBsYW5JR04gPSB7IC0tPlxuICA8IS0tICAgc3R5bGU6ICdub3JtYWwnLCAtLT5cbiAgPCEtLSAgIGZvcm1hdDogJ2ltYWdlL3BuZycsIC0tPlxuICA8IS0tICAgbGF5ZXI6ICdHRU9HUkFQSElDQUxHUklEU1lTVEVNUy5QTEFOSUdOVjInIC0tPlxuICA8IS0tIH07IC0tPlxuXG4gIGNvbnN0IHNvdXJjZU9ydGhvID0ge1xuICAgIHN0eWxlOiAnbm9ybWFsJyxcbiAgICBmb3JtYXQ6ICdpbWFnZS9qcGVnJyxcbiAgICBsYXllcjogJ0hSLk9SVEhPSU1BR0VSWS5PUlRIT1BIT1RPUydcbiAgfTtcbiAgXG4gIGNvbnN0IHNvdXJjZU9TTSA9IHtcbiAgICB0aWxlczogJ2h0dHBzOi8vdGlsZS5vcGVuc3RyZWV0bWFwLm9yZy97en0ve3h9L3t5fS5wbmcnLFxuICAgIGF0dHJpYnV0aW9uOiAnwqkgPGEgaHJlZj1cImh0dHBzOi8vd3d3Lm9wZW5zdHJlZXRtYXAub3JnL2NvcHlyaWdodFwiPk9wZW5TdHJlZXRNYXA8L2E+IGNvbnRyaWJ1dG9ycycsXG4gICAgbWluem9vbTogMCxcbiAgICBtYXh6b29tOiAxOVxuICB9O1xuXG4gIGNvbnN0IG1hcCA9IG5ldyBtYXBsaWJyZWdsLk1hcCh7XG4gICAgY29udGFpbmVyOiBjb250YWluZXIsXG4gICAgc3R5bGU6ICdodHRwczovL2Jhc2VtYXBzLmNhcnRvY2RuLmNvbS9nbC92b3lhZ2VyLWdsLXN0eWxlL3N0eWxlLmpzb24nLFxuICAgIDwhLS0gY2VudGVyOiBbLTAuMDQsIDQ2LjMwNTFdLCAgLS0+XG4gICAgem9vbTogMTFcbiAgfSk7XG5cbiAgbWFwLmFkZENvbnRyb2wobmV3IG1hcGxpYnJlZ2wuRnVsbHNjcmVlbkNvbnRyb2woKSwgJ3RvcC1yaWdodCcpO1xuICBtYXAuYWRkQ29udHJvbChuZXcgbWFwbGlicmVnbC5OYXZpZ2F0aW9uQ29udHJvbCh7IHZpc3VhbGl6ZVBpdGNoOiB0cnVlIH0pLCAndG9wLWxlZnQnKTtcbiAgbWFwLmFkZENvbnRyb2wobmV3IG1hcGxpYnJlZ2wuU2NhbGVDb250cm9sKHsgbWF4V2lkdGg6IDgwLCB1bml0OiAnbWV0cmljJyB9KSk7XG4gIFxuXG4gIGNvbnN0IHRvZ2dsZVN0eWxlID0gKHVzZU9ydGhvKSA9PiB7XG4gICAgaWYgKHVzZU9ydGhvKSB7XG4gICAgICBtYXAuc2V0TGF5b3V0UHJvcGVydHkoJ29ydGhvSUdOJywgJ3Zpc2liaWxpdHknLCAndmlzaWJsZScpO1xuICAgICAgbWFwLnNldExheW91dFByb3BlcnR5KCdPU00nLCAndmlzaWJpbGl0eScsICdub25lJyk7XG4gICAgfSBlbHNlIHtcbiAgICAgIG1hcC5zZXRMYXlvdXRQcm9wZXJ0eSgnb3J0aG9JR04nLCAndmlzaWJpbGl0eScsICdub25lJyk7XG4gICAgICBtYXAuc2V0TGF5b3V0UHJvcGVydHkoJ09TTScsICd2aXNpYmlsaXR5JywgJ3Zpc2libGUnKTtcbiAgICB9XG4gIH07XG5cbiAgbWFwLm9uKCdsb2FkJywgKCkgPT4ge1xuICAgIG1hcC5maXRCb3VuZHMoXG4gICAgW1xuICAgICAgWy0wLjA0LCA0Ni4zMDUxXSwgICAvLyBTdWQtT3Vlc3RcbiAgICAgIFswLjc3NDEsIDQ2Ljg1NjVdICAgLy8gTm9yZC1Fc3RcbiAgICBdLFxuICAgIHtcbiAgICAgIHBhZGRpbmc6IDIwLFxuICAgICAgbGluZWFyOiB0cnVlLFxuICAgICAgZHVyYXRpb246IDBcbiAgICB9XG4gICk7XG4gICAgLy8gQWpvdXQgZGVzIGZvbmRzIHJhc3RlciBJR05cbiAgICA8IS0tIG1hcC5hZGRTb3VyY2UoJ3Jhc3Rlci1wbGFuaWduJywgeyAtLT5cbiAgICA8IS0tICAgdHlwZTogJ3Jhc3RlcicsIC0tPlxuICAgIDwhLS0gICB0aWxlczogWyAtLT5cbiAgICA8IS0tICAgICBgaHR0cHM6Ly9kYXRhLmdlb3BmLmZyL3dtdHM/U0VSVklDRT1XTVRTJnN0eWxlPSR7c291cmNlUGxhbklHTi5zdHlsZX0mVkVSU0lPTj0xLjAuMCZSRVFVRVNUPUdldFRpbGUmZm9ybWF0PSR7c291cmNlUGxhbklHTi5mb3JtYXR9JmxheWVyPSR7c291cmNlUGxhbklHTi5sYXllcn0mdGlsZW1hdHJpeHNldD1QTSZUaWxlTWF0cml4PXt6fSZUaWxlQ29sPXt4fSZUaWxlUm93PXt5fWAgLS0+XG4gICAgPCEtLSAgIF0sIC0tPlxuICAgIDwhLS0gICB0aWxlU2l6ZTogMjU2LCAtLT5cbiAgICA8IS0tICAgYXR0cmlidXRpb246ICfCqSA8YSBocmVmPVwiaHR0cHM6Ly93d3cuaWduLmZyL1wiPklHTjwvYT4nLCAtLT5cbiAgICA8IS0tICAgbWluem9vbTogMCwgLS0+XG4gICAgPCEtLSAgIG1heHpvb206IDIyIC0tPlxuICAgIDwhLS0gfSk7IC0tPlxuXG4gICAgbWFwLmFkZFNvdXJjZSgncmFzdGVyLW9ydGhvJywge1xuICAgICAgdHlwZTogJ3Jhc3RlcicsXG4gICAgICB0aWxlczogW1xuICAgICAgICBgaHR0cHM6Ly9kYXRhLmdlb3BmLmZyL3dtdHM/U0VSVklDRT1XTVRTJnN0eWxlPSR7c291cmNlT3J0aG8uc3R5bGV9JlZFUlNJT049MS4wLjAmUkVRVUVTVD1HZXRUaWxlJmZvcm1hdD0ke3NvdXJjZU9ydGhvLmZvcm1hdH0mbGF5ZXI9JHtzb3VyY2VPcnRoby5sYXllcn0mdGlsZW1hdHJpeHNldD1QTSZUaWxlTWF0cml4PXt6fSZUaWxlQ29sPXt4fSZUaWxlUm93PXt5fWBcbiAgICAgIF0sXG4gICAgICB0aWxlU2l6ZTogMjU2LFxuICAgICAgYXR0cmlidXRpb246ICfCqSA8YSBocmVmPVwiaHR0cHM6Ly93d3cuaWduLmZyL1wiPklHTjwvYT4nLFxuICAgICAgbWluem9vbTogMCxcbiAgICAgIG1heHpvb206IDIyXG4gICAgfSk7XG5cbiAgICBtYXAuYWRkU291cmNlKCdyYXN0ZXItb3NtJywge1xuICB0eXBlOiAncmFzdGVyJyxcbiAgdGlsZXM6IFtcbiAgICAnaHR0cHM6Ly90aWxlLm9wZW5zdHJlZXRtYXAub3JnL3t6fS97eH0ve3l9LnBuZydcbiAgXSxcbiAgdGlsZVNpemU6IDI1NixcbiAgYXR0cmlidXRpb246XG4gICAgJ8KpIDxhIGhyZWY9XCJodHRwczovL3d3dy5vcGVuc3RyZWV0bWFwLm9yZy9jb3B5cmlnaHRcIj5PcGVuU3RyZWV0TWFwPC9hPiBjb250cmlidXRvcnMnLFxuICBtaW56b29tOiAwLFxuICBtYXh6b29tOiAxOVxuICAgIH0pO1xuXG4gICAgPCEtLSBtYXAuYWRkTGF5ZXIoeyAtLT5cbiAgICA8IS0tICAgaWQ6ICdwbGFuSUdOJywgLS0+XG4gICAgPCEtLSAgIHR5cGU6ICdyYXN0ZXInLCAtLT5cbiAgICA8IS0tICAgc291cmNlOiAncmFzdGVyLXBsYW5pZ24nLCAtLT5cbiAgICA8IS0tICAgbGF5b3V0OiB7IHZpc2liaWxpdHk6ICd2aXNpYmxlJyB9IC0tPlxuICAgIDwhLS0gfSk7IC0tPlxuXG4gICAgbWFwLmFkZExheWVyKHtcbiAgICAgIGlkOiAnb3J0aG9JR04nLFxuICAgICAgdHlwZTogJ3Jhc3RlcicsXG4gICAgICBzb3VyY2U6ICdyYXN0ZXItb3J0aG8nLFxuICAgICAgbGF5b3V0OiB7IHZpc2liaWxpdHk6ICdub25lJyB9XG4gICAgfSk7XG5cbiAgICBtYXAuYWRkTGF5ZXIoe1xuICAgICAgaWQ6ICdPU00nLFxuICAgICAgdHlwZTogJ3Jhc3RlcicsXG4gICAgICBzb3VyY2U6ICdyYXN0ZXItb3NtJyxcbiAgICAgIGxheW91dDogeyB2aXNpYmlsaXR5OiAndmlzaWJsZScgfSAvLyB0dSBwZXV4IGxlIGxhaXNzZXIgY2FjaMOpIGF1IGTDqXBhcnQgc2kgdHUgdmV1eCBsZSBiYXNjdWxlciBlbnN1aXRlXG4gICAgfSk7XG4gICAgICAgICAgICAgIFxuICAgIFxuICAgIGNvbnN0IGxheWVyc0RhdGEgPSBbXG4gICAgICB7IGRhdGE6IGJhc3Npbl92aWVubmUsIHR5cGU6ICdsaW5lJywgaWQ6ICdiYXNzaW52aWVubmVMYXllcicsIGNvbG9yOiAnZ3JlZW4nLCBsYXlvdXQ6IHt2aXNpYmlsaXR5Oidub25lJ319LFxuICAgICAgeyBkYXRhOiByZWdpb24sIHR5cGU6ICdsaW5lJywgaWQ6ICdyZWdpb25MYXllcicsIGNvbG9yOiAncmVkJywgbGF5b3V0OiB7dmlzaWJpbGl0eTonbm9uZSd9IH0sXG4gICAgICB7IGRhdGE6IGRlcGFydGVtZW50LCB0eXBlOiAnbGluZScsIGlkOiAnZGVwYXJ0ZW1lbnRMYXllcicsIGNvbG9yOiAnI2E3NzJiOScsIHdpZHRoOiAyLCAgbGF5b3V0Ont2aXNpYmlsaXR5Oidub25lJ319LFxuICAgICAgeyBkYXRhOiBlcGNpLCB0eXBlOiAnbGluZScsIGlkOiAnZXBjaUxheWVyJywgY29sb3I6ICcjNTY3YWUzJywgbGF5b3V0OiB7dmlzaWJpbGl0eTonbm9uZSd9IH0sXG4gICAgICB7ICBkYXRhOiBpbmRpY2F0ZXVyc0dlb2pzb24sIC8vIEdlb0pTT04gY29udGVuYW50IHVuZSBwcm9wcmnDqXTDqSAnczMxYXR4J1xuICAgICAgICAgIHR5cGU6ICdmaWxsJyxcbiAgICAgICAgICBpZDogJ2luZGljYXRldXJzMzFiTGF5ZXInLFxuICAgICAgICAgIG9wYWNpdHk6IDAuOSxcbiAgICAgICAgICB3aWR0aDogMSxcbiAgICAgICAgICBkeW5hbWljQ29sb3I6IHsgXG4gICAgICAgICAgICBwcm9wZXJ0eTogJ3MzMWInLFxuICAgICAgICAgICAgLy8gTGEgbG9naXF1ZSBleGFjdGUgZGUgbGEgbMOpZ2VuZGUgw6AgYXBwbGlxdWVyIDpcbiAgICAgICAgICAgIC8vIC0gMCBvdSBudWxsID0+ICNkOWQ5ZDlcbiAgICAgICAgICAgIC8vIC0gPCAxNTAgICAgID0+ICNmOWYwZDlcbiAgICAgICAgICAgIC8vIC0gPCA1MDAwMDAgID0+ICNmZGI3N2FcbiAgICAgICAgICAgIC8vIC0gPCAyMDAwMDAwID0+ICNlYzYwM0ZcbiAgICAgICAgICAgIC8vIC0gPj0gMjAwMDAwMCA9PiAjYjMwMDAwXG4gICAgICAgICAgICBtYXBwaW5nOiB7XG4gICAgICAgICAgICAgICcwJzogJyNkOWQ5ZDknLFxuICAgICAgICAgICAgICAnNTAnOiAnI2ZmZjVlYicsXG4gICAgICAgICAgICAgICczMDAnOiAnI2ZkYmQ4MycsXG4gICAgICAgICAgICAgICcxMDAwJzogJyNlZTY1MTAnLFxuICAgICAgICAgICAgICAnMTAwMSc6ICcjN2YyNzA0J1xuICAgICAgICAgICAgfSxcbiAgICAgICAgICAgIGRlZmF1bHQ6ICcjZDlkOWQ5JyAvLyB1dGlsaXPDqSBzaSBudWxsLCB1bmRlZmluZWQgb3UgPCAxNTBcbiAgICAgICAgICB9LFxuICAgICAgICAgIGxheW91dDogeyB2aXNpYmlsaXR5OiAndmlzaWJsZScgfVxuICAgICAgICB9LFxuICAgICAgICB7IGRhdGE6IGNvdXJzX2RfZWF1LCB0eXBlOiAnbGluZScsIGlkOiAnY291cnNkZWF1TGF5ZXInLCBjb2xvcjogJyNiNGMzZWYnICwgd2lkdGg6IDIsIG9wYWNpdHk6IDEsIFxuICAgICAgbGF5b3V0OiB7dmlzaWJpbGl0eTondmlzaWJsZSd9IH0sXG4gICAgICB7IGRhdGE6IHpvbmVfaW5vbmRhYmxlLCB0eXBlOiAnZmlsbCcsIGlkOiAnem9uZWlub25kYWJsZUxheWVyJywgY29sb3I6ICcjYjRjM2VmJyAsIHdpZHRoOiAyLCBvcGFjaXR5OiAxLCBcbiAgICAgIGxheW91dDoge3Zpc2liaWxpdHk6J3Zpc2libGUnfSB9LFxuICAgICAgeyBkYXRhOiBiYXRpbWVudHMsIHR5cGU6ICdmaWxsLWV4dHJ1c2lvbicsIGlkOiAnYmF0aW1lbnRzTGF5ZXInLCB3aWR0aDoyLCBvcGFjaXR5OiAxLCBjb2xvckJ5VHlwZTogJ2ZmX2R0ZWxvY3R4dCcsXG4gICAgICAgIGhlaWdodFByb3BlcnR5OiAnaGF1dGV1cicsbGF5b3V0OiB7dmlzaWJpbGl0eTonbm9uZSd9fVxuICAgICAgXG4gICAgXTtcbiAgICBcbiAgICAvLyBDcsOpZXIgbGUgY29udGVuZXVyXG4gICAgICAgIGNvbnN0IGxlZ2VuZCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuICAgICAgICBsZWdlbmQuaWQgPSAnbGVnZW5kJztcbiAgICAgICAgbGVnZW5kLnN0eWxlLnBvc2l0aW9uID0gJ2Fic29sdXRlJztcbiAgICAgICAgbGVnZW5kLnN0eWxlLnRvcCA9ICc4MiUnO1xuICAgICAgICBsZWdlbmQuc3R5bGUucmlnaHQgPSAnMTBweCc7XG4gICAgICAgIGxlZ2VuZC5zdHlsZS50cmFuc2Zvcm0gPSAndHJhbnNsYXRlWSgtNTAlKSc7XG4gICAgICAgIGxlZ2VuZC5zdHlsZS5iYWNrZ3JvdW5kID0gJ3doaXRlJztcbiAgICAgICAgbGVnZW5kLnN0eWxlLnBhZGRpbmcgPSAnMTBweCc7XG4gICAgICAgIGxlZ2VuZC5zdHlsZS5mb250U2l6ZSA9ICcxMnB4JztcbiAgICAgICAgbGVnZW5kLnN0eWxlLmJvcmRlclJhZGl1cyA9ICc0cHgnO1xuICAgICAgICBsZWdlbmQuc3R5bGUuYm94U2hhZG93ID0gJzAgMXB4IDRweCByZ2JhKDAsMCwwLDAuMyknO1xuICAgICAgICBsZWdlbmQuc3R5bGUuekluZGV4ID0gJzEnOyAvLyBwb3VyIHBhc3NlciBhdS1kZXNzdXMgZGUgbGEgY2FydGVcbiAgICAgICAgXG4gICAgICAgIC8vIENvbnRlbnUgZGUgbGEgbMOpZ2VuZGVcbiAgICAgICAgbGVnZW5kLmlubmVySFRNTCA9IGBcbiAgICAgICAgICA8c3Ryb25nPk5vbWJyZSBkJ2VtcGxvecOpcyBlbiA8YnI+IHpvbmUgaW5vbmRhYmxlPC9zdHJvbmc+PGJyPlxuICAgICAgICAgIDxkaXY+PHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiNkOWQ5ZDk7d2lkdGg6MTJweDtoZWlnaHQ6MTJweDtkaXNwbGF5OmlubGluZS1ibG9jazttYXJnaW4tcmlnaHQ6NXB4O1wiPjwvc3Bhbj4gMDwvZGl2PlxuICAgICAgICAgIDxkaXY+PHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiNmZmY1ZWI7d2lkdGg6MTJweDtoZWlnaHQ6MTJweDtkaXNwbGF5OmlubGluZS1ibG9jazttYXJnaW4tcmlnaHQ6NXB4O2JvcmRlcjoxcHggc29saWQgI2NjYztcIj48L3NwYW4+IDwgNTAgPC9kaXY+XG4gICAgICAgICAgPGRpdj48c3BhbiBzdHlsZT1cImJhY2tncm91bmQ6I2ZkYmQ4Mzt3aWR0aDoxMnB4O2hlaWdodDoxMnB4O2Rpc3BsYXk6aW5saW5lLWJsb2NrO21hcmdpbi1yaWdodDo1cHg7XCI+PC9zcGFuPiA1MC0zMDAgPC9kaXY+XG4gICAgICAgICAgPGRpdj48c3BhbiBzdHlsZT1cImJhY2tncm91bmQ6I2VlNjUxMDt3aWR0aDoxMnB4O2hlaWdodDoxMnB4O2Rpc3BsYXk6aW5saW5lLWJsb2NrO21hcmdpbi1yaWdodDo1cHg7XCI+PC9zcGFuPiAzMDAtMTAwMCA8L2Rpdj5cbiAgICAgICAgICA8ZGl2PjxzcGFuIHN0eWxlPVwiYmFja2dyb3VuZDojN2YyNzA0O3dpZHRoOjEycHg7aGVpZ2h0OjEycHg7ZGlzcGxheTppbmxpbmUtYmxvY2s7bWFyZ2luLXJpZ2h0OjVweDtcIj48L3NwYW4+ID4gMTAwMCA8L2Rpdj5gO1xuICAgICAgICBcbiAgICAgICAgLy8gTOKAmWFqb3V0ZXIgw6AgbGEgY2FydGUgKGxlIGNvbnRhaW5lciBNYXBMaWJyZSlcbiAgICAgICAgbWFwLmdldENvbnRhaW5lcigpLmFwcGVuZENoaWxkKGxlZ2VuZCk7XG4gICAgICAgIFxuICAgICAgICAvL2FmaW4gZGUgbGllciBsYSBsw6lnZW5kZSDDoCBsJ2luZGljYXRldXJcbiAgICAgICAgZnVuY3Rpb24gdXBkYXRlTGVnZW5kVmlzaWJpbGl0eSgpIHtcbiAgICAgICAgY29uc3QgdmlzaWJpbGl0eSA9IG1hcC5nZXRMYXlvdXRQcm9wZXJ0eSgnaW5kaWNhdGV1cnMzMWJMYXllcicsICd2aXNpYmlsaXR5Jyk7XG4gICAgICAgIGlmICh2aXNpYmlsaXR5ID09PSAnbm9uZScpIHtcbiAgICAgICAgICBsZWdlbmQuc3R5bGUuZGlzcGxheSA9ICdub25lJztcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICBsZWdlbmQuc3R5bGUuZGlzcGxheSA9ICdibG9jayc7XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgICBtYXAub24oJ2lkbGUnLCB1cGRhdGVMZWdlbmRWaXNpYmlsaXR5KTtcbiAgICAgICAgXG4gICAgICAgIC8vIENyw6llciBsZSBjb250ZW5ldXIgZGUgbMOpZ2VuZGUgZGVzIGLDonRpbWVudHNcbiAgICAgICAgY29uc3QgYmF0aW1lbnRMZWdlbmQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuaWQgPSAnYmF0aW1lbnQtbGVnZW5kJztcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuc3R5bGUucG9zaXRpb24gPSAnYWJzb2x1dGUnO1xuICAgICAgICBiYXRpbWVudExlZ2VuZC5zdHlsZS50b3AgPSAnODElJztcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuc3R5bGUubGVmdCA9ICcxMHB4JztcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuc3R5bGUudHJhbnNmb3JtID0gJ3RyYW5zbGF0ZVkoLTUwJSknO1xuICAgICAgICBiYXRpbWVudExlZ2VuZC5zdHlsZS5iYWNrZ3JvdW5kID0gJ3doaXRlJztcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuc3R5bGUucGFkZGluZyA9ICcxMHB4JztcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuc3R5bGUuZm9udFNpemUgPSAnMTJweCc7XG4gICAgICAgIGJhdGltZW50TGVnZW5kLnN0eWxlLmJvcmRlclJhZGl1cyA9ICc0cHgnO1xuICAgICAgICBiYXRpbWVudExlZ2VuZC5zdHlsZS5ib3hTaGFkb3cgPSAnMCAxcHggNHB4IHJnYmEoMCwwLDAsMC4zKSc7XG4gICAgICAgIGJhdGltZW50TGVnZW5kLnN0eWxlLnpJbmRleCA9ICcxJztcbiAgICAgICAgXG4gICAgICAgIC8vIENvbnRlbnUgZGUgbGEgbMOpZ2VuZGVcbiAgICAgICAgYmF0aW1lbnRMZWdlbmQuaW5uZXJIVE1MID0gYFxuICAgICAgICAgIDxzdHJvbmc+VHlwZSBkZSBiw6J0aW1lbnQ8L3N0cm9uZz48YnI+XG4gICAgICAgICAgPGRpdj48c3BhbiBzdHlsZT1cImJhY2tncm91bmQ6IzFmNzdiNDt3aWR0aDoxMnB4O2hlaWdodDoxMnB4O2Rpc3BsYXk6aW5saW5lLWJsb2NrO21hcmdpbi1yaWdodDo1cHg7XCI+PC9zcGFuPiBBY3Rpdml0w6k8L2Rpdj5cbiAgICAgICAgICA8ZGl2PjxzcGFuIHN0eWxlPVwiYmFja2dyb3VuZDojMmNhMDJjO3dpZHRoOjEycHg7aGVpZ2h0OjEycHg7ZGlzcGxheTppbmxpbmUtYmxvY2s7bWFyZ2luLXJpZ2h0OjVweDtcIj48L3NwYW4+IEFwcGFydGVtZW50PC9kaXY+XG4gICAgICAgICAgPGRpdj48c3BhbiBzdHlsZT1cImJhY2tncm91bmQ6I2Q5ZDlkOTt3aWR0aDoxMnB4O2hlaWdodDoxMnB4O2Rpc3BsYXk6aW5saW5lLWJsb2NrO21hcmdpbi1yaWdodDo1cHg7XCI+PC9zcGFuPiBBdWN1biBsb2NhbDwvZGl2PlxuICAgICAgICAgIDxkaXY+PHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiM5NDY3YmQ7d2lkdGg6MTJweDtoZWlnaHQ6MTJweDtkaXNwbGF5OmlubGluZS1ibG9jazttYXJnaW4tcmlnaHQ6NXB4O1wiPjwvc3Bhbj4gRMOpcGVuZGFuY2U8L2Rpdj5cbiAgICAgICAgICA8ZGl2PjxzcGFuIHN0eWxlPVwiYmFja2dyb3VuZDojZmY3ZjBlO3dpZHRoOjEycHg7aGVpZ2h0OjEycHg7ZGlzcGxheTppbmxpbmUtYmxvY2s7bWFyZ2luLXJpZ2h0OjVweDtcIj48L3NwYW4+IE1haXNvbjwvZGl2PlxuICAgICAgICAgIDxkaXY+PHNwYW4gc3R5bGU9XCJiYWNrZ3JvdW5kOiNlMzc3YzI7d2lkdGg6MTJweDtoZWlnaHQ6MTJweDtkaXNwbGF5OmlubGluZS1ibG9jazttYXJnaW4tcmlnaHQ6NXB4O1wiPjwvc3Bhbj4gTWl4dGU8L2Rpdj5cbiAgICAgICAgYDtcbiAgICAgICAgXG4gICAgICAgIC8vIEzigJlham91dGVyIMOgIGxhIGNhcnRlXG4gICAgICAgIG1hcC5nZXRDb250YWluZXIoKS5hcHBlbmRDaGlsZChiYXRpbWVudExlZ2VuZCk7XG4gICAgICAgIGJhdGltZW50TGVnZW5kLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7IC8vIFBlcm1ldCBkZSBzdXBwcmltZXIgbCdhZmZpY2hhZ2UgZGUgbGEgbMOpZ2VuZGUgYXUgY2hhcmdlbWVudCBkZSBsYSBwYWdlXG4gICAgICAgIFxuICAgICAgICAvLyBMaWVyIGxhIHZpc2liaWxpdMOpIMOgIGxhIGNvdWNoZSBiw6J0aW1lbnRcbiAgICAgICAgZnVuY3Rpb24gdXBkYXRlQmF0aW1lbnRMZWdlbmRWaXNpYmlsaXR5KCkge1xuICAgICAgICAgIGNvbnN0IHZpc2liaWxpdHkgPSBtYXAuZ2V0TGF5b3V0UHJvcGVydHkoJ2JhdGltZW50c0xheWVyJywgJ3Zpc2liaWxpdHknKTtcbiAgICAgICAgICAvL2JhdGltZW50TGVnZW5kLnN0eWxlLmRpc3BsYXkgPSAodmlzaWJpbGl0eSA9PT0gJ25vbmUnKSA/ICdub25lJyA6ICdibG9jayc7XG4gICAgICAgICAgaWYgKHZpc2liaWxpdHkgPT09ICdub25lJykge1xuICAgICAgICAgIGJhdGltZW50TGVnZW5kLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7XG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgYmF0aW1lbnRMZWdlbmQuc3R5bGUuZGlzcGxheSA9ICdibG9jayc7XG4gICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgICBcbiAgICAgICAgbWFwLm9uKCdpZGxlJywgdXBkYXRlQmF0aW1lbnRMZWdlbmRWaXNpYmlsaXR5KTtcbiAgICAgXG4gICAgLy8gQWpvdXQgZGVzIGNvdWNoZXMgdmVjdG9yaWVsbGVzXG4gICAgICBsYXllcnNEYXRhLmZvckVhY2gobGF5ZXIgPT4ge1xuICAgICAgICBtYXAuYWRkU291cmNlKGxheWVyLmlkLCB7XG4gICAgICAgICAgdHlwZTogJ2dlb2pzb24nLFxuICAgICAgICAgIGRhdGE6IGxheWVyLmRhdGFcbiAgICAgICAgfSk7XG4gICAgICBcbiAgICAgICAgY29uc3QgbGF5ZXJDb25maWcgPSB7XG4gICAgICAgICAgaWQ6IGxheWVyLmlkLFxuICAgICAgICAgIHR5cGU6IGxheWVyLnR5cGUsXG4gICAgICAgICAgc291cmNlOiBsYXllci5pZCxcbiAgICAgICAgICBwYWludDoge30sXG4gICAgICAgICAgbGF5b3V0OiBsYXllci5sYXlvdXRcbiAgICAgICAgfTtcbiAgICAgIFxuICAgICAgICBpZiAobGF5ZXIudHlwZSA9PT0gJ2ZpbGwnKSB7XG4gICAgICAgICAgaWYgKGxheWVyLmR5bmFtaWNDb2xvcikge1xuICAgICAgICAgICAgY29uc3QgcHJvcCA9IFsnZ2V0JywgbGF5ZXIuZHluYW1pY0NvbG9yLnByb3BlcnR5XTtcbiAgICAgICAgICAgIGxheWVyQ29uZmlnLnBhaW50WydmaWxsLWNvbG9yJ10gPSBbXG4gICAgICAgICAgICAgICdjYXNlJyxcbiAgICAgICAgICAgICAgWychJywgWydoYXMnLCBsYXllci5keW5hbWljQ29sb3IucHJvcGVydHldXSwgJyNkOWQ5ZDknLCAgICAgICAgICAgICAgICAgICAgICAgLy8gUHJvcHJpw6l0w6kgYWJzZW50ZVxuICAgICAgICAgICAgICBbJ2FueScsIFsnPT0nLCBbJ2dldCcsIGxheWVyLmR5bmFtaWNDb2xvci5wcm9wZXJ0eV0sIG51bGxdLCBbJz09JywgWydnZXQnLCBsYXllci5keW5hbWljQ29sb3IucHJvcGVydHldLCAwXV0sICcjZDlkOWQ5JywgLy8gbnVsbCBvdSAwXG4gICAgICAgICAgICAgIFsnPCcsIFsnZ2V0JywgbGF5ZXIuZHluYW1pY0NvbG9yLnByb3BlcnR5XSwgNTBdLCAnI2ZmZjVlYicsXG4gICAgICAgICAgICAgIFsnPCcsIFsnZ2V0JywgbGF5ZXIuZHluYW1pY0NvbG9yLnByb3BlcnR5XSwgMzAwXSwgJyNmZGJkODMnLFxuICAgICAgICAgICAgICBbJzwnLCBbJ2dldCcsIGxheWVyLmR5bmFtaWNDb2xvci5wcm9wZXJ0eV0sIDEwMDBdLCAnI2VlNjUxMCcsXG4gICAgICAgICAgICAgIFsnPicsIFsnZ2V0JywgbGF5ZXIuZHluYW1pY0NvbG9yLnByb3BlcnR5XSwgMTAwMF0sICcjN2YyNzA0JyxcbiAgICAgICAgICAgICAgJyNkOWQ5ZDknIC8vIGZhbGxiYWNrXG4gICAgICAgICAgICBdO1xuICAgICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBsYXllckNvbmZpZy5wYWludFsnZmlsbC1jb2xvciddID0gbGF5ZXIuY29sb3IgfHwgJyMwMDAwMDAnO1xuICAgICAgICAgIH1cbiAgICAgICAgXG4gICAgICAgICAgbGF5ZXJDb25maWcucGFpbnRbJ2ZpbGwtb3BhY2l0eSddID0gbGF5ZXIub3BhY2l0eSB8fCAwLjQ7XG4gICAgICAgICAgbGF5ZXJDb25maWcucGFpbnRbJ2ZpbGwtb3V0bGluZS1jb2xvciddID0gJyMwMDAwMDAnO1xuICAgICAgICBcbiAgICAgICAgfSBlbHNlIGlmIChsYXllci50eXBlID09PSAnbGluZScpIHtcbiAgICAgICAgICBsYXllckNvbmZpZy5wYWludFsnbGluZS1jb2xvciddID0gbGF5ZXIuY29sb3IgfHwgJyMwMDAwMDAnO1xuICAgICAgICAgIGxheWVyQ29uZmlnLnBhaW50WydsaW5lLXdpZHRoJ10gPSBsYXllci53aWR0aCB8fCAxO1xuICAgICAgICB9IGVsc2UgaWYgKGxheWVyLnR5cGUgPT09ICdmaWxsLWV4dHJ1c2lvbicpIHtcbiAgICAgICAgICBpZiAobGF5ZXIuY29sb3JCeVR5cGUgPT09ICdmZl9kdGVsb2N0eHQnKSB7XG4gICAgICAgICAgICBsYXllckNvbmZpZy5wYWludFsnZmlsbC1leHRydXNpb24tY29sb3InXSA9IFtcbiAgICAgICAgICAgICAgJ21hdGNoJyxcbiAgICAgICAgICAgICAgWydnZXQnLCAnZmZfZHRlbG9jdHh0J10sXG4gICAgICAgICAgICAgICdBQ1RJVklURScsICcjMWY3N2I0JyxcbiAgICAgICAgICAgICAgJ0FQUEFSVEVNRU5UJywgJyMyY2EwMmMnLFxuICAgICAgICAgICAgICAnQVVDVU4gTE9DQUwnLCAnI2Q5ZDlkOScsXG4gICAgICAgICAgICAgICdERVBFTkRBTkNFJywgJyM5NDY3YmQnLFxuICAgICAgICAgICAgICAnTUFJU09OJywgJyNmZjdmMGUnLFxuICAgICAgICAgICAgICAnTUlYVEUnLCAnI2UzNzdjMicsXG4gICAgICAgICAgICAgICcjMDAwMDAwJyAvLyBmYWxsYmFja1xuICAgICAgICAgICAgXTtcbiAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgbGF5ZXJDb25maWcucGFpbnRbJ2ZpbGwtZXh0cnVzaW9uLWNvbG9yJ10gPSBsYXllci5jb2xvciB8fCAnIzAwMDAwMCc7XG4gICAgICAgICAgfVxuICAgICAgICBcbiAgICAgICAgICBsYXllckNvbmZpZy5wYWludFsnZmlsbC1leHRydXNpb24taGVpZ2h0J10gPSBbJ2dldCcsIGxheWVyLmhlaWdodFByb3BlcnR5IHx8ICdoYXV0ZXVyJ107XG4gICAgICAgICAgbGF5ZXJDb25maWcucGFpbnRbJ2ZpbGwtZXh0cnVzaW9uLWJhc2UnXSA9IDA7XG4gICAgICAgICAgbGF5ZXJDb25maWcucGFpbnRbJ2ZpbGwtZXh0cnVzaW9uLW9wYWNpdHknXSA9IGxheWVyLm9wYWNpdHkgfHwgMC45O1xuICAgICAgICB9XG5cbiAgICAgICAgbWFwLmFkZExheWVyKGxheWVyQ29uZmlnKTtcbiAgICAgICAgXG4gICAgICAgICBtYXAuYWRkTGF5ZXIoe1xuICAgICAgICAgICAgICAgICAgaWQ6ICdpbmRpY2F0ZXVyczMxYkxhYmVscycsXG4gICAgICAgICAgICAgICAgICB0eXBlOiAnc3ltYm9sJyxcbiAgICAgICAgICAgICAgICAgIHNvdXJjZTogJ2luZGljYXRldXJzMzFiTGF5ZXInLCAvLyBsZSBtw6ptZSBpZCBxdWUgdGEgc291cmNlIEdlb0pTT05cbiAgICAgICAgICAgICAgICAgIGxheW91dDoge1xuICAgICAgICAgICAgICAgICAgICAndGV4dC1maWVsZCc6IFsnZ2V0JywgJ25vbSddLFxuICAgICAgICAgICAgICAgICAgICAndGV4dC1zaXplJzogMTEsXG4gICAgICAgICAgICAgICAgICAgICd0ZXh0LWZvbnQnOiBbJ09wZW4gU2FucyBCb2xkJywgJ0FyaWFsIFVuaWNvZGUgTVMgQm9sZCddLFxuICAgICAgICAgICAgICAgICAgICAndGV4dC1vZmZzZXQnOiBbMCwgMC42XSxcbiAgICAgICAgICAgICAgICAgICAgJ3RleHQtYW5jaG9yJzogJ3RvcCdcbiAgICAgICAgICAgICAgICAgIH0sXG4gICAgICAgICAgICAgICAgICBwYWludDoge1xuICAgICAgICAgICAgICAgICAgICAndGV4dC1jb2xvcic6ICcjMDAwMDAwJyxcbiAgICAgICAgICAgICAgICAgICAgJ3RleHQtaGFsby1jb2xvcic6ICcjZmZmZmZmJyxcbiAgICAgICAgICAgICAgICAgICAgJ3RleHQtaGFsby13aWR0aCc6IDFcbiAgICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICB9KTtcbiAgICAgICAgICAgICAgICBcbiAgICAgICAgbWFwLmFkZExheWVyKHtcbiAgICAgICAgICAgICAgICAgaWQ6ICdpbmRpY2F0ZXVyczMxYi1ob3ZlcicsXG4gICAgICAgICAgICAgICAgIHR5cGU6ICdsaW5lJyxcbiAgICAgICAgICAgICAgICAgc291cmNlOiAnaW5kaWNhdGV1cnMzMWJMYXllcicsIC8vIG3Dqm1lIHNvdXJjZVxuICAgICAgICAgICAgICAgICBwYWludDoge1xuICAgICAgICAgICAgICAgICAgICdsaW5lLWNvbG9yJzogJyMwMDAnLFxuICAgICAgICAgICAgICAgICAgICdsaW5lLXdpZHRoJzogMlxuICAgICAgICAgICAgICAgICAgfSxcbiAgICAgICAgICAgICAgICAgZmlsdGVyOiBbJz09JywgJ25vbScsICcnXSAvLyB2aWRlIGF1IGTDqWJ1dFxuICAgICAgICAgICAgICAgICAgfSk7XG4gICAgICAgIFxuICAgICAgICBcbiAgICAgIG1hcC5vbignY2xpY2snLCAnaW5kaWNhdGV1cnMzMWJMYXllcicsIChlKSA9PiB7XG4gICAgICAgIGNvbnN0IGZlYXR1cmUgPSBlLmZlYXR1cmVzWzBdO1xuICAgICAgICBjb25zdCBpbWFnZT0gZmVhdHVyZS5wcm9wZXJ0aWVzLmltYWdlO1xuICAgICAgICBjb25zdCBub20gPSBmZWF0dXJlLnByb3BlcnRpZXMubm9tIHx8ICdOb24gZGlzcG9uaWJsZSc7XG4gICAgICAgIFxuICAgICAgICBjb25zdCBwb3B1bGF0aW9uID0gZmVhdHVyZS5wcm9wZXJ0aWVzLnBvcHVsYXRpb25cbiAgICAgICAgICA/IGZlYXR1cmUucHJvcGVydGllcy5wb3B1bGF0aW9uLnRvTG9jYWxlU3RyaW5nKCdmci1GUicpICsgJyBoYWJpdGFudHMnXG4gICAgICAgICAgOiAnTm9uIGRpc3BvbmlibGUnO1xuICAgICAgXG4gICAgICAgIGNvbnN0IHMzMWJWYWx1ZSA9IHBhcnNlRmxvYXQoZmVhdHVyZS5wcm9wZXJ0aWVzLnMzMWIpO1xuICAgICAgICBjb25zdCBkb21tYWdlcyA9IChOdW1iZXIoczMxYlZhbHVlKSB8fCAwKS50b0xvY2FsZVN0cmluZygnZnItRlInKTtcbiAgICAgICAgY29uc3QgYmF0aW1lbnRzVmFsdWUgPSBmZWF0dXJlLnByb3BlcnRpZXMubmJfYmF0aW1lbnRzO1xuICAgICAgICBjb25zdCBiYXRpbWVudHMgPSAhaXNOYU4ocGFyc2VGbG9hdChiYXRpbWVudHNWYWx1ZSkpXG4gICAgICAgICAgPyBwYXJzZUludChiYXRpbWVudHNWYWx1ZSkudG9Mb2NhbGVTdHJpbmcoJ2ZyLUZSJylcbiAgICAgICAgICA6ICdOb24gZGlzcG9uaWJsZSc7XG4gICAgICAgIGNvbnN0IGJhdGluZGlmID0gZmVhdHVyZS5wcm9wZXJ0aWVzLm5iX2JhdF9pbmRpZj8udG9Mb2NhbGVTdHJpbmcoJ2ZyLUZSJyk7XG4gICAgICAgIGNvbnN0IGJhdHNwb3J0aWZWYWx1ZSA9IHBhcnNlRmxvYXQoZmVhdHVyZS5wcm9wZXJ0aWVzLm5iX2JhdF9zcG9ydGlmKTtcbiAgICAgICAgY29uc3QgYmF0c3BvcnRpZiA9ICghaXNOYU4oYmF0c3BvcnRpZlZhbHVlKSA/IGJhdHNwb3J0aWZWYWx1ZSA6IDApLnRvTG9jYWxlU3RyaW5nKCdmci1GUicpO1xuICAgICAgICBjb25zdCBiYXRhZ3JpY29sZWZWYWx1ZSA9IHBhcnNlRmxvYXQoZmVhdHVyZS5wcm9wZXJ0aWVzLm5iX2JhdF9hZ3JpY29sZSk7XG4gICAgICAgIGNvbnN0IGJhdGFncmljb2xlID0gKCFpc05hTihiYXRhZ3JpY29sZWZWYWx1ZSkgPyBiYXRhZ3JpY29sZWZWYWx1ZSA6IDApLnRvTG9jYWxlU3RyaW5nKCdmci1GUicpO1xuICAgICAgICBjb25zdCBiYXRyZXNpZGVudGllbFZhbHVlID0gcGFyc2VGbG9hdChmZWF0dXJlLnByb3BlcnRpZXMubmJfYmF0X3Jlc2lkZW50aWVsKTtcbiAgICAgICAgY29uc3QgYmF0cmVzaWRlbnRpZWwgPSAoIWlzTmFOKGJhdHJlc2lkZW50aWVsVmFsdWUpID8gYmF0cmVzaWRlbnRpZWxWYWx1ZSA6IDApLnRvTG9jYWxlU3RyaW5nKCdmci1GUicpO1xuICAgICAgICBjb25zdCBiYXRhbm5leGVWYWx1ZSA9IHBhcnNlRmxvYXQoZmVhdHVyZS5wcm9wZXJ0aWVzLm5iX2JhdF9hbm5leGUpO1xuICAgICAgICBjb25zdCBiYXRhbm5leGUgPSAoIWlzTmFOKGJhdGFubmV4ZVZhbHVlKSA/IGJhdGFubmV4ZVZhbHVlIDogMCkudG9Mb2NhbGVTdHJpbmcoJ2ZyLUZSJyk7XG4gICAgICAgIGNvbnN0IGJhdHJlbGlnaWV1eFZhbHVlID0gcGFyc2VGbG9hdChmZWF0dXJlLnByb3BlcnRpZXMubmJfYmF0X3JlbGlnaWV1eCk7XG4gICAgICAgIGNvbnN0IGJhdHJlbGlnaWV1eCA9ICghaXNOYU4oYmF0cmVsaWdpZXV4VmFsdWUpID8gYmF0cmVsaWdpZXV4VmFsdWUgOiAwKS50b0xvY2FsZVN0cmluZygnZnItRlInKTtcbiAgICAgICAgY29uc3QgYmF0aW5kdXN0cmllbFZhbHVlID0gcGFyc2VGbG9hdChmZWF0dXJlLnByb3BlcnRpZXMubmJfYmF0X2luZHVzdHJpZWwpO1xuICAgICAgICBjb25zdCBiYXRpbmR1c3RyaWVsID0gKCFpc05hTihiYXRpbmR1c3RyaWVsVmFsdWUpID8gYmF0aW5kdXN0cmllbFZhbHVlIDogMCkudG9Mb2NhbGVTdHJpbmcoJ2ZyLUZSJyk7XG4gICAgICAgIGNvbnN0IGJhdGNvbW1lcmNpYWxWYWx1ZSA9IHBhcnNlRmxvYXQoZmVhdHVyZS5wcm9wZXJ0aWVzLm5iX2JhdF9jb21tZXJjaWFsKTtcbiAgICAgICAgY29uc3QgYmF0Y29tbWVyY2lhbCA9ICghaXNOYU4oYmF0Y29tbWVyY2lhbFZhbHVlKSA/IGJhdGNvbW1lcmNpYWxWYWx1ZSA6IDApLnRvTG9jYWxlU3RyaW5nKCdmci1GUicpO1xuICAgICAgXG4gICAgICAgIGNvbnN0IHBvcHVwQ29udGVudCA9IGBcbiAgICAgICAgPHN0eWxlPlxuICAgICAgICAgIC5tYXBsaWJyZWdsLXBvcHVwLWNvbnRlbnQge1xuICAgICAgICAgICAgcGFkZGluZzogNHB4ICFpbXBvcnRhbnQ7XG4gICAgICAgICAgICBib3JkZXI6IDFweCBzb2xpZDtcbiAgICAgICAgICAgIGJvcmRlci1yYWRpdXM6IDhweDtcbiAgICAgICAgICAgIHdpZHRoOiBtYXgtY29udGVudDtcbiAgICAgICAgICAgIGJveC1zaGFkb3c6IHJnYmEoMTAxLCAxNDcsIDIyMCwgMC4yKSAwcHggNHB4IDhweCAwcHg7XG4gICAgICAgICAgICBib3JkZXItY29sb3I6IHJnYmEoMTAxLCAxNDcsIDIyMCwgMC41KTtcbiAgICAgICAgICB9XG4gICAgICAgIDwvc3R5bGU+XG4gICAgICAgICAgPGRpdiBzdHlsZT1cImZvbnQtZmFtaWx5OiBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEzcHg7IG1hcmdpbjoxMHB4O1wiPlxuICAgICAgICAgIDxkaXYgc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiAjNjk3NzRmOyBib3JkZXI6IDFweCBzb2xpZDsgYm9yZGVyLXJhZGl1czo4cHg7IG1hcmdpbi1ib3R0b206MTZweDsgcGFkZGluZzoxMHB4OyBjb2xvcjp3aGl0ZTtcIj48c3Ryb25nPlxuICAgICAgICAgIDxjZW50ZXI+JHtub219PC9jZW50ZXI+XG4gICAgICAgICAgPC9zdHJvbmc+PC9kaXY+XG4gICAgICAgICAgICA8cCBzdHlsZT1cIm1hcmdpbjphdXRvO1wiPjxzdHJvbmc+UG9wdWxhdGlvbiA6PC9zdHJvbmc+ICR7cG9wdWxhdGlvbn08L3A+XG4gICAgICAgICAgICA8cCBzdHlsZT1cIm1hcmdpbjphdXRvO1wiPjxzdHJvbmc+Tm9tYnJlIGQnZW1wbG95w6lzIGVuIHpvbmUgaW5vbmRhYmxlIDo8L3N0cm9uZz4gJHtkb21tYWdlc308L3A+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgIGA7XG4gICAgICBcbiAgICAgICAgbmV3IG1hcGxpYnJlZ2wuUG9wdXAoe2Nsb3NlQnV0dG9uOiBmYWxzZX0pXG4gICAgICAgICAgLnNldExuZ0xhdChlLmxuZ0xhdClcbiAgICAgICAgICAuc2V0SFRNTChwb3B1cENvbnRlbnQpXG4gICAgICAgICAgLmFkZFRvKG1hcCk7XG4gICAgICAgICAgXG4gICAgICAgICAgLy8gTWV0dHJlIMOgIGpvdXIgbGUgY29udGVuZXVyIEhUTUwgYXZlYyBsZXMgaW5mb3JtYXRpb25zIHNww6ljaWZpcXVlcyBkdSBtYXJxdWV1ciBcbiAgICAgICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdkb25uZWVzJykuaW5uZXJIVE1MID0gYFxuICAgICAgICAgIDxkaXYgc3R5bGU9XCJ0ZXh0LWFsaWduOmNlbnRlcjsgZm9udC1mYW1pbHk6c2Fucy1zZXJpZjsgZm9udC1zaXplOjE2cHg7XCI+XG4gICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgPGltZyBzcmM9XCIke2ltYWdlfVwiIHN0eWxlPVwid2lkdGg6MzAwcHg7IG1hcmdpbi1ib3R0b206MTBweDtwYWRkaW5nOiAycHg7IGJhY2tncm91bmQtY29sb3I6IGRhcmtnb2xkZW5yb2Q7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1hcmdpbi10b3A6IDEzcHg7Ym94LXNoYWRvdzogcmdiYSgxNDksIDMxLCA4MSwgMC43NykgMHB4IDRweCA4cHggMHB4O1wiPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8YnI+XG4gICAgICAgICAgICBcbiAgICAgICAgICAgIDxzdHJvbmcgc3R5bGU9XCJmb250LXNpemU6MS4xZW07XCI+PGkgY2xhc3M9XCJiaSBiaS1nZW8tYWx0LWZpbGxcIj48L2k+IENvbW11bmUgOjwvc3Ryb25nPiAke25vbX08YnI+XG4gICAgICAgICAgICA8c3Ryb25nIHN0eWxlPVwiZm9udC1zaXplOjEuMWVtO1wiPjxpIGNsYXNzPVwiYmkgYmktcGVvcGxlLWZpbGxcIj48L2k+IE5vbWJyZSBkJ2hhYml0YW50cyA6PC9zdHJvbmc+ICR7cG9wdWxhdGlvbn08YnI+XG4gICAgICAgICAgICA8c3Ryb25nIHN0eWxlPVwiZm9udC1zaXplOjEuMWVtO1wiPjxpIGNsYXNzPVwiYmkgYmktaG91c2UtZmlsbFwiPjwvaT4gTm9tYnJlIGRlIGLDonRpbWVudHMgOjwvc3Ryb25nPiAke2JhdGltZW50c308YnI+XG4gICAgICAgICAgICBcbiAgICAgICAgICAgIDxkaXYgc3R5bGU9XCJtYXJnaW4tdG9wOjEwcHg7XCI+PHN0cm9uZz5Eb250IDo8L3N0cm9uZz48L2Rpdj5cbiAgICAgICAgICAgIDx1bCBzdHlsZT1cImxpc3Qtc3R5bGU6bm9uZTsgcGFkZGluZzowO1wiPlxuICAgICAgICAgICAgICA8bGk+PGg1IHN0eWxlPVwiZm9udC1zaXplOjFlbTtcIj4ke2JhdGluZGlmfSA8c3Ryb25nPmLDonRpbWVudHMgaW5kaWZmw6lyZW5jacOpczwvc3Ryb25nPjwvaDU+PC9saT5cbiAgICAgICAgICAgICAgPGxpPjxoNSBzdHlsZT1cImZvbnQtc2l6ZToxZW07XCI+JHtiYXRzcG9ydGlmfSA8c3Ryb25nPmLDonRpbWVudHMgc3BvcnRpZnM8L3N0cm9uZz48L2g1PjwvbGk+XG4gICAgICAgICAgICAgIDxsaT48aDUgc3R5bGU9XCJmb250LXNpemU6MWVtO1wiPiR7YmF0YWdyaWNvbGV9IDxzdHJvbmc+YsOidGltZW50cyBhZ3JpY29sZXM8L3N0cm9uZz48L2g1PjwvbGk+XG4gICAgICAgICAgICAgIDxsaT48aDUgc3R5bGU9XCJmb250LXNpemU6MWVtO1wiPiR7YmF0cmVzaWRlbnRpZWx9IDxzdHJvbmc+YsOidGltZW50cyByw6lzaWRlbnRpZWxzPC9zdHJvbmc+PC9oNT48L2xpPlxuICAgICAgICAgICAgICA8bGk+PGg1IHN0eWxlPVwiZm9udC1zaXplOjFlbTtcIj4ke2JhdGFubmV4ZX0gPHN0cm9uZz5iw6J0aW1lbnRzIGFubmV4ZXM8L3N0cm9uZz48L2g1PjwvbGk+XG4gICAgICAgICAgICAgIDxsaT48aDUgc3R5bGU9XCJmb250LXNpemU6MWVtO1wiPiR7YmF0cmVsaWdpZXV4fSA8c3Ryb25nPmLDonRpbWVudHMgcmVsaWdpZXV4PC9zdHJvbmc+PC9oNT48L2xpPlxuICAgICAgICAgICAgICA8bGk+PGg1IHN0eWxlPVwiZm9udC1zaXplOjFlbTtcIj4ke2JhdGluZHVzdHJpZWx9IDxzdHJvbmc+YsOidGltZW50cyBpbmR1c3RyaWVsczwvc3Ryb25nPjwvaDU+PC9saT5cbiAgICAgICAgICAgICAgPGxpPjxoNSBzdHlsZT1cImZvbnQtc2l6ZToxZW07XCI+JHtiYXRjb21tZXJjaWFsfSA8c3Ryb25nPmLDonRpbWVudHMgY29tbWVyY2lhdXg8L3N0cm9uZz48L2g1PjwvbGk+XG4gICAgICAgICAgICA8L3VsPlxuICAgICAgICBcbiAgICAgICAgICAgIDxkaXYgc3R5bGU9XCJtYXJnaW4tdG9wOjEwcHg7XCI+XG4gICAgICAgICAgICAgIDxzdHJvbmcgc3R5bGU9XCJmb250LXNpemU6MS4xZW07XCI+PGkgY2xhc3M9XCJmYXMgZmEtdXNlci10aWVcIj48L2k+IE5vbWJyZSBkJ2VtcGxvecOpcyBlbiB6b25lIGlub25kYWJsZSA6PC9zdHJvbmc+ICR7ZG9tbWFnZXN9XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgYDtcbiAgICAgIH0pO1xuXG4gICAgICBtYXAub24oJ21vdXNlbW92ZScsICdpbmRpY2F0ZXVyczMxYkxheWVyJywgKGUpID0+IHtcbiAgICAgICAgaWYgKGUuZmVhdHVyZXMubGVuZ3RoID4gMCkge1xuICAgICAgICAgIGNvbnN0IG5vbUNvbW11bmUgPSBlLmZlYXR1cmVzWzBdLnByb3BlcnRpZXMubm9tO1xuICAgICAgXG4gICAgICAgICAgbWFwLnNldEZpbHRlcignaW5kaWNhdGV1cnMzMWItaG92ZXInLCBbJz09JywgJ25vbScsIG5vbUNvbW11bmVdKTtcbiAgICAgIFxuICAgICAgICAgIG1hcC5nZXRDYW52YXMoKS5zdHlsZS5jdXJzb3IgPSAncG9pbnRlcic7XG4gICAgICAgIH1cbiAgICAgIH0pO1xuXG4gICAgICAgIG1hcC5vbignbW91c2VsZWF2ZScsICdpbmRpY2F0ZXVyczMxYkxheWVyJywgKCkgPT4ge1xuICAgICAgICAgIG1hcC5zZXRGaWx0ZXIoJ2luZGljYXRldXJzMzFiLWhvdmVyJywgWyc9PScsICdub20nLCAnJ10pO1xuICAgICAgICAgIG1hcC5nZXRDYW52YXMoKS5zdHlsZS5jdXJzb3IgPSAnJztcbiAgICAgICAgfSk7XG4gICAgICB9KTtcblxuICAgIC8vIEludGVyZmFjZSBkZSBjb250csO0bGUgZGVzIGNvdWNoZXNcbiAgICBjb25zdCBtYXBMYXllcnNEaXYgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcbiAgICBtYXBMYXllcnNEaXYuY2xhc3NMaXN0LmFkZCgnbWFwTGF5ZXJzJyk7XG4gICAgbWFwTGF5ZXJzRGl2LnN0eWxlLnBvc2l0aW9uID0gJ2Fic29sdXRlJztcbiAgICBtYXBMYXllcnNEaXYuc3R5bGUuekluZGV4ID0gJzEwMDAnO1xuICAgIG1hcExheWVyc0Rpdi5pbm5lckhUTUwgPSBgXG4gICAgICA8YnV0dG9uIGlkPVwidG9nZ2xlTWFwTWVudUJ1dHRvblwiIGNsYXNzPVwiYnRuIGJ0bi1saWdodCBhcmlhLWxhYmVsPVwiQWZmaWNoZXIgbGVzIGNvdWNoZXNcIiB0aXRsZT1cIkFmZmljaGVyIGxlcyBjb3VjaGVzXCI+XG4gICAgICAgIDxpbWcgc3JjPVwiSW1hZ2VzL2ljb25zL2xheWVycy1oYWxmLnN2Z1wiIGFsdD1cIkljw7RuZSBTVkdcIiB3aWR0aD1cIjI1XCIgaGVpZ2h0PVwiMjVcIj5cbiAgICAgIDwvYnV0dG9uPlxuICAgICAgPGRpdiBpZD1cImxheWVyc0xpc3RcIiBzdHlsZT1cImRpc3BsYXk6IG5vbmU7IGJhY2tncm91bmQ6IHdoaXRlOyBwYWRkaW5nOiAxMHB4OyBib3JkZXI6IDFweCBzb2xpZCAjY2NjO1wiPjwvZGl2PlxuICAgIGA7XG4gICAgbWFwLmdldENvbnRhaW5lcigpLmFwcGVuZENoaWxkKG1hcExheWVyc0Rpdik7XG5cbiAgICBjb25zdCB0b2dnbGVhYmxlTGF5ZXJJZHMgPSBsYXllcnNEYXRhLm1hcChsYXllciA9PiBsYXllci5pZCk7XG4gICAgY29uc3QgYWxpYXNMYXllcklkcyA9IHtcbiAgICAgIGJhc3NpbnZpZW5uZUxheWVyOiAnQmFzc2luIGRlIGxhIFZpZW5uZScsXG4gICAgICByZWdpb25MYXllcjogJ1LDqWdpb24nLFxuICAgICAgZGVwYXJ0ZW1lbnRMYXllcjogJ0TDqXBhcnRlbWVudCcsXG4gICAgICBlcGNpTGF5ZXI6ICdFdGFibGlzc2VtZW50IFB1YmxpYyBkZSBDb29ww6lyYXRpb24gSW50ZXJjb21tdW5hbGUnLFxuICAgICAgY291cnNkZWF1TGF5ZXI6IFwiQ291cnMgZCdlYXVcIixcbiAgICAgIHpvbmVpbm9uZGFibGVMYXllcjogJ1pvbmFnZSBJbm9uZGFibGUnLFxuICAgICAgaW5kaWNhdGV1cnMzMWJMYXllcjogXCJOb21icmUgZCdlbXBsb3nDqXMgZW4gem9uZSBpbm9uZGFibGVcIixcbiAgICAgIGJhdGltZW50c0xheWVyOiBcIkLDonRpbWVudHNcIlxuICAgIH07XG5cbiAgICBmdW5jdGlvbiB0b2dnbGVMYXllclZpc2liaWxpdHkoaWQsIHZpc2libGUpIHtcbiAgICAgIGNvbnN0IHZpc2liaWxpdHkgPSB2aXNpYmxlID8gJ3Zpc2libGUnIDogJ25vbmUnO1xuICAgICAgaWYgKG1hcC5nZXRMYXllcihpZCkpIHtcbiAgICAgICAgbWFwLnNldExheW91dFByb3BlcnR5KGlkLCAndmlzaWJpbGl0eScsIHZpc2liaWxpdHkpO1xuICAgICAgfVxuICAgIH1cblxuICAgIGNvbnN0IGxheWVyc0xpc3REaXYgPSBtYXBMYXllcnNEaXYucXVlcnlTZWxlY3RvcignI2xheWVyc0xpc3QnKTtcbiAgICBcbiAgICB0b2dnbGVhYmxlTGF5ZXJJZHMuZm9yRWFjaChpZCA9PiB7XG4gICAgICBjb25zdCBuYW1lID0gYWxpYXNMYXllcklkc1tpZF0gfHwgaWQ7XG5cbiAgICAgIGNvbnN0IGNoZWNrYm94ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnaW5wdXQnKTtcbiAgICAgIGNoZWNrYm94LnR5cGUgPSAnY2hlY2tib3gnO1xuICAgICAgY2hlY2tib3guaWQgPSBpZDtcbiAgICAgIGNoZWNrYm94LmNsYXNzTmFtZSA9ICdmb3JtLWNoZWNrLWlucHV0JztcbiAgICAgIFxuICAgICAgLy8g4pyFIExpcmUgbGEgdmlzaWJpbGl0w6kgYWN0dWVsbGUgZGlyZWN0ZW1lbnQgZGFucyBsYSBjYXJ0ZVxuICAgICAgbWFwLm9uY2UoJ2lkbGUnLCAoKSA9PiB7XG4gICAgICAgIGNvbnN0IHZpc2liaWxpdHkgPSBtYXAuZ2V0TGF5b3V0UHJvcGVydHkoaWQsICd2aXNpYmlsaXR5Jyk7XG4gICAgICAgIGNoZWNrYm94LmNoZWNrZWQgPSB2aXNpYmlsaXR5ID09PSAndmlzaWJsZSc7XG4gICAgICB9KTtcbiAgXG4gICAgICBjaGVja2JveC5hZGRFdmVudExpc3RlbmVyKCdjaGFuZ2UnLCAoKSA9PiB0b2dnbGVMYXllclZpc2liaWxpdHkoaWQsIGNoZWNrYm94LmNoZWNrZWQpKTtcblxuICAgICAgY29uc3QgbGFiZWwgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdsYWJlbCcpO1xuICAgICAgbGFiZWwuaHRtbEZvciA9IGlkO1xuICAgICAgbGFiZWwuY2xhc3NOYW1lID0gJ2Zvcm0tY2hlY2stbGFiZWwnO1xuICAgICAgbGFiZWwuaW5uZXJUZXh0ID0gbmFtZTtcblxuICAgICAgY29uc3Qgd3JhcHBlciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuICAgICAgd3JhcHBlci5jbGFzc05hbWUgPSAnZm9ybS1jaGVjayc7XG4gICAgICB3cmFwcGVyLmFwcGVuZENoaWxkKGNoZWNrYm94KTtcbiAgICAgIHdyYXBwZXIuYXBwZW5kQ2hpbGQobGFiZWwpO1xuXG4gICAgICBsYXllcnNMaXN0RGl2LmFwcGVuZENoaWxkKHdyYXBwZXIpO1xuICAgIH0pO1xuXG4gICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3RvZ2dsZU1hcE1lbnVCdXR0b24nKS5hZGRFdmVudExpc3RlbmVyKCdjbGljaycsICgpID0+IHtcbiAgICAgIGxheWVyc0xpc3REaXYuc3R5bGUuZGlzcGxheSA9IGxheWVyc0xpc3REaXYuc3R5bGUuZGlzcGxheSA9PT0gJ25vbmUnID8gJ2Jsb2NrJyA6ICdub25lJztcbiAgICB9KTtcbiAgICAgXG5cbiAgICAvLyBNZW51IGJhc2N1bGUgZm9uZCBkZSBwbGFuXG4gICAgY29uc3QgbWFwTWVudURpdiA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuICAgIG1hcE1lbnVEaXYuY2xhc3NMaXN0LmFkZCgnbWFwRm9uZERlUGxhbicpO1xuICAgIG1hcE1lbnVEaXYuc3R5bGUucG9zaXRpb24gPSAnYWJzb2x1dGUnO1xuICAgIG1hcE1lbnVEaXYuc3R5bGUuekluZGV4ID0gJzEwMDAnO1xuICAgIG1hcE1lbnVEaXYuaW5uZXJIVE1MID0gYFxuICAgICAgPHN0cm9uZz5Gb25kIGRlIHBsYW4gOjwvc3Ryb25nPlxuICAgICAgPGRpdiBjbGFzcz1cImZvcm0tY2hlY2sgZm9ybS1zd2l0Y2hcIj5cbiAgICAgICAgPGlucHV0IGNsYXNzPVwiZm9ybS1jaGVjay1pbnB1dFwiIHR5cGU9XCJjaGVja2JveFwiIHJvbGU9XCJzd2l0Y2hcIiBpZD1cIm9ydGhvQ2hlY2tib3hcIj5cbiAgICAgICAgPGxhYmVsIGNsYXNzPVwiZm9ybS1jaGVjay1sYWJlbFwiIGZvcj1cIm9ydGhvQ2hlY2tib3hcIj5QaG90b3MgYcOpcmllbm5lczwvbGFiZWw+XG4gICAgICA8L2Rpdj5cbiAgICBgO1xuICAgIG1hcC5nZXRDb250YWluZXIoKS5hcHBlbmRDaGlsZChtYXBNZW51RGl2KTtcblxuICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdvcnRob0NoZWNrYm94JykuYWRkRXZlbnRMaXN0ZW5lcignY2hhbmdlJywgZnVuY3Rpb24gKGUpIHtcbiAgICAgIGUucHJldmVudERlZmF1bHQoKTtcbiAgICAgIGUuc3RvcFByb3BhZ2F0aW9uKCk7XG4gICAgICB0b2dnbGVTdHlsZSh0aGlzLmNoZWNrZWQpO1xuICAgIH0pO1xuICB9KTtcbn07XG5cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Im1kYFxuPGRpdiBpZD1cImRvbm5lZXNcIiBzdHlsZT1cImZvbnQtZmFtaWx5OiBBcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNnB4OyBsaW5lLWhlaWdodDogMS41OyBtYXJnaW4tdG9wOjElO1wiPlxuICAgIENsaXF1ZXogc3VyIHVuZSBjb21tdW5lIHBvdXIgdm9pciBsZXMgaW5mb3JtYXRpb25zIGljaS48YnI+XG48L2Rpdj5cblxuYFxuXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJcbmltcG9ydCB7IFBsb3QgYXMgUGxvdFRhdXggfSBmcm9tIFwiQG9ic2VydmFibGVocS9wbG90XCI7XG5pbXBvcnQgeyBJbnB1dHMgYXMgSW5wdXRzVGF1eCB9IGZyb20gXCJAb2JzZXJ2YWJsZWhxL2lucHV0c1wiO1xuXG4vLyBDaGFyZ2VyIGxlcyBkb25uw6llc1xuZGF0YSA9IEZpbGVBdHRhY2htZW50KFwibGF5ZXJzL2RhdGFfczMxYi5qc29uXCIpLmpzb24oKVxuXG4vLyBMYWJlbCBkdSBzbGlkZXJcbmh0bWxgPGxhYmVsIGZvcj1cInNsaWRlci1zMzFiXCIgc3R5bGU9XCJkaXNwbGF5OiBibG9jaztcbiAgbWFyZ2luLXRvcDogMWVtO1xuICBmb250LXdlaWdodDogYm9sZDtcbiAgbWFyZ2luLWJvdHRvbTogMWVtO1xuICBib3JkZXI6IDFweCBzb2xpZCByZ2JhKDAsIDAsIDAsIDAuNik7XG4gIGJveC1zaGFkb3c6IDBweCAwcHggOHB4IDBweCByZ2JhKDAsIDAsIDAsIDAuOCk7XG4gIGJvcmRlci1yYWRpdXM6IDhweDtcbiAgcGFkZGluZzogNXB4O1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gIG1hcmdpbi1yaWdodDogMjAlO1xuICBtYXJnaW4tbGVmdDogMjAlO1wiPlxuICBOb21icmUgZCdlbXBsb3nDqXMgZW4gem9uZSBpbm9uZGFibGVcbjwvbGFiZWw+YFxuXG4vLyBTbGlkZXJcblxuXG5kYXRhX3MzMWIgPSBGaWxlQXR0YWNobWVudChcImxheWVycy9kYXRhX3MzMWIuanNvblwiKS5qc29uKClcblxudmlld29mIHNsaWRlcl9zMzFiID0gSW5wdXRzVGF1eC5yYW5nZShbMCwgMTgwMF0sIHtcbiAgdmFsdWU6IDkwMCxcbiAgc3RlcDogMjAwLy9cbiAgLy9sYWJlbDogXCJMaW7DqWFpcmUgZCdpdGluw6lyYWlyZXMgcm91dGllcnMgaW50ZXJjZXB0w6lzIGVuIGttXCJcbn0pXG5cbnNvcnRlZF9zMzFiID0gZGF0YV9zMzFiXG4gIC5tYXAoZCA9PiAoeyAuLi5kLCBzMzFiOiArZC5zMzFiIHx8IDAgfSkpXG4gIC5maWx0ZXIoZCA9PiBkLnMzMWIgPD0gc2xpZGVyX3MzMWIpXG4gIC5zb3J0KChhLCBiKSA9PiBhLnMzMWIgLSBiLnMzMWIpXG5cblBsb3RUYXV4LnBsb3Qoe1xuICBtYXJrczogW1xuICAgIFBsb3RUYXV4LmJhclkoc29ydGVkX3MzMWIsIHtcbiAgICAgIHg6IGQgPT4gZC5ub20sXG4gICAgICB5OiBkID0+IGQuczMxYixcbiAgICAgICAgZmlsbDogZCA9PiB7XG4gICAgICAgIGNvbnN0IHZhbCA9IGQuczMxYjtcbiAgICAgICAgaWYgKHZhbCA9PT0gMCkgcmV0dXJuIFwiI2Q5ZDlkOVwiO1xuICAgICAgICBpZiAodmFsIDwgNTApIHJldHVybiBcIiNmZmY1ZWJcIjtcbiAgICAgICAgaWYgKHZhbCA8IDMwMCkgcmV0dXJuIFwiI2ZkYmQ4M1wiO1xuICAgICAgICBpZiAodmFsIDwgMTAwMCkgcmV0dXJuIFwiI2VlNjUxMFwiO1xuICAgICAgICBpZiAodmFsID49IDEwMDApIHJldHVybiBcIiM3ZjI3MDRcIjtcbiAgICAgICAgcmV0dXJuIFwiIzY3MDAwZFwiOyAvLyA+NFxuICAgICAgICBcbiAgICAgIH1cbiAgICB9KSxcbiAgICBQbG90VGF1eC50ZXh0KHNvcnRlZF9zMzFiLCB7XG4gICAgICB4OiBkID0+IGQubm9tLFxuICAgICAgeTogZCA9PiBkLnMzMWIsXG4gICAgICB0ZXh0OiBkID0+IGQuczMxYi50b0xvY2FsZVN0cmluZyhcImZyLUZSXCIpLFxuICAgICAgZHk6IC04LFxuICAgICAgZm9udFNpemU6IDksXG4gICAgICBmaWxsOiBcImJsYWNrXCIsXG4gICAgICB0ZXh0QW5jaG9yOiBcIm1pZGRsZVwiXG4gICAgfSlcbiAgXSxcbiAgeToge1xuICAgIGdyaWQ6IHRydWUsXG4gICAgbGFiZWw6IFwiTm9tYnJlIGQnZW1wbG95w6lzIGVuIHpvbmUgaW5vbmRhYmxlXCIsXG4gICAgZG9tYWluOiBbMCwgTWF0aC5tYXgoLi4uc29ydGVkX3MzMWIubWFwKGQgPT4gZC5zMzFiKSldLFxuICAgIHRpY2tGb3JtYXQ6IGQgPT4gZC50b0xvY2FsZVN0cmluZyhcImZyLUZSXCIsIHsgbWF4aW11bUZyYWN0aW9uRGlnaXRzOiAwIH0pXG4gIH0sXG4gIHg6IHtcbiAgICBsYWJlbDogXCJDb21tdW5lXCIsXG4gICAgdGlja1JvdGF0ZTogLTQ1LFxuICAgIGxhYmVsQW5jaG9yOiBcInJpZ2h0XCJcbiAgfSxcbiAgc3R5bGU6IHtcbiAgICBmb250U2l6ZTogXCIxMXB4XCIsXG4gICAgZm9udEZhbWlseTogXCJzYW5zLXNlcmlmXCIsXG4gICAgZm9udFdlaWdodDogXCJib2xkXCJcbiAgfSxcbiAgd2lkdGg6IHdpbmRvdy5pbm5lcldpZHRoICogMC45NSxcbiAgaGVpZ2h0OiB3aW5kb3cuaW5uZXJIZWlnaHQgKiAwLjY1LFxuICBtYXJnaW5Cb3R0b206IDEyMCxcbiAgbWFyZ2luVG9wOiA1MCxcbiAgbWFyZ2luTGVmdDogODBcbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJtZGBcblxuPHRhYmxlIHN0eWxlPVwid2lkdGg6OTAlOyBib3JkZXItY29sbGFwc2U6IGNvbGxhcHNlOyBib3JkZXI6MXB4IHNvbGlkOyB0ZXh0LWFsaWduOmNlbnRlcjsgbWFyZ2luOmF1dG87XCI+XG4gIDxjb2xncm91cD5cbiAgICA8Y29sIHN0eWxlPVwid2lkdGg6MjAlO1wiPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoyMCU7XCI+XG4gICAgPGNvbCBzdHlsZT1cIndpZHRoOjIwJTtcIj5cbiAgICA8Y29sIHN0eWxlPVwid2lkdGg6MjAlO1wiPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoyMCU7XCI+XG4gIDwvY29sZ3JvdXA+XG4gIDx0cj5cbiAgICA8dGggc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7XCIgY29sc3Bhbj1cIjJcIj5OdW3DqXJvIGQnaW5kaWNhdGV1cjwvdGg+XG4gICAgPHRoIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5JbmQzLzFiPC90aD5cbiAgICA8dGggc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7XCI+RGF0ZSBkZSBtaXNlIMOgIGpvdXI8L3RoPlxuICAgIDx0aCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+MzEvMDUvMjAyNTwvdGg+XG4gIDwvdHI+XG4gIDx0cj5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+SW50aXR1bMOpPC90ZD5cbiAgICA8dGQgY29sc3Bhbj1cIjNcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+Tm9tYnJlIGQnZW1wbG95w6lzIGVuIHpvbmUgaW5vbmRhYmxlPC90ZD5cbiAgPC90cj5cbiAgPHRyPlxuICAgIDx0ZCBjb2xzcGFuPVwiMlwiIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjojZDFmZmM0OyBib3JkZXI6MXB4IHNvbGlkOyBmb250LXdlaWdodDogYm9sZDtcIj5PYmplY3RpZiBkZSBsYSBTTkdSSTwvdGQ+XG4gICAgPHRkIGNvbHNwYW49XCIzXCIgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPk9iamVjdGlmIG7CsDMgOiBSYWNjb3VyY2lyIGZvcnRlbWVudCBsZSBkw6lsYWkgZGUgcmV0b3VyIMOgIGxhIG5vcm1hbGUgZGVzIHRlcnJpdG9pcmVzIHNpbmlzdHLDqXM8L3RkPlxuICA8L3RyPlxuICA8dHI+XG4gICAgPHRkIGNvbHNwYW49XCIyXCIgc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7IGZvbnQtd2VpZ2h0OiBib2xkO1wiPkF4ZSBkZSB2dWxuw6lyYWJpbGl0w6k8L3RkPlxuICAgIDx0ZCBjb2xzcGFuPVwiM1wiIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5BeGUgMy8xIEzigJlpbXBhY3QgYXUgdGVycml0b2lyZSBldCBzZXMgY2FwYWNpdMOpcyDDoCByw6l0YWJsaXIgbGVzIGZvbmN0aW9ucyBk4oCZaGFiaXRhdCwgZOKAmWFjdGl2aXTDqSwgZXRjLjwvdGQ+XG4gIDwvdHI+XG4gIDx0cj5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+U291cmNlIGRlIHZ1bG7DqXJhYmlsaXTDqTwvdGQ+XG4gICAgPHRkIGNvbHNwYW49XCIzXCIgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPlMzLzEgSW1wYWN0IHBvdGVudGllbCBk4oCZdW5lIGNydWUgc3VyIGxlIHRlcnJpdG9pcmU8L3RkPlxuICA8L3RyPlxuPC90YWJsZT5cblxuPGJyPlxuXG48dGFibGUgc3R5bGU9XCJ3aWR0aDo5MCU7IGJvcmRlci1jb2xsYXBzZTogY29sbGFwc2U7IGJvcmRlcjoxcHggc29saWQ7IHRleHQtYWxpZ246Y2VudGVyOyBtYXJnaW46YXV0bztcIj5cbiAgPGNvbGdyb3VwPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoyMCU7XCI+XG4gICAgPGNvbCBzdHlsZT1cIndpZHRoOjIwJTtcIj5cbiAgICA8Y29sIHN0eWxlPVwid2lkdGg6MjAlO1wiPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoyMCU7XCI+XG4gICAgPGNvbCBzdHlsZT1cIndpZHRoOjIwJTtcIj5cbiAgPC9jb2xncm91cD5cbiAgPHRyPlxuICAgIDx0ZCBjb2xzcGFuPVwiMlwiIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjojZDFmZmM0OyBib3JkZXI6MXB4IHNvbGlkOyBmb250LXdlaWdodDogYm9sZDtcIj5Nb2RhbGl0w6lzIGR1IGNhbGN1bDwvdGQ+XG4gICAgPHRkIGNvbHNwYW49XCIzXCIgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPk9uIGNhbGN1bGUgbGUgbm9tYnJlIHRvdGFsIGTigJllbXBsb3nDqXMgZW4gem9uZSBpbm9uZGFibGUgKFp4KS5cbkxhIHZhbGV1ciBwcmlzZSBlbiBjb21wdGUgZXN0IGzigJllZmZlY3RpZiBtYXhpbWFsIGRlIGzigJllbnRyZXByaXNlLCBkb25uw6llIGlzc3VlIGRlIGxhIGJhc2UgU0lSRU4uPC90ZD5cbiAgPC90cj5cbiAgPHRyPlxuICAgIDx0ZCBjb2xzcGFuPVwiMlwiIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjojZDFmZmM0OyBib3JkZXI6MXB4IHNvbGlkOyBmb250LXdlaWdodDogYm9sZDtcIj7DiWNoZWxsZSBkZSByZXByw6lzZW50YXRpb248L3RkPlxuICAgIDx0ZCBjb2xzcGFuPVwiM1wiIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5Db21tdW5hbGU8L3RkPlxuICA8L3RyPlxuICA8dHI+XG4gICAgPHRkIGNvbHNwYW49XCIyXCIgc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7IGZvbnQtd2VpZ2h0OiBib2xkO1wiPlBvaW50cyBkZSB2aWdpbGFuY2U8L3RkPlxuICAgIDx0ZCBjb2xzcGFuPVwiM1wiIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5MZSBub21icmUgZOKAmWVtcGxvecOpcyBwZXV0IMOqdHJlIHN1csOpdmFsdcOpIGNhciBj4oCZZXN0IGxhIHZhbGV1ciBoYXV0ZSBkZSBsYSB2YXJpYWJsZSDCqyB0cmFuY2hlIGRlXG4gICAgICAgIGzigJllZmZlY3RpZiBkZSBs4oCZw6l0YWJsaXNzZW1lbnQgwrsgcXVpIGEgw6l0w6kgY2hvaXNpZS4gUGFyIGFpbGxldXJzLCB1biBjZXJ0YWluIG5vbWJyZSBk4oCZw6l0YWJsaXNzZW1lbnRzXG4gICAgICAgIG7igJlhIHBhcyDDqXTDqSBjb21wdGFiaWxpc8OpIGR1IGZhaXQgZGUgbGEgdHJvcCBncmFuZGUgaW1wcsOpY2lzaW9uIGR1IGfDqW9jb2RhZ2UsIHF1aSBwZXV0IMOqdHJlIGF1XG4gICAgICAgIG51bcOpcm8sIMOgIGxhIHJ1ZSBvdSDDoCBsYSBjb21tdW5lIChjZW50cmUgb3UgbWFpcmllKS4gU2V1bHMgbGVzIMOpdGFibGlzc2VtZW50cyBnw6lvY29kw6lzIGF1XG4gICAgICAgIG51bcOpcm8gc29udCBwcmlzIGVuIGNvbXB0ZS4gQ2VsYSByZXByw6lzZW50ZSA4MSUgZGVzIHBvaW50cyBzdXIgbm90cmUgdGVycml0b2lyZSBk4oCZw6l0dWRlIHBvdXIgbGVcbiAgICAgICAgbWlsbMOpc2ltZSAyMDIxLlxuICAgICAgICBM4oCZZW50cmVwcmlzZSBGRU5XSUNLIHN1ciBsYSBjb21tdW5lIGRlIENFTk9OIGVzdCBtYWwgZ8Opb2NvZMOpZS4gU29uIHBvaW50IG51bcOpcmlzw6kgc2VcbiAgICAgICAgdHJvdXZlIGhvcnMgZGUgbGEgem9uZSBpbm9uZGFibGUsIGFsb3JzIHF1ZSBsZSBiw6J0aW1lbnQgeSBlc3QuIFVuZSBjb3JyZWN0aW9uIG1hbnVlbGxlIGEgw6l0w6lcbiAgICAgICAgcsOpYWxpc8OpZSBzdXIgY2V0dGUgZW50cmVwcmlzZSBxdWkgY29tcHRlIGVudmlyb24gODAwIGVtcGxvecOpcy48L3RkPlxuICA8L3RyPlxuICA8dHI+XG4gICAgPHRkIGNvbHNwYW49XCIyXCIgc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7IGZvbnQtd2VpZ2h0OiBib2xkO1wiPlRhYmxlIGNpYmxlPC90ZD5cbiAgICA8dGQgY29sc3Bhbj1cIjNcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+cF9vYmozX3JldG91cl9ub3JtYWxlLnMzMWJfZW1wbG95ZXNfZW5femk8L3RkPlxuICA8L3RyPlxuICA8dHI+XG4gIDx0cj5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+VmFyaWFibGVzIG1vYmlsaXPDqWVzPC90ZD5cbiAgICA8dGQgY29sc3Bhbj1cIjNcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+WnggOiB6b25lIGlub25kYWJsZSwgPGJyPlBvcDIgOiBlbXBsb3nDqXM8L3RkPlxuICA8L3RyPlxuICA8dHI+XG4gIDx0cj5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+SW5kaWNhdGV1ciBjb21tdW4gU0xHUkkgVmllbm5lL0NsYWluPC90ZD5cbiAgICA8dGQgY29sc3Bhbj1cIjNcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+T3VpPC90ZD5cbiAgPC90cj5cbiAgPHRyPlxuPC90YWJsZT5cblxuPGJyPlxuXG48dGFibGUgc3R5bGU9XCJ3aWR0aDo5MCU7IGJvcmRlci1jb2xsYXBzZTogY29sbGFwc2U7IGJvcmRlcjoxcHggc29saWQ7IHRleHQtYWxpZ246Y2VudGVyOyBtYXJnaW46YXV0bztcIj5cbiAgPGNvbGdyb3VwPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoxMCU7XCI+XG4gICAgPGNvbCBzdHlsZT1cIndpZHRoOjEwJTtcIj5cbiAgICA8Y29sIHN0eWxlPVwid2lkdGg6MTAlO1wiPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoxMCU7XCI+XG4gICAgPGNvbCBzdHlsZT1cIndpZHRoOjEwJTtcIj5cbiAgICA8Y29sIHN0eWxlPVwid2lkdGg6MTAlO1wiPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoxMCU7XCI+XG4gICAgPGNvbCBzdHlsZT1cIndpZHRoOjEwJTtcIj5cbiAgICA8Y29sIHN0eWxlPVwid2lkdGg6MTAlO1wiPlxuICAgIDxjb2wgc3R5bGU9XCJ3aWR0aDoxMCU7XCI+XG4gIDwvY29sZ3JvdXA+XG5cbiAgPHRyPlxuICAgIDx0ZCBjb2xzcGFuPVwiMTBcIiBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDsgZm9udC13ZWlnaHQ6IGJvbGQ7XCI+RG9ubsOpZXMgc291cmNlczwvdGQ+XG4gIDwvdHI+XG4gIDx0cj5cbiAgICA8dGggc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7XCIgY29sc3Bhbj1cIjJcIj5Ew6lzaWduYXRpb248L3RoPlxuICAgIDx0aCBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDtcIj5NaWxsw6lzaW1lPC90aD5cbiAgICA8dGggc3R5bGU9XCJiYWNrZ3JvdW5kLWNvbG9yOiNkMWZmYzQ7IGJvcmRlcjoxcHggc29saWQ7XCI+TmF0aW9uYWxlL2xvY2FsZTwvdGg+XG4gICAgPHRoIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjojZDFmZmM0OyBib3JkZXI6MXB4IHNvbGlkO1wiPkZvcm1hdDwvdGg+XG4gICAgPHRoIHN0eWxlPVwiYmFja2dyb3VuZC1jb2xvcjojZDFmZmM0OyBib3JkZXI6MXB4IHNvbGlkO1wiPlR5cGU8L3RoPlxuICAgIDx0aCBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDtcIiBjb2xzcGFuPVwiMlwiPlByb2R1Y3RldXI8L3RoPlxuICAgIDx0aCBzdHlsZT1cImJhY2tncm91bmQtY29sb3I6I2QxZmZjNDsgYm9yZGVyOjFweCBzb2xpZDtcIiBjb2xzcGFuPVwiMlwiPk5vbSBmaWNoaWVyPC90aD5cbiAgPC90cj5cbiAgPHRyPlxuICAgIDx0ZCBjb2xzcGFuPVwiMlwiIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5ab25lIGlub25kYWJsZTwvdGQ+XG4gICAgPHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj4yMDE5PC90ZD5cbiAgICA8dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPkxvY2FsZTwvdGQ+XG4gICAgPHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5TaGFwZTwvdGQ+XG4gICAgPHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5Qb2x5Z29uZTwvdGQ+XG4gICAgPHRkIGNvbHNwYW49XCIyXCIgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPkNlcmVtYTwvdGQ+XG4gICAgPHRkIGNvbHNwYW49XCIyXCIgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPlp4X3pvbmVfaW5vbmRhYmxlLnNocDwvdGQ+XG4gIDwvdHI+XG4gIDx0cj5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+RWZmZWN0aWYgZGVzIGVudHJlcHJpc2VzPC90ZD5cbiAgICA8dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPjIwMjE8L3RkPlxuICAgIDx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+TmF0aW9uYWxlPC90ZD5cbiAgICA8dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPkNTVjwvdGQ+XG4gICAgPHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5Qb2ludDwvdGQ+XG4gICAgPHRkIGNvbHNwYW49XCIyXCIgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkO1wiPklOU0VFPC90ZD5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+Z2VvX3NpcmV0LnNocDwvdGQ+XG4gIDwvdHI+XG4gIDx0cj5cbiAgICA8dGQgY29sc3Bhbj1cIjJcIiBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+Q29tbXVuZXMgKEJEVE9QTyk8L3RkPlxuICAgIDx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+MjAyMDwvdGQ+XG4gICAgPHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5OYXRpb25hbGU8L3RkPlxuICAgIDx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+U2hhcGU8L3RkPlxuICAgIDx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQ7XCI+UG9seWdvbmU8L3RkPlxuICAgIDx0ZCBjb2xzcGFuPVwiMlwiIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5JR048L3RkPlxuICAgIDx0ZCBjb2xzcGFuPVwiMlwiIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZDtcIj5Db21tdW5lLnNocDwvdGQ+XG4gIDwvdHI+XG48L3RhYmxlPlxuXG5cbmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnc2xpZGVyX3MzMWInKSJ9XX0=
 </script>
@@ -1535,248 +1377,236 @@ window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
-    const isCodeAnnotation = (el) => {
-      for (const clz of el.classList) {
-        if (clz.startsWith('code-annotation-')) {                     
-          return true;
-        }
-      }
-      return false;
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
     }
-    const onCopySuccess = function(e) {
-      // button target
-      const button = e.trigger;
-      // don't keep focus
-      button.blur();
-      // flash "checked"
-      button.classList.add('code-copy-button-checked');
-      var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copié");
-      let tooltip;
-      if (window.bootstrap) {
-        button.setAttribute("data-bs-toggle", "tooltip");
-        button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copié");
-        tooltip = new bootstrap.Tooltip(button, 
-          { trigger: "manual", 
-            customClass: "code-copy-button-tooltip",
-            offset: [0, -8]});
-        tooltip.show();    
-      }
-      setTimeout(function() {
-        if (tooltip) {
-          tooltip.hide();
-          button.removeAttribute("data-bs-title");
-          button.removeAttribute("data-bs-toggle");
-          button.removeAttribute("data-bs-placement");
-        }
-        button.setAttribute("title", currentTitle);
-        button.classList.remove('code-copy-button-checked');
-      }, 1000);
-      // clear code selection
-      e.clearSelection();
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
     }
-    const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copié");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copié");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-    }
-    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-      text: getTextToCopy
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
     });
-    clipboard.on('success', onCopySuccess);
-    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-        text: getTextToCopy,
-        container: window.document.getElementById('quarto-embedded-source-code-modal')
-      });
-      clipboardModal.on('success', onCopySuccess);
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/0830a445-d28a-41f0-8d74-20dfd6062283\.netlify\.app\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
-            // target, if specified
-            link.setAttribute("target", "_blank");
-            if (link.getAttribute("rel") === null) {
-              link.setAttribute("rel", "noopener");
-            }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
         }
       }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'quarto',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config); 
     }
-    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-    for (var i=0; i<noterefs.length; i++) {
-      const ref = noterefs[i];
-      tippyHover(ref, function() {
-        // use id or data attribute instead here
-        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-        try { href = new URL(href).hash; } catch {}
-        const id = href.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note) {
-          return note.innerHTML;
-        } else {
-          return "";
-        }
-      });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
     }
-    const xrefs = window.document.querySelectorAll('a.quarto-xref');
-    const processXRef = (id, note) => {
-      // Strip column container classes
-      const stripColumnClz = (el) => {
-        el.classList.remove("page-full", "page-columns");
-        if (el.children) {
-          for (const child of el.children) {
-            stripColumnClz(child);
-          }
-        }
-      }
-      stripColumnClz(note)
-      if (id === null || id.startsWith('sec-')) {
-        // Special case sections, only their first couple elements
-        const container = document.createElement("div");
-        if (note.children && note.children.length > 2) {
-          container.appendChild(note.children[0].cloneNode(true));
-          for (let i = 1; i < note.children.length; i++) {
-            const child = note.children[i];
-            if (child.tagName === "P" && child.innerText === "") {
-              continue;
-            } else {
-              container.appendChild(child.cloneNode(true));
-              break;
-            }
-          }
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(container);
-          }
-          return container.innerHTML
-        } else {
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(note);
-          }
-          return note.innerHTML;
-        }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
       } else {
-        // Remove any anchor links if they are present
-        const anchorLink = note.querySelector('a.anchorjs-link');
-        if (anchorLink) {
-          anchorLink.remove();
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
         }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        if (note.classList.contains("callout")) {
-          return note.outerHTML;
-        } else {
-          return note.innerHTML;
-        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
       }
     }
-    for (var i=0; i<xrefs.length; i++) {
-      const xref = xrefs[i];
-      tippyHover(xref, undefined, function(instance) {
-        instance.disable();
-        let url = xref.getAttribute('href');
-        let hash = undefined; 
-        if (url.startsWith('#')) {
-          hash = url;
-        } else {
-          try { hash = new URL(url).hash; } catch {}
-        }
-        if (hash) {
-          const id = hash.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note !== null) {
-            try {
-              const html = processXRef(id, note.cloneNode(true));
-              instance.setContent(html);
-            } finally {
-              instance.enable();
-              instance.show();
-            }
-          } else {
-            // See if we can fetch this
-            fetch(url.split('#')[0])
-            .then(res => res.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const htmlDoc = parser.parseFromString(html, "text/html");
-              const note = htmlDoc.getElementById(id);
-              if (note !== null) {
-                const html = processXRef(id, note);
-                instance.setContent(html);
-              } 
-            }).finally(() => {
-              instance.enable();
-              instance.show();
-            });
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
           }
         } else {
-          // See if we can fetch a full url (with no hash to target)
-          // This is a special case and we should probably do some content thinning / targeting
-          fetch(url)
+          // See if we can fetch this
+          fetch(url.split('#')[0])
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.querySelector('main.content');
+            const note = htmlDoc.getElementById(id);
             if (note !== null) {
-              // This should only happen for chapter cross references
-              // (since there is no id in the URL)
-              // remove the first header
-              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-                note.children[0].remove();
-              }
-              const html = processXRef(null, note);
+              const html = processXRef(id, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1784,161 +1614,185 @@ window._ojs.runtime.interpretFromScriptTags();
             instance.show();
           });
         }
-      }, function(instance) {
-      });
-    }
-        let selectedAnnoteEl;
-        const selectorForAnnotation = ( cell, annotation) => {
-          let cellAttr = 'data-code-cell="' + cell + '"';
-          let lineAttr = 'data-code-annotation="' +  annotation + '"';
-          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-          return selector;
-        }
-        const selectCodeLines = (annoteEl) => {
-          const doc = window.document;
-          const targetCell = annoteEl.getAttribute("data-target-cell");
-          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-          const lineIds = lines.map((line) => {
-            return targetCell + "-" + line;
-          })
-          let top = null;
-          let height = null;
-          let parent = null;
-          if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
-            }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
-            }
-            selectedAnnoteEl = annoteEl;
-          }
-        };
-        const unselectCodeLines = () => {
-          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-          elementsIds.forEach((elId) => {
-            const div = window.document.getElementById(elId);
-            if (div) {
-              div.remove();
-            }
-          });
-          selectedAnnoteEl = undefined;
-        };
-          // Handle positioning of the toggle
-      window.addEventListener(
-        "resize",
-        throttle(() => {
-          elRect = undefined;
-          if (selectedAnnoteEl) {
-            selectCodeLines(selectedAnnoteEl);
-          }
-        }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
-              fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
-            }
-          });
-        }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
       } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
             }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
         });
       }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
     }
-  });
-  </script>
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -1973,6 +1827,14 @@ window._ojs.runtime.interpretFromScriptTags();
   </div>
 </footer>
 
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (_event) {
+  if (window.bslib.Card) {
+    window.bslib.Card.initializeAllCards();
+  }
+}); 
+</script>
+  
 
 
 
