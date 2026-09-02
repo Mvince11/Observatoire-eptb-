@@ -485,11 +485,31 @@ div.sidebar-item-container{
     margin: 40px !important;
   }
   
-  /* --- STYLE DU PANNEAU LATERAL GÉOPORTAIL --- */
+.nav .navbar-collapse{
+  display: none;
+}  
+
+/* --- Couleur Géoportail unifiée --- */
+#menuButton {
+  background: #F7F9FB !important;
+  border: 1px solid #D6DEE6 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+}
+
+#menuButton:hover {
+  background: #E9EEF3 !important; /* hover Géoportail */
+}
+
+/* Label "Menu" sous le bouton */
+#menuLabel {
+  color: #2A3B4D;
+}
+
+/* --- SideMenu Géoportail --- */
 #sideMenu {
-  background: #F7F9FB; /* fond gris bleuté */
-  border-right: 1px solid #D6DEE6;
-  box-shadow: 2px 0 6px rgba(0,0,0,0.15);
+  background: #F7F9FB !important;
+  border-right: 1px solid #D6DEE6 !important;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.15) !important;
   color: #2A3B4D;
   font-family: "Roboto", sans-serif;
 }
