@@ -22,7 +22,6 @@ include-in-header:
     
     <link rel="stylesheet" href="js/photon-geocoder-autocomplete.min.css" type="text/css">
     <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
-    <script src="js/offcanvas.js" type="text/javascript"></script>
 ---
 
 ```{=html}
@@ -415,8 +414,6 @@ batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
 //| padding: 0px
 //| expandable: false
 //| fill: true
-
-
 map = {
   const container = html`<div class="map-container" id="map" style="height: 600px; width: 90%; margin-left: 5vw;"></div>`;
   yield container;

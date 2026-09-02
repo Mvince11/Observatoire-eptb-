@@ -21,7 +21,7 @@ include-in-header:
     
     <link rel="stylesheet" href="js/photon-geocoder-autocomplete.min.css" type="text/css">
     <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
-    <script src="js/offcanvas.js" type="text/javascript"></script>
+    
 ---
 
 ##  {.sidebar}

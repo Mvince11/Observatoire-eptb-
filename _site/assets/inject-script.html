@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // --- 1) On supprime l’ancien offcanvas Bootstrap
+  const collapse =
+    document.getElementById('quarto-navbar-collapse') ||
+    document.getElementById('navbarCollapse');
+
+  const toggler = document.querySelector('.navbar-toggler');
+  if (!collapse || !toggler) return;
+
+  collapse.classList.add('d-none'); // on cache le menu Quarto
+
+  // --- 2) Création du panneau latéral type Géoportail
+  const sideMenu = document.createElement('div');
+  sideMenu.id = "sideMenu";
+  sideMenu.style = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 100%;
+    background: white;
+    border-right: 1px solid #ccc;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+    padding: 15px;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 2000;
+  `;
+
+  sideMenu.innerHTML = `
+    <h3 style="margin-top:0;">Couches</h3>
+
+    <div class="accordion" id="layersAccordion">
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fondPlan">
+            Fond de plan
+          </button>
+        </h2>
+        <div id="fondPlan" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="OSM">
+              <label class="form-check-label">OSM</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="orthoIGN">
+              <label class="form-check-label">Orthophoto IGN</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#limites">
+            Limites administratives
+          </button>
+        </h2>
+        <div id="limites" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="regionLayer">
+              <label class="form-check-label">Région</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="departementLayer">
+              <label class="form-check-label">Département</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="epciLayer">
+              <label class="form-check-label">EPCI</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hydro">
+            Hydrographie
+          </button>
+        </h2>
+        <div id="hydro" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="coursdeauLayer">
+              <label class="form-check-label">Cours d'eau</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="zoneinondableLayer">
+              <label class="form-check-label">Zone inondable</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#batiments">
+            Bâtiments
+          </button>
+        </h2>
+        <div id="batiments" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="batimentsLayer">
+              <label class="form-check-label">Bâtiments</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input layer-toggle" type="checkbox" data-layer="indicateurs12aLayer">
+              <label class="form-check-label">Population en zone inondable</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(sideMenu);
+
+  // --- 3) Bouton d’ouverture du menu
+  const menuButton = document.createElement('button');
+  menuButton.id = "menuButton";
+  menuButton.style = `
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 3000;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  `;
+  menuButton.innerHTML = "☰ Couches";
+
+  document.body.appendChild(menuButton);
+
+  menuButton.onclick = () => {
+    const menu = document.getElementById("sideMenu");
+    const isOpen = menu.style.transform === "translateX(0%)";
+    menu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+  };
+
+});
+</script>

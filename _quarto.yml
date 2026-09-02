@@ -14,7 +14,7 @@ website:
      
         - href: index.qmd
           text: Accueil
-  #        icon: house
+          icon: house
           
         - href: mieux_comprendre.qmd
           text: Mieux comprendre les inondations
