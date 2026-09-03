@@ -165,9 +165,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- Toggle du panneau latéral ---
   menuButton.onclick = () => {
-    const isOpen = sideMenu.style.transform === "translateX(0%)";
-    sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
-  };
+  const isOpen = sideMenu.style.transform === "translateX(0%)";
 
+  // Ouvrir / fermer le sideMenu
+  sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+
+  // Ajouter / retirer la classe de rotation
+  if (isOpen) {
+    menuButton.classList.remove("rotated");
+  } else {
+    menuButton.classList.add("rotated");
+  }
+};
 });
 </script>

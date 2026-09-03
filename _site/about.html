@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.38">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,10 +69,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e55257969e79e1b23715b75ca28f8bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,195 +102,370 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<!-- <script src="assets/inject-logos.js"></script> -->
-
-<script src="assets/sidebar-toggle.js"></script>
-
-<!-- <script src="assets/toggle.js"></script> --> 
-
-
-
-<style>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
-
-</style>
-
-
-
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-  // Trouve le collapse généré par Quarto
+
+
+  const navbar = document.querySelector("nav.navbar");
+
+  if (!navbar) return;
+
+
+
+  // --- Bouton Menu ---
+
+  const menuButton = document.createElement("button");
+
+  menuButton.id = "menuButton";
+
+  menuButton.style = `
+
+    background: #ffffff;
+
+    border: 1px solid #d0d0d0;
+
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 4px;
+
+    margin-right: 14px;
+
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+
+    cursor: pointer;
+
+    margin-top: -23px;
+
+  `;
+
+  menuButton.innerHTML = `
+
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#444">
+
+      <rect x="3" y="6" width="18" height="2"></rect>
+
+      <rect x="3" y="11" width="18" height="2"></rect>
+
+      <rect x="3" y="16" width="18" height="2"></rect>
+
+    </svg>
+
+  `;
+
+
+
+  const brandContainer = navbar.querySelector(".navbar-brand-container");
+
+  brandContainer.parentNode.insertBefore(menuButton, brandContainer);
+
+  
+
+  // --- Ajouter le mot "Menu" sous le bouton ---
+
+  const menuLabel = document.createElement("div");
+
+  menuLabel.textContent = "Menu";
+
+  menuLabel.id = "menuLabel";
+
+  menuLabel.style = `
+
+    position: absolute;
+
+    top: 68px;        /* juste sous le bouton */
+
+    left: 23px;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    color: #444;
+
+    padding-left: 6px;
+
+  `;
+
+  navbar.appendChild(menuLabel);
+
+
+
+
+
+  // --- Récupérer collapse AVANT suppression ---
 
   const collapse =
 
-    document.getElementById('quarto-navbar-collapse') ||
+    document.getElementById("quarto-navbar-collapse") ||
 
-    document.getElementById('navbarCollapse');
-
-
-
-  const toggler = document.querySelector('.navbar-toggler');
-
-  if (!collapse || !toggler) return;
+    document.getElementById("navbarCollapse");
 
 
 
-  // Crée le conteneur offcanvas
+  // --- CLONER les tools AVANT suppression ---
 
-  const offcanvas = document.createElement('div');
+  const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
 
-  offcanvas.className = 'offcanvas offcanvas-start site-offcanvas';
-
-  offcanvas.id = 'site-offcanvas';
-
-  offcanvas.setAttribute('tabindex', '-1');
+  const toolsClone = toolsOriginal ? toolsOriginal.cloneNode(true) : null;
 
 
 
-  // Header avec logo + bouton de fermeture
+  // --- Cloner le menu YAML ---
 
-  const header = document.createElement('div');
+  const collapseClone = collapse.cloneNode(true);
 
-  header.className = 'offcanvas-header';
+  
 
+  // --- SUPPRIMER le collapse APRÈS que Quarto ait fini de l’injecter ---
 
+  requestAnimationFrame(() => {
 
-  const img = document.createElement('img');
+    collapse.remove();
 
-  img.src = 'Images/logo_porteurs_projet_anc.png';
-
-  img.alt = 'Logo';
-
-  img.style.maxHeight = '84px';
-
-  img.style.objectFit = 'contain';
-
-
-
-  const closeBtn = document.createElement('button');
-
-  closeBtn.type = 'button';
-
-  closeBtn.className = 'btn-close';
-
-  closeBtn.setAttribute('data-bs-dismiss', 'offcanvas');
-
-
-
-  header.appendChild(img);
-
-  header.appendChild(closeBtn);
-
-
-
-  // Body : deux colonnes (menu à gauche, image à droite)
-
-  const body = document.createElement('div');
-
-  body.className = 'offcanvas-body';
-
-
-
-  const leftCol = document.createElement('div');
-
-  leftCol.className = 'offcanvas-menu-col';
-
-
-
-  const rightCol = document.createElement('div');
-
-  rightCol.className = 'offcanvas-image-col';
+  });
 
 
 
 
 
-  const sideImg = document.createElement('img');
+  // --- Créer le panneau latéral (slide-in depuis la gauche) ---
 
-  sideImg.src = 'Images/Bec-de-Vienne-ULMarden-Jero-Hajewski-scaled.jpg'; // ← remplace par ton image
+  const sideMenu = document.createElement("div");
 
-  sideImg.alt = 'Illustration';
+  sideMenu.id = "sideMenu";
+
+  sideMenu.style = `
+
+    position: fixed;
+
+    top: 106px;
+
+    left: 0;
+
+    width: 320px;
+
+    height: 100%;
+
+    background: white;
+
+    border-right: 1px solid #ccc;
+
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+
+    /*padding: 15px;*/
+
+    overflow-y: hidden;
+
+    transform: translateX(-100%);
+
+    transition: transform 0.3s ease;
+
+    z-index: 2000;
+
+  `;
 
 
 
-  rightCol.appendChild(sideImg);
+  sideMenu.innerHTML = `
+
+    <div class="accordion" style="padding:15px 0 0 15px;" id="menuAccordion"></div>
+
+    <hr>
+
+    <div id="toolsContainer"></div>
+
+  `;
 
 
 
-  // Déplacer les éléments du collapse dans la colonne gauche
+  document.body.appendChild(sideMenu);
 
-  while (collapse.firstChild) {
 
-    leftCol.appendChild(collapse.firstChild);
+
+  const accordion = sideMenu.querySelector("#menuAccordion");
+
+  const toolsContainer = sideMenu.querySelector("#toolsContainer");
+
+
+
+  // --- Transformer le menu YAML ---
+
+  collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
+
+
+
+    const link = item.querySelector("a.nav-link, a.dropdown-toggle");
+
+    const submenu = item.querySelector("ul.dropdown-menu");
+
+    const title = link ? link.textContent.trim() : "Menu";
+
+
+
+    // --- CAS 1 : nav-item simple ---
+
+    if (!submenu) {
+
+
+
+      const linkEl = document.createElement("a");
+
+      linkEl.href = link.href;
+
+      linkEl.className = "d-flex align-items-center gap-2 mb-3";
+
+
+
+      // détecter une icône Bootstrap dans l'item original
+
+      const icon = item.querySelector("i.bi");
+
+      if (icon) {
+
+        const iconClone = icon.cloneNode(true);
+
+        iconClone.style.fontSize = "1.2rem";
+
+        linkEl.appendChild(iconClone);
+
+      }
+
+
+
+      const textNode = document.createElement("span");
+
+      textNode.textContent = title;
+
+      linkEl.appendChild(textNode);
+
+
+
+      accordion.appendChild(linkEl);
+
+      return;
+
+    }
+
+
+
+    // --- CAS 2 : dropdown ---
+
+    const id = "acc" + index;
+
+
+
+    const accItem = document.createElement("div");
+
+    accItem.className = "accordion-item";
+
+    accItem.innerHTML = `
+
+      <h2 class="accordion-header">
+
+        <button class="accordion-button collapsed" type="button"
+
+          data-bs-toggle="collapse" data-bs-target="#${id}">
+
+          ${title}
+
+        </button>
+
+      </h2>
+
+      <div id="${id}" class="accordion-collapse collapse">
+
+        <div class="accordion-body"></div>
+
+      </div>
+
+    `;
+
+
+
+    const body = accItem.querySelector(".accordion-body");
+
+
+
+    submenu.querySelectorAll("a.dropdown-item").forEach(sub => {
+
+      const subLink = document.createElement("a");
+
+      subLink.href = sub.href;
+
+      subLink.textContent = sub.textContent.trim();
+
+      subLink.className = "d-block mb-2";
+
+      body.appendChild(subLink);
+
+    });
+
+
+
+    accordion.appendChild(accItem);
+
+
+
+  });
+
+
+
+  // --- Ajouter les tools ---
+
+  if (toolsClone) {
+
+    toolsContainer.appendChild(toolsClone);
 
   }
 
 
 
-  // Injecter les colonnes dans le body
+  // --- Toggle du panneau latéral ---
 
-  body.appendChild(leftCol);
+  menuButton.onclick = () => {
 
-  body.appendChild(rightCol);
+  const isOpen = sideMenu.style.transform === "translateX(0%)";
 
 
 
-  // Finalisation
+  // Ouvrir / fermer le sideMenu
 
-  offcanvas.appendChild(header);
+  sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
 
-  offcanvas.appendChild(body);
 
-  
 
-  leftCol.className = "offcanvas-menu-col";
+  // Ajouter / retirer la classe de rotation
 
-  rightCol.className = "offcanvas-image-col";
+  if (isOpen) {
 
-  
+    menuButton.classList.remove("rotated");
 
-  const textOverlay = document.createElement('div');
+  } else {
 
-  textOverlay.className = 'offcanvas-image-text';
+    menuButton.classList.add("rotated");
 
-  textOverlay.innerText = "Observatoire de la vulnérabilité aux inondations Vienne - Clain";
+  }
 
-  
-
-  rightCol.appendChild(textOverlay);
+};
 
 
 
 
-
-  // Insère l’offcanvas dans le DOM
-
-  const navbar = document.querySelector('nav.navbar');
-
-  (navbar?.parentNode || document.body).appendChild(offcanvas);
-
-
-
-  // Cache l’ancien collapse
-
-  collapse.classList.add('d-none');
-
-
-
-  // Retarget le burger vers l’offcanvas
-
-  toggler.setAttribute('data-bs-toggle', 'offcanvas');
-
-  toggler.setAttribute('data-bs-target', '#site-offcanvas');
 
 });
 
-
-
 </script>
+
 
 
 <link rel="stylesheet" href="styles.css">
@@ -316,7 +491,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="./index.html"> <i class="bi bi-house" role="img">
+</i> 
 <span class="menu-text">Accueil</span></a>
   </li>  
   <li class="nav-item">
@@ -591,7 +767,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/0830a445-d28a-41f0-8d74-20dfd6062283\.netlify\.app\/");
+      var filterRegex = new RegExp("https:\/\/website\.quarto\.pub\/observatoire_eptb");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

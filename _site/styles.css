@@ -353,31 +353,80 @@ div.sidebar-item-container{
   opacity: 1;
 }
 
-.mapLayers .form-check {
+.form-check {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
-.mapLayers .form-check-input {
+ .form-check-input {
   margin-right: 8px;
 }
 
-.mapLayers .form-check-label {
+.form-check-label {
   flex: 1;
   text-align: left;
 }
 
-.mapLayers .form-check-input {
+ .form-check-input {
   width: 18px;
   height: 18px;
   border-radius: 4px;
   border: 2px solid #198754; /* Bordure verte */
 }
 
-.mapLayers .form-check-input:checked {
+.form-check-input:checked {
   background-color: #198754; /* Fond vert quand cochée */
   border-color: #198754;
 }
+
+/* --- Vignette de fond de plan --- */
+.fond-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+  cursor: pointer;
+  padding-top: 6px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* --- Survol façon Géoportail --- */
+.fond-item:hover {
+  background-color: #E9EEF3; /* bleu très clair IGN */
+}
+
+/* --- Image --- */
+.fond-item img {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.15);
+  transition: border-color 0.2s ease;
+}
+
+/* --- État actif (sélectionné) --- */
+.fond-item.active {
+  background-color: #1C436C; /* bleu clair IGN */
+}
+
+.fond-item.active span {
+  color:white;
+}
+
+.fond-item.active img {
+  border-color: #0063A3; /* bleu IGN */
+}
+
+/* --- Label --- */
+.fond-item span {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #2A3B4D;
+}
+
 
 #dashboard-collapse{
   height: auto;
@@ -487,7 +536,108 @@ div.sidebar-item-container{
   
 .nav .navbar-collapse{
   display: none;
-}  
+}
+
+/* --- Barre verticale façon Géoportail --- */
+#rightTabs {
+  position: absolute;
+  top: 40px;
+  right: 0px; /* collé au bord droit */
+  width: 55px;
+  background: #F7F9FB;
+  border-left: 1px solid #D6DEE6;
+  border-radius: 6px 0 0 6px;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.15);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+}
+
+
+/* --- Boutons --- */
+#rightTabs .tool-btn {
+  width: 100%;
+  height: 55px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #2A3B4D;
+  font-size: 22px;
+  border-bottom: 1px solid #D6DEE6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Dernier bouton sans bord --- */
+#rightTabs .tool-btn:last-child {
+  border-bottom: none;
+}
+
+/* --- Hover IGN --- */
+#rightTabs .tool-btn:hover {
+  background: #E9EEF3;
+}
+
+/* --- Bouton actif IGN --- */
+#rightTabs .tool-btn.active {
+  background: #E9EEF3;
+  color: #0063A3;
+}
+
+#rightPanel {
+  position: absolute;
+  top: 40px;
+  right: 55px; /* juste à gauche de la barre */
+  width: 320px;
+  height: calc(100% - 140px);
+  background: white;
+  border-left: 1px solid #D6DEE6;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+  border-radius: 6px 0 0 6px;
+  padding: 15px;
+  overflow-y: auto;
+  display: none; /* caché par défaut */
+  z-index: 3000;
+}
+
+
+#rightTabsToggle:hover {
+  background: #E9EEF3;
+}
+
+
+/* --- Label flottant façon Géoportail --- */
+.rightTabs-label {
+  position: absolute;
+  right: 70px; /* distance depuis la barre */
+  background: #FFFFFF;
+  border: 1px solid #D6DEE6;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: #2A3B4D;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+  white-space: nowrap;
+  z-index: 4000;
+  pointer-events: none; /* important : ne bloque pas le hover */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+
+/* Animation de rotation du bouton Menu */
+#menuButton svg {
+  transition: transform 0.3s ease;
+}
+
+#menuButton.rotated svg {
+  transform: rotate(90deg);
+}
+
 
 /* --- Couleur Géoportail unifiée --- */
 #menuButton {
