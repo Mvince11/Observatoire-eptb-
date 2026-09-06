@@ -10,48 +10,37 @@ function initRightTabs() {
 
   let isCollapsed = false;
 
-  // --- Rétraction / déploiement ---
-  rightTabsToggle.onclick = () => {
-    isCollapsed = !isCollapsed;
-
-    if (isCollapsed) {
-      rightTabs.style.display = "none";
-      rightPanel.style.display = "none";
-      rightTabsToggle.innerHTML = `<i class="bi bi-chevron-left" style="font-size:18px; color:#2A3B4D;"></i>`;
-    } else {
-      rightTabs.style.display = "flex";
-      rightTabsToggle.innerHTML = `<i class="bi bi-chevron-right" style="font-size:18px; color:#2A3B4D;"></i>`;
-    }
-  };
+ 
 
     // --- Label flottant au survol façon Géoportail ---
   const hoverLabel = document.createElement("div");
-  hoverLabel.className = "rightTabs-label";
-  document.body.appendChild(hoverLabel);
-  
-  document.querySelectorAll("#rightTabs .tool-btn").forEach(btn => {
-  
-    btn.addEventListener("mouseenter", () => {
-      const tool = btn.dataset.tool;
-  
-      const labels = {
-        layers: "Couches",
-        fond: "Fonds de cartes",
-        mesures: "Mesures",
-        dessin: "Dessin"
-      };
-  
-      hoverLabel.textContent = labels[tool] || "";
-      
-      const rect = btn.getBoundingClientRect();
-      hoverLabel.style.top = rect.top + "px";
-      hoverLabel.style.opacity = 1;
-    });
-  
-    btn.addEventListener("mouseleave", () => {
-      hoverLabel.style.opacity = 0;
-    });
+hoverLabel.className = "rightTabs-label";
+document.body.appendChild(hoverLabel);
+
+document.querySelectorAll("#rightTabs .tool-btn").forEach(btn => {
+
+  btn.addEventListener("mouseenter", () => {
+    const tool = btn.dataset.tool;
+
+    const labels = {
+      layers: "Couches",
+      fond: "Fond de cartes",
+      mesures: "Mesures",
+      dessin: "Dessin"
+    };
+
+    hoverLabel.textContent = labels[tool] || "";
+
+    const rect = btn.getBoundingClientRect();
+    hoverLabel.style.top = rect.top + "px";
+    hoverLabel.style.opacity = 1;
   });
+
+  btn.addEventListener("mouseleave", () => {
+    hoverLabel.style.opacity = 0;
+  });
+});
+
 
 
   // --- Activation des onglets ---
