@@ -971,21 +971,6 @@ map = {
     
     const rightTabs = document.createElement("div");
     rightTabs.id = "rightTabs";
-    rightTabs.style = `
-      position: absolute;
-      top: 40px;
-      right: 29px;
-      width: 55px;
-      background: #F7F9FB;
-      border: 1px solid #D6DEE6;
-      border-radius: 6px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.15);
-      z-index: 3000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 6px 0;
-    `;
     
     rightTabs.innerHTML = `
       <button class="tool-btn" data-tool="layers"><i class="bi bi-layers"></i></button>
@@ -1026,21 +1011,6 @@ map = {
     
     const rightPanel = document.createElement("div");
     rightPanel.id = "rightPanel";
-    rightPanel.style = `
-      position: absolute;
-      top: 40px;
-      right: 75px;
-      width: 225px;
-      height: calc(100% - 140px);
-      background: white;
-      border: 1px solid #ccc;
-      box-shadow: 0 0 6px rgba(0,0,0,0.2);
-      border-radius: 6px;
-      padding: 15px;
-      overflow-y: auto;
-      display: none;
-      z-index: 3000;
-    `;
     
     map.getContainer().appendChild(rightPanel);
     window.rightPanel = rightPanel;

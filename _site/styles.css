@@ -541,7 +541,7 @@ div.sidebar-item-container{
 /* --- Barre verticale façon Géoportail --- */
 #rightTabs {
   position: absolute;
-  top: 120px;
+  top: 40px;
   right: 0px; /* collé au bord droit */
   width: 55px;
   background: #F7F9FB;
@@ -554,7 +554,6 @@ div.sidebar-item-container{
   align-items: center;
   padding: 6px 0;
 }
-
 
 
 /* --- Boutons --- */
@@ -591,9 +590,9 @@ div.sidebar-item-container{
 
 #rightPanel {
   position: absolute;
-  top: 120px;
-  right: 55px; /* collé à la barre */
-  width: 320px;
+  top: 40px;
+  right: 56px; /* juste à gauche de la barre */
+  width: 225px;
   height: calc(100% - 140px);
   background: white;
   border-left: 1px solid #D6DEE6;
@@ -601,19 +600,20 @@ div.sidebar-item-container{
   border-radius: 6px 0 0 6px;
   padding: 15px;
   overflow-y: auto;
-  display: none;
+  display: none; /* caché par défaut */
   z-index: 3000;
 }
 
 
-
-
+#rightTabsToggle:hover {
+  background: #E9EEF3;
+}
 
 
 /* --- Label flottant façon Géoportail --- */
 .rightTabs-label {
   position: absolute;
-  right: 65px; /* juste à gauche de la barre */
+  right: 70px; /* distance depuis la barre */
   background: #FFFFFF;
   border: 1px solid #D6DEE6;
   padding: 6px 10px;
@@ -623,11 +623,10 @@ div.sidebar-item-container{
   box-shadow: 0 0 6px rgba(0,0,0,0.15);
   white-space: nowrap;
   z-index: 4000;
-  pointer-events: none;
+  pointer-events: none; /* important : ne bloque pas le hover */
   opacity: 0;
   transition: opacity 0.15s ease;
 }
-
 
 
 /* Animation de rotation du bouton Menu */

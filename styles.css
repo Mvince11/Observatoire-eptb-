@@ -591,8 +591,8 @@ div.sidebar-item-container{
 #rightPanel {
   position: absolute;
   top: 40px;
-  right: 55px; /* juste à gauche de la barre */
-  width: 320px;
+  right: 56px; /* juste à gauche de la barre */
+  width: 225px;
   height: calc(100% - 140px);
   background: white;
   border-left: 1px solid #D6DEE6;
