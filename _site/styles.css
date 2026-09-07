@@ -591,7 +591,7 @@ div.sidebar-item-container{
 #rightPanel {
   position: absolute;
   top: 40px;
-  right: 56px; /* juste à gauche de la barre */
+  right: 0px;
   width: 225px;
   height: calc(100% - 140px);
   background: white;
@@ -613,7 +613,6 @@ div.sidebar-item-container{
 /* --- Label flottant façon Géoportail --- */
 .rightTabs-label {
   position: absolute;
-  right: 70px; /* distance depuis la barre */
   background: #FFFFFF;
   border: 1px solid #D6DEE6;
   padding: 6px 10px;
@@ -623,10 +622,11 @@ div.sidebar-item-container{
   box-shadow: 0 0 6px rgba(0,0,0,0.15);
   white-space: nowrap;
   z-index: 4000;
-  pointer-events: none; /* important : ne bloque pas le hover */
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
 }
+
 
 
 /* Animation de rotation du bouton Menu */

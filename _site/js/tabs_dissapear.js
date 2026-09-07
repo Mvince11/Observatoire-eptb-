@@ -8,122 +8,165 @@ function initRightTabs() {
     return;
   }
 
-  let isCollapsed = false;
+  let activeTool = null;
 
-
-  // --- Rétraction / déploiement ---
-  rightTabsToggle.onclick = () => {
-    isCollapsed = !isCollapsed;
-
-    if (isCollapsed) {
-      rightTabs.style.display = "none";
-      rightPanel.style.display = "none";
-      rightTabsToggle.innerHTML = `<i class="bi bi-chevron-left" style="font-size:18px; color:#2A3B4D;"></i>`;
-    } else {
-      rightTabs.style.display = "flex";
-      rightTabsToggle.innerHTML = `<i class="bi bi-chevron-right" style="font-size:18px; color:#2A3B4D;"></i>`;
-    }
-  };
- 
-
-    // --- Label flottant au survol façon Géoportail ---
-  const hoverLabel = document.createElement("div");
-  hoverLabel.className = "rightTabs-label";
-  document.body.appendChild(hoverLabel);
-  
-  document.querySelectorAll("#rightTabs .tool-btn").forEach(btn => {
-  
-    btn.addEventListener("mouseenter", () => {
-      const tool = btn.dataset.tool;
-  
-      const labels = {
-        layers: "Couches",
-        fond: "Fond de cartes",
-        mesures: "Mesures",
-        dessin: "Dessin"
-      };
-  
-      hoverLabel.textContent = labels[tool] || "";
-  
-      const rect = btn.getBoundingClientRect();
-      hoverLabel.style.top = rect.top + "px";
-      hoverLabel.style.opacity = 1;
-    });
-  
-    btn.addEventListener("mouseleave", () => {
-      hoverLabel.style.opacity = 0;
-    });
-  });
-
-
-
-  // --- Activation des onglets ---
+  // --- Clic sur un bouton de la barre ---
   document.querySelectorAll("#rightTabs .tool-btn").forEach(btn => {
     btn.onclick = () => {
 
-      // Si la barre est rétractée → la déployer
-      if (isCollapsed) {
-        isCollapsed = false;
-        rightTabs.style.display = "flex";
-        rightTabsToggle.innerHTML = `<i class="bi bi-chevron-right" style="font-size:18px; color:#2A3B4D;"></i>`;
-      }
+      const tool = btn.dataset.tool;
 
       // Activer visuellement
       document.querySelectorAll("#rightTabs .tool-btn")
         .forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
-      const tool = btn.dataset.tool;
+      activeTool = tool;
 
-      // Afficher le panneau
+      // --- Masquer la barre ---
+      rightTabs.style.display = "none";
+
+      // --- Afficher le panneau ---
       rightPanel.style.display = "block";
 
-      if (tool === "layers") {
+      // --- Construire le panneau ---
+      let titre = "";
+      if (tool === "layers") titre = "Couches";
+      if (tool === "fond") titre = "Fonds de cartes";
+      if (tool === "legend") titre = "Légendes";
+      if (tool === "dessin") titre = "Dessin";
+
       rightPanel.innerHTML = `
-        <h3 style="margin-bottom:10px;">Couches</h3>
-        <div id="layersListContainer"></div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button id="closeRightPanel" style="
+            background:none;
+            border:none;
+            font-size:22px;
+            cursor:pointer;
+            color:#444;
+          ">&times;</button>
+        </div>
+        <h3>${titre}</h3>
+        <div id="panelContent"></div>
       `;
-    
-      const container = document.getElementById("layersListContainer");
-    
-      // Réinjecter la liste des couches
-      container.appendChild(window.layersListDiv);
-    
-      // Toujours visible
-      window.layersListDiv.style.display = "block";
-    }
+
+      const content = document.getElementById("panelContent");
+
+      // --- Injecter le contenu selon l’outil ---
+      if (tool === "layers") {
+        content.appendChild(window.layersListDiv);
+      }
 
       if (tool === "fond") {
+        content.appendChild(window.fondListDiv);
+      }
+
+      if (tool === "legend") {
       rightPanel.innerHTML = `
-        <h3 style="margin-bottom:10px;">Fonds de cartes</h3>
-        <div id="fondContainer" style="display:flex; justify-content:center;"></div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button id="closeRightPanel" style="
+            background:none;
+            border:none;
+            font-size:22px;
+            cursor:pointer;
+            color:#444;
+          ">&times;</button>
+        </div>
+        <h3>Légende</h3>
+        <div id="panelContent"></div>
       `;
     
-      const container = document.getElementById("fondContainer");
+      const content = document.getElementById("panelContent");
     
-      // Réinjecter les vignettes
-      container.appendChild(window.fondListDiv);
-    
-      window.fondListDiv.style.display = "flex";
-    }
+      // Injecter ta légende
+      content.appendChild(window.legendDiv);
 
+  // Bouton de fermeture
+  document.getElementById("closeRightPanel").onclick = () => {
+    rightPanel.style.display = "none";
+    rightTabs.style.display = "flex";
+    activeTool = null;
+  };
+}
 
-
-      if (tool === "mesures") {
-        rightPanel.innerHTML = `
-          <h3>Mesures</h3>
-          <p>(Outils de mesure à intégrer)</p>
-        `;
-      }
 
       if (tool === "dessin") {
-        rightPanel.innerHTML = `
-          <h3>Dessin</h3>
-          <p>(Outils de dessin à intégrer)</p>
-        `;
+        content.innerHTML += `<p>(Outils de dessin à intégrer)</p>`;
       }
+
+      // --- Bouton de fermeture ---
+      document.getElementById("closeRightPanel").onclick = () => {
+        rightPanel.style.display = "none";
+        rightTabs.style.display = "flex";
+        activeTool = null;
+      };
     };
   });
+
+  // --- Toggle pour réafficher la barre ---
+  rightTabsToggle.onclick = () => {
+    rightTabs.style.display = "flex";
+    rightPanel.style.display = "none";
+    activeTool = null;
+  };
 }
 
 initRightTabs();
+
+
+function initHoverLabels() {
+  const rightTabs = window.rightTabs;
+  if (!rightTabs) {
+    setTimeout(initHoverLabels, 100);
+    return;
+  }
+
+  const hoverLabel = document.createElement("div");
+  hoverLabel.className = "rightTabs-label";
+  document.body.appendChild(hoverLabel);
+
+  function attachHoverEvents() {
+    document.querySelectorAll("#rightTabs .tool-btn").forEach(btn => {
+
+      btn.addEventListener("mouseenter", () => {
+        const tool = btn.dataset.tool;
+
+        const labels = {
+          layers: "Couches",
+          fond: "Fond de cartes",
+          dessin: "Dessin",
+          legend: "Légendes"
+        };
+
+        hoverLabel.textContent = labels[tool] || "";
+
+        const rect = btn.getBoundingClientRect();
+        hoverLabel.style.top = rect.top + "px";
+        
+        // Position horizontale : à gauche du bouton
+        const labelWidth = hoverLabel.offsetWidth;
+        hoverLabel.style.left = (rect.left - labelWidth - 10) + "px";
+      
+        hoverLabel.style.opacity = 1;
+      });
+
+      btn.addEventListener("mouseleave", () => {
+        hoverLabel.style.opacity = 0;
+      });
+    });
+  }
+
+  // Attacher les événements au chargement
+  attachHoverEvents();
+
+  // Réattacher quand rightTabs réapparaît
+  const observer = new MutationObserver(() => {
+    if (rightTabs.style.display !== "none") {
+      attachHoverEvents();
+    }
+  });
+
+  observer.observe(rightTabs, { attributes: true, attributeFilter: ["style"] });
+}
+
+initHoverLabels();

@@ -572,17 +572,17 @@ map = {
         legend.style.zIndex = '1'; // pour passer au-dessus de la carte
         
         // Contenu de la légende
-        legend.innerHTML = `
-          <strong>Population en zone <br>fortement inondable</strong><br>
-          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
-          <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
-          <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
-          <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
-          <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
-        `;
+        // legend.innerHTML = `
+          // <strong>Population en zone <br>fortement inondable</strong><br>
+          // <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
+          // <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
+          // <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
+          // <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
+          // <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
+        // `;
         
         // L’ajouter à la carte (le container MapLibre)
-        map.getContainer().appendChild(legend);
+        // map.getContainer().appendChild(legend);
         
         //afin de lier la légende à l'indicateur
         function updateLegendVisibility() {
@@ -930,13 +930,13 @@ map = {
         id: "plan",
         label: "Plan",
         img: "Images/OSM.jpg",
-        apply: () => toggleStyle(false)   // ton style normal
+        apply: () => toggleStyle(false)   
       },
       {
         id: "ortho",
         label: "Photos aériennes",
         img: "Images/ORTHOPHOTOS.jpg",
-        apply: () => toggleStyle(true)    // ton orthophoto
+        apply: () => toggleStyle(true)    
       }
     ];
 
@@ -975,38 +975,38 @@ map = {
     rightTabs.innerHTML = `
       <button class="tool-btn" data-tool="layers"><i class="bi bi-layers"></i></button>
       <button class="tool-btn" data-tool="fond"><i class="bi bi-image"></i></button>
-      <button class="tool-btn" data-tool="mesures"><i class="bi bi-rulers"></i></button>
+      <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button>
       <button class="tool-btn" data-tool="dessin"><i class="bi bi-pencil"></i></button>
     `;
     
     map.getContainer().appendChild(rightTabs);
     window.rightTabs = rightTabs;
     
-    const rightTabsToggle = document.createElement("div");
-    rightTabsToggle.id = "rightTabsToggle";
-    rightTabsToggle.style = `
-      position: absolute;
-      top: 40px;
-      right: 10px;
-      width: 20px;
-      height: 40px;
-      background: #F7F9FB;
-      border: 1px solid #D6DEE6;
-      border-radius: 6px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.15);
-      display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 3000;
-      `;
+   const rightTabsToggle = document.createElement("div");
+     rightTabsToggle.id = "rightTabsToggle";
+     <!-- rightTabsToggle.style = ` -->
+      <!-- position: absolute; -->
+      <!-- top: 40px; -->
+      <!-- right: 10px; -->
+      <!-- width: 20px; -->
+      <!-- height: 40px; -->
+      <!-- background: #F7F9FB; -->
+      <!-- border: 1px solid #D6DEE6; -->
+      <!-- border-radius: 6px; -->
+      <!-- box-shadow: 0 0 6px rgba(0,0,0,0.15); -->
+      <!-- display: flex; -->
+        <!-- align-items: center; -->
+        <!-- justify-content: center; -->
+        <!-- cursor: pointer; -->
+        <!-- z-index: 3000; -->
+      <!-- `; -->
   
-    rightTabsToggle.innerHTML = `
-      <i class="bi bi-chevron-right" style="font-size:18px; color:#2A3B4D;"></i>
-    `;
+    <!-- rightTabsToggle.innerHTML = ` -->
+      <!-- <i class="bi bi-chevron-right" style="font-size:18px; color:#2A3B4D;"></i> -->
+    <!-- `; -->
     
-    map.getContainer().appendChild(rightTabsToggle);
-    window.rightTabsToggle = rightTabsToggle;
+    map.getContainer().appendChild(rightTabsToggle); 
+    window.rightTabsToggle = rightTabsToggle; 
 
     
     const rightPanel = document.createElement("div");
@@ -1014,6 +1014,32 @@ map = {
     
     map.getContainer().appendChild(rightPanel);
     window.rightPanel = rightPanel;
+
+    const legendDiv = document.createElement("div");
+    legendDiv.id = "legendDiv";
+    legendDiv.style.padding = "10px";
+    legendDiv.style.fontFamily = "sans-serif";
+    legendDiv.style.fontSize = "14px";
+    legendDiv.style.lineHeight = "1.4";
+    
+    legendDiv.innerHTML = `
+      <strong>Population en zone <br>fortement inondable</strong><br>
+          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
+          <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
+          <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
+          <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
+          <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
+          <hr>
+          <strong>Type de bâtiment</strong><br>
+          <div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
+          <div><span style="background:#2ca02c;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Appartement</div>
+          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Aucun local</div>
+          <div><span style="background:#9467bd;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Dépendance</div>
+          <div><span style="background:#ff7f0e;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Maison</div>
+          <div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
+        `;
+    
+    window.legendDiv = legendDiv;
 
 
 
