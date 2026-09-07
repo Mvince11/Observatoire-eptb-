@@ -35,6 +35,7 @@ function initRightTabs() {
       if (tool === "fond") titre = "Fonds de cartes";
       if (tool === "legend") titre = "Légendes";
       if (tool === "dessin") titre = "Dessin";
+      if (tool === "donnees") titre = "Données de la commune";
 
       rightPanel.innerHTML = `
         <div style="display:flex; justify-content:flex-end;">
@@ -90,7 +91,7 @@ function initRightTabs() {
 }
 
 
-      if (tool === "dessin") {
+      if (tool === "donnees") {
         content.innerHTML += `<p>(Outils de dessin à intégrer)</p>`;
       }
 
@@ -129,26 +130,36 @@ function initHoverLabels() {
     document.querySelectorAll("#rightTabs .tool-btn").forEach(btn => {
 
       btn.addEventListener("mouseenter", () => {
-        const tool = btn.dataset.tool;
+      const tool = btn.dataset.tool;
+    
+      const labels = {
+        layers: "Couches",
+        fond: "Fond de cartes",
+        donnees: "Données de la commune",
+        legend: "Légendes"
+      };
+    
+      hoverLabel.textContent = labels[tool] || "";
+    
+      const rect = btn.getBoundingClientRect();
+    
+      // 1️⃣ rendre visible AVANT de mesurer
+      hoverLabel.style.opacity = 0;
+      hoverLabel.style.display = "block";
+    
+      // 2️⃣ mesurer la largeur réelle
+      const labelWidth = hoverLabel.offsetWidth;
+    
+      // 3️⃣ position verticale : alignée avec le bouton
+      hoverLabel.style.top = rect.top + "px";
+    
+      // 4️⃣ position horizontale : à gauche du bouton (IGN style)
+      hoverLabel.style.left = (rect.left - labelWidth - 10) + "px";
+    
+      // 5️⃣ afficher
+      hoverLabel.style.opacity = 1;
+    });
 
-        const labels = {
-          layers: "Couches",
-          fond: "Fond de cartes",
-          dessin: "Dessin",
-          legend: "Légendes"
-        };
-
-        hoverLabel.textContent = labels[tool] || "";
-
-        const rect = btn.getBoundingClientRect();
-        hoverLabel.style.top = rect.top + "px";
-        
-        // Position horizontale : à gauche du bouton
-        const labelWidth = hoverLabel.offsetWidth;
-        hoverLabel.style.left = (rect.left - labelWidth - 10) + "px";
-      
-        hoverLabel.style.opacity = 1;
-      });
 
       btn.addEventListener("mouseleave", () => {
         hoverLabel.style.opacity = 0;

@@ -976,7 +976,7 @@ map = {
       <button class="tool-btn" data-tool="layers"><i class="bi bi-layers"></i></button>
       <button class="tool-btn" data-tool="fond"><i class="bi bi-image"></i></button>
       <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button>
-      <button class="tool-btn" data-tool="dessin"><i class="bi bi-pencil"></i></button>
+      <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
     `;
     
     map.getContainer().appendChild(rightTabs);
