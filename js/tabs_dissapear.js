@@ -29,6 +29,9 @@ function initRightTabs() {
       // --- Afficher le panneau ---
       rightPanel.style.display = "block";
 
+      // --- Classe par défaut ---
+      rightPanel.className = "rightpanel-default";
+
       // --- Construire le panneau ---
       let titre = "";
       if (tool === "layers") titre = "Couches";
@@ -36,16 +39,11 @@ function initRightTabs() {
       if (tool === "legend") titre = "Légendes";
       if (tool === "dessin") titre = "Dessin";
       if (tool === "donnees") titre = "Données de la commune";
+      if (tool === "tableau") titre = "Tableau de données";
 
       rightPanel.innerHTML = `
         <div style="display:flex; justify-content:flex-end;">
-          <button id="closeRightPanel" style="
-            background:none;
-            border:none;
-            font-size:22px;
-            cursor:pointer;
-            color:#444;
-          ">&times;</button>
+          <button id="closeRightPanel" class="close-btn">&times;</button>
         </div>
         <h3>${titre}</h3>
         <div id="panelContent"></div>
@@ -53,47 +51,63 @@ function initRightTabs() {
 
       const content = document.getElementById("panelContent");
 
-      // --- Injecter le contenu selon l’outil ---
+      // --- ROUTAGE PROPRE PAR OUTIL ---
+
+      // COUCHES
       if (tool === "layers") {
+        rightPanel.className = "rightpanel-large";
         content.appendChild(window.layersListDiv);
       }
 
+      // FONDS
       if (tool === "fond") {
+        rightPanel.className = "rightpanel-large";
         content.appendChild(window.fondListDiv);
       }
 
+      // LÉGENDE
       if (tool === "legend") {
-      rightPanel.innerHTML = `
-        <div style="display:flex; justify-content:flex-end;">
-          <button id="closeRightPanel" style="
-            background:none;
-            border:none;
-            font-size:22px;
-            cursor:pointer;
-            color:#444;
-          ">&times;</button>
-        </div>
-        <h3>Légende</h3>
-        <div id="panelContent"></div>
-      `;
-    
-      const content = document.getElementById("panelContent");
-    
-      // Injecter ta légende
-      content.appendChild(window.legendDiv);
-
-  // Bouton de fermeture
-  document.getElementById("closeRightPanel").onclick = () => {
-    rightPanel.style.display = "none";
-    rightTabs.style.display = "flex";
-    activeTool = null;
-  };
-}
-
-
-      if (tool === "donnees") {
-        content.innerHTML += `<p>(Outils de dessin à intégrer)</p>`;
+        rightPanel.className = "rightpanel-large";
+        content.appendChild(window.legendDiv);
       }
+
+      // DONNÉES DE LA COMMUNE (tab4)
+      if (tool === "donnees") {
+        rightPanel.className = "rightpanel-large";
+        const title = rightPanel.querySelector("h3");
+        if (title) title.style.display = "none";
+
+        const quartoTabs = document.querySelectorAll("#tab4");
+        donneesDiv.innerHTML = "";
+
+        quartoTabs.forEach(tab => {
+          const clone = tab.cloneNode(true);
+          clone.style.display = "block";
+          donneesDiv.appendChild(clone);
+        });
+
+        content.appendChild(donneesDiv);
+      }
+
+      // TABLEAU DE DONNÉES (tab5)
+      if (tool === "tableau") {
+      rightPanel.className = "rightpanel-full";
+    
+      const title = rightPanel.querySelector("h3");
+      if (title) title.style.display = "none";
+    
+      const iframe = document.createElement("iframe");
+      iframe.src = "tableau_commune.html";
+      iframe.style.width = "100%";
+      iframe.style.height = "calc(100vh - 120px)";   // hauteur dynamique
+      iframe.style.border = "none";
+      iframe.style.display = "block";
+    
+      content.innerHTML = "";
+      content.appendChild(iframe);
+    } 
+
+
 
       // --- Bouton de fermeture ---
       document.getElementById("closeRightPanel").onclick = () => {
@@ -113,6 +127,12 @@ function initRightTabs() {
 }
 
 initRightTabs();
+
+// Supprimer les onglets Quarto du haut
+const tabset = document.querySelector(".tabset");
+if (tabset) tabset.remove();
+
+
 
 
 function initHoverLabels() {
@@ -134,9 +154,10 @@ function initHoverLabels() {
     
       const labels = {
         layers: "Couches",
-        fond: "Fond de cartes",
+        fond: "Fonds de carte",
         donnees: "Données de la commune",
-        legend: "Légendes"
+        legend: "Légendes",
+        tableau: "Tableau de données"
       };
     
       hoverLabel.textContent = labels[tool] || "";
