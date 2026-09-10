@@ -377,7 +377,7 @@ document.querySelectorAll(".collapse-header").forEach(header => {
     <button class="tab-btn" data-tab="tab6">
      <i class="bi bi-bar-chart"></i>Graphiques
      </button>
-    <button class="tab-btn" data-tab="tab2">
+    <button class="tab-btn" data-tab="tab2" style="display:none;">
     <i class="bi bi-info-circle"></i>Informations relatives à l'indicateur
     </button>
     <button class="tab-btn" data-tab="tab3" style="display:none;">
@@ -931,13 +931,13 @@ map = {
         id: "plan",
         label: "Plan",
         img: "Images/OSM.jpg",
-        apply: () => toggleStyle(true)   
+        apply: () => toggleStyle(false)   
       },
       {
         id: "ortho",
         label: "Photos aériennes",
         img: "Images/ORTHOPHOTOS.jpg",
-        apply: () => toggleStyle(false)    
+        apply: () => toggleStyle(true)    
       }
     ];
 
@@ -980,6 +980,7 @@ map = {
       <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
       <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button>
       <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button>
+      <button class="tool-btn" data-tool="infoindicateur"><i class="bi bi-info"></i></button>
     `;
     
     map.getContainer().appendChild(rightTabs);
@@ -1076,6 +1077,16 @@ map = {
           batiment3dDiv.style.lineHeight = "1.4";
           
           window.batimment3dDiv = batiment3dDiv;
+          
+          // Info indicateur
+          const infoindicateurDiv= document.createElement("div");
+          infoindicateurDiv.id = "infoindicateurDiv";
+          infoindicateurDiv.style.padding = "10px";
+          infoindicateurDiv.style.fontFamily = "Arial";
+          infoindicateurDiv.style.fontSize = "14px";
+          infoindicateurDiv.style.lineHeight = "1.4";
+          
+          window.infoindicateurDiv = infoindicateurDiv;
 
     document.getElementById('orthoCheckbox').addEventListener('change', function (e) {
       e.preventDefault();
@@ -1102,7 +1113,7 @@ map = {
 //| expandable: false
 md`
 
-<table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
+<table class="info_indicateur" style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
   <colgroup>
     <col style="width:20%;">
     <col style="width:20%;">
@@ -1138,7 +1149,7 @@ md`
 
 <br>
 
-<table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
+<table class="info_indicateur" style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
   <colgroup>
     <col style="width:20%;">
     <col style="width:20%;">
@@ -1182,7 +1193,7 @@ md`
 
 <br>
 
-<table style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
+<table class="info_indicateur" style="width:90%; border-collapse: collapse; border:1px solid; text-align:center; margin:auto;">
   <colgroup>
     <col style="width:10%;">
     <col style="width:10%;">

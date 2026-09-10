@@ -643,7 +643,7 @@ div.sidebar-item-container{
 }
 
 .rightpanel-full2 {
-  height: calc(100% - 40px)!important;
+  height: 100% !important;
   overflow-y: auto;
   width: 100% !important;
   top: 0 !important;

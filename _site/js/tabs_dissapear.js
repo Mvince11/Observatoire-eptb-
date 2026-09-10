@@ -41,6 +41,7 @@ function initRightTabs() {
       if (tool === "donnees") titre = "Données de la commune";
       if (tool === "tableau") titre = "Tableau de données";
       if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
+      if (tool ==="infoindicateur") titre ="Informations relatives à l'indicateur";
 
       rightPanel.innerHTML = `
         <div style="display:flex; justify-content:flex-end;">
@@ -92,7 +93,7 @@ function initRightTabs() {
 
       // TABLEAU DE DONNÉES (tab5)
       if (tool === "tableau") {
-      rightPanel.className = "rightpanel-full";
+      rightPanel.className = "rightpanel-full2";
     
       const title = rightPanel.querySelector("h3");
       if (title) title.style.display = "none";
@@ -122,7 +123,22 @@ function initRightTabs() {
         content.appendChild(clone);
       }
 
-
+      if (tool === "infoindicateur") {
+      rightPanel.className = "rightpanel-full2";
+    
+      const title = rightPanel.querySelector("h3");
+      if (title) title.style.display = "none";
+    
+      const tables = document.querySelectorAll(".info_indicateur");
+    
+      content.innerHTML = ""; // vider le panneau
+    
+      tables.forEach(tbl => {
+        const clone = tbl.cloneNode(true);
+        //clone.style.display = "block";
+        content.appendChild(clone);
+      });
+    }
 
       // --- Bouton de fermeture ---
       document.getElementById("closeRightPanel").onclick = () => {
@@ -172,8 +188,9 @@ function initHoverLabels() {
         fond: "Fonds de carte",
         donnees: "Données de la commune",
         legend: "Légendes",
-        tableau: "Tableau de données",
-        batiment3d: "Bâtiments 3D: Mode d'emploi"
+        tableau: "Tableau de données", 
+        batiment3d: "Bâtiments 3D: Mode d'emploi",
+        infoindicateur: "Informations relatives à l'indicateur"
       };
     
       hoverLabel.textContent = labels[tool] || "";
