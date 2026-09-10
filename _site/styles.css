@@ -642,6 +642,13 @@ div.sidebar-item-container{
   top: 0 !important;
 }
 
+.rightpanel-full2 {
+  height: calc(100% - 40px)!important;
+  overflow-y: auto;
+  width: 100% !important;
+  top: 0 !important;
+}
+
 /* Animation de rotation du bouton Menu */
 #menuButton svg {
   transition: transform 0.3s ease;

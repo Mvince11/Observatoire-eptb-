@@ -380,7 +380,7 @@ document.querySelectorAll(".collapse-header").forEach(header => {
     <button class="tab-btn" data-tab="tab2">
     <i class="bi bi-info-circle"></i>Informations relatives à l'indicateur
     </button>
-    <button class="tab-btn" data-tab="tab3">
+    <button class="tab-btn" data-tab="tab3" style="display:none;">
     <i class="bi bi-box"></i>Bâtiments en 3D : Mode d'emploi
     </button>
   </div>
@@ -931,13 +931,13 @@ map = {
         id: "plan",
         label: "Plan",
         img: "Images/OSM.jpg",
-        apply: () => toggleStyle(false)   
+        apply: () => toggleStyle(true)   
       },
       {
         id: "ortho",
         label: "Photos aériennes",
         img: "Images/ORTHOPHOTOS.jpg",
-        apply: () => toggleStyle(true)    
+        apply: () => toggleStyle(false)    
       }
     ];
 
@@ -979,6 +979,7 @@ map = {
       <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button>
       <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
       <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button>
+      <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button>
     `;
     
     map.getContainer().appendChild(rightTabs);
@@ -1066,6 +1067,15 @@ map = {
           window.tableauDiv = tableauDiv;
           
           
+          // Bâtiments 3D
+          const batiment3dDiv= document.createElement("div");
+          batiment3dDiv.id = "batiment3dDiv";
+          batiment3dDiv.style.padding = "10px";
+          batiment3dDiv.style.fontFamily = "Arial";
+          batiment3dDiv.style.fontSize = "14px";
+          batiment3dDiv.style.lineHeight = "1.4";
+          
+          window.batimment3dDiv = batiment3dDiv;
 
     document.getElementById('orthoCheckbox').addEventListener('change', function (e) {
       e.preventDefault();
@@ -1257,7 +1267,7 @@ md`
       <p>
 ```
 
-::: {style="width:100%; max-width:1000px; margin: 0 auto; padding: 20px 0;"}
+::: {#batiment3d-info style="width:100%; max-width:1000px; margin: 0 auto; padding: 20px 0;"}
 <i class="bi bi-box"></i> **Incliner et faire tourner la carte**\
 Maintenez enfoncé le bouton droit de la souris sur ce symbole <img src="Images/bouton_inclinaison.jpg" style="margin-bottom:auto;"/> et déplacez le pour incliner le point de vue ou faire tourner la carte.
 

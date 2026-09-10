@@ -40,6 +40,7 @@ function initRightTabs() {
       if (tool === "dessin") titre = "Dessin";
       if (tool === "donnees") titre = "Données de la commune";
       if (tool === "tableau") titre = "Tableau de données";
+      if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
 
       rightPanel.innerHTML = `
         <div style="display:flex; justify-content:flex-end;">
@@ -105,7 +106,21 @@ function initRightTabs() {
     
       content.innerHTML = "";
       content.appendChild(iframe);
-    } 
+    }
+    
+      if (tool === "batiment3d") {
+        rightPanel.className = "rightpanel-full2";
+        
+        const title = rightPanel.querySelector("h3");
+      if (title) title.style.display = "none";
+    
+        const bloc = document.querySelector("#batiment3d-info");
+
+        const clone = bloc.cloneNode(true);
+        clone.style.display = "block";
+      
+        content.appendChild(clone);
+      }
 
 
 
@@ -157,7 +172,8 @@ function initHoverLabels() {
         fond: "Fonds de carte",
         donnees: "Données de la commune",
         legend: "Légendes",
-        tableau: "Tableau de données"
+        tableau: "Tableau de données",
+        batiment3d: "Bâtiments 3D: Mode d'emploi"
       };
     
       hoverLabel.textContent = labels[tool] || "";
