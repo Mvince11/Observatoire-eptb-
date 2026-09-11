@@ -178,4 +178,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 };
 });
+
+
+window.addEventListener("load", () => {
+
+  // Sélecteur garanti sur tous les sites Quarto
+  const navbar = document.querySelector("header#quarto-header nav.navbar");
+  const footer = document.querySelector("footer");
+
+  const navbarHeight = navbar ? navbar.getBoundingClientRect().height : 0;
+  const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
+
+  document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+  document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
+
+  console.log("NAVBAR =", navbarHeight, "FOOTER =", footerHeight);
+});
+
+
 </script>

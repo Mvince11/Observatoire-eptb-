@@ -67,9 +67,19 @@ img{
    MAP LIBRE
 ----------------------------------------------------------- */
 
-.map-container { 
-    height: 72vh; 
-    width: 100%; /* 100% de la largeur de l'écran */
+ html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .map-container {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  bottom: var(--footer-height);
+  overflow: hidden;
 }
 
 .mapFondDePlan {

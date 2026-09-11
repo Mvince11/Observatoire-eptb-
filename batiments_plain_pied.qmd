@@ -24,11 +24,8 @@ include-in-header:
     <link rel="stylesheet" href="js/photon-geocoder-autocomplete.min.css" type="text/css">
     <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
     <script src="js/tabs_dissapear.js" type="text/javascript"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 ---
-
-```{=html}
-<div id="nav-menu-objectif-n°1"></div>
-```
 
 ```{ojs}
 //| echo: false
@@ -37,7 +34,6 @@ bbox_sru = FileAttachment("layers/bb.json").json()
 ```
 
 ```{=html}
-<style>
 <style>
 
 /* ----------------------------- */
@@ -129,142 +125,9 @@ bbox_sru = FileAttachment("layers/bb.json").json()
   }
 }
 
-/* ----------------------------- */
-/*        TABSET MODERNE         */
-/* ----------------------------- */
-
-.tabset {
-  margin-top: 30px;
-  padding: 25px 0;
-  border-radius: 22px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Effet verre compatible Firefox */
-.tabset::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.45);
-  filter: blur(18px);
-  z-index: -1;
-}
-
-/* ----------------------------- */
-/*        BOUTONS TABS           */
-/* ----------------------------- */
-
-.tab-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  justify-content: center;
-  margin-bottom: 25px;
-}
-
-.tab-btn {
-  padding: 12px 22px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.45);
-  border: 1px solid rgba(255,255,255,0.35);
-  font-family: "Inter", sans-serif;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Icônes */
-.tab-btn i {
-  font-size: 1.2rem;
-  opacity: 0.85;
-  transition: transform 0.35s ease, opacity 0.25s ease;
-  animation: slowRotate 12s linear infinite;
-}
-
-/* Rotation lente continue */
-@keyframes slowRotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* Rotation douce au hover */
-.tab-btn:hover i {
-  transform: rotate(20deg);
-  opacity: 1;
-}
-
-/* Pulse sur active */
-.tab-btn.active i {
-  animation: slowRotate 12s linear infinite, pulseIcon 1.2s ease infinite;
-  color: white;
-  opacity: 1;
-}
-
-@keyframes pulseIcon {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.18); }
-  100% { transform: scale(1); }
-}
-
-/* Hover */
-.tab-btn:hover {
-  background: rgba(255,255,255,0.75);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-}
-
-/* Active */
-.tab-btn.active {
-  background: #ef7757;
-  color: white;
-  border-color: #ef7757;
-  box-shadow: 0 6px 18px rgba(239,119,87,0.35);
-}
-
-/* ----------------------------- */
-/*        CONTENU TABS           */
-/* ----------------------------- */
-
-.tab-content {
-  margin-top: 10px;
-}
-
-.tab {
-  display: none;
-  animation: fadeSlide 0.45s ease;
-}
-
-.tab.active {
-  display: block;
-}
-
-/* Animation apparition */
-@keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .tab-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
 </style>
 
-<div class="collapse-box">
+<div class="collapse-box" id="collapse_indicateur" style="display:none;">
 
   <h1 style="color:orangered; font-size:1.5rem; margin: 20px; font-family:avenir; opacity: 0.7;">
     Nombre de personnes occupant des bâtiments de plain-pied fortement inondables
@@ -362,34 +225,38 @@ document.querySelectorAll(".collapse-header").forEach(header => {
 ```
 
 ```{=html}
-<div class="tabset">
-  <!-- Boutons -->
-  <div class="tab-buttons">
-    <button class="tab-btn active" data-tab="tab1"> 
-    <i class="bi bi-map"></i>Cartographie
-    </button>
-    <button class="tab-btn" data-tab="tab4" style="display:none;">
-    <i class="bi bi-building"></i>Données de la commune
-    </button> 
-    <button class="tab-btn" data-tab="tab5" style="display:none;">
-     <i class="bi bi-table"></i>Tableau de données
-     </button>
-    <button class="tab-btn" data-tab="tab6">
-     <i class="bi bi-bar-chart"></i>Graphiques
-     </button>
-    <button class="tab-btn" data-tab="tab2" style="display:none;">
-    <i class="bi bi-info-circle"></i>Informations relatives à l'indicateur
-    </button>
-    <button class="tab-btn" data-tab="tab3" style="display:none;">
-    <i class="bi bi-box"></i>Bâtiments en 3D : Mode d'emploi
-    </button>
-  </div>
-  
-    <!-- Contenu --> 
-    <div class="tab-content">
-      <div id="tab1" class="tab active" style="margin-top:-40px;">
-        <p style="margin-left:10vw; margin-right:10vw;">
-      
+<script>
+// Supprimer complètement le tabset Quarto
+const tabset = document.querySelector(".tabset");
+if (tabset) {
+  // Récupérer le contenu de la carte
+  const tab1 = tabset.querySelector("#tab1");
+
+  if (tab1) {
+    const carte = tab1.cloneNode(true); // clone propre
+
+    // Supprimer le tabset entier
+    tabset.remove();
+
+    // Créer un conteneur plein écran
+    const full = document.createElement("div");
+    full.id = "fullmap-container";
+    full.style.width = "100vw";
+    full.style.height = "100vh";
+    full.style.margin = "0";
+    full.style.padding = "0";
+    full.style.position = "relative";
+
+    // Ajouter la carte dedans
+    full.appendChild(carte);
+
+    // Injecter dans le body
+    document.body.appendChild(full);
+  }
+}
+
+
+</script>      
 ```
 
 ```{ojs}
@@ -417,7 +284,7 @@ batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
 //| expandable: false
 //| fill: true
 map = {
-  const container = html`<div class="map-container" id="map" style="height: 600px; width: 90%; margin-left: 5vw;"></div>`;
+  const container = html`<div class="map-container" id="map"></div>`;
   yield container;
 
   <!-- const sourcePlanIGN = { -->
@@ -981,6 +848,7 @@ map = {
       <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button>
       <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button>
       <button class="tool-btn" data-tool="infoindicateur"><i class="bi bi-info"></i></button>
+      <button class="tool-btn" data-tool="graphique"><i class="bi bi-bar-chart"></i></button>
     `;
     
     map.getContainer().appendChild(rightTabs);
@@ -1087,6 +955,16 @@ map = {
           infoindicateurDiv.style.lineHeight = "1.4";
           
           window.infoindicateurDiv = infoindicateurDiv;
+          
+          // Graphiques
+          const graphiqueDiv= document.createElement("div");
+          graphiqueDiv.id = "graphiqueDiv";
+          graphiqueDiv.style.padding = "10px";
+          graphiqueDiv.style.fontFamily = "Arial";
+          graphiqueDiv.style.fontSize = "14px";
+          graphiqueDiv.style.lineHeight = "1.4";
+          
+          window.graphiqueDiv = graphiqueDiv;
 
     document.getElementById('orthoCheckbox').addEventListener('change', function (e) {
       e.preventDefault();
@@ -1098,13 +976,7 @@ map = {
 ```
 
 ```{=html}
-        </p>
-```
-
-```{=html}
-      </div>
-      <div id="tab2" class="tab">
-        <p>
+<div id="hidden-content" style="display:none;">
 ```
 
 ```{ojs}
@@ -1270,13 +1142,6 @@ md`
 `
 ```
 
-```{=html}
-        
-        </p>
-      </div>
-      <div id="tab3" class="tab"> 
-      <p>
-```
 
 ::: {#batiment3d-info style="width:100%; max-width:1000px; margin: 0 auto; padding: 20px 0;"}
 <i class="bi bi-box"></i> **Incliner et faire tourner la carte**\
@@ -1290,13 +1155,6 @@ Zoomer sur la carte (molette de la souris) pour visualiser les bâtiments.
 ![Bâtiments 3D](Images/batiments_3d.jpg){fig-align="center" width="100%"}
 :::
 
-```{=html}
-
-    </p>
-      </div>
-      <div id="tab4" class="tab"> 
-        <p>
-```
 
 ```{ojs}
 //| echo: false
@@ -1312,12 +1170,6 @@ md`
 
 ```
 
-```{=html}
-        </p>
-      </div>
-      <div id="tab5" class="tab">
-        <p>
-```
 
 ```{r}
 #| echo: false
@@ -1378,12 +1230,6 @@ htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
 
 ```
 
-```{=html}
-        </p>
-      </div>
-      <div id="tab6" class="tab">
-        <p>
-```
 
 ```{r}
 #| echo: false
@@ -1475,30 +1321,5 @@ Plot.plot({
 ```
 
 ```{=html}
-        </p>
-      </div> 
-    </div>
-</div> 
-
-
-
-
-<script>
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-
-    // désactiver tous les boutons
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-
-    // masquer tous les onglets
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-
-    // activer le bouton cliqué
-    btn.classList.add("active");
-
-    // activer l’onglet correspondant
-    document.getElementById(btn.dataset.tab).classList.add("active");
-  });
-});
-</script>
+</div>
 ```

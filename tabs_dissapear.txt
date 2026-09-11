@@ -79,7 +79,7 @@ function initRightTabs() {
         const title = rightPanel.querySelector("h3");
         if (title) title.style.display = "none";
 
-        const quartoTabs = document.querySelectorAll("#donnees");
+        const quartoTabs = document.querySelectorAll("#tab4");
         donneesDiv.innerHTML = "";
 
         quartoTabs.forEach(tab => {
@@ -128,34 +128,28 @@ function initRightTabs() {
     
       const title = rightPanel.querySelector("h3");
       if (title) title.style.display = "none";
-    
-      content.innerHTML = "";
-    
+      
+      // Récupérer le bloc collapse
       const bloc = document.querySelector("#collapse_indicateur");
-      console.log("bloc collapse_indicateur :", bloc);
+      const clone = bloc.cloneNode(true);
+      clone.style.display = "block";
     
+      // Ajouter au panneau AVANT les tableaux
+      content.appendChild(clone);
+
       const tables = document.querySelectorAll(".info_indicateur");
-      console.log("nb tables .info_indicateur :", tables.length);
     
-      if (!bloc && tables.length === 0) {
-        content.innerHTML = "<p style='color:red;'>Aucun bloc ni tableau trouvés dans le DOM principal.</p>";
-        return;
-      }
-    
-      if (bloc) {
-        const cloneBloc = bloc.cloneNode(true);
-        cloneBloc.style.display = "block";
-        content.appendChild(cloneBloc);
-        attachCollapseBehavior(cloneBloc);
-      }
+      content.innerHTML = ""; // vider le panneau
     
       tables.forEach(tbl => {
-        const cloneTable = tbl.cloneNode(true);
-        //cloneTable.style.display = "block";
-        content.appendChild(cloneTable);
+        const clone = tbl.cloneNode(true);
+        //clone.style.display = "block";
+        content.appendChild(tclone);
       });
+      
+      // Ré-attacher le script collapse
+      attachCollapseBehavior(clone);
     }
-
     
       if (tool === "graphique") {
       rightPanel.className = "rightpanel-full2";
@@ -264,30 +258,31 @@ function initRightTabs() {
     }
 
         function attachCollapseBehavior(root) {
-        root.querySelectorAll(".collapse-header").forEach(header => {
-          const content = header.nextElementSibling;
-      
-          header.addEventListener("click", () => {
-            header.classList.toggle("active");
-      
-            if (content.style.maxHeight) {
-              content.style.maxHeight = null;
-              content.classList.remove("open");
-            } else {
-              content.style.maxHeight = content.scrollHeight + "px";
-              content.classList.add("open");
-            }
+          root.querySelectorAll(".collapse-header").forEach(header => {
+            const content = header.nextElementSibling;
+        
+            header.addEventListener("click", () => {
+              header.classList.toggle("active");
+        
+              if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove("open");
+              } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.add("open");
+              }
+            });
+        
+            const ro = new ResizeObserver(() => {
+              if (content.classList.contains("open")) {
+                content.style.maxHeight = content.scrollHeight + 20 + "px";
+              }
+            });
+        
+            ro.observe(content);
           });
-      
-          const ro = new ResizeObserver(() => {
-            if (content.classList.contains("open")) {
-              content.style.maxHeight = content.scrollHeight + 20 + "px";
-            }
-          });
-      
-          ro.observe(content);
-        });
-      }
+        }
+
 
 
       // --- Bouton de fermeture ---

@@ -37,11 +37,11 @@ function initRightTabs() {
       if (tool === "layers") titre = "Couches";
       if (tool === "fond") titre = "Fonds de cartes";
       if (tool === "legend") titre = "Légendes";
-      if (tool === "dessin") titre = "Dessin";
       if (tool === "donnees") titre = "Données de la commune";
       if (tool === "tableau") titre = "Tableau de données";
       if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
       if (tool ==="infoindicateur") titre ="Informations relatives à l'indicateur";
+      if (tool === "graphique") titre = "Graphiques";
 
       rightPanel.innerHTML = `
         <div style="display:flex; justify-content:flex-end;">
@@ -79,7 +79,7 @@ function initRightTabs() {
         const title = rightPanel.querySelector("h3");
         if (title) title.style.display = "none";
 
-        const quartoTabs = document.querySelectorAll("#tab4");
+        const quartoTabs = document.querySelectorAll("#donnees");
         donneesDiv.innerHTML = "";
 
         quartoTabs.forEach(tab => {
@@ -129,16 +129,166 @@ function initRightTabs() {
       const title = rightPanel.querySelector("h3");
       if (title) title.style.display = "none";
     
-      const tables = document.querySelectorAll(".info_indicateur");
+      content.innerHTML = "";
     
-      content.innerHTML = ""; // vider le panneau
+      const bloc = document.querySelector("#collapse_indicateur");
+      console.log("bloc collapse_indicateur :", bloc);
+    
+      const tables = document.querySelectorAll(".info_indicateur");
+      console.log("nb tables .info_indicateur :", tables.length);
+    
+      if (!bloc && tables.length === 0) {
+        content.innerHTML = "<p style='color:red;'>Aucun bloc ni tableau trouvés dans le DOM principal.</p>";
+        return;
+      }
+    
+      if (bloc) {
+        const cloneBloc = bloc.cloneNode(true);
+        cloneBloc.style.display = "block";
+        content.appendChild(cloneBloc);
+        attachCollapseBehavior(cloneBloc);
+      }
     
       tables.forEach(tbl => {
-        const clone = tbl.cloneNode(true);
-        //clone.style.display = "block";
-        content.appendChild(clone);
+        const cloneTable = tbl.cloneNode(true);
+        //cloneTable.style.display = "block";
+        content.appendChild(cloneTable);
       });
     }
+
+    
+      if (tool === "graphique") {
+      rightPanel.className = "rightpanel-full2";
+    
+      const title = rightPanel.querySelector("h3");
+      if (title) title.style.display = "none";
+    
+      content.innerHTML = "";
+    
+      fetch("layers/data_s12a.json")
+        .then(r => r.json())
+        .then(data => {
+
+      
+
+          // Slider
+          const slider = document.createElement("input");
+          slider.type = "range";
+          slider.min = 0;
+          slider.max = 230;
+          slider.step = 10;
+          slider.value = 150;
+          slider.style.width = "20%";
+          slider.style.display = "inline-block";
+    
+          // Valeur du slider
+          const sliderValue = document.createElement("span");
+          sliderValue.textContent = slider.value + " habitants";
+          sliderValue.style.marginLeft = "10px";
+          sliderValue.style.fontWeight = "bold";
+          sliderValue.style.fontSize = "14px";
+          sliderValue.style.border = "1px solid";
+          sliderValue.style.borderRadius = "8px";
+          sliderValue.style.padding = "5px";
+    
+          // Conteneur slider + valeur
+          const sliderContainer = document.createElement("div");
+          sliderContainer.style.marginBottom = "5px";
+          sliderContainer.appendChild(slider);
+          sliderContainer.appendChild(sliderValue);
+    
+          
+          content.appendChild(sliderContainer);
+    
+          // Conteneur du graphique
+          const plotDiv = document.createElement("div");
+          plotDiv.style.width = "100%";
+          plotDiv.style.height = "600px";
+          content.appendChild(plotDiv);
+    
+          function renderPlot() {
+            const maxVal = Number(slider.value);
+    
+            const sorted = data
+              .filter(d => d.s12a <= maxVal)
+              .sort((a, b) => a.s12a - b.s12a);
+              
+             // Cas où toutes les valeurs sont 0 → graphique vide propre
+          if (sorted.length === 0 || sorted.every(d => d.s12a === 0)) {
+            Plotly.newPlot(plotDiv, [], {
+              title: "Population en zone fortement inondable",
+              yaxis: { range: [0, 10] },
+              xaxis: { visible: false },
+              margin: { b: 150 }
+            });
+            return;
+          }
+        
+          const maxY = Math.max(...sorted.map(d => d.s12a));
+    
+            const trace = {
+              x: sorted.map(d => d.nom),
+              y: sorted.map(d => d.s12a),
+              type: "bar",
+              text: sorted.map(d => d.s12a),   // valeur au-dessus des barres
+              textposition: "outside",
+              marker: {
+                color: sorted.map(d => {
+                  const val = d.s12a;
+                  if (val === 0) return "#d9d9d9";
+                  if (val < 10) return "#f9e9e9";
+                  if (val < 50) return "#ffaaaa";
+                  if (val < 100) return "#ff5555";
+                  if (val >= 100) return "#ff0000";
+                  return "#b30000";
+                })
+              }
+            };
+    
+            const layout = {
+              title: "Population en zone fortement inondable",
+              margin: { b: 150 },
+              xaxis: { tickangle: -45 }
+            };
+    
+            Plotly.newPlot(plotDiv, [trace], layout);
+          }
+    
+          renderPlot();
+    
+          slider.addEventListener("input", () => {
+            sliderValue.textContent = slider.value + " habitants";
+            renderPlot();
+          });
+        });
+    }
+
+        function attachCollapseBehavior(root) {
+        root.querySelectorAll(".collapse-header").forEach(header => {
+          const content = header.nextElementSibling;
+      
+          header.addEventListener("click", () => {
+            header.classList.toggle("active");
+      
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+              content.classList.remove("open");
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+              content.classList.add("open");
+            }
+          });
+      
+          const ro = new ResizeObserver(() => {
+            if (content.classList.contains("open")) {
+              content.style.maxHeight = content.scrollHeight + 20 + "px";
+            }
+          });
+      
+          ro.observe(content);
+        });
+      }
+
 
       // --- Bouton de fermeture ---
       document.getElementById("closeRightPanel").onclick = () => {
@@ -190,7 +340,8 @@ function initHoverLabels() {
         legend: "Légendes",
         tableau: "Tableau de données", 
         batiment3d: "Bâtiments 3D: Mode d'emploi",
-        infoindicateur: "Informations relatives à l'indicateur"
+        infoindicateur: "Informations relatives à l'indicateur",
+        graphique: "Graphiques"
       };
     
       hoverLabel.textContent = labels[tool] || "";
