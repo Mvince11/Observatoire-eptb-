@@ -224,40 +224,7 @@ document.querySelectorAll(".collapse-header").forEach(header => {
 </script>
 ```
 
-```{=html}
-<script>
-// Supprimer complètement le tabset Quarto
-const tabset = document.querySelector(".tabset");
-if (tabset) {
-  // Récupérer le contenu de la carte
-  const tab1 = tabset.querySelector("#tab1");
 
-  if (tab1) {
-    const carte = tab1.cloneNode(true); // clone propre
-
-    // Supprimer le tabset entier
-    tabset.remove();
-
-    // Créer un conteneur plein écran
-    const full = document.createElement("div");
-    full.id = "fullmap-container";
-    full.style.width = "100vw";
-    full.style.height = "100vh";
-    full.style.margin = "0";
-    full.style.padding = "0";
-    full.style.position = "relative";
-
-    // Ajouter la carte dedans
-    full.appendChild(carte);
-
-    // Injecter dans le body
-    document.body.appendChild(full);
-  }
-}
-
-
-</script>      
-```
 
 ```{ojs}
 //| echo: false
