@@ -79,7 +79,7 @@ img{
   left: 0;
   right: 0;
   bottom: var(--footer-height);
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .mapFondDePlan {
@@ -264,6 +264,11 @@ img{
   z-index: 1000;
 }
 
+#quarto-navbar-collapse,
+#navbarCollapse {
+  display: none !important;
+}
+
 #quarto-document-content {
   padding-top: 150px; 
 }
@@ -437,45 +442,12 @@ div.sidebar-item-container{
   color: #2A3B4D;
 }
 
-
 #dashboard-collapse{
   height: auto;
   margin-bottom: 8px;
   margin-top: 0 !important;
 }
 
-.navbar-nav .nav-link {
-  position: relative;
-  display: inline-block;
-  padding-bottom: 4px; /* espace pour la barre */
-  }
-
-
-/* On cible les liens de la navbar */
-.navbar-nav.navbar-nav-scroll.me-auto >.nav-item {
-  position: relative; /* nécessaire pour positionner le ::after */
-}
-
-/* État initial : pas de soulignement visible */
-.navbar-nav.navbar-nav-scroll.me-auto >.nav-item::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: #f48019; /* couleur du soulignement */
-  transform-origin: bottom right;
-  transition: transform 0.45s ease-out;
-}
-
-/* Au survol ou si actif : on étend la barre */
-.navbar-nav.navbar-nav-scroll.me-auto > .nav-item:hover::after,
-.navbar-nav.navbar-nav-scroll.me-auto > .nav-item.active::after{
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
 
 /*.navbar-nav .dropdown-menu{
   max-width: max-content;

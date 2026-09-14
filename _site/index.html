@@ -70,9 +70,15 @@ ul.task-list li input[type="checkbox"] {
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
 
 
+
+  /* -----------------------------------------------------------
+
+     1) Récupérer la navbar Quarto
+
+  ----------------------------------------------------------- */
 
   const navbar = document.querySelector("nav.navbar");
 
@@ -80,7 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Bouton Menu ---
+  /* -----------------------------------------------------------
+
+     2) Ajouter le bouton Menu dans la navbar
+
+  ----------------------------------------------------------- */
 
   const menuButton = document.createElement("button");
 
@@ -134,21 +144,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   brandContainer.parentNode.insertBefore(menuButton, brandContainer);
 
-  
 
-  // --- Ajouter le mot "Menu" sous le bouton ---
+
+  /* Label "Menu" */
 
   const menuLabel = document.createElement("div");
 
-  menuLabel.textContent = "Menu";
-
   menuLabel.id = "menuLabel";
+
+  menuLabel.textContent = "Menu";
 
   menuLabel.style = `
 
     position: absolute;
 
-    top: 68px;        /* juste sous le bouton */
+    top: 68px;
 
     left: 23px;
 
@@ -158,8 +168,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     color: #444;
 
-    padding-left: 6px;
-
   `;
 
   navbar.appendChild(menuLabel);
@@ -168,7 +176,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Récupérer collapse AVANT suppression ---
+  /* -----------------------------------------------------------
+
+     3) Récupérer le collapse Quarto (menu YAML)
+
+  ----------------------------------------------------------- */
 
   const collapse =
 
@@ -178,7 +190,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- CLONER les tools AVANT suppression ---
+  if (!collapse) return;
+
+
+
+  /* Cloner le menu YAML AVANT suppression */
+
+  const collapseClone = collapse.cloneNode(true);
+
+
+
+  /* Cloner les tools */
 
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
 
@@ -186,25 +208,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Cloner le menu YAML ---
+  /* Supprimer le collapse (sans flash) */
 
-  const collapseClone = collapse.cloneNode(true);
-
-  
-
-  // --- SUPPRIMER le collapse APRÈS que Quarto ait fini de l’injecter ---
-
-  requestAnimationFrame(() => {
-
-    collapse.remove();
-
-  });
+  collapse.remove();
 
 
 
 
 
-  // --- Créer le panneau latéral (slide-in depuis la gauche) ---
+  /* -----------------------------------------------------------
+
+     4) Créer le sideMenu
+
+  ----------------------------------------------------------- */
 
   const sideMenu = document.createElement("div");
 
@@ -214,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     position: fixed;
 
-    top: 106px;
+    top: 105px;
 
     left: 0;
 
@@ -228,9 +244,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
 
-    /*padding: 15px;*/
+    padding-right: 5px;
 
-    overflow-y: hidden;
+    overflow-y: auto;
 
     transform: translateX(-100%);
 
@@ -264,7 +280,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Transformer le menu YAML ---
+
+
+  /* -----------------------------------------------------------
+
+     5) Transformer le menu YAML en sideMenu
+
+  ----------------------------------------------------------- */
 
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
@@ -278,43 +300,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // --- CAS 1 : nav-item simple ---
+    /* Cas 1 : nav-item simple */
 
     if (!submenu) {
-
-
 
       const linkEl = document.createElement("a");
 
       linkEl.href = link.href;
 
-      linkEl.className = "d-flex align-items-center gap-2 mb-3";
+      linkEl.className = "d-block mb-3";
 
-
-
-      // détecter une icône Bootstrap dans l'item original
-
-      const icon = item.querySelector("i.bi");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.fontSize = "1.2rem";
-
-        linkEl.appendChild(iconClone);
-
-      }
-
-
-
-      const textNode = document.createElement("span");
-
-      textNode.textContent = title;
-
-      linkEl.appendChild(textNode);
-
-
+      linkEl.textContent = title;
 
       accordion.appendChild(linkEl);
 
@@ -324,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // --- CAS 2 : dropdown ---
+    /* Cas 2 : dropdown */
 
     const id = "acc" + index;
 
@@ -380,53 +376,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
     accordion.appendChild(accItem);
 
-
-
   });
 
 
 
-  // --- Ajouter les tools ---
-
-  if (toolsClone) {
-
-    toolsContainer.appendChild(toolsClone);
-
-  }
 
 
+  /* -----------------------------------------------------------
 
-  // --- Toggle du panneau latéral ---
+     6) Ajouter les tools dans le sideMenu
+
+  ----------------------------------------------------------- */
+
+  if (toolsClone) toolsContainer.appendChild(toolsClone);
+
+
+
+
+
+  /* -----------------------------------------------------------
+
+     7) Toggle du sideMenu
+
+  ----------------------------------------------------------- */
 
   menuButton.onclick = () => {
 
-  const isOpen = sideMenu.style.transform === "translateX(0%)";
+    const isOpen = sideMenu.style.transform === "translateX(0%)";
+
+    sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+
+  };
 
 
 
-  // Ouvrir / fermer le sideMenu
-
-  sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
 
 
+  /* -----------------------------------------------------------
 
-  // Ajouter / retirer la classe de rotation
+     8) Calculer la hauteur navbar/footer pour MapLibre
 
-  if (isOpen) {
+  ----------------------------------------------------------- */
 
-    menuButton.classList.remove("rotated");
+  const footer = document.querySelector("footer");
 
-  } else {
+  const navbarHeight = navbar.getBoundingClientRect().height;
 
-    menuButton.classList.add("rotated");
+  const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
 
-  }
 
-};
+
+  document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+
+  document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
 
 });
 
 </script>
+
+
 
 
 
@@ -622,8 +630,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <section id="pourquoi-un-observatoire" class="level2">
 <h2 class="anchored" data-anchor-id="pourquoi-un-observatoire">Pourquoi un observatoire ?</h2>
-
-
 <p align="justify">
 
 <font size="4.5px" face="calibri"> L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population.<br> La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national.<br> Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire.<br><br> </font>

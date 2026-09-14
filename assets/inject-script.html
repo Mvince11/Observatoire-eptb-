@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
 
+  /* -----------------------------------------------------------
+     1) Récupérer la navbar Quarto
+  ----------------------------------------------------------- */
   const navbar = document.querySelector("nav.navbar");
   if (!navbar) return;
 
-  // --- Bouton Menu ---
+  /* -----------------------------------------------------------
+     2) Ajouter le bouton Menu dans la navbar
+  ----------------------------------------------------------- */
   const menuButton = document.createElement("button");
   menuButton.id = "menuButton";
   menuButton.style = `
@@ -32,47 +37,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const brandContainer = navbar.querySelector(".navbar-brand-container");
   brandContainer.parentNode.insertBefore(menuButton, brandContainer);
-  
-  // --- Ajouter le mot "Menu" sous le bouton ---
+
+  /* Label "Menu" */
   const menuLabel = document.createElement("div");
-  menuLabel.textContent = "Menu";
   menuLabel.id = "menuLabel";
+  menuLabel.textContent = "Menu";
   menuLabel.style = `
     position: absolute;
-    top: 68px;        /* juste sous le bouton */
+    top: 68px;
     left: 23px;
     font-size: 20px;
     font-weight: 600;
     color: #444;
-    padding-left: 6px;
   `;
   navbar.appendChild(menuLabel);
 
 
-  // --- Récupérer collapse AVANT suppression ---
+  /* -----------------------------------------------------------
+     3) Récupérer le collapse Quarto (menu YAML)
+  ----------------------------------------------------------- */
   const collapse =
     document.getElementById("quarto-navbar-collapse") ||
     document.getElementById("navbarCollapse");
 
-  // --- CLONER les tools AVANT suppression ---
+  if (!collapse) return;
+
+  /* Cloner le menu YAML AVANT suppression */
+  const collapseClone = collapse.cloneNode(true);
+
+  /* Cloner les tools */
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
   const toolsClone = toolsOriginal ? toolsOriginal.cloneNode(true) : null;
 
-  // --- Cloner le menu YAML ---
-  const collapseClone = collapse.cloneNode(true);
-  
-  // --- SUPPRIMER le collapse APRÈS que Quarto ait fini de l’injecter ---
-  requestAnimationFrame(() => {
-    collapse.remove();
-  });
+  /* Supprimer le collapse (sans flash) */
+  collapse.remove();
 
 
-  // --- Créer le panneau latéral (slide-in depuis la gauche) ---
+  /* -----------------------------------------------------------
+     4) Créer le sideMenu
+  ----------------------------------------------------------- */
   const sideMenu = document.createElement("div");
   sideMenu.id = "sideMenu";
   sideMenu.style = `
     position: fixed;
-    top: 106px;
+    top: 105px;
     left: 0;
     width: 320px;
     height: 100%;
@@ -80,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     border-right: 1px solid #ccc;
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
     padding-right: 5px;
-    overflow-y: hidden;
+    overflow-y: auto;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 2000;
@@ -97,37 +105,27 @@ document.addEventListener("DOMContentLoaded", function () {
   const accordion = sideMenu.querySelector("#menuAccordion");
   const toolsContainer = sideMenu.querySelector("#toolsContainer");
 
-  // --- Transformer le menu YAML ---
+
+  /* -----------------------------------------------------------
+     5) Transformer le menu YAML en sideMenu
+  ----------------------------------------------------------- */
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
     const link = item.querySelector("a.nav-link, a.dropdown-toggle");
     const submenu = item.querySelector("ul.dropdown-menu");
     const title = link ? link.textContent.trim() : "Menu";
 
-    // --- CAS 1 : nav-item simple ---
+    /* Cas 1 : nav-item simple */
     if (!submenu) {
-
       const linkEl = document.createElement("a");
       linkEl.href = link.href;
-      linkEl.className = "d-flex align-items-center gap-2 mb-3";
-
-      // détecter une icône Bootstrap dans l'item original
-      const icon = item.querySelector("i.bi");
-      if (icon) {
-        const iconClone = icon.cloneNode(true);
-        iconClone.style.fontSize = "1.2rem";
-        linkEl.appendChild(iconClone);
-      }
-
-      const textNode = document.createElement("span");
-      textNode.textContent = title;
-      linkEl.appendChild(textNode);
-
+      linkEl.className = "d-block mb-3";
+      linkEl.textContent = title;
       accordion.appendChild(linkEl);
       return;
     }
 
-    // --- CAS 2 : dropdown ---
+    /* Cas 2 : dropdown */
     const id = "acc" + index;
 
     const accItem = document.createElement("div");
@@ -155,45 +153,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     accordion.appendChild(accItem);
-
   });
 
-  // --- Ajouter les tools ---
-  if (toolsClone) {
-    toolsContainer.appendChild(toolsClone);
-  }
 
-  // --- Toggle du panneau latéral ---
+  /* -----------------------------------------------------------
+     6) Ajouter les tools dans le sideMenu
+  ----------------------------------------------------------- */
+  if (toolsClone) toolsContainer.appendChild(toolsClone);
+
+
+  /* -----------------------------------------------------------
+     7) Toggle du sideMenu
+  ----------------------------------------------------------- */
   menuButton.onclick = () => {
-  const isOpen = sideMenu.style.transform === "translateX(0%)";
-
-  // Ouvrir / fermer le sideMenu
-  sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
-
-  // Ajouter / retirer la classe de rotation
-  if (isOpen) {
-    menuButton.classList.remove("rotated");
-  } else {
-    menuButton.classList.add("rotated");
-  }
-};
-});
+    const isOpen = sideMenu.style.transform === "translateX(0%)";
+    sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+  };
 
 
-window.addEventListener("load", () => {
-
-  // Sélecteur garanti sur tous les sites Quarto
-  const navbar = document.querySelector("header#quarto-header nav.navbar");
+  /* -----------------------------------------------------------
+     8) Calculer la hauteur navbar/footer pour MapLibre
+  ----------------------------------------------------------- */
   const footer = document.querySelector("footer");
-
-  const navbarHeight = navbar ? navbar.getBoundingClientRect().height : 0;
+  const navbarHeight = navbar.getBoundingClientRect().height;
   const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
 
   document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
   document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
-
-  console.log("NAVBAR =", navbarHeight, "FOOTER =", footerHeight);
 });
-
-
 </script>
+
