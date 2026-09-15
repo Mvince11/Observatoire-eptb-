@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.38">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,10 +35,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e55257969e79e1b23715b75ca28f8bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,9 +70,15 @@ ul.task-list li input[type="checkbox"] {
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
 
 
+
+  /* -----------------------------------------------------------
+
+     1) Récupérer la navbar Quarto
+
+  ----------------------------------------------------------- */
 
   const navbar = document.querySelector("nav.navbar");
 
@@ -80,7 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Bouton Menu ---
+  /* -----------------------------------------------------------
+
+     2) Ajouter le bouton Menu dans la navbar
+
+  ----------------------------------------------------------- */
 
   const menuButton = document.createElement("button");
 
@@ -134,33 +144,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   brandContainer.parentNode.insertBefore(menuButton, brandContainer);
 
-  
 
-  // --- Ajouter le mot "Menu" sous le bouton ---
+
+  /* Label "Menu" */
 
   const menuLabel = document.createElement("div");
 
-  menuLabel.textContent = "Menu";
-
   menuLabel.id = "menuLabel";
 
-  menuLabel.style = `
+  menuLabel.classList.add("menu-label");
 
-    position: absolute;
-
-    top: 68px;        /* juste sous le bouton */
-
-    left: 23px;
-
-    font-size: 20px;
-
-    font-weight: 600;
-
-    color: #444;
-
-    padding-left: 6px;
-
-  `;
+  menuLabel.textContent = "Menu";
 
   navbar.appendChild(menuLabel);
 
@@ -168,7 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Récupérer collapse AVANT suppression ---
+  /* -----------------------------------------------------------
+
+     3) Récupérer le collapse Quarto (menu YAML)
+
+  ----------------------------------------------------------- */
 
   const collapse =
 
@@ -178,7 +176,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- CLONER les tools AVANT suppression ---
+  if (!collapse) return;
+
+
+
+  const collapseClone = collapse.cloneNode(true);
+
+
 
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
 
@@ -186,25 +190,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Cloner le menu YAML ---
-
-  const collapseClone = collapse.cloneNode(true);
-
-  
-
-  // --- SUPPRIMER le collapse APRÈS que Quarto ait fini de l’injecter ---
-
-  requestAnimationFrame(() => {
-
-    collapse.remove();
-
-  });
+  collapse.remove();
 
 
 
 
 
-  // --- Créer le panneau latéral (slide-in depuis la gauche) ---
+  /* -----------------------------------------------------------
+
+     4) Créer le sideMenu
+
+  ----------------------------------------------------------- */
 
   const sideMenu = document.createElement("div");
 
@@ -214,13 +210,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     position: fixed;
 
-    top: 106px;
+    top: var(--navbar-height);
 
     left: 0;
 
     width: 320px;
 
-    height: 100%;
+    height: calc(100% - var(--navbar-height));
 
     background: white;
 
@@ -228,9 +224,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
 
-    /*padding: 15px;*/
+    padding-right: 5px;
 
-    overflow-y: hidden;
+    overflow-y: auto;
 
     transform: translateX(-100%);
 
@@ -264,7 +260,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Transformer le menu YAML ---
+
+
+  /* -----------------------------------------------------------
+
+     5) Transformer le menu YAML en sideMenu
+
+  ----------------------------------------------------------- */
 
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
@@ -278,43 +280,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // --- CAS 1 : nav-item simple ---
-
     if (!submenu) {
-
-
 
       const linkEl = document.createElement("a");
 
       linkEl.href = link.href;
 
-      linkEl.className = "d-flex align-items-center gap-2 mb-3";
+      linkEl.className = "d-block mb-3";
 
-
-
-      // détecter une icône Bootstrap dans l'item original
-
-      const icon = item.querySelector("i.bi");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.fontSize = "1.2rem";
-
-        linkEl.appendChild(iconClone);
-
-      }
-
-
-
-      const textNode = document.createElement("span");
-
-      textNode.textContent = title;
-
-      linkEl.appendChild(textNode);
-
-
+      linkEl.textContent = title;
 
       accordion.appendChild(linkEl);
 
@@ -323,8 +297,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
-    // --- CAS 2 : dropdown ---
 
     const id = "acc" + index;
 
@@ -380,49 +352,77 @@ document.addEventListener("DOMContentLoaded", function () {
 
     accordion.appendChild(accItem);
 
-
-
   });
 
 
 
-  // --- Ajouter les tools ---
-
-  if (toolsClone) {
-
-    toolsContainer.appendChild(toolsClone);
-
-  }
 
 
+  /* -----------------------------------------------------------
 
-  // --- Toggle du panneau latéral ---
+     6) Ajouter les tools dans le sideMenu
+
+  ----------------------------------------------------------- */
+
+  if (toolsClone) toolsContainer.appendChild(toolsClone);
+
+
+
+
+
+  /* -----------------------------------------------------------
+
+     7) Toggle du sideMenu + rotation bouton
+
+  ----------------------------------------------------------- */
 
   menuButton.onclick = () => {
 
-  const isOpen = sideMenu.style.transform === "translateX(0%)";
+    const isOpen = sideMenu.style.transform === "translateX(0%)";
+
+    sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+
+    menuButton.classList.toggle("rotated", !isOpen);
+
+  };
 
 
 
-  // Ouvrir / fermer le sideMenu
-
-  sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
 
 
+  /* -----------------------------------------------------------
 
-  // Ajouter / retirer la classe de rotation
+     8) Fonction responsive : recalcul hauteur navbar/footer
 
-  if (isOpen) {
+  ----------------------------------------------------------- */
 
-    menuButton.classList.remove("rotated");
+  function updateLayoutHeights() {
 
-  } else {
+    const footer = document.querySelector("footer");
 
-    menuButton.classList.add("rotated");
+    const navbarHeight = navbar.getBoundingClientRect().height;
+
+    const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
+
+
+
+    document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+
+    document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
 
   }
 
-};
+
+
+  updateLayoutHeights();
+
+
+
+  window.addEventListener("resize", updateLayoutHeights);
+
+  window.addEventListener("orientationchange", updateLayoutHeights);
+
+
 
 });
 
@@ -861,7 +861,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/website\.quarto\.pub\/observatoire_eptb");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

@@ -44,6 +44,10 @@ h1::before {
     background-color: $orangeCerema;
 }
 
+.quarto-title{
+  display: none;
+}
+
 input[type="number"], select {
     border: 1px solid #ced4da; /* Couleur et épaisseur du cadre */
     border-radius: 5px; /* Rayon des coins arrondis */
@@ -744,6 +748,140 @@ div.sidebar-item-container{
   color: #0063A3;
 }
 
+/* Style de base du label Menu */
+.menu-label {
+  position: absolute;
+  left: 33px;              /* aligné sous le bouton */
+  top: 70px;               /* hauteur par défaut */
+  font-size: 20px;
+  font-weight: 600;
+  color: #444;
+  pointer-events: none;    /* évite les clics involontaires */
+  transition: top 0.25s ease, font-size 0.25s ease;
+}
+
+/* Footer global */
+.footer {
+  width: 100%;;
+  background: #fff;
+  border-top: 1px solid #e6e6e6;
+  position: fixed;
+}
+
+/* Conteneur principal : toujours horizontal */
+.nav-footer {
+  display: flex;
+  flex-direction: row;      /* jamais en colonne */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;        /* empêche les blocs de passer en dessous */
+  gap: 10px;
+}
+
+/* Colonnes : largeur flexible */
+.nav-footer-left,
+.nav-footer-center,
+.nav-footer-right {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;      /* empêche les retours à la ligne */
+  overflow: hidden;         /* évite les débordements */
+  text-overflow: ellipsis;  /* coupe proprement si trop long */
+}
+
+/* Icônes à droite */
+.nav-footer-right a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-left: 10px;
+}
+
+/* --- PETITES RÉSOLUTIONS --- */
+@media (max-width: 768px) {
+
+  /* On réduit la taille du texte pour éviter les débordements */
+  .nav-footer-left,
+  .nav-footer-center {
+    font-size: 14px;
+  }
+
+  /* On réduit les icônes */
+  .nav-footer-right a {
+    font-size: 1.2rem;
+    margin-left: 8px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+
+  .nav-footer-left,
+  .nav-footer-center {
+    font-size: 13px;
+  }
+
+  .nav-footer-right a {
+    font-size: 1.1rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  :root {
+    --footer-height:40px !important;
+  }
+}
+
+/* Écrans larges (desktop) */
+@media (min-width: 1400px) {
+  .menu-label {
+    top: 72px;
+    font-size: 21px;
+  }
+}
+
+/* Écrans moyens (tablettes paysage / laptop compact) */
+@media (max-width: 1200px) {
+  .menu-label {
+    top: 70px;
+    font-size: 19px;
+  }
+}
+
+/* Tablettes portrait */
+@media (max-width: 992px) {
+  .menu-label {
+    top: 88px;
+    font-size: 18px;
+  }
+}
+
+/* Smartphones portrait */
+@media (max-width: 768px) {
+  .menu-label {
+    top: 96px;
+    font-size: 18px;
+  }
+}
+
+/* Smartphones paysage (ton cas problématique) */
+@media (max-width: 768px) and (orientation: landscape) {
+  .menu-label {
+    top: 92px;
+    font-size: 16px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .menu-label {
+    top: 92px;
+    font-size: 15px;
+  }
+}
+
 
 @media (max-width: 768px) {
   #photos_crues img {
@@ -759,6 +897,10 @@ div.sidebar-item-container{
   .collapse-box{
     margin: 130px 0 20px !important;
   }
+  
+  /*#menuLabel{
+    top: 88px !important;
+  }*/
 }
 
 @media(max-width: 665px){
@@ -778,6 +920,10 @@ div.sidebar-item-container{
   .navbar-nav-scroll .dropdown-item{
     white-space: normal;           /* ⭐ retour à la ligne */
   }
+  
+     /* #menuLabel{
+    top: 88px !important;
+  }*/
 }
 
 @media (min-width: 868px){
@@ -801,6 +947,10 @@ div.sidebar-item-container{
   .navbar-logo{
     max-height: 60px;
   }
+  
+    /*#menuLabel{
+    top: 88px !important;
+  }*/
 }
 
 @media (max-width: 1052px) {
@@ -815,4 +965,11 @@ div.sidebar-item-container{
   }
 }
 
+/* Très petits écrans */
+/*media (max-width: 480px) {
+  .menu-label {
+    top: 115px;
+    font-size: 16px;
+  }
+}*/
 

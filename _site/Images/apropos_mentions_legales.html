@@ -70,9 +70,15 @@ ul.task-list li input[type="checkbox"] {
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
 
 
+
+  /* -----------------------------------------------------------
+
+     1) Récupérer la navbar Quarto
+
+  ----------------------------------------------------------- */
 
   const navbar = document.querySelector("nav.navbar");
 
@@ -80,7 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Bouton Menu ---
+  /* -----------------------------------------------------------
+
+     2) Ajouter le bouton Menu dans la navbar
+
+  ----------------------------------------------------------- */
 
   const menuButton = document.createElement("button");
 
@@ -134,33 +144,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   brandContainer.parentNode.insertBefore(menuButton, brandContainer);
 
-  
 
-  // --- Ajouter le mot "Menu" sous le bouton ---
+
+  /* Label "Menu" */
 
   const menuLabel = document.createElement("div");
 
-  menuLabel.textContent = "Menu";
-
   menuLabel.id = "menuLabel";
 
-  menuLabel.style = `
+  menuLabel.classList.add("menu-label");
 
-    position: absolute;
-
-    top: 68px;        /* juste sous le bouton */
-
-    left: 23px;
-
-    font-size: 20px;
-
-    font-weight: 600;
-
-    color: #444;
-
-    padding-left: 6px;
-
-  `;
+  menuLabel.textContent = "Menu";
 
   navbar.appendChild(menuLabel);
 
@@ -168,7 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Récupérer collapse AVANT suppression ---
+  /* -----------------------------------------------------------
+
+     3) Récupérer le collapse Quarto (menu YAML)
+
+  ----------------------------------------------------------- */
 
   const collapse =
 
@@ -178,7 +176,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- CLONER les tools AVANT suppression ---
+  if (!collapse) return;
+
+
+
+  const collapseClone = collapse.cloneNode(true);
+
+
 
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
 
@@ -186,25 +190,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Cloner le menu YAML ---
-
-  const collapseClone = collapse.cloneNode(true);
-
-  
-
-  // --- SUPPRIMER le collapse APRÈS que Quarto ait fini de l’injecter ---
-
-  requestAnimationFrame(() => {
-
-    collapse.remove();
-
-  });
+  collapse.remove();
 
 
 
 
 
-  // --- Créer le panneau latéral (slide-in depuis la gauche) ---
+  /* -----------------------------------------------------------
+
+     4) Créer le sideMenu
+
+  ----------------------------------------------------------- */
 
   const sideMenu = document.createElement("div");
 
@@ -214,13 +210,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     position: fixed;
 
-    top: 106px;
+    top: var(--navbar-height);
 
     left: 0;
 
     width: 320px;
 
-    height: 100%;
+    height: calc(100% - var(--navbar-height));
 
     background: white;
 
@@ -228,9 +224,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
 
-    /*padding: 15px;*/
+    padding-right: 5px;
 
-    overflow-y: hidden;
+    overflow-y: auto;
 
     transform: translateX(-100%);
 
@@ -264,7 +260,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-  // --- Transformer le menu YAML ---
+
+
+  /* -----------------------------------------------------------
+
+     5) Transformer le menu YAML en sideMenu
+
+  ----------------------------------------------------------- */
 
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
@@ -278,43 +280,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // --- CAS 1 : nav-item simple ---
-
     if (!submenu) {
-
-
 
       const linkEl = document.createElement("a");
 
       linkEl.href = link.href;
 
-      linkEl.className = "d-flex align-items-center gap-2 mb-3";
+      linkEl.className = "d-block mb-3";
 
-
-
-      // détecter une icône Bootstrap dans l'item original
-
-      const icon = item.querySelector("i.bi");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.fontSize = "1.2rem";
-
-        linkEl.appendChild(iconClone);
-
-      }
-
-
-
-      const textNode = document.createElement("span");
-
-      textNode.textContent = title;
-
-      linkEl.appendChild(textNode);
-
-
+      linkEl.textContent = title;
 
       accordion.appendChild(linkEl);
 
@@ -323,8 +297,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
-    // --- CAS 2 : dropdown ---
 
     const id = "acc" + index;
 
@@ -380,49 +352,77 @@ document.addEventListener("DOMContentLoaded", function () {
 
     accordion.appendChild(accItem);
 
-
-
   });
 
 
 
-  // --- Ajouter les tools ---
-
-  if (toolsClone) {
-
-    toolsContainer.appendChild(toolsClone);
-
-  }
 
 
+  /* -----------------------------------------------------------
 
-  // --- Toggle du panneau latéral ---
+     6) Ajouter les tools dans le sideMenu
+
+  ----------------------------------------------------------- */
+
+  if (toolsClone) toolsContainer.appendChild(toolsClone);
+
+
+
+
+
+  /* -----------------------------------------------------------
+
+     7) Toggle du sideMenu + rotation bouton
+
+  ----------------------------------------------------------- */
 
   menuButton.onclick = () => {
 
-  const isOpen = sideMenu.style.transform === "translateX(0%)";
+    const isOpen = sideMenu.style.transform === "translateX(0%)";
+
+    sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+
+    menuButton.classList.toggle("rotated", !isOpen);
+
+  };
 
 
 
-  // Ouvrir / fermer le sideMenu
-
-  sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
 
 
+  /* -----------------------------------------------------------
 
-  // Ajouter / retirer la classe de rotation
+     8) Fonction responsive : recalcul hauteur navbar/footer
 
-  if (isOpen) {
+  ----------------------------------------------------------- */
 
-    menuButton.classList.remove("rotated");
+  function updateLayoutHeights() {
 
-  } else {
+    const footer = document.querySelector("footer");
 
-    menuButton.classList.add("rotated");
+    const navbarHeight = navbar.getBoundingClientRect().height;
+
+    const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
+
+
+
+    document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+
+    document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
 
   }
 
-};
+
+
+  updateLayoutHeights();
+
+
+
+  window.addEventListener("resize", updateLayoutHeights);
+
+  window.addEventListener("orientationchange", updateLayoutHeights);
+
+
 
 });
 

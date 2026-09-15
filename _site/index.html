@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.38">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,10 +35,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-67bf86bc6bfa3b758eb180a50ed708f2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1a02b2580d7ac6afdbd5895625c2a81a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -152,23 +152,9 @@ window.addEventListener("load", function () {
 
   menuLabel.id = "menuLabel";
 
+  menuLabel.classList.add("menu-label");
+
   menuLabel.textContent = "Menu";
-
-  menuLabel.style = `
-
-    position: absolute;
-
-    top: 68px;
-
-    left: 23px;
-
-    font-size: 20px;
-
-    font-weight: 600;
-
-    color: #444;
-
-  `;
 
   navbar.appendChild(menuLabel);
 
@@ -194,21 +180,15 @@ window.addEventListener("load", function () {
 
 
 
-  /* Cloner le menu YAML AVANT suppression */
-
   const collapseClone = collapse.cloneNode(true);
 
 
-
-  /* Cloner les tools */
 
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
 
   const toolsClone = toolsOriginal ? toolsOriginal.cloneNode(true) : null;
 
 
-
-  /* Supprimer le collapse (sans flash) */
 
   collapse.remove();
 
@@ -230,13 +210,13 @@ window.addEventListener("load", function () {
 
     position: fixed;
 
-    top: 105px;
+    top: var(--navbar-height);
 
     left: 0;
 
     width: 320px;
 
-    height: 100%;
+    height: calc(100% - var(--navbar-height));
 
     background: white;
 
@@ -300,8 +280,6 @@ window.addEventListener("load", function () {
 
 
 
-    /* Cas 1 : nav-item simple */
-
     if (!submenu) {
 
       const linkEl = document.createElement("a");
@@ -319,8 +297,6 @@ window.addEventListener("load", function () {
     }
 
 
-
-    /* Cas 2 : dropdown */
 
     const id = "acc" + index;
 
@@ -396,7 +372,7 @@ window.addEventListener("load", function () {
 
   /* -----------------------------------------------------------
 
-     7) Toggle du sideMenu
+     7) Toggle du sideMenu + rotation bouton
 
   ----------------------------------------------------------- */
 
@@ -406,6 +382,8 @@ window.addEventListener("load", function () {
 
     sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
 
+    menuButton.classList.toggle("rotated", !isOpen);
+
   };
 
 
@@ -414,27 +392,41 @@ window.addEventListener("load", function () {
 
   /* -----------------------------------------------------------
 
-     8) Calculer la hauteur navbar/footer pour MapLibre
+     8) Fonction responsive : recalcul hauteur navbar/footer
 
   ----------------------------------------------------------- */
 
-  const footer = document.querySelector("footer");
+  function updateLayoutHeights() {
 
-  const navbarHeight = navbar.getBoundingClientRect().height;
+    const footer = document.querySelector("footer");
 
-  const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
+    const navbarHeight = navbar.getBoundingClientRect().height;
+
+    const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
 
 
 
-  document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+    document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
 
-  document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
+    document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
+
+  }
+
+
+
+  updateLayoutHeights();
+
+
+
+  window.addEventListener("resize", updateLayoutHeights);
+
+  window.addEventListener("orientationchange", updateLayoutHeights);
+
+
 
 });
 
 </script>
-
-
 
 
 
@@ -817,7 +809,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/website\.quarto\.pub\/observatoire_eptb");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

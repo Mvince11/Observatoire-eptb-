@@ -41,15 +41,8 @@ window.addEventListener("load", function () {
   /* Label "Menu" */
   const menuLabel = document.createElement("div");
   menuLabel.id = "menuLabel";
+  menuLabel.classList.add("menu-label");
   menuLabel.textContent = "Menu";
-  menuLabel.style = `
-    position: absolute;
-    top: 68px;
-    left: 23px;
-    font-size: 20px;
-    font-weight: 600;
-    color: #444;
-  `;
   navbar.appendChild(menuLabel);
 
 
@@ -62,14 +55,11 @@ window.addEventListener("load", function () {
 
   if (!collapse) return;
 
-  /* Cloner le menu YAML AVANT suppression */
   const collapseClone = collapse.cloneNode(true);
 
-  /* Cloner les tools */
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
   const toolsClone = toolsOriginal ? toolsOriginal.cloneNode(true) : null;
 
-  /* Supprimer le collapse (sans flash) */
   collapse.remove();
 
 
@@ -80,10 +70,10 @@ window.addEventListener("load", function () {
   sideMenu.id = "sideMenu";
   sideMenu.style = `
     position: fixed;
-    top: 105px;
+    top: var(--navbar-height);
     left: 0;
     width: 320px;
-    height: 100%;
+    height: calc(100% - var(--navbar-height));
     background: white;
     border-right: 1px solid #ccc;
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
@@ -115,7 +105,6 @@ window.addEventListener("load", function () {
     const submenu = item.querySelector("ul.dropdown-menu");
     const title = link ? link.textContent.trim() : "Menu";
 
-    /* Cas 1 : nav-item simple */
     if (!submenu) {
       const linkEl = document.createElement("a");
       linkEl.href = link.href;
@@ -125,7 +114,6 @@ window.addEventListener("load", function () {
       return;
     }
 
-    /* Cas 2 : dropdown */
     const id = "acc" + index;
 
     const accItem = document.createElement("div");
@@ -163,23 +151,31 @@ window.addEventListener("load", function () {
 
 
   /* -----------------------------------------------------------
-     7) Toggle du sideMenu
+     7) Toggle du sideMenu + rotation bouton
   ----------------------------------------------------------- */
   menuButton.onclick = () => {
     const isOpen = sideMenu.style.transform === "translateX(0%)";
     sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+    menuButton.classList.toggle("rotated", !isOpen);
   };
 
 
   /* -----------------------------------------------------------
-     8) Calculer la hauteur navbar/footer pour MapLibre
+     8) Fonction responsive : recalcul hauteur navbar/footer
   ----------------------------------------------------------- */
-  const footer = document.querySelector("footer");
-  const navbarHeight = navbar.getBoundingClientRect().height;
-  const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
+  function updateLayoutHeights() {
+    const footer = document.querySelector("footer");
+    const navbarHeight = navbar.getBoundingClientRect().height;
+    const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
 
-  document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
-  document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
+    document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+    document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
+  }
+
+  updateLayoutHeights();
+
+  window.addEventListener("resize", updateLayoutHeights);
+  window.addEventListener("orientationchange", updateLayoutHeights);
+
 });
 </script>
-
