@@ -406,18 +406,18 @@ map = {
         legend.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
         legend.style.zIndex = '1'; // pour passer au-dessus de la carte
         
-        // Contenu de la légende
-        // legend.innerHTML = `
-          // <strong>Population en zone <br>fortement inondable</strong><br>
-          // <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
-          // <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
-          // <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
-          // <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
-          // <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
-        // `;
+         //Contenu de la légende
+         legend.innerHTML = `
+          <strong>Population en zone <br>fortement inondable</strong><br>
+          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
+          <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
+          <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
+          <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
+          <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
+        `;
         
         // L’ajouter à la carte (le container MapLibre)
-        // map.getContainer().appendChild(legend);
+         map.getContainer().appendChild(legend);
         
         //afin de lier la légende à l'indicateur
         function updateLegendVisibility() {
@@ -696,7 +696,11 @@ map = {
     window.layersListDiv = layersListDiv; // rendre global
 
 
-    const toggleableLayerIds = layersData.map(layer => layer.id);
+     const toggleableLayerIds = layersData
+    .map(layer => layer.id)
+    .filter(id => id !== "indicateurs12aLayer");
+
+
 
     const aliasLayerIds = {
       bassinvienneLayer: 'Bassin de la Vienne',
@@ -747,70 +751,120 @@ map = {
 
      
 
-    // Menu bascule fond de plan
-    // --- Conteneur global des fonds de plan ---
-    const fondListDiv = document.createElement("div");
-    fondListDiv.id = "fondListDiv";
-    fondListDiv.style.display = "flex";
-    fondListDiv.style.flexDirection = "column";
-    fondListDiv.style.padding = "10px";
-    fondListDiv.style.gap = "15px";
-    fondListDiv.style.textAlign = "center";
-    
-    window.fondListDiv = fondListDiv;
+// --- Création du conteneur ---
+const fondListDiv = document.createElement("div");
+fondListDiv.id = "fondListDiv";
 
-    
-    const fondOptions = [
-      {
-        id: "plan",
-        label: "Plan",
-        img: "Images/OSM.jpg",
-        apply: () => toggleStyle(false)   
-      },
-      {
-        id: "ortho",
-        label: "Photos aériennes",
-        img: "Images/ORTHOPHOTOS.jpg",
-        apply: () => toggleStyle(true)    
-      }
-    ];
+map.getContainer().appendChild(fondListDiv);
 
 
-    fondOptions.forEach(opt => {
-
-    const item = document.createElement("div");
-    item.className = "fond-item";
-    item.dataset.id = opt.id;
-  
-    item.innerHTML = `
-      <img src="${opt.img}" alt="${opt.label}">
-      <span>${opt.label}</span>
-    `;
-  
-    item.addEventListener("click", () => {
-  
-      // Appliquer le fond
-      opt.apply();
-  
-      // Activer visuellement
-      document.querySelectorAll(".fond-item")
-        .forEach(el => el.classList.remove("active"));
-  
-      item.classList.add("active");
-    });
-  
-    fondListDiv.appendChild(item);
-  });
+// --- Fonds disponibles ---
+const fondOptions = [
+  {
+    id: "plan",
+    label: "Plan",
+    img: "Images/OSM.jpg",
+    apply: () => toggleStyle(false)
+  },
+  {
+    id: "ortho",
+    label: "Photos aériennes",
+    img: "Images/ORTHOPHOTOS.jpg",
+    apply: () => toggleStyle(true)
+  }
+];
 
 
-    
+// --- Création des vignettes ---
+fondOptions.forEach((opt, index) => {
+
+  const item = document.createElement("div");
+
+  item.className = "fond-item";
+  item.dataset.id = opt.id;
+
+  item.innerHTML = `
+    <img src="${opt.img}" alt="${opt.label}">
+    <span>${opt.label}</span>
+  `;
+
+  if (index === 0) {
+    item.classList.add("active");
+  } else {
+    item.classList.add("inactive");
+  }
+
+  fondListDiv.appendChild(item);
+});
+
+
+// =====================================================
+// Fonctions
+// =====================================================
+
+function getActive() {
+  return fondListDiv.querySelector(".fond-item.active");
+}
+
+function getInactive() {
+  return fondListDiv.querySelector(".fond-item.inactive");
+}
+
+
+// =====================================================
+// SURVOL
+// =====================================================
+
+fondListDiv.addEventListener("mouseenter", () => {
+  fondListDiv.classList.add("hover-active");
+});
+
+fondListDiv.addEventListener("mouseleave", () => {
+  fondListDiv.classList.remove("hover-active");
+});
+
+
+// =====================================================
+// CLIC SUR LA VIGNETTE INACTIVE
+// =====================================================
+
+fondListDiv.addEventListener("click", (e) => {
+
+  const inactive = e.target.closest(".fond-item.inactive");
+
+  if (!inactive) return;
+
+  const active = getActive();
+
+  // Recherche du fond correspondant
+  const opt = fondOptions.find(
+    o => o.id === inactive.dataset.id
+  );
+
+  // Application du fond
+  if (opt && opt.apply) {
+    opt.apply();
+  }
+
+  // Échange des rôles
+  active.classList.remove("active");
+  active.classList.add("inactive");
+
+  inactive.classList.remove("inactive");
+  inactive.classList.add("active");
+
+  // On conserve le sélecteur ouvert
+  fondListDiv.classList.add("hover-active");
+});
+
+
     const rightTabs = document.createElement("div");
     rightTabs.id = "rightTabs";
     
     rightTabs.innerHTML = `
       <button class="tool-btn" data-tool="layers"><i class="bi bi-layers"></i></button>
-      <button class="tool-btn" data-tool="fond"><i class="bi bi-image"></i></button>
-      <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button>
+     <!-- <button class="tool-btn" data-tool="fond"><i class="bi bi-image"></i></button> -->
+      <!-- <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button> -->
       <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
       <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button>
       <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button>
@@ -856,31 +910,31 @@ map = {
 
 
     // Légende
-    const legendDiv = document.createElement("div");
-    legendDiv.id = "legendDiv";
-    legendDiv.style.padding = "10px";
-    legendDiv.style.fontFamily = "sans-serif";
-    legendDiv.style.fontSize = "14px";
-    legendDiv.style.lineHeight = "1.4";
+    //const legendDiv = document.createElement("div");
+    //legendDiv.id = "legendDiv";
+    //legendDiv.style.padding = "10px";
+    //legendDiv.style.fontFamily = "sans-serif";
+    //legendDiv.style.fontSize = "14px";
+    //legendDiv.style.lineHeight = "1.4";
     
-    legendDiv.innerHTML = `
-      <strong>Population en zone <br>fortement inondable</strong><br>
-          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
-          <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
-          <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
-          <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
-          <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
-          <hr>
-          <strong>Type de bâtiment</strong><br>
-          <div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
-          <div><span style="background:#2ca02c;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Appartement</div>
-          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Aucun local</div>
-          <div><span style="background:#9467bd;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Dépendance</div>
-          <div><span style="background:#ff7f0e;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Maison</div>
-          <div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
-        `;
+    //legendDiv.innerHTML = `
+      //<strong>Population en zone <br>fortement inondable</strong><br>
+          //<div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
+          //<div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
+          //<div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
+          //<div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
+          //<div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
+          //<hr>
+          //<strong>Type de bâtiment</strong><br>
+          //<div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
+          //<div><span style="background:#2ca02c;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Appartement</div>
+          //<div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Aucun local</div>
+          //<div><span style="background:#9467bd;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Dépendance</div>
+          //<div><span style="background:#ff7f0e;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Maison</div>
+          //<div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
+        //`;
     
-    window.legendDiv = legendDiv;
+    //window.legendDiv = legendDiv;-->
   
           // Données de la commune
           const donneesDiv = document.createElement("div");
@@ -939,6 +993,41 @@ map = {
       toggleStyle(this.checked);
     });
   });
+        // --- Conteneur global ---
+      const toggleContainer = document.createElement("div");
+      toggleContainer.id = "toggleInondableContainer";
+      toggleContainer.innerHTML = `<span>Affichage de l'indicateur</span>`;
+      map.getContainer().appendChild(toggleContainer);
+      
+      // --- Bouton ---
+      const toggleBtn = document.createElement("div");
+      toggleBtn.id = "toggleInondableBtn";
+      toggleBtn.innerHTML = `<i class="bi bi-water"></i>`;
+      toggleContainer.appendChild(toggleBtn);
+      
+      // --- État initial ---
+      let inondableVisible = map.getLayoutProperty("indicateurs12aLayer", "visibility") !== "none";
+      
+      // --- Fonction de toggle ---
+      function toggleInondable() {
+        inondableVisible = !inondableVisible;
+      
+        map.setLayoutProperty(
+          "indicateurs12aLayer",
+          "visibility",
+          inondableVisible ? "visible" : "none"
+        );
+      
+        toggleBtn.classList.toggle("active", inondableVisible);
+      }
+      
+      // --- Clic ---
+      toggleBtn.addEventListener("click", toggleInondable);
+      
+      // --- Synchronisation initiale ---
+      toggleBtn.classList.toggle("active", inondableVisible);
+      
+
 };
 ```
 

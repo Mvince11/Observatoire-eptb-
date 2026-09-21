@@ -35,8 +35,8 @@ function initRightTabs() {
       // --- Construire le panneau ---
       let titre = "";
       if (tool === "layers") titre = "Couches";
-      if (tool === "fond") titre = "Fonds de cartes";
-      if (tool === "legend") titre = "Légendes";
+      //if (tool === "fond") titre = "Fonds de cartes";
+      //if (tool === "legend") titre = "Légendes";
       if (tool === "donnees") titre = "Données de la commune";
       if (tool === "tableau") titre = "Tableau de données";
       if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
@@ -62,16 +62,16 @@ function initRightTabs() {
       }
 
       // FONDS
-      if (tool === "fond") {
-        rightPanel.className = "rightpanel-large";
-        content.appendChild(window.fondListDiv);
-      }
+      //if (tool === "fond") {
+        //rightPanel.className = "rightpanel-large";
+        //content.appendChild(window.fondListDiv);
+      //}
 
       // LÉGENDE
-      if (tool === "legend") {
-        rightPanel.className = "rightpanel-large";
-        content.appendChild(window.legendDiv);
-      }
+      //if (tool === "legend") {
+        //rightPanel.className = "rightpanel-large";
+        //content.appendChild(window.legendDiv);
+      //}
 
       // DONNÉES DE LA COMMUNE (tab4)
       if (tool === "donnees") {
@@ -335,9 +335,9 @@ function initHoverLabels() {
     
       const labels = {
         layers: "Couches",
-        fond: "Fonds de carte",
+        //fond: "Fonds de carte",
         donnees: "Données de la commune",
-        legend: "Légendes",
+        //legend: "Légendes",
         tableau: "Tableau de données", 
         batiment3d: "Bâtiments 3D: Mode d'emploi",
         infoindicateur: "Informations relatives à l'indicateur",
