@@ -25,6 +25,11 @@ include-in-header:
     <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
     <script src="js/tabs_dissapear.js" type="text/javascript"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        .footer {
+          display: none !important;
+        }
+    </style>
 ---
 
 ```{ojs}
@@ -995,38 +1000,38 @@ fondListDiv.addEventListener("click", (e) => {
   });
         // --- Conteneur global ---
       const toggleContainer = document.createElement("div");
-      toggleContainer.id = "toggleInondableContainer";
-      toggleContainer.innerHTML = `<span>Affichage de l'indicateur</span>`;
-      map.getContainer().appendChild(toggleContainer);
-      
-      // --- Bouton ---
-      const toggleBtn = document.createElement("div");
-      toggleBtn.id = "toggleInondableBtn";
-      toggleBtn.innerHTML = `<i class="bi bi-water"></i>`;
-      toggleContainer.appendChild(toggleBtn);
-      
-      // --- État initial ---
-      let inondableVisible = map.getLayoutProperty("indicateurs12aLayer", "visibility") !== "none";
-      
-      // --- Fonction de toggle ---
-      function toggleInondable() {
-        inondableVisible = !inondableVisible;
-      
-        map.setLayoutProperty(
-          "indicateurs12aLayer",
-          "visibility",
-          inondableVisible ? "visible" : "none"
-        );
-      
+        toggleContainer.id = "toggleInondableContainer";
+        toggleContainer.innerHTML = `<span>Affichage de l'indicateur</span>`;
+        map.getContainer().appendChild(toggleContainer);
+        
+        // --- Bouton ---
+        const toggleBtn = document.createElement("div");
+        toggleBtn.id = "toggleInondableBtn";
+        toggleBtn.innerHTML = `<i class="bi bi-water"></i>`;
+        toggleContainer.appendChild(toggleBtn);
+        
+        // --- État initial ---
+        let inondableVisible = map.getLayoutProperty("indicateurs12aLayer", "visibility") !== "none";
+        
+        // --- Fonction de toggle ---
+        function toggleInondable() {
+          inondableVisible = !inondableVisible;
+        
+          map.setLayoutProperty(
+            "indicateurs12aLayer",
+            "visibility",
+            inondableVisible ? "visible" : "none"
+          );
+        
+          toggleBtn.classList.toggle("active", inondableVisible);
+        }
+        
+        // --- Clic ---
+        toggleBtn.addEventListener("click", toggleInondable);
+        
+        // --- Synchronisation initiale ---
         toggleBtn.classList.toggle("active", inondableVisible);
-      }
-      
-      // --- Clic ---
-      toggleBtn.addEventListener("click", toggleInondable);
-      
-      // --- Synchronisation initiale ---
-      toggleBtn.classList.toggle("active", inondableVisible);
-      
+
 
 };
 ```

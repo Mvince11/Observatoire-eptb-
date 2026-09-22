@@ -101,19 +101,36 @@ window.addEventListener("load", function () {
   ----------------------------------------------------------- */
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
-    const link = item.querySelector("a.nav-link, a.dropdown-toggle");
-    const submenu = item.querySelector("ul.dropdown-menu");
-    const title = link ? link.textContent.trim() : "Menu";
+  const link = item.querySelector("a.nav-link, a.dropdown-toggle");
+  const submenu = item.querySelector("ul.dropdown-menu");
 
+  // --- Correction du titre (version anti-underscore) ---
+  let rawTitle = link ? link.innerText.trim() : "Menu";
+  rawTitle = rawTitle.replace(/_/g, "");   // supprime tous les underscores
+  const title = rawTitle.replace(/\s+/g, " ").trim();
+
+
+    /* CAS 1 : item SANS sous-menu */
     if (!submenu) {
       const linkEl = document.createElement("a");
       linkEl.href = link.href;
       linkEl.className = "d-block mb-3";
-      linkEl.textContent = title;
+
+      const icon = link.querySelector("i");
+      if (icon) {
+        const iconClone = icon.cloneNode(true);
+        iconClone.style.marginRight = "6px";
+        linkEl.appendChild(iconClone);
+        linkEl.appendChild(document.createTextNode(title));
+      } else {
+        linkEl.textContent = title;
+      }
+
       accordion.appendChild(linkEl);
-      return;
+      return;   // IMPORTANT
     }
 
+    /* CAS 2 : item AVEC sous-menu */
     const id = "acc" + index;
 
     const accItem = document.createElement("div");
@@ -135,8 +152,28 @@ window.addEventListener("load", function () {
     submenu.querySelectorAll("a.dropdown-item").forEach(sub => {
       const subLink = document.createElement("a");
       subLink.href = sub.href;
-      subLink.textContent = sub.textContent.trim();
       subLink.className = "d-block mb-2";
+
+      const icon = sub.querySelector("i");
+      if (icon) {
+        const iconClone = icon.cloneNode(true);
+        iconClone.style.marginRight = "0px";
+        subLink.appendChild(iconClone);
+        subLink.appendChild(
+          document.createTextNode(
+            sub.textContent
+              .replace(/_/g, "")
+              .replace(/\s+/g, " ")
+              .trim()
+          )
+        );
+      } else {
+        subLink.textContent = sub.textContent
+          .replace(/_/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+              }
+
       body.appendChild(subLink);
     });
 

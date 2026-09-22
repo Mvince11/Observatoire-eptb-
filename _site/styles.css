@@ -897,6 +897,10 @@ div.sidebar-item-container{
   text-decoration: underline;
 }
 
+.bi::before {
+    display: inline-block;
+}
+
 /* --- TOOLS EN BAS --- */
 #toolsContainer {
   padding: 10px 15px;
@@ -940,7 +944,6 @@ div.sidebar-item-container{
   width: 100%;;
   background: #fff;
   border-top: 1px solid #e6e6e6;
-  position: fixed;
 }
 
 /* Conteneur principal : toujours horizontal */
