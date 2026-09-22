@@ -66,6 +66,8 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+
 <script>
 
 window.addEventListener("load", function () {
@@ -270,39 +272,25 @@ window.addEventListener("load", function () {
 
 
 
-    const link = item.querySelector("a.nav-link, a.dropdown-toggle");
+  const link = item.querySelector("a.nav-link, a.dropdown-toggle");
 
-    const submenu = item.querySelector("ul.dropdown-menu");
-
-
-
-    /* --- Récupération du titre SANS underscore, SANS aria-hidden --- */
-
-    let rawTitle = "";
-
-    link.childNodes.forEach(node => {
-
-      if (node.nodeType === Node.TEXT_NODE) {
-
-        rawTitle += node.textContent;
-
-      }
-
-    });
+  const submenu = item.querySelector("ul.dropdown-menu");
 
 
 
-    rawTitle = rawTitle.trim().replace(/_/g, "");
+  // --- Correction du titre (version anti-underscore) ---
 
-    const title = rawTitle;
+  let rawTitle = link ? link.innerText.trim() : "Menu";
+
+  rawTitle = rawTitle.replace(/_/g, "");   // supprime tous les underscores
+
+  const title = rawTitle.replace(/\s+/g, " ").trim();
 
 
 
-    /* -----------------------------------------------------------
 
-       CAS 1 : item SANS sous-menu → simple lien
 
-    ----------------------------------------------------------- */
+    /* CAS 1 : item SANS sous-menu */
 
     if (!submenu) {
 
@@ -336,17 +324,13 @@ window.addEventListener("load", function () {
 
       accordion.appendChild(linkEl);
 
-      return;
+      return;   // IMPORTANT
 
     }
 
 
 
-    /* -----------------------------------------------------------
-
-       CAS 2 : item AVEC sous-menu → accordion
-
-    ----------------------------------------------------------- */
+    /* CAS 2 : item AVEC sous-menu */
 
     const id = "acc" + index;
 
@@ -386,24 +370,6 @@ window.addEventListener("load", function () {
 
     submenu.querySelectorAll("a.dropdown-item").forEach(sub => {
 
-
-
-      let rawSub = "";
-
-      sub.childNodes.forEach(node => {
-
-        if (node.nodeType === Node.TEXT_NODE) rawSub += node.textContent;
-
-      });
-
-
-
-      rawSub = rawSub.trim().replace(/_/g, "");
-
-      const subTitle = rawSub;
-
-
-
       const subLink = document.createElement("a");
 
       subLink.href = sub.href;
@@ -418,17 +384,37 @@ window.addEventListener("load", function () {
 
         const iconClone = icon.cloneNode(true);
 
-        iconClone.style.marginRight = "6px";
+        iconClone.style.marginRight = "0px";
 
         subLink.appendChild(iconClone);
 
-        subLink.appendChild(document.createTextNode(subTitle));
+        subLink.appendChild(
+
+          document.createTextNode(
+
+            sub.textContent
+
+              .replace(/_/g, "")
+
+              .replace(/\s+/g, " ")
+
+              .trim()
+
+          )
+
+        );
 
       } else {
 
-        subLink.textContent = subTitle;
+        subLink.textContent = sub.textContent
 
-      }
+          .replace(/_/g, "")
+
+          .replace(/\s+/g, " ")
+
+          .trim();
+
+              }
 
 
 
