@@ -13,6 +13,10 @@ resources:
   - layers/batiments_hauteur.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
+  - Images/*.jpg
+  - Images/logo/*.jpg
+  - Images/logo/*.png
+  
     
 include-in-header:
   text: |
@@ -507,13 +511,16 @@ map = {
         map.on('idle', updateBatimentLegendVisibility);
         
         
-         const PMTILES_URL =
-          "http://localhost:8000/layers/batiments_hauteur.pmtiles";
-    
-        map.addSource("batiments", {
-        type: "vector",
-        url: `pmtiles://${PMTILES_URL}`
-      });
+         const PMTILES_URL = "layers/batiments_hauteur.pmtiles";
+
+          // Reconstruit proprement l'URL absolue HTTP/HTTPS
+          const absoluteFileUrl = new URL(PMTILES_URL, window.location.href).href;
+          
+          map.addSource("batiments", {
+            type: "vector",
+            // On applique le préfixe pmtiles:// uniquement sur l'URL absolue propre
+            url: `pmtiles://${absoluteFileUrl}`
+          });
      
     // Ajout des couches vectorielles
       layersData.forEach(layer => {
@@ -1137,8 +1144,7 @@ fondListDiv.addEventListener("click", (e) => {
 };
 ```
 
-<div id="hidden-content" style="display:none;">
-
+:::: {#hidden-content style="display:none;"}
 ```{ojs}
 //| echo: false
 //| padding: 5px
@@ -1475,5 +1481,4 @@ Plot.plot({
 })
 
 ```
-
-</div>
+::::

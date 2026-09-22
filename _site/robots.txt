@@ -1,1 +1,0 @@
-Sitemap: https://website.quarto.pub/observatoire_eptb/sitemap.xml
