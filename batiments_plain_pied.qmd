@@ -10,12 +10,13 @@ format:
 resources:
   - Images/icons/*.svg
   - layers/data_s12a.json
-  - layers/batiments_hauteur.geojson
+  - layers/batiments_hauteur.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
     
 include-in-header:
   text: |
+    <script src="js/pmtiles.js"></script>
     <script src="js/maplibre.js"></script>
     <link href="js/maplibre.css" rel="stylesheet">
     <script src="js/jquery_3.5.min.js" type="text/javascript"></script>
@@ -244,7 +245,7 @@ zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
 //indicateurs = FileAttachment("layers/indicateurs.json").json();
 cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
 indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
-batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
+//batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
 
 ```
 
@@ -256,6 +257,23 @@ batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
 map = {
   const container = html`<div class="map-container" id="map"></div>`;
   yield container;
+  
+  // add the PMTiles plugin to the maplibregl global.
+    const protocol = new pmtiles.Protocol();
+    maplibregl.addProtocol('pmtiles', (request) => {
+        return new Promise((resolve, reject) => {
+            const callback = (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({data});
+                }
+            };
+            protocol.tile(request, callback);
+        });
+    });
+  
+  
 
   <!-- const sourcePlanIGN = { -->
   <!--   style: 'normal', -->
@@ -391,7 +409,19 @@ map = {
       layout: {visibility:'visible'} },
       { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
       layout: {visibility:'visible'} },
-      { data: batiments, type: 'fill-extrusion', id: 'batimentsLayer', width:2, opacity: 1, colorByType: 'ff_dteloctxt', heightProperty: 'hauteur',layout: {visibility:'none'} }
+      {
+        pmtiles: true,
+        source: "batiments",
+        sourceLayer: "batiments_hauteur",
+        type: "fill-extrusion",
+        id: "batimentsLayer",
+        opacity: 0.9,
+        heightProperty: "hauteur",
+        colorByType: "ff_dteloctxt",
+        layout: {
+          visibility: "none"
+        }
+      }
       
     ];
     
@@ -475,9 +505,82 @@ map = {
         }
         
         map.on('idle', updateBatimentLegendVisibility);
+        
+        
+         const PMTILES_URL =
+          "http://localhost:8000/layers/batiments_hauteur.pmtiles";
+    
+        map.addSource("batiments", {
+        type: "vector",
+        url: `pmtiles://${PMTILES_URL}`
+      });
      
     // Ajout des couches vectorielles
       layersData.forEach(layer => {
+      
+      // ==========================================================
+  // COUCHE PMTILES
+  // ==========================================================
+        if (layer.pmtiles === true) {
+      
+          const layerConfig = {
+            id: layer.id,
+            type: layer.type,
+            source: layer.source,
+            'source-layer': layer.sourceLayer,
+            paint: {},
+            layout: layer.layout || {}
+          };
+      
+          // ----------------------------------------------------------
+          // PMTiles en extrusion 3D
+          // ----------------------------------------------------------
+          if (layer.type === 'fill-extrusion') {
+      
+            // Couleur selon le type de bâtiment
+            if (layer.colorByType === 'ff_dteloctxt') {
+      
+              layerConfig.paint['fill-extrusion-color'] = [
+                'match',
+                ['get', 'ff_dteloctxt'],
+      
+                'ACTIVITE',     '#1f77b4',
+                'APPARTEMENT',  '#2ca02c',
+                'AUCUN LOCAL',  '#d9d9d9',
+                'DEPENDANCE',   '#9467bd',
+                'MAISON',       '#ff7f0e',
+                'MIXTE',        '#e377c2',
+      
+                '#000000'
+              ];
+      
+            } else {
+      
+              layerConfig.paint['fill-extrusion-color'] =
+                layer.color || '#000000';
+            }
+      
+            // Hauteur des bâtiments
+            layerConfig.paint['fill-extrusion-height'] = [
+              'coalesce',
+              ['get', layer.heightProperty || 'hauteur'],
+              5
+            ];
+      
+            layerConfig.paint['fill-extrusion-base'] = 0;
+      
+            layerConfig.paint['fill-extrusion-opacity'] =
+              layer.opacity ?? 0.9;
+          }
+      
+          // Ajout de la couche PMTiles
+          map.addLayer(layerConfig);
+      
+          // On passe à la couche suivante
+          return;
+        }
+
+      
         map.addSource(layer.id, {
           type: 'geojson',
           data: layer.data
