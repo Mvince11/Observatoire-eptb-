@@ -1,0 +1,1153 @@
+/* --- NAVBAR PREMIUM --- */
+
+/* Hauteur, fond, ombre légère */
+.navbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e6e6e6;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Logo plus élégant */
+.navbar-brand img {
+  height: 80px !important;
+  width: auto;
+  margin-right: 12px;
+}
+
+.navbar-logo{
+  max-height: inherit;
+}
+
+
+/* Amélioration du collapse mobile */
+.navbar-toggler {
+  display:none;
+}
+
+.accordion a{
+  color: black;
+}
+
+h1 {
+    position: relative;
+    padding-left: 50px; /* Ajustez cet espace selon vos besoins */
+}
+h1::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px; /* Largeur du rectangle */
+    height: 100%;
+    background-color: $orangeCerema;
+}
+
+.quarto-title{
+  display: none;
+}
+
+input[type="number"], select {
+    border: 1px solid #ced4da; /* Couleur et épaisseur du cadre */
+    border-radius: 5px; /* Rayon des coins arrondis */
+    padding: 5px; /* Marge intérieure pour l'espace autour du texte */
+}
+
+p{
+  text-align: justify;
+}
+
+img{
+  border-radius: 10px;
+}
+
+/*-- sidebar--*/
+#bslib-sidebar-1{
+  background-color: rgba(255, 255, 255, 1); 
+}
+
+/* -----------------------------------------------------------
+   MAP LIBRE
+----------------------------------------------------------- */
+
+ html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .map-container {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  bottom: var(--footer-height);
+  overflow: hidden !important;
+}
+
+.mapFondDePlan {
+    position: absolute;
+    top: 10px;
+    left: 55px;
+    /* width: 180px; */
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #000000;
+    font: 13px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    padding: 10px;
+    z-index: 1000;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.mapLayers {
+    position: absolute;
+    top: 40px;
+    right: 9px;
+    /* width: 180px; */
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #000000;
+    font: 13px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    /* padding: 10px; */
+    z-index: 1000;
+    /* border-radius: 10px; */
+    /* border: 1px solid #ccc; */
+}
+
+#toggleMapMenuButton {
+    /* background: #fff; */
+    position: absolute;
+    z-index: 1000;
+    padding: 0px;
+    margin: 0px;
+    top: 0px;
+    right: 0px;
+    border-radius: 5px;
+    width: 31px;
+    height: 31px;
+    text-align: center;
+    /* border: 1px solid rgba(0, 0, 0, 0.4); */
+    font-family: 'Open Sans', sans-serif;
+}
+
+#layersList {
+    /* background: #fff; */
+    visibility: hidden;
+    /* Cache visuellement l'élément */
+    position: absolute;
+    z-index: 1000;
+    top: 31px;
+    right: 0px;
+    border-radius: 8px;
+    width: 180px;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.8);
+    font-family: 'Open Sans', sans-serif;
+
+    /* Animation de départ */
+    transform: scale(0.8);
+    /* Départ avec une taille réduite */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.4s ease;
+}
+
+/* Afficher le menu quand on survole le bouton ou le menu */
+.mapLayers:hover #layersList,
+#layersList:hover {
+    visibility: visible;
+    /* Rendre visible l'élément */
+    opacity: 1;
+    animation: popEffect 0.4s ease forwards;
+    /* Animation de pop */
+}
+
+/* Définir l'animation de pop */
+@keyframes popEffect {
+    0% {
+        transform: scale(0.0);
+        /* Départ plus petit */
+    }
+
+    50% {
+        transform: scale(1.1);
+        /* Agrandissement au-dessus de 100% */
+    }
+
+    100% {
+        transform: scale(1);
+        /* Retour à la taille normale */
+    }
+}
+
+#layersList a {
+    font-size: 12px;
+    color: #ffffff;
+    opacity: 0.75;
+    display: block;
+    margin: 0;
+    /* padding: 0; */
+    padding: 2px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+#layersList a:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+#layersList a:last-child {
+    border-bottom: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#layersList a:hover {
+    background-color: #ffef60;
+    color: #000000;
+    opacity: 1;
+
+}
+
+#layersList a.active {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#layersList a.active:hover {
+    background: #ffef60;
+}
+
+  
+/*-- OJS --*/
+.observablehq td, .observablehq th {
+    white-space: normal;
+    word-break: break-word;
+}
+
+.maplibregl-control-container {
+    z-index: 10; /* Assurez-vous que les contrôles sont visibles */
+}
+
+
+
+.bslib-card .bslib-navs-card-title .nav{
+  margin-left: inherit;
+}
+
+  /*.navbar .navbar-collapse {
+    margin-left: auto;
+    overflow: visible;
+    
+    opacity: 1;
+    border-radius: 8px;
+    height: 80px;
+  }*/
+
+#photos_crues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vw;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+#photos_crues img {
+  max-width: 100%;
+  width: 48%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+#quarto-navbar-collapse,
+#navbarCollapse {
+  display: none !important;
+}
+
+#quarto-document-content {
+  padding-top: 150px; 
+}
+
+#quarto-margin-sidebar{
+  padding-top: 150px;
+}
+
+#quarto-sidebar{
+  margin-top: 150px;
+  background-color: #464749;
+}
+
+
+.text-start{
+  font-size: 1.3em;
+  color: white;
+}
+
+.sidebar-item-container{
+  font-size: 0.9em;
+}
+
+div.sidebar-item-container{
+  color: white;
+  padding: 5px;
+  border: 1px solid;
+  border-color: darkgray;
+  background-color: gray;
+  border-radius: 4px;
+}
+
+.sidebar #quarto-search{
+  background-color: white;
+  border: 1px solid;
+  border-radius: 15px;
+  width: 15% !important;
+}
+
+.quarto-dashboard #quarto-header #quarto-dashboard-header > nav{
+  margin-top: 125px;
+  position: inherit;
+}
+
+.px-1 {
+  display: block;
+  display: block;
+  margin-bottom: 8px;
+  border: 1px solid aliceblue;
+  border-radius: 25px;
+  text-align: center;
+  padding: 3px;
+  font-size: 22px;
+}
+
+.px-1:hover{
+  background: rgba(255,255,255,0.4); /* effet verre renforcé au survol */
+  transition: background 0.3s ease, border-radius 0.3s ease;
+}
+
+
+.bi-envelope{
+  color:black;
+}
+/*.px-1 > i {
+  font-size: 1.5rem;
+}*/
+
+.bi-linkedin{
+  color: #3f72ce;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  bottom: 150%; /* distance au-dessus du bouton */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+ .form-check-input {
+  margin-right: 8px;
+}
+
+.form-check-label {
+  flex: 1;
+  text-align: left;
+}
+
+ .form-check-input {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #198754; /* Bordure verte */
+}
+
+.form-check-input:checked {
+  background-color: #198754; /* Fond vert quand cochée */
+  border-color: #198754;
+}
+
+/* Conteneur général */
+#fondListDiv {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+
+  width: 120px;
+  height: 70px;
+
+  overflow: visible;
+}
+
+
+/* =====================================================
+   Conteneur du sélecteur
+===================================================== */
+
+#fondListDiv {
+  position: absolute;
+  bottom: 60px;
+  right: 150px;
+
+  z-index: 999;
+
+  /* largeur nécessaire pour les 2 vignettes */
+  width: 252px;
+  height: 70px;
+
+  overflow: visible;
+}
+
+
+/* =====================================================
+   Vignettes
+===================================================== */
+
+.fond-item {
+  position: absolute;
+
+  top: 0;
+
+  width: 120px;
+  height: 70px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+  transition:
+    left 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+/* =====================================================
+   Image
+===================================================== */
+
+.fond-item img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =====================================================
+   Titre
+===================================================== */
+
+.fond-item span {
+  position: absolute;
+
+  left: 6px;
+  right: 6px;
+  bottom: 4px;
+
+  padding: 3px 5px;
+
+  font-size: 12px;
+  line-height: 1.2;
+
+  color: white;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  border-radius: 4px;
+
+  opacity: 0;
+
+  transition: opacity 0.2s ease;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   VIGNETTE ACTIVE
+===================================================== */
+
+.fond-item.active {
+  left: 132px;
+
+  opacity: 1;
+
+  z-index: 2;
+
+  pointer-events: auto;
+  
+  border: 1px solid #00a6a6;
+}
+
+
+/* titre de l'active */
+.fond-item.active span {
+  opacity: 1;
+}
+
+
+/* =====================================================
+   VIGNETTE INACTIVE
+===================================================== */
+
+.fond-item.inactive {
+  left: 132px;
+
+  opacity: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  transform: translateX(0);
+}
+
+
+/* =====================================================
+   INACTIVE VISIBLE AU SURVOL
+===================================================== */
+
+#fondListDiv.hover-active .fond-item.inactive {
+  left: 0;
+
+  opacity: 1;
+
+  z-index: 3;
+
+  pointer-events: auto;
+
+  transform: translateX(0);
+  
+  border: 1px solid #00a6a6;
+}
+
+
+/* titre de la vignette proposée */
+#fondListDiv.hover-active .fond-item.inactive span {
+  opacity: 1;
+}
+
+
+/* =====================================================
+   Effet au survol de la vignette proposée
+===================================================== */
+
+#fondListDiv.hover-active .fond-item.inactive:hover {
+  transform: scale(1.03);
+}
+
+#toggleInondableContainer {
+  position: absolute;
+  bottom: 238px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.9);
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+#toggleInondableBtn {
+  background: white;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .25s ease, transform .25s ease;
+}
+
+#toggleInondableBtn.active {
+  background: #4a7aff;
+  transform: scale(1.05);
+}
+
+#toggleInondableBtn i {
+  font-size: 20px;
+  color: #333;
+}
+
+#toggleInondableBtn.active i {
+  color: white;
+}
+
+
+
+#dashboard-collapse{
+  height: auto;
+  margin-bottom: 8px;
+  margin-top: 0 !important;
+}
+
+
+/*.navbar-nav .dropdown-menu{
+  max-width: max-content;
+}*/
+
+.navbar-title {
+  color: orangered;
+  /*font-size: 1.4em;*/
+  white-space: normal;    /* autorise le retour à la ligne */
+  max-width: 560px;       /* optionnel, pour forcer la coupure */
+  text-align: center;     /* optionnel, pour centrer */
+}
+
+.navbar-title-text{
+  color: initial;
+}
+
+.navbar-brand .navbar-title {
+  font-weight: bold;
+  font-size: 1rem;       /* ajuste la taille du titre */
+  line-height: 1.2;       /* évite que ça saute trop */
+  text-align: center;     /* centre le texte sous le logo */
+}
+
+.navbar-brand {
+  display: flex;
+  flex-direction: column; /* empile logo puis texte */
+  align-items: center;    /* centre logo et texte */
+}
+
+.navbar .navbar-container > .navbar-brand-container {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.quarto-navbar-tools{
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Style du lien admin */
+.nav-link[href*="login"] {
+  display: flex;
+  background: rgba(255,255,255,0.25);
+  border-radius: 14px;
+  padding: 8px 14px;
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.35);
+  transition: all 0.25s ease;
+  font-weight: 600;
+}
+
+/* Hover premium */
+.nav-link[href*="login"]:hover {
+  background: rgba(255,255,255,0.35);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.nav-link[href*="login"] .menu-text {
+  margin-left: 6px;
+}
+
+.collapse-box{
+    margin: 40px !important;
+  }
+  
+.nav .navbar-collapse{
+  display: none;
+}
+
+/* --- Barre verticale façon Géoportail --- */
+#rightTabs {
+  position: absolute;
+  top: 40px;
+  right: 0px; /* collé au bord droit */
+  width: 55px;
+  background: #F7F9FB;
+  border-left: 1px solid #D6DEE6;
+  border-radius: 6px 0 0 6px;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.15);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+}
+
+
+/* --- Boutons --- */
+#rightTabs .tool-btn {
+  width: 100%;
+  height: 55px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #2A3B4D;
+  font-size: 22px;
+  border-bottom: 1px solid #D6DEE6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Dernier bouton sans bord --- */
+#rightTabs .tool-btn:last-child {
+  border-bottom: none;
+}
+
+/* --- Hover IGN --- */
+#rightTabs .tool-btn:hover {
+  background: #E9EEF3;
+}
+
+/* --- Bouton actif IGN --- */
+#rightTabs .tool-btn.active {
+  background: #E9EEF3;
+  color: #0063A3;
+}
+
+#rightPanel {
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  width: 225px;
+  height: calc(100% - 140px);
+  background: white;
+  border-left: 1px solid #D6DEE6;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+  border-radius: 6px 0 0 6px;
+  padding: 15px;
+  overflow-y: auto;
+  display: none; /* caché par défaut */
+  z-index: 3000;
+}
+
+
+#rightTabsToggle:hover {
+  background: #E9EEF3;
+}
+
+
+/* --- Label flottant façon Géoportail --- */
+.rightTabs-label {
+  position: absolute;
+  background: #FFFFFF;
+  border: 1px solid #D6DEE6;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: #2A3B4D;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+  white-space: nowrap;
+  z-index: 4000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+/* Onglet agrandi */
+.rightpanel-large {
+  height: 100% !important; /* plus haut */
+  overflow-y: auto !important;
+  width: auto !important;
+  top: 0 !important;
+}
+
+.rightpanel-full {
+  height: calc(100% - 40px)!important;
+  overflow-y: hidden!important;
+  width: 100% !important;
+  top: 0 !important;
+}
+
+.rightpanel-full2 {
+  height: 100% !important;
+  overflow-y: auto;
+  width: 100% !important;
+  top: 0 !important;
+}
+
+/* Animation de rotation du bouton Menu */
+#menuButton svg {
+  transition: transform 0.3s ease;
+}
+
+#menuButton.rotated svg {
+  transform: rotate(90deg);
+}
+
+
+/* --- Couleur Géoportail unifiée --- */
+#menuButton {
+  background: #F7F9FB !important;
+  border: 1px solid #D6DEE6 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+}
+
+#menuButton:hover {
+  background: #E9EEF3 !important; /* hover Géoportail */
+}
+
+/* Label "Menu" sous le bouton */
+#menuLabel {
+  color: #2A3B4D;
+}
+
+/* --- SideMenu Géoportail --- */
+#sideMenu {
+  background: #F7F9FB !important;
+  border-right: 1px solid #D6DEE6 !important;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.15) !important;
+  color: #2A3B4D;
+  font-family: "Roboto", sans-serif;
+}
+
+/* --- TITRE "Menu" --- */
+#sideMenu h3 {
+  color: #2A3B4D;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px 0 20px 15px;
+}
+
+/* --- ACCORDÉONS GÉOPORTAIL --- */
+#sideMenu .accordion-item {
+  background: #FFFFFF;
+  border: 1px solid #D6DEE6;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#sideMenu .accordion-button {
+  background: #FFFFFF;
+  color: #2A3B4D;
+  font-weight: 600;
+  padding: 12px 15px;
+  border: none;
+  box-shadow: none;
+}
+
+#sideMenu .accordion-button:not(.collapsed) {
+  background: #E9EEF3; /* bleu clair Géoportail */
+  color: #0063A3;       /* bleu IGN */
+}
+
+#sideMenu .accordion-button:hover {
+  background: #E9EEF3;
+}
+
+#sideMenu .accordion-body {
+  background: #FFFFFF;
+  padding: 10px 15px 15px 15px;
+}
+
+/* --- LIENS DANS LE MENU --- */
+#sideMenu a {
+  color: #2A3B4D;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+#sideMenu a:hover {
+  color: #0063A3;
+  text-decoration: underline;
+}
+
+.bi::before {
+    display: inline-block;
+}
+
+/* --- TOOLS EN BAS --- */
+#toolsContainer {
+  padding: 10px 15px;
+}
+
+#toolsContainer a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2A3B4D;
+  font-size: 15px;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+#toolsContainer a:hover {
+  color: #0063A3;
+  text-decoration: underline;
+}
+
+/* --- ICÔNES BOOTSTRAP --- */
+#sideMenu i.bi {
+  font-size: 1.3rem;
+  color: #0063A3;
+}
+
+/* Style de base du label Menu */
+.menu-label {
+  position: absolute;
+  left: 33px;              /* aligné sous le bouton */
+  top: 70px;               /* hauteur par défaut */
+  font-size: 20px;
+  font-weight: 600;
+  color: #444;
+  pointer-events: none;    /* évite les clics involontaires */
+  transition: top 0.25s ease, font-size 0.25s ease;
+}
+
+/* Footer global */
+.footer {
+  width: 100%;;
+  background: #fff;
+  border-top: 1px solid #e6e6e6;
+}
+
+/* Conteneur principal : toujours horizontal */
+.nav-footer {
+  display: flex;
+  flex-direction: row;      /* jamais en colonne */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;        /* empêche les blocs de passer en dessous */
+  gap: 10px;
+}
+
+/* Colonnes : largeur flexible */
+.nav-footer-left,
+.nav-footer-center,
+.nav-footer-right {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;      /* empêche les retours à la ligne */
+  overflow: hidden;         /* évite les débordements */
+  text-overflow: ellipsis;  /* coupe proprement si trop long */
+}
+
+/* Icônes à droite */
+.nav-footer-right a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-left: 10px;
+}
+
+/* --- PETITES RÉSOLUTIONS --- */
+@media (max-width: 768px) {
+
+  /* On réduit la taille du texte pour éviter les débordements */
+  .nav-footer-left,
+  .nav-footer-center {
+    font-size: 14px;
+  }
+
+  /* On réduit les icônes */
+  .nav-footer-right a {
+    font-size: 1.2rem;
+    margin-left: 8px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+
+  .nav-footer-left,
+  .nav-footer-center {
+    font-size: 13px;
+  }
+
+  .nav-footer-right a {
+    font-size: 1.1rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  :root {
+    --footer-height:40px !important;
+  }
+}
+
+/* Écrans larges (desktop) */
+@media (min-width: 1400px) {
+  .menu-label {
+    top: 72px;
+    font-size: 21px;
+  }
+}
+
+/* Écrans moyens (tablettes paysage / laptop compact) */
+@media (max-width: 1200px) {
+  .menu-label {
+    top: 70px;
+    font-size: 19px;
+  }
+}
+
+/* Tablettes portrait */
+@media (max-width: 992px) {
+  .menu-label {
+    top: 88px;
+    font-size: 18px;
+  }
+}
+
+/* Smartphones portrait */
+@media (max-width: 768px) {
+  .menu-label {
+    top: 96px;
+    font-size: 18px;
+  }
+}
+
+/* Smartphones paysage (ton cas problématique) */
+@media (max-width: 768px) and (orientation: landscape) {
+  .menu-label {
+    top: 92px;
+    font-size: 16px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+  .menu-label {
+    top: 92px;
+    font-size: 15px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  #photos_crues img {
+    width: 100%;
+  }
+}
+
+@media (min-width: 666px) and (max-width: 992px){
+   .navbar-brand-container{
+  display: block;
+  }
+  
+  .collapse-box{
+    margin: 130px 0 20px !important;
+  }
+  
+  /*#menuLabel{
+    top: 88px !important;
+  }*/
+}
+
+@media(max-width: 665px){
+  
+  .navbar-brand-container{
+  display: block;
+  }
+  
+  .collapse-box{
+    margin: 160px 0 20px !important;
+  }
+  
+  .navbar-nav-scroll{
+    overflow: visible !important; /* ⭐ le dropdown peut sortir */
+  }
+
+  .navbar-nav-scroll .dropdown-item{
+    white-space: normal;           /* ⭐ retour à la ligne */
+  }
+  
+     /* #menuLabel{
+    top: 88px !important;
+  }*/
+}
+
+@media (min-width: 868px){
+  .navbar-title {
+  color: orangered;
+  /*font-size: 1.4em;*/
+  white-space: normal;    /* autorise le retour à la ligne */
+  max-width: 560px;       /* optionnel, pour forcer la coupure */
+  text-align: center;     /* optionnel, pour centrer */
+  }
+
+.navbar-brand .navbar-title {
+  font-weight: bold;
+  font-size: 1.1rem;       /* ajuste la taille du titre */
+  line-height: 1.2;       /* évite que ça saute trop */
+  text-align: center;     /* centre le texte sous le logo */
+  }
+}
+
+@media(max-width:500px){
+  .navbar-logo{
+    max-height: 60px;
+  }
+  
+    /*#menuLabel{
+    top: 88px !important;
+  }*/
+}
+
+@media (max-width: 1052px) {
+  .collapse-content .flex-columns {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  .collapse-content .flex-columns > div {
+    width: 100% !important;
+    flex: none !important;
+  }
+}
+
+/* Très petits écrans */
+/*media (max-width: 480px) {
+  .menu-label {
+    top: 115px;
+    font-size: 16px;
+  }
+}*/
+
