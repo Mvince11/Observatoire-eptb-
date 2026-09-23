@@ -12,6 +12,7 @@ resources:
   - layers/data_s12a.json
   - layers/batiments_hauteur.pmtiles
   - layers/zi_cartino2d.pmtiles
+  - layers/zi_ppri_azi.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
   - Images/*.jpg
@@ -414,6 +415,18 @@ map = {
       layout: {visibility:'visible'} },
       {
         pmtiles: true,
+        source: "zoneinondable2d",
+        sourceLayer: "zi_cartino2d",
+        type: "fill",
+        id: "zoneinondable2dLayer",
+        color: "#b4c3ef",
+        opacity: 0.5,
+        layout: {
+          visibility: "visible"
+        }
+      },
+      {
+        pmtiles: true,
         source: "batiments",
         sourceLayer: "batiments_hauteur",
         type: "fill-extrusion",
@@ -427,16 +440,16 @@ map = {
       },
       {
         pmtiles: true,
-        source: "zoneinondable2d",
-        sourceLayer: "zi_cartino2d",
+        source: "zoneinondableazi",
+        sourceLayer: "zi_ppri_azi",
         type: "fill",
-        id: "zoneinondable2dLayer",
+        id: "zoneinondableaziLayer",
         color: "#b4c3ef",
         opacity: 0.5,
-        layout: { visibility: "visible" }
+        layout: {
+          visibility: "none"
+        }
       },
-
-      
     ];
     
     // Créer le conteneur
@@ -540,6 +553,16 @@ map = {
         map.addSource("zoneinondable2d", {
           type: "vector",
           url: `pmtiles://${zoneAbsoluteUrl}`
+        });
+        
+         const ZONE_PM_azi = "layers/zi_ppri_azi.pmtiles";
+
+        // Reconstruit proprement l'URL absolue HTTP/HTTPS
+        const zoneAbsoluteaziUrl = new URL(ZONE_PM_azi, window.location.href).href;
+        
+        map.addSource("zoneinondableazi", {
+          type: "vector",
+          url: `pmtiles://${zoneAbsoluteaziUrl}`
         });
 
     // Ajout des couches vectorielles
@@ -850,6 +873,7 @@ map = {
       departementLayer: 'Département',
       epciLayer: 'EPCI',
       zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D',
+      zoneinondableaziLayer: 'Zonage Inondable par modélisation PPRI AZI',
       coursdeauLayer: "Cours d'eau",
       indicateurs12aLayer: 'Population en zone inondable',
       batimentsLayer: "Bâtiments"
