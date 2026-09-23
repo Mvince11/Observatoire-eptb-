@@ -11,6 +11,7 @@ resources:
   - Images/icons/*.svg
   - layers/data_s12a.json
   - layers/batiments_hauteur.pmtiles
+  - layers/zi_cartino2d.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
   - Images/*.jpg
@@ -244,8 +245,8 @@ region = FileAttachment("layers/region.geojson").json();
 epci = FileAttachment("layers/epci.geojson").json();
 perimetre = FileAttachment("layers/perimetre.json").json();
 slgri = FileAttachment("layers/slgri.json").json();
-tri = FileAttachment("layers/tri.json").json();
-zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
+tri = FileAttachment("layers/tri.geojson").json();
+//zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
 //indicateurs = FileAttachment("layers/indicateurs.json").json();
 cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
 indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
@@ -409,8 +410,6 @@ map = {
         }
         , layout: {visibility:'visible'}
          },
-      { data: zone_inondable, type: 'fill', id: 'zoneinondableLayer', color: '#b4c3ef' , width: 0, opacity: 0.5, 
-      layout: {visibility:'visible'} },
       { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
       layout: {visibility:'visible'} },
       {
@@ -425,7 +424,18 @@ map = {
         layout: {
           visibility: "none"
         }
-      }
+      },
+      {
+        pmtiles: true,
+        source: "zoneinondable2d",
+        sourceLayer: "zi_cartino2d",
+        type: "fill",
+        id: "zoneinondable2dLayer",
+        color: "#b4c3ef",
+        opacity: 0.5,
+        layout: { visibility: "visible" }
+      },
+
       
     ];
     
@@ -521,7 +531,17 @@ map = {
             // On applique le préfixe pmtiles:// uniquement sur l'URL absolue propre
             url: `pmtiles://${absoluteFileUrl}`
           });
-     
+          
+          const ZONE_PM = "layers/zi_cartino2d.pmtiles";
+
+        // Reconstruit proprement l'URL absolue HTTP/HTTPS
+        const zoneAbsoluteUrl = new URL(ZONE_PM, window.location.href).href;
+        
+        map.addSource("zoneinondable2d", {
+          type: "vector",
+          url: `pmtiles://${zoneAbsoluteUrl}`
+        });
+
     // Ajout des couches vectorielles
       layersData.forEach(layer => {
       
@@ -538,6 +558,22 @@ map = {
             paint: {},
             layout: layer.layout || {}
           };
+          
+          // ----------------------------------------------------------
+            // PMTiles en POLYGONES 2D
+            // ----------------------------------------------------------
+            if (layer.type === 'fill') {
+          
+              layerConfig.paint['fill-color'] =
+                layer.color || '#000000';
+          
+              layerConfig.paint['fill-opacity'] =
+                layer.opacity ?? 0.5;
+          
+              // Facultatif : contour
+              layerConfig.paint['fill-outline-color'] =
+                layer.outlineColor || '#000000';
+            }
       
           // ----------------------------------------------------------
           // PMTiles en extrusion 3D
@@ -808,24 +844,21 @@ map = {
     
     window.layersListDiv = layersListDiv; // rendre global
 
-
-     const toggleableLayerIds = layersData
-    .map(layer => layer.id)
-    .filter(id => id !== "indicateurs12aLayer");
-
-
-
     const aliasLayerIds = {
       bassinvienneLayer: 'Bassin de la Vienne',
       regionLayer: 'Région',
       departementLayer: 'Département',
       epciLayer: 'EPCI',
-      zoneinondableLayer: 'Zonage Inondable',
+      zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D',
       coursdeauLayer: "Cours d'eau",
       indicateurs12aLayer: 'Population en zone inondable',
       batimentsLayer: "Bâtiments"
     };
-    
+
+     const toggleableLayerIds = layersData
+    .map(layer => layer.id)
+    .filter(id => id !== "indicateurs12aLayer");
+
     function toggleLayerVisibility(id, visible) {
       const visibility = visible ? 'visible' : 'none';
       if (map.getLayer(id)) {
