@@ -13,6 +13,8 @@ resources:
   - layers/batiments_hauteur.pmtiles
   - layers/zi_cartino2d.pmtiles
   - layers/zi_ppri_azi.pmtiles
+  - layers/ruissellement_cartino2d.pmtiles
+  - layers/cours_d_eau.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
   - Images/*.jpg
@@ -249,7 +251,7 @@ slgri = FileAttachment("layers/slgri.json").json();
 tri = FileAttachment("layers/tri.geojson").json();
 //zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
 //indicateurs = FileAttachment("layers/indicateurs.json").json();
-cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
+//cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
 indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
 //batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
 
@@ -411,8 +413,19 @@ map = {
         }
         , layout: {visibility:'visible'}
          },
-      { data: cours_d_eau, type: 'line', id: 'coursdeauLayer', color: '#b4c3ef' , width: 2, opacity: 1, 
-      layout: {visibility:'visible'} },
+      {
+        pmtiles: true,
+        source: "coursdeau",
+        sourceLayer: "cours_d_eau",
+        type: "line",
+        id: "coursdeauLayer",
+        color: "#b4c3ef",
+        width: 3,
+        opacity: 0.5,
+        layout: {
+          visibility: "visible"
+        }
+      },
       {
         pmtiles: true,
         source: "zoneinondable2d",
@@ -427,19 +440,6 @@ map = {
       },
       {
         pmtiles: true,
-        source: "batiments",
-        sourceLayer: "batiments_hauteur",
-        type: "fill-extrusion",
-        id: "batimentsLayer",
-        opacity: 0.9,
-        heightProperty: "hauteur",
-        colorByType: "ff_dteloctxt",
-        layout: {
-          visibility: "none"
-        }
-      },
-      {
-        pmtiles: true,
         source: "zoneinondableazi",
         sourceLayer: "zi_ppri_azi",
         type: "fill",
@@ -450,6 +450,31 @@ map = {
           visibility: "none"
         }
       },
+      {
+        pmtiles: true,
+        source: "ruissellement2d",
+        sourceLayer: "ruissellement_cartino2d",
+        type: "fill",
+        id: "ruissellementcartino2dLayer",
+        color: "#b4c3ef",
+        opacity: 0.5,
+        layout: {
+          visibility: "none"
+        }
+      },
+      {
+        pmtiles: true,
+        source: "batiments",
+        sourceLayer: "batiments_hauteur",
+        type: "fill-extrusion",
+        id: "batimentsLayer",
+        opacity: 0.9,
+        heightProperty: "hauteur",
+        colorByType: "ff_dteloctxt",
+        layout: {
+          visibility: "none"
+        }
+      }
     ];
     
     // Créer le conteneur
@@ -564,6 +589,24 @@ map = {
           type: "vector",
           url: `pmtiles://${zoneAbsoluteaziUrl}`
         });
+        
+        const ZONE_PM_rui2d = "layers/ruissellement_cartino2d.pmtiles";
+        
+        const zoneRui2dUrl = new URL(ZONE_PM_rui2d, window.location.href).href;
+        
+        map.addSource("ruissellement2d", {
+          type: "vector",
+          url: `pmtiles://${zoneRui2dUrl}`
+        });
+        
+        const ZONE_PM_cdeau = "layers/cours_d_eau.pmtiles";
+        
+        const zoneCdeaudUrl = new URL(ZONE_PM_cdeau, window.location.href).href;
+        
+        map.addSource("coursdeau", {
+          type: "vector",
+          url: `pmtiles://${zoneCdeaudUrl}`
+        });
 
     // Ajout des couches vectorielles
       layersData.forEach(layer => {
@@ -596,6 +639,18 @@ map = {
               // Facultatif : contour
               layerConfig.paint['fill-outline-color'] =
                 layer.outlineColor || '#000000';
+            }
+            
+            if (layer.type === 'line') {
+          
+              layerConfig.paint['line-color'] =
+                layer.color || '#000000';
+          
+              layerConfig.paint['line-opacity'] =
+                layer.opacity ?? 0.5;
+                
+              layerConfig.paint['line-width'] = 
+                layer.width || 1;
             }
       
           // ----------------------------------------------------------
@@ -874,6 +929,7 @@ map = {
       epciLayer: 'EPCI',
       zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D',
       zoneinondableaziLayer: 'Zonage Inondable par modélisation PPRI AZI',
+      ruissellementcartino2dLayer: 'Zone de ruissellement par modélisation Cartino 2D',
       coursdeauLayer: "Cours d'eau",
       indicateurs12aLayer: 'Population en zone inondable',
       batimentsLayer: "Bâtiments"
