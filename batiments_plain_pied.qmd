@@ -251,6 +251,7 @@ epci = FileAttachment("layers/epci.geojson").json();
 perimetre = FileAttachment("layers/perimetre.json").json();
 slgri = FileAttachment("layers/slgri.json").json();
 tri = FileAttachment("layers/tri.geojson").json();
+perimetre_papi = FileAttachment("layers/perimetre_papi.geojson").json();
 //zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
 //indicateurs = FileAttachment("layers/indicateurs.json").json();
 //cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
@@ -397,6 +398,7 @@ map = {
       { data: region, type: 'line', id: 'regionLayer', color: 'red', layout: {visibility:'none'} },
       { data: departement, type: 'line', id: 'departementLayer', color: '#a772b9', width: 2,  layout:{visibility:'none'}},
       { data: epci, type: 'line', id: 'epciLayer', color: '#567ae3', layout: {visibility:'none'} },
+      { data: perimetre_papi, type: 'line', id: 'perimetrepapiLayer', color: 'black', layout: {visibility:'none'} },
       { data: indicateursGeojson, // GeoJSON contenant une propriété 's12a' -->
         type: 'fill',
         id: 'indicateurs12aLayer',
@@ -963,6 +965,7 @@ map = {
       regionLayer: 'Région',
       departementLayer: 'Département',
       epciLayer: 'EPCI',
+      perimetrepapiLayer: "Périmètre du PAPI",
       communepapiLayer: 'Communes incluses dans le PAPI',
       zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D',
       zoneinondableaziLayer: 'Zonage Inondable par modélisation PPRI AZI',
