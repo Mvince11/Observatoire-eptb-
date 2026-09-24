@@ -399,34 +399,22 @@ div.sidebar-item-container{
   border-color: #198754;
 }
 
-/* Conteneur général */
-#fondListDiv {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999;
 
-  width: 120px;
-  height: 70px;
-
-  overflow: visible;
-}
 
 
 /* =====================================================
    Conteneur du sélecteur
 ===================================================== */
 
+/* Conteneur général */
 #fondListDiv {
   position: absolute;
   bottom: 60px;
-  right: 150px;
-
+  right: 120px;
   z-index: 999;
 
-  /* largeur nécessaire pour les 2 vignettes */
-  width: 252px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
 
   overflow: visible;
 }
@@ -441,8 +429,8 @@ div.sidebar-item-container{
 
   top: 0;
 
-  width: 120px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
 
   overflow: hidden;
 
@@ -508,7 +496,7 @@ div.sidebar-item-container{
 ===================================================== */
 
 .fond-item.active {
-  left: 132px;
+  left: 113px;
 
   opacity: 1;
 
@@ -531,7 +519,7 @@ div.sidebar-item-container{
 ===================================================== */
 
 .fond-item.inactive {
-  left: 132px;
+  left: 20px;
 
   opacity: 0;
 
@@ -659,7 +647,6 @@ div.sidebar-item-container{
 
 .navbar .navbar-container > .navbar-brand-container {
   margin-right: auto !important;
-  margin-left: auto !important;
 }
 
 .quarto-navbar-tools{

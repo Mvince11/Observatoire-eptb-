@@ -511,7 +511,7 @@ map = {
         legend.id = 'legend';
         legend.style.position = 'absolute';
         legend.style.top = '82%';
-        legend.style.right = '10px';
+        legend.style.left = '10px';
         legend.style.transform = 'translateY(-50%)';
         legend.style.background = 'white';
         legend.style.padding = '10px';
@@ -587,6 +587,33 @@ map = {
         
         map.on('idle', updateBatimentLegendVisibility);
         
+        
+        function updateLegendPositions() {
+        const isPopVisible = legend.style.display !== "none";
+        const isBatVisible = batimentLegend.style.display !== "none";
+      
+        // Cas 1 : les deux légendes sont visibles
+        if (isPopVisible && isBatVisible) {
+          legend.style.top = "70%";          // la première remonte
+          batimentLegend.style.top = "82%";  // la seconde descend
+        }
+      
+        // Cas 2 : seule la légende population est visible
+        else if (isPopVisible && !isBatVisible) {
+          legend.style.top = "82%";          // reprend sa place normale
+        }
+      
+        // Cas 3 : seule la légende bâtiment est visible
+        else if (!isPopVisible && isBatVisible) {
+          batimentLegend.style.top = "82%";  // reprend sa place normale
+        }
+      
+        // Cas 4 : aucune légende visible
+        else {
+          // rien à faire
+        }
+      }
+
         
          const PMTILES_URL = "layers/batiments_hauteur.pmtiles";
 
