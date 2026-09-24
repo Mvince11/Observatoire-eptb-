@@ -14,6 +14,8 @@ resources:
   - layers/zi_cartino2d.pmtiles
   - layers/zi_ppri_azi.pmtiles
   - layers/ruissellement_cartino2d.pmtiles
+  # - layers/ruissellement_exzeco.pmtiles
+  - layers/communes_zone_papi.pmtiles
   - layers/cours_d_eau.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
@@ -462,6 +464,31 @@ map = {
           visibility: "none"
         }
       },
+      
+    {
+        pmtiles: true,
+        source: "communepapi",
+        sourceLayer: "communes_zone_papi",
+        type: "fill",
+        id: "communepapiLayer",
+        color: "#ff8800",
+        opacity: 0.5,
+        layout: {
+          visibility: "none"
+        }
+      },
+      <!-- { -->
+      <!--   pmtiles: true, -->
+      <!--   source: "ruissellementexzeco", -->
+      <!--   sourceLayer: "ruissellement_exzeco", -->
+      <!--   type: "fill", -->
+      <!--   id: "ruissellementexzecoLayer", -->
+      <!--   color: "#b4c3ef", -->
+      <!--   opacity: 0.5, -->
+      <!--   layout: { -->
+      <!--     visibility: "none" -->
+      <!--   } -->
+      <!-- }, -->
       {
         pmtiles: true,
         source: "batiments",
@@ -606,6 +633,15 @@ map = {
         map.addSource("coursdeau", {
           type: "vector",
           url: `pmtiles://${zoneCdeaudUrl}`
+        });
+        
+        const ZONE_PM_cpapi = "layers/communes_zone_papi.pmtiles";
+        
+        const zonecpapiUrl = new URL(ZONE_PM_cpapi, window.location.href).href;
+        
+        map.addSource("communepapi", {
+          type: "vector",
+          url: `pmtiles://${zonecpapiUrl}`
         });
 
     // Ajout des couches vectorielles
@@ -927,6 +963,7 @@ map = {
       regionLayer: 'Région',
       departementLayer: 'Département',
       epciLayer: 'EPCI',
+      communepapiLayer: 'Communes incluses dans le PAPI',
       zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D',
       zoneinondableaziLayer: 'Zonage Inondable par modélisation PPRI AZI',
       ruissellementcartino2dLayer: 'Zone de ruissellement par modélisation Cartino 2D',
