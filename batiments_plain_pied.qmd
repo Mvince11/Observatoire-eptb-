@@ -626,8 +626,9 @@ map = {
           updateBatimentLegendVisibility();
         });
 
-
-        
+        /* ===========================================================
+            Déclaration des couches PMTiles
+        =========================================================== */
          const PMTILES_URL = "layers/batiments_hauteur.pmtiles";
 
           // Reconstruit proprement l'URL absolue HTTP/HTTPS
@@ -1213,6 +1214,74 @@ map = {
     /* ============================================================
             Fin Fonds de Plan
        ============================================================ */
+
+       /* ============================================================
+            Bouton 2D/3D
+       ============================================================ */
+      const modeBtn = document.createElement("div");
+      modeBtn.id = "mode3d-btn";
+      
+      modeBtn.innerHTML = `
+        <span id="mode3d-label">3D</span>
+      `;
+      
+      modeBtn.style.cssText = `
+        position: absolute;
+        top: 154px;
+        left: 9px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        z-index: 999;
+        font-size: 13px;
+        font-weight: 600;
+        user-select: none;
+      `;
+      
+      map.getContainer().appendChild(modeBtn);
+      
+      
+      // --- Logique 2D / 3D ---
+      let is3D = false;
+      
+      modeBtn.addEventListener("click", () => {
+      
+        const label = document.getElementById("mode3d-label");
+      
+        if (!is3D) {
+          // Passage en 3D
+          map.easeTo({
+            pitch: 60,
+            bearing: 0,
+            duration: 800
+          });
+      
+          label.textContent = "2D";   // Affiche 2D quand on est en 3D
+          is3D = true;
+        }
+      
+        else {
+          // Retour en 2D
+          map.easeTo({
+            pitch: 0,
+            bearing: 0,
+            duration: 800
+          });
+      
+          label.textContent = "3D";   // Affiche 3D quand on est en 2D
+          is3D = false;
+        }
+      });
+      /* ============================================================
+           Fin Bouton 2D/3D
+       ============================================================ */
+
 
 
     const rightTabs = document.createElement("div");

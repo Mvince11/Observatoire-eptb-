@@ -83,7 +83,7 @@ website:
         
         - icon: person-circle
           href: login.qmd
-          text: " Mode administrateur - Espace réservé aux personnes identifiées"
+          text: " Mode administrateur - Espace réservé"
         
      tools: 
          - href: https://fr.linkedin.com/company/eptb-vienne
