@@ -300,12 +300,17 @@ map = {
 
   const map = new maplibregl.Map({
     container: container,
-    style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+    //style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+    style: {
+    version: 8,
+    sources: {},
+    layers: []
+  },
     <!-- center: [-0.04, 46.3051],  -->
     zoom: 11
   });
 
-  map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+  map.addControl(new maplibregl.FullscreenControl(), 'top-left');
   map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-left');
   map.addControl(new maplibregl.ScaleControl({ maxWidth: 80, unit: 'metric' }));
   
@@ -506,22 +511,25 @@ map = {
       }
     ];
     
-    // Créer le conteneur
-        const legend = document.createElement('div');
-        legend.id = 'legend';
-        legend.style.position = 'absolute';
-        legend.style.top = '82%';
-        legend.style.left = '10px';
-        legend.style.transform = 'translateY(-50%)';
-        legend.style.background = 'white';
-        legend.style.padding = '10px';
-        legend.style.fontSize = '12px';
-        legend.style.borderRadius = '4px';
-        legend.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-        legend.style.zIndex = '1'; // pour passer au-dessus de la carte
+    /* ============================================================
+           LÉGENDE POPULATION
+        ============================================================ */
         
-         //Contenu de la légende
-         legend.innerHTML = `
+        const legend = document.createElement("div");
+        legend.id = "legend";
+        legend.style.cssText = `
+          position:absolute;
+          bottom:60px;          /* position normale en bas */
+          left:10px;
+          background:white;
+          padding:10px;
+          font-size:12px;
+          border-radius:4px;
+          box-shadow:0 1px 4px rgba(0,0,0,0.3);
+          z-index:10;
+        `;
+        
+        legend.innerHTML = `
           <strong>Population en zone <br>fortement inondable</strong><br>
           <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
           <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
@@ -530,36 +538,28 @@ map = {
           <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
         `;
         
-        // L’ajouter à la carte (le container MapLibre)
-         map.getContainer().appendChild(legend);
+        map.getContainer().appendChild(legend);
         
-        //afin de lier la légende à l'indicateur
-        function updateLegendVisibility() {
-        const visibility = map.getLayoutProperty('indicateurs12aLayer', 'visibility');
-        if (visibility === 'none') {
-          legend.style.display = 'none';
-        } else {
-          legend.style.display = 'block';
-        }
-      }
-
-        map.on('idle', updateLegendVisibility);
         
-        // Créer le conteneur de légende des bâtiments
-        const batimentLegend = document.createElement('div');
-        batimentLegend.id = 'batiment-legend';
-        batimentLegend.style.position = 'absolute';
-        batimentLegend.style.top = '81%';
-        batimentLegend.style.left = '10px';
-        batimentLegend.style.transform = 'translateY(-50%)';
-        batimentLegend.style.background = 'white';
-        batimentLegend.style.padding = '10px';
-        batimentLegend.style.fontSize = '12px';
-        batimentLegend.style.borderRadius = '4px';
-        batimentLegend.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-        batimentLegend.style.zIndex = '1';
+        /* ============================================================
+           LÉGENDE BÂTIMENTS
+        ============================================================ */
         
-        // Contenu de la légende
+        const batimentLegend = document.createElement("div");
+        batimentLegend.id = "batiment-legend";
+        batimentLegend.style.cssText = `
+          position:absolute;
+          bottom:60px;          /* même base */
+          left:10px;
+          background:white;
+          padding:10px;
+          font-size:12px;
+          border-radius:4px;
+          box-shadow:0 1px 4px rgba(0,0,0,0.3);
+          z-index:10;
+          display:none;
+        `;
+        
         batimentLegend.innerHTML = `
           <strong>Type de bâtiment</strong><br>
           <div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
@@ -570,49 +570,62 @@ map = {
           <div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
         `;
         
-        // L’ajouter à la carte
         map.getContainer().appendChild(batimentLegend);
-        batimentLegend.style.display = 'none'; // Permet de supprimer l'affichage de la légende au chargement de la page
         
-        // Lier la visibilité à la couche bâtiment
-        function updateBatimentLegendVisibility() {
-          const visibility = map.getLayoutProperty('batimentsLayer', 'visibility');
-          //batimentLegend.style.display = (visibility === 'none') ? 'none' : 'block';
-          if (visibility === 'none') {
-          batimentLegend.style.display = 'none';
-        } else {
-          batimentLegend.style.display = 'block';
-        }
-        }
         
-        map.on('idle', updateBatimentLegendVisibility);
-        
+        /* ============================================================
+           POSITIONNEMENT INTELLIGENT (bas à gauche)
+        ============================================================ */
         
         function updateLegendPositions() {
-        const isPopVisible = legend.style.display !== "none";
-        const isBatVisible = batimentLegend.style.display !== "none";
-      
-        // Cas 1 : les deux légendes sont visibles
-        if (isPopVisible && isBatVisible) {
-          legend.style.top = "70%";          // la première remonte
-          batimentLegend.style.top = "82%";  // la seconde descend
+          const popVisible = legend.style.display !== "none";
+          const batVisible = batimentLegend.style.display !== "none";
+        
+          if (popVisible && batVisible) {
+            // Les deux visibles → on empile proprement
+            legend.style.bottom = "230px";          // légende population en haut
+            batimentLegend.style.bottom = "60px";  // légende bâtiment en bas
+          }
+          else if (popVisible && !batVisible) {
+            legend.style.bottom = "60px";          // position normale
+          }
+          else if (!popVisible && batVisible) {
+            batimentLegend.style.bottom = "120px";  // position normale
+          }
         }
-      
-        // Cas 2 : seule la légende population est visible
-        else if (isPopVisible && !isBatVisible) {
-          legend.style.top = "82%";          // reprend sa place normale
+        
+        
+        /* ============================================================
+           VISIBILITÉ POPULATION
+        ============================================================ */
+        
+        function updateLegendVisibility() {
+          const visibility = map.getLayoutProperty("indicateurs12aLayer", "visibility");
+          legend.style.display = (visibility === "none") ? "none" : "block";
+          updateLegendPositions();
         }
-      
-        // Cas 3 : seule la légende bâtiment est visible
-        else if (!isPopVisible && isBatVisible) {
-          batimentLegend.style.top = "82%";  // reprend sa place normale
+        
+        
+        /* ============================================================
+           VISIBILITÉ BÂTIMENTS
+        ============================================================ */
+        
+        function updateBatimentLegendVisibility() {
+          const visibility = map.getLayoutProperty("batimentsLayer", "visibility");
+          batimentLegend.style.display = (visibility === "none") ? "none" : "block";
+          updateLegendPositions();
         }
-      
-        // Cas 4 : aucune légende visible
-        else {
-          // rien à faire
-        }
-      }
+        
+        
+        /* ============================================================
+           ÉCOUTE MAPLIBRE
+        ============================================================ */
+        
+        map.on("idle", () => {
+          updateLegendVisibility();
+          updateBatimentLegendVisibility();
+        });
+
 
         
          const PMTILES_URL = "layers/batiments_hauteur.pmtiles";
@@ -1043,112 +1056,163 @@ map = {
     });
 
      
+     /* ============================================================
+           Fonds de Plan
+        ============================================================ */
+    // --- Création du conteneur ---
+    const fondListDiv = document.createElement("div");
+    fondListDiv.id = "fondListDiv";
+    
+    map.getContainer().appendChild(fondListDiv);
+    
+    
+    // --- Fonds disponibles ---
+    const fondOptions = [
+      {
+        id: "plan",
+        label: "Plan",
+        img: "Images/OSM.jpg",
+        apply: () => toggleStyle(false)
+      },
+      {
+        id: "ortho",
+        label: "Photos aériennes",
+        img: "Images/ORTHOPHOTOS.jpg",
+        apply: () => toggleStyle(true)
+      },
+      {
+        id: "none",
+        label: "Aucun fond",
+        img: "Images/aucun_fond.jpg",
+        apply: () => toggleStyle("none")
+      }
 
-// --- Création du conteneur ---
-const fondListDiv = document.createElement("div");
-fondListDiv.id = "fondListDiv";
+    ];
+    
+        function toggleStyle(mode) {
 
-map.getContainer().appendChild(fondListDiv);
+        if (mode === false) {
+          // Activer le plan OSM
+          map.setLayoutProperty("OSM", "visibility", "visible");
+          map.setLayoutProperty("orthoIGN", "visibility", "none");
+        }
+      
+        else if (mode === true) {
+          // Activer l’orthophoto
+          map.setLayoutProperty("OSM", "visibility", "none");
+          map.setLayoutProperty("orthoIGN", "visibility", "visible");
+        }
+      
+        else if (mode === "none") {
+          // Aucun fond → cacher les deux
+          map.setLayoutProperty("OSM", "visibility", "none");
+          map.setLayoutProperty("orthoIGN", "visibility", "none");
+        }
+      }
 
+    
+    // --- Création des vignettes ---
+    fondOptions.forEach((opt, index) => {
+    
+      const item = document.createElement("div");
+    
+      item.className = "fond-item";
+      item.dataset.id = opt.id;
+    
+      item.innerHTML = `
+        <img src="${opt.img}" alt="${opt.label}">
+        <span>${opt.label}</span>
+      `;
+    
+      if (index === 0) {
+        item.classList.add("active");
+      } else {
+        item.classList.add("inactive");
+      }
+    
+      fondListDiv.appendChild(item);
+    });
+    
+    updateInactivePositions();
+    // =====================================================
+    // Fonctions
+    // =====================================================
+    
+    function getActive() {
+      return fondListDiv.querySelector(".fond-item.active");
+    }
+    
+    function getInactive() {
+      return fondListDiv.querySelector(".fond-item.inactive");
+    }
+    
+    function updateInactivePositions() {
 
-// --- Fonds disponibles ---
-const fondOptions = [
-  {
-    id: "plan",
-    label: "Plan",
-    img: "Images/OSM.jpg",
-    apply: () => toggleStyle(false)
-  },
-  {
-    id: "ortho",
-    label: "Photos aériennes",
-    img: "Images/ORTHOPHOTOS.jpg",
-    apply: () => toggleStyle(true)
-  }
-];
+      const inactiveItems =
+        fondListDiv.querySelectorAll(".fond-item.inactive");
+    
+      inactiveItems.forEach((item, index) => {
+    
+        item.style.setProperty(
+          "--inactive-position",
+          index
+        );
+    
+      });
+    }
+    
+    // =====================================================
+    // SURVOL
+    // =====================================================
+    
+    let hideTimer;
 
-
-// --- Création des vignettes ---
-fondOptions.forEach((opt, index) => {
-
-  const item = document.createElement("div");
-
-  item.className = "fond-item";
-  item.dataset.id = opt.id;
-
-  item.innerHTML = `
-    <img src="${opt.img}" alt="${opt.label}">
-    <span>${opt.label}</span>
-  `;
-
-  if (index === 0) {
-    item.classList.add("active");
-  } else {
-    item.classList.add("inactive");
-  }
-
-  fondListDiv.appendChild(item);
-});
-
-
-// =====================================================
-// Fonctions
-// =====================================================
-
-function getActive() {
-  return fondListDiv.querySelector(".fond-item.active");
-}
-
-function getInactive() {
-  return fondListDiv.querySelector(".fond-item.inactive");
-}
-
-
-// =====================================================
-// SURVOL
-// =====================================================
-
-fondListDiv.addEventListener("mouseenter", () => {
-  fondListDiv.classList.add("hover-active");
-});
-
-fondListDiv.addEventListener("mouseleave", () => {
-  fondListDiv.classList.remove("hover-active");
-});
-
-
-// =====================================================
-// CLIC SUR LA VIGNETTE INACTIVE
-// =====================================================
-
-fondListDiv.addEventListener("click", (e) => {
-
-  const inactive = e.target.closest(".fond-item.inactive");
-
-  if (!inactive) return;
-
-  const active = getActive();
-
-  // Recherche du fond correspondant
-  const opt = fondOptions.find(
-    o => o.id === inactive.dataset.id
-  );
-
-  // Application du fond
-  if (opt && opt.apply) {
-    opt.apply();
-  }
-
-  // Échange des rôles
-  active.classList.remove("active");
-  active.classList.add("inactive");
-
-  inactive.classList.remove("inactive");
-  inactive.classList.add("active");
-
-  // On conserve le sélecteur ouvert
-  fondListDiv.classList.add("hover-active");
-});
+    fondListDiv.addEventListener("mouseenter", () => {
+      clearTimeout(hideTimer);
+      fondListDiv.classList.add("hover-active");
+    });
+    
+    fondListDiv.addEventListener("mouseleave", () => {
+      hideTimer = setTimeout(() => {
+        fondListDiv.classList.remove("hover-active");
+      }, 300);
+    });
+    
+    
+    // =====================================================
+    // CLIC SUR LA VIGNETTE INACTIVE
+    // =====================================================
+    
+        fondListDiv.addEventListener("click", (e) => {
+      
+        const inactive = e.target.closest(".fond-item.inactive");
+        if (!inactive) return;
+      
+        const active = getActive();
+      
+        const opt = fondOptions.find(
+          o => o.id === inactive.dataset.id
+        );
+      
+        if (opt && opt.apply) {
+          opt.apply();
+        }
+      
+        active.classList.remove("active");
+        active.classList.add("inactive");
+      
+        inactive.classList.remove("inactive");
+        inactive.classList.add("active");
+      
+        updateInactivePositions();
+      
+        // On garde le menu ouvert
+        clearTimeout(hideTimer);
+        fondListDiv.classList.add("hover-active");
+      });
+    /* ============================================================
+            Fin Fonds de Plan
+       ============================================================ */
 
 
     const rightTabs = document.createElement("div");
