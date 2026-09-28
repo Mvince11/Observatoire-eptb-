@@ -309,6 +309,7 @@ map = {
     zoom: 11
   });
 
+  // Utile pour le bouton latérale Couche indicateur --------------
   window.map = map;
     
   map.addControl(new maplibregl.FullscreenControl(), 'top-left');
@@ -1293,10 +1294,10 @@ map = {
       <button class="tool-btn" data-tool="indicateur"><i class="bi bi-water"></i></button>
       <!-- <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button> -->
       <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
-      <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button>
+      <!-- <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button> -->
       <!-- <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button> -->
       <button class="tool-btn" data-tool="infoindicateur"><i class="bi bi-info"></i></button>
-      <button class="tool-btn" data-tool="graphique"><i class="bi bi-bar-chart"></i></button>
+      <button class="tool-btn" data-tool="donneesgraphique"><i class="bi bi-bar-chart"></i></button>
     `;
     
     map.getContainer().appendChild(rightTabs);

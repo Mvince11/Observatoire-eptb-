@@ -610,7 +610,44 @@ div.sidebar-item-container{
   color: white;
 }
 
+.data-switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  margin: 10px auto 15px auto;
+}
 
+.data-switch-btn {
+  border: 1px solid #293574;
+  background: white;
+  color: #293574;
+
+  padding: 8px 20px;
+
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.data-switch-btn:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.data-switch-btn:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.data-switch-btn.active {
+  background: #293574;
+  color: white;
+}
+
+.data-switch-btn:hover {
+  background: #293574;
+  color: white;
+}
 
 #dashboard-collapse{
   height: auto;
