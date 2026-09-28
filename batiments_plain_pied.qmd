@@ -1293,7 +1293,7 @@ map = {
       <!-- <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button> -->
       <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
       <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button>
-      <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button>
+      <!-- <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button> -->
       <button class="tool-btn" data-tool="infoindicateur"><i class="bi bi-info"></i></button>
       <button class="tool-btn" data-tool="graphique"><i class="bi bi-bar-chart"></i></button>
     `;
@@ -1384,14 +1384,14 @@ map = {
           
           
           // Bâtiments 3D
-          const batiment3dDiv= document.createElement("div");
-          batiment3dDiv.id = "batiment3dDiv";
-          batiment3dDiv.style.padding = "10px";
-          batiment3dDiv.style.fontFamily = "Arial";
-          batiment3dDiv.style.fontSize = "14px";
-          batiment3dDiv.style.lineHeight = "1.4";
-          
-          window.batimment3dDiv = batiment3dDiv;
+          <!-- const batiment3dDiv= document.createElement("div"); -->
+          <!-- batiment3dDiv.id = "batiment3dDiv"; -->
+          <!-- batiment3dDiv.style.padding = "10px"; -->
+          <!-- batiment3dDiv.style.fontFamily = "Arial"; -->
+          <!-- batiment3dDiv.style.fontSize = "14px"; -->
+          <!-- batiment3dDiv.style.lineHeight = "1.4"; -->
+
+          <!-- window.batimment3dDiv = batiment3dDiv; -->
           
           // Info indicateur
           const infoindicateurDiv= document.createElement("div");
