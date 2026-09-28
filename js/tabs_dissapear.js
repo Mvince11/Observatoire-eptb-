@@ -79,7 +79,7 @@ function initRightTabs() {
       //if (tool === "indicateur") titre = "Couche Indicateur";
       //if (tool === "legend") titre = "Légendes";
       if (tool === "donneesgraphipue") titre = "Données de la commune";
-      if (tool === "donnees") titre = "Données de la commune";
+      //if (tool === "donnees") titre = "Données de la commune";
       //if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
       if (tool ==="infoindicateur") titre ="Informations relatives à l'indicateur";
       //if (tool === "graphique") titre = "Graphiques";
@@ -103,22 +103,22 @@ function initRightTabs() {
       }
 
       // DONNÉES DE LA COMMUNE (tab4)
-      if (tool === "donnees") {
-        rightPanel.className = "rightpanel-large";
-        const title = rightPanel.querySelector("h3");
-        if (title) title.style.display = "none";
+      //if (tool === "donnees") {
+        //rightPanel.className = "rightpanel-large";
+        //const title = rightPanel.querySelector("h3");
+        //if (title) title.style.display = "none";
 
-        const quartoTabs = document.querySelectorAll("#donnees");
-        donneesDiv.innerHTML = "";
+        //const quartoTabs = document.querySelectorAll("#donnees");
+        //donneesDiv.innerHTML = "";
 
-        quartoTabs.forEach(tab => {
-          const clone = tab.cloneNode(true);
-          clone.style.display = "block";
-          donneesDiv.appendChild(clone);
-        });
+        //quartoTabs.forEach(tab => {
+          //const clone = tab.cloneNode(true);
+          //clone.style.display = "block";
+          //donneesDiv.appendChild(clone);
+        //});
 
-        content.appendChild(donneesDiv);
-      }
+        //content.appendChild(donneesDiv);
+      //}
 
       // TABLEAU DE DONNÉES (tab5)
       // =====================================================

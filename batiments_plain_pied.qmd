@@ -923,22 +923,78 @@ map = {
         const batcommercial = (!isNaN(batcommercialValue) ? batcommercialValue : 0).toLocaleString('fr-FR');
       
         const popupContent = `
-        <style>
-          .maplibregl-popup-content {
-            padding: 4px !important;
-            border: 1px solid;
-            border-radius: 8px;
-            width: 270px;
-            box-shadow: rgba(101, 147, 220, 0.2) 0px 4px 8px 0px;
-            border-color: rgba(101, 147, 220, 0.5);
-          }
-        </style>
-           <div style="font-family: sans-serif; font-size: 13px; margin:10px;">
-          <div style="background-color: #d1ee9c; border: 1px solid; border-radius:8px; margin-bottom:16px; padding:10px;"><strong>
-          <center>${nom}</center>
-          </strong></div>
-          <p style="text-align:center !important"><strong>- Population :</strong> ${population}</p>
-          <p style="text-align:center !important"><strong>- Nombre de personnes en zone fortement inondable :</strong> ${dommages}</p>
+              <div class="popup-content">
+              
+                <img 
+                  src="${image}" 
+                  class="popup-image"
+                >
+              
+                <div class="popup-body">
+              
+                  <h3 class="popup-title">
+                    ${nom}
+                  </h3>
+              
+                  <div class="popup-indicator">
+              
+                    <div class="popup-icon">
+                      <i class="bi bi-people-fill"></i>
+                    </div>
+              
+                    <div>
+                      <span class="popup-label">
+                        Population
+                      </span>
+              
+                      <span class="popup-value">
+                        ${population}
+                      </span>
+                    </div>
+              
+                  </div>
+              
+              
+                  <div class="popup-indicator inondation">
+              
+                    <div class="popup-icon">
+                      <i class="bi bi-droplet-half"></i>
+                    </div>
+              
+                    <div>
+                      <span class="popup-label">
+                        Personnes en zone fortement inondable
+                      </span>
+              
+                      <span class="popup-value">
+                        ${dommages}
+                      </span>
+                    </div>
+              
+                  </div>
+              
+              
+                  <div class="popup-indicator">
+              
+                    <div class="popup-icon">
+                      <i class="bi bi-house-fill"></i>
+                    </div>
+              
+                    <div>
+                      <span class="popup-label">
+                        Nombre de bâtiments
+                      </span>
+              
+                      <span class="popup-value">
+                        ${batiments}
+                      </span>
+                    </div>
+              
+                  </div>
+              
+                </div>
+              
+              </div>
         `;
       
         new maplibregl.Popup({closeButton: false})
@@ -946,32 +1002,32 @@ map = {
           .setHTML(popupContent)
           .addTo(map);
           
-          // Mettre à jour le conteneur HTML avec les informations spécifiques du marqueur 
-         document.getElementById('donnees').innerHTML = `
-          <div style="text-align:center; font-family:sans-serif; font-size:16px;">
-            <img src="${image}" style="width:300px; margin-bottom:10px;"><br>
-            
-            <strong style="font-size:1.1em;"><i class="bi bi-geo-alt-fill"></i> Commune :</strong> ${nom}<br>
-            <strong style="font-size:1.1em;"><i class="bi bi-people-fill"></i> Nombre d'habitants :</strong> ${population}<br>
-            <strong style="font-size:1.1em;"><i class="bi bi-house-fill"></i> Nombre de bâtiments :</strong> ${batiments}<br>
-            
-            <div style="margin-top:10px;"><strong>Dont :</strong></div>
-            <ul style="list-style:none; padding:0;">
-              <li><h5 style="font-size:1em;">${batindif} <strong>bâtiments indifférenciés</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batsportif} <strong>bâtiments sportifs</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batagricole} <strong>bâtiments agricoles</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batresidentiel} <strong>bâtiments résidentiels</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batannexe} <strong>bâtiments annexes</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batreligieux} <strong>bâtiments religieux</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batindustriel} <strong>bâtiments industriels</strong></h5></li>
-              <li><h5 style="font-size:1em;">${batcommercial} <strong>bâtiments commerciaux</strong></h5></li>
-            </ul>
-        
-            <div style="margin-top:10px;">
-              <strong style="font-size:1.1em;"><i class="bi bi-droplet-half"></i> Nombre de personnes en zone fortement inondable :</strong> ${dommages}
-            </div>
-          </div>
-         `;
+         <!--  // Mettre à jour le conteneur HTML avec les informations spécifiques du marqueur  -->
+         <!-- document.getElementById('donnees').innerHTML = ` -->
+         <!--  <div style="text-align:center; font-family:sans-serif; font-size:16px;"> -->
+         <!--    <img src="${image}" style="width:300px; margin-bottom:10px;"><br> -->
+
+         <!--    <strong style="font-size:1.1em;"><i class="bi bi-geo-alt-fill"></i> Commune :</strong> ${nom}<br> -->
+         <!--    <strong style="font-size:1.1em;"><i class="bi bi-people-fill"></i> Nombre d'habitants :</strong> ${population}<br> -->
+         <!--    <strong style="font-size:1.1em;"><i class="bi bi-house-fill"></i> Nombre de bâtiments :</strong> ${batiments}<br> -->
+
+         <!--    <div style="margin-top:10px;"><strong>Dont :</strong></div> -->
+         <!--    <ul style="list-style:none; padding:0;"> -->
+         <!--      <li><h5 style="font-size:1em;">${batindif} <strong>bâtiments indifférenciés</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batsportif} <strong>bâtiments sportifs</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batagricole} <strong>bâtiments agricoles</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batresidentiel} <strong>bâtiments résidentiels</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batannexe} <strong>bâtiments annexes</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batreligieux} <strong>bâtiments religieux</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batindustriel} <strong>bâtiments industriels</strong></h5></li> -->
+         <!--      <li><h5 style="font-size:1em;">${batcommercial} <strong>bâtiments commerciaux</strong></h5></li> -->
+         <!--    </ul> -->
+
+         <!--    <div style="margin-top:10px;"> -->
+         <!--      <strong style="font-size:1.1em;"><i class="bi bi-droplet-half"></i> Nombre de personnes en zone fortement inondable :</strong> ${dommages} -->
+         <!--    </div> -->
+         <!--  </div> -->
+         <!-- `; -->
       });
 
 
@@ -1293,7 +1349,7 @@ map = {
       <button class="tool-btn" data-tool="layers"><i class="bi bi-layers"></i></button>
       <button class="tool-btn" data-tool="indicateur"><i class="bi bi-water"></i></button>
       <!-- <button class="tool-btn" data-tool="legend"><i class="bi bi-list-ul"></i></button> -->
-      <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button>
+      <!-- <button class="tool-btn" data-tool="donnees"><i class="bi bi-building"></i></button> -->
       <!-- <button class="tool-btn" data-tool="tableau"><i class="bi bi-table"></i></button> -->
       <!-- <button class="tool-btn" data-tool="batiment3d"><i class="bi bi-box"></i></button> -->
       <button class="tool-btn" data-tool="infoindicateur"><i class="bi bi-info"></i></button>
@@ -1306,26 +1362,7 @@ map = {
     
    const rightTabsToggle = document.createElement("div");
      rightTabsToggle.id = "rightTabsToggle";
-     <!-- rightTabsToggle.style = ` -->
-      <!-- position: absolute; -->
-      <!-- top: 40px; -->
-      <!-- right: 10px; -->
-      <!-- width: 20px; -->
-      <!-- height: 40px; -->
-      <!-- background: #F7F9FB; -->
-      <!-- border: 1px solid #D6DEE6; -->
-      <!-- border-radius: 6px; -->
-      <!-- box-shadow: 0 0 6px rgba(0,0,0,0.15); -->
-      <!-- display: flex; -->
-        <!-- align-items: center; -->
-        <!-- justify-content: center; -->
-        <!-- cursor: pointer; -->
-        <!-- z-index: 3000; -->
-      <!-- `; -->
-  
-    <!-- rightTabsToggle.innerHTML = ` -->
-      <!-- <i class="bi bi-chevron-right" style="font-size:18px; color:#2A3B4D;"></i> -->
-    <!-- `; -->
+    
     
     map.getContainer().appendChild(rightTabsToggle); 
     window.rightTabsToggle = rightTabsToggle; 
@@ -1337,33 +1374,6 @@ map = {
     map.getContainer().appendChild(rightPanel);
     window.rightPanel = rightPanel;
 
-
-    // Légende
-    //const legendDiv = document.createElement("div");
-    //legendDiv.id = "legendDiv";
-    //legendDiv.style.padding = "10px";
-    //legendDiv.style.fontFamily = "sans-serif";
-    //legendDiv.style.fontSize = "14px";
-    //legendDiv.style.lineHeight = "1.4";
-    
-    //legendDiv.innerHTML = `
-      //<strong>Population en zone <br>fortement inondable</strong><br>
-          //<div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
-          //<div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
-          //<div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
-          //<div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
-          //<div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
-          //<hr>
-          //<strong>Type de bâtiment</strong><br>
-          //<div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
-          //<div><span style="background:#2ca02c;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Appartement</div>
-          //<div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Aucun local</div>
-          //<div><span style="background:#9467bd;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Dépendance</div>
-          //<div><span style="background:#ff7f0e;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Maison</div>
-          //<div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
-        //`;
-    
-    //window.legendDiv = legendDiv;-->
   
           // Données de la commune
           const donneesDiv = document.createElement("div");
@@ -1385,16 +1395,6 @@ map = {
           
           window.tableauDiv = tableauDiv;
           
-          
-          // Bâtiments 3D
-          <!-- const batiment3dDiv= document.createElement("div"); -->
-          <!-- batiment3dDiv.id = "batiment3dDiv"; -->
-          <!-- batiment3dDiv.style.padding = "10px"; -->
-          <!-- batiment3dDiv.style.fontFamily = "Arial"; -->
-          <!-- batiment3dDiv.style.fontSize = "14px"; -->
-          <!-- batiment3dDiv.style.lineHeight = "1.4"; -->
-
-          <!-- window.batimment3dDiv = batiment3dDiv; -->
           
           // Info indicateur
           const infoindicateurDiv= document.createElement("div");
@@ -1422,40 +1422,6 @@ map = {
       toggleStyle(this.checked);
     });
   });
-        // --- Conteneur global ---
-      <!-- const toggleContainer = document.createElement("div"); -->
-      <!--   toggleContainer.id = "toggleInondableContainer"; -->
-      <!--   toggleContainer.innerHTML = `<span>Affichage de l'indicateur</span>`; -->
-      <!--   map.getContainer().appendChild(toggleContainer); -->
-
-      <!--   // --- Bouton --- -->
-      <!--   const toggleBtn = document.createElement("div"); -->
-      <!--   toggleBtn.id = "toggleInondableBtn"; -->
-      <!--   toggleBtn.innerHTML = `<i class="bi bi-water"></i>`; -->
-      <!--   toggleContainer.appendChild(toggleBtn); -->
-
-      <!--   // --- État initial --- -->
-      <!--   let inondableVisible = map.getLayoutProperty("indicateurs12aLayer", "visibility") !== "none"; -->
-
-      <!--   // --- Fonction de toggle --- -->
-      <!--   function toggleInondable() { -->
-      <!--     inondableVisible = !inondableVisible; -->
-
-      <!--     map.setLayoutProperty( -->
-      <!--       "indicateurs12aLayer", -->
-      <!--       "visibility", -->
-      <!--       inondableVisible ? "visible" : "none" -->
-      <!--     ); -->
-
-      <!--     toggleBtn.classList.toggle("active", inondableVisible); -->
-      <!--   } -->
-
-      <!--   // --- Clic --- -->
-      <!--   toggleBtn.addEventListener("click", toggleInondable); -->
-
-      <!--   // --- Synchronisation initiale --- -->
-      <!--   toggleBtn.classList.toggle("active", inondableVisible); -->
-
 
 };
 ```
