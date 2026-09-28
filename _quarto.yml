@@ -1,9 +1,10 @@
 project:
   type: website
   title: "Observatoire de la vulnérabilité aux inondations Vienne - Clain"
-
+  
 website:
   back-to-top-navigation: true
+  favicon: "favicon.ico"
   #title: "Observatoire de la vulnérabilité <br> aux inondations Vienne - Clain"
   navbar:
      search: false
