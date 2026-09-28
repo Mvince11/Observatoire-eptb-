@@ -15,7 +15,48 @@ function initRightTabs() {
     btn.onclick = () => {
 
       const tool = btn.dataset.tool;
+      
+      
+     if (tool === "indicateur") {
 
+        console.log("Clic sur indicateur");
+      
+        const mapLibre = window.map;
+      
+        if (!mapLibre || typeof mapLibre.setLayoutProperty !== "function") {
+          console.error("Carte MapLibre introuvable :", mapLibre);
+          return;
+        }
+      
+        const currentVisibility =
+          mapLibre.getLayoutProperty(
+            "indicateurs12aLayer",
+            "visibility"
+          );
+      
+        console.log("Visibilité actuelle :", currentVisibility);
+      
+        const newVisibility =
+          currentVisibility === "none"
+            ? "visible"
+            : "none";
+      
+        mapLibre.setLayoutProperty(
+          "indicateurs12aLayer",
+          "visibility",
+          newVisibility
+        );
+      
+        console.log("Nouvelle visibilité :", newVisibility);
+      
+        btn.classList.toggle(
+          "active",
+          newVisibility === "visible"
+        );
+      
+        return;
+      }
+      
       // Activer visuellement
       document.querySelectorAll("#rightTabs .tool-btn")
         .forEach(b => b.classList.remove("active"));
@@ -35,11 +76,11 @@ function initRightTabs() {
       // --- Construire le panneau ---
       let titre = "";
       if (tool === "layers") titre = "Couches";
-      //if (tool === "fond") titre = "Fonds de cartes";
+      //if (tool === "indicateur") titre = "Couche Indicateur";
       //if (tool === "legend") titre = "Légendes";
       if (tool === "donnees") titre = "Données de la commune";
       if (tool === "tableau") titre = "Tableau de données";
-      if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
+      //if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
       if (tool ==="infoindicateur") titre ="Informations relatives à l'indicateur";
       if (tool === "graphique") titre = "Graphiques";
 
@@ -109,19 +150,19 @@ function initRightTabs() {
       content.appendChild(iframe);
     }
     
-      if (tool === "batiment3d") {
-        rightPanel.className = "rightpanel-full2";
+      //if (tool === "batiment3d") {
+        //rightPanel.className = "rightpanel-full2";
         
-        const title = rightPanel.querySelector("h3");
-      if (title) title.style.display = "none";
+        //const title = rightPanel.querySelector("h3");
+      //if (title) title.style.display = "none";
     
-        const bloc = document.querySelector("#batiment3d-info");
+        //const bloc = document.querySelector("#batiment3d-info");
 
-        const clone = bloc.cloneNode(true);
-        clone.style.display = "block";
+        //const clone = bloc.cloneNode(true);
+        //clone.style.display = "block";
       
-        content.appendChild(clone);
-      }
+        //content.appendChild(clone);
+      //}
 
       if (tool === "infoindicateur") {
       rightPanel.className = "rightpanel-full2";
@@ -335,11 +376,11 @@ function initHoverLabels() {
     
       const labels = {
         layers: "Couches",
-        //fond: "Fonds de carte",
+        indicateur: "Couche Indicateur",
         donnees: "Données de la commune",
         //legend: "Légendes",
         tableau: "Tableau de données", 
-        batiment3d: "Bâtiments 3D: Mode d'emploi",
+        //batiment3d: "Bâtiments 3D: Mode d'emploi",
         infoindicateur: "Informations relatives à l'indicateur",
         graphique: "Graphiques"
       };
