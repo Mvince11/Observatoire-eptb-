@@ -1129,62 +1129,159 @@ div.sidebar-item-container{
   border-top: 1px solid #e6e6e6;
 }
 
-/* Conteneur principal : toujours horizontal */
+/* ================================
+   FOOTER QUARTO
+   ================================ */
+
 .nav-footer {
-  display: flex;
-  flex-direction: row;      /* jamais en colonne */
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;        /* empêche les blocs de passer en dessous */
-  gap: 10px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  width: 100%;
+  min-height: 55px;
+
+  padding: 10px 25px !important;
+
+  font-family: Avenir, Arial, sans-serif;
+  font-size: 13px;
+
+  background-color: #ffffff !important;
+  border-top: 1px solid #e5e7ef;
+
+  box-sizing: border-box;
 }
 
-/* Colonnes : largeur flexible */
+
+/* Les trois zones */
 .nav-footer-left,
 .nav-footer-center,
 .nav-footer-right {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;      /* empêche les retours à la ligne */
-  overflow: hidden;         /* évite les débordements */
-  text-overflow: ellipsis;  /* coupe proprement si trop long */
+  display: flex !important;
+  align-items: center !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  white-space: nowrap;
 }
 
-/* Icônes à droite */
+
+/* Gauche */
+.nav-footer-left {
+  justify-content: flex-start;
+  flex: 1;
+}
+
+
+/* Centre */
+.nav-footer-center {
+  justify-content: center;
+  flex: 1;
+
+  color: #293574;
+}
+
+
+/* Droite */
+.nav-footer-right {
+  justify-content: flex-end;
+  flex: 1;
+}
+
+
+/* Liens */
+.nav-footer a {
+  color: #293574 !important;
+  text-decoration: none !important;
+
+  transition: color 0.2s ease;
+}
+
+
+/* Hover */
+.nav-footer a:hover {
+  color: #ef7757 !important;
+}
+
+
+/* Icônes réseaux sociaux */
 .nav-footer-right a {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
-  margin-left: 10px;
+
+  width: 30px;
+  height: 30px;
+
+  margin-left: 7px;
+
+  font-size: 1.15rem;
+
+  border-radius: 50%;
 }
 
-/* --- PETITES RÉSOLUTIONS --- */
+
+/* Effet au survol des icônes */
+.nav-footer-right a:hover {
+  background-color: #f7f8fb;
+}
+
+
+/* ================================
+   TABLETTE
+   ================================ */
+
 @media (max-width: 768px) {
 
-  /* On réduit la taille du texte pour éviter les débordements */
-  .nav-footer-left,
-  .nav-footer-center {
-    font-size: 14px;
+  .nav-footer {
+    padding: 8px 15px !important;
+    font-size: 12px;
   }
 
-  /* On réduit les icônes */
   .nav-footer-right a {
-    font-size: 1.2rem;
-    margin-left: 8px;
+    width: 27px;
+    height: 27px;
+    margin-left: 4px;
+    font-size: 1rem;
   }
 }
 
-/* Très petits écrans */
-@media (max-width: 480px) {
 
-  .nav-footer-left,
-  .nav-footer-center {
-    font-size: 13px;
+/* ================================
+   MOBILE
+   ================================ */
+
+@media (max-width: 550px) {
+
+  .nav-footer {
+    flex-wrap: wrap;
+    justify-content: center !important;
+
+    gap: 5px 15px;
+
+    min-height: auto;
+    padding: 10px 15px !important;
   }
 
-  .nav-footer-right a {
-    font-size: 1.1rem;
+  .nav-footer-left,
+  .nav-footer-center,
+  .nav-footer-right {
+    flex: none;
+
+    width: auto;
+  }
+
+  .nav-footer-left {
+    order: 1;
+  }
+
+  .nav-footer-center {
+    order: 2;
+  }
+
+  .nav-footer-right {
+    order: 3;
   }
 }
 
