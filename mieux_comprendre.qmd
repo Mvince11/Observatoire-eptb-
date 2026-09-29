@@ -1,6 +1,11 @@
 ---
 title: ""
 lang: fr
+format:
+  html:
+    grid:
+      sidebar-width: 0px
+      body-width: 1200px
 ---
 
 ## Pour mieux comprendre les inondations
