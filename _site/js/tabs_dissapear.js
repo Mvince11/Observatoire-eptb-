@@ -76,13 +76,8 @@ function initRightTabs() {
       // --- Construire le panneau ---
       let titre = "";
       if (tool === "layers") titre = "Couches";
-      //if (tool === "indicateur") titre = "Couche Indicateur";
-      //if (tool === "legend") titre = "Légendes";
-      if (tool === "donneesgraphipue") titre = "Données de la commune";
-      //if (tool === "donnees") titre = "Données de la commune";
-      //if (tool === "batiment3d") titre = "Bâtiments 3D: Mode d'emploi";
+      if (tool === "donneesgraphique") titre = "Données de la commune";
       if (tool ==="infoindicateur") titre ="Informations relatives à l'indicateur";
-      //if (tool === "graphique") titre = "Graphiques";
 
       rightPanel.innerHTML = `
         <div style="display:flex; justify-content:flex-end;">
@@ -102,23 +97,6 @@ function initRightTabs() {
         content.appendChild(window.layersListDiv);
       }
 
-      // DONNÉES DE LA COMMUNE (tab4)
-      //if (tool === "donnees") {
-        //rightPanel.className = "rightpanel-large";
-        //const title = rightPanel.querySelector("h3");
-        //if (title) title.style.display = "none";
-
-        //const quartoTabs = document.querySelectorAll("#donnees");
-        //donneesDiv.innerHTML = "";
-
-        //quartoTabs.forEach(tab => {
-          //const clone = tab.cloneNode(true);
-          //clone.style.display = "block";
-          //donneesDiv.appendChild(clone);
-        //});
-
-        //content.appendChild(donneesDiv);
-      //}
 
       // TABLEAU DE DONNÉES (tab5)
       // =====================================================
@@ -668,7 +646,7 @@ function initHoverLabels() {
       const labels = {
         layers: "Couches",
         indicateur: "Couche Indicateur",
-        donnees: "Données de la commune",
+        //donnees: "Données de la commune",
         donneesgraphique: "Data",
         infoindicateur: "Informations relatives à l'indicateur"
         //legend: "Légendes",
