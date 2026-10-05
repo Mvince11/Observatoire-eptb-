@@ -11,12 +11,12 @@ resources:
   - Images/icons/*.svg
   - layers/data_s12a.json
   - layers/batiments_hauteur.pmtiles
-  - layers/zi_cartino2d.pmtiles
-  - layers/zi_ppri_azi.pmtiles
+  # - layers/zi_cartino2d.pmtiles
+  - layers/zi_perimetre_papi_vc.pmtiles
   - layers/ruissellement_cartino2d.pmtiles
   # - layers/ruissellement_exzeco.pmtiles
   - layers/communes_zone_papi.pmtiles
-  - layers/cours_d_eau.pmtiles
+  - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs.geojson
   - tableau_commune.html
   - Images/*.jpg
@@ -427,7 +427,7 @@ map = {
       {
         pmtiles: true,
         source: "coursdeau",
-        sourceLayer: "cours_d_eau",
+        sourceLayer: "coursdeau_perimetre_papi_vc",
         type: "line",
         id: "coursdeauLayer",
         color: "#1f78b4",
@@ -444,24 +444,24 @@ map = {
           visibility: "visible"
         }
       },
+      <!-- { -->
+      <!--   pmtiles: true, -->
+      <!--   source: "zoneinondable2d", -->
+      <!--   sourceLayer: "zi_cartino2d", -->
+      <!--   type: "fill", -->
+      <!--   id: "zoneinondable2dLayer", -->
+      <!--   color: "#b4c3ef", -->
+      <!--   opacity: 0.5, -->
+      <!--   layout: { -->
+      <!--     visibility: "visible" -->
+      <!--   } -->
+      <!-- }, -->
       {
         pmtiles: true,
-        source: "zoneinondable2d",
-        sourceLayer: "zi_cartino2d",
+        source: "zoneinondable",
+        sourceLayer: "zi_perimetre_papi_vc",
         type: "fill",
-        id: "zoneinondable2dLayer",
-        color: "#b4c3ef",
-        opacity: 0.5,
-        layout: {
-          visibility: "visible"
-        }
-      },
-      {
-        pmtiles: true,
-        source: "zoneinondableazi",
-        sourceLayer: "zi_ppri_azi",
-        type: "fill",
-        id: "zoneinondableaziLayer",
+        id: "zoneinondableLayer",
         color: "#b4c3ef",
         opacity: 0.5,
         layout: {
@@ -649,22 +649,22 @@ map = {
             url: `pmtiles://${absoluteFileUrl}`
           });
           
-          const ZONE_PM = "layers/zi_cartino2d.pmtiles";
+        <!--   const ZONE_PM = "layers/zi_cartino2d.pmtiles"; -->
 
-        // Reconstruit proprement l'URL absolue HTTP/HTTPS
-        const zoneAbsoluteUrl = new URL(ZONE_PM, window.location.href).href;
+        <!-- // Reconstruit proprement l'URL absolue HTTP/HTTPS -->
+        <!-- const zoneAbsoluteUrl = new URL(ZONE_PM, window.location.href).href; -->
+
+        <!-- map.addSource("zoneinondable2d", { -->
+        <!--   type: "vector", -->
+        <!--   url: `pmtiles://${zoneAbsoluteUrl}` -->
+        <!-- }); -->
         
-        map.addSource("zoneinondable2d", {
-          type: "vector",
-          url: `pmtiles://${zoneAbsoluteUrl}`
-        });
-        
-         const ZONE_PM_azi = "layers/zi_ppri_azi.pmtiles";
+         const ZONE_PM_azi = "layers/zi_perimetre_papi_vc.pmtiles";
 
         // Reconstruit proprement l'URL absolue HTTP/HTTPS
         const zoneAbsoluteaziUrl = new URL(ZONE_PM_azi, window.location.href).href;
         
-        map.addSource("zoneinondableazi", {
+        map.addSource("zoneinondable", {
           type: "vector",
           url: `pmtiles://${zoneAbsoluteaziUrl}`
         });
@@ -678,7 +678,7 @@ map = {
           url: `pmtiles://${zoneRui2dUrl}`
         });
         
-        const ZONE_PM_cdeau = "layers/cours_d_eau.pmtiles";
+        const ZONE_PM_cdeau = "layers/coursdeau_perimetre_papi_vc.pmtiles";
         
         const zoneCdeaudUrl = new URL(ZONE_PM_cdeau, window.location.href).href;
         
@@ -1073,8 +1073,8 @@ map = {
       epciLayer: 'EPCI',
       perimetrepapiLayer: "Périmètre du PAPI",
       communepapiLayer: 'Communes incluses dans le PAPI',
-      zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D',
-      zoneinondableaziLayer: 'Zonage Inondable par modélisation PPRI AZI',
+      <!-- zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D', -->
+      zoneinondableLayer: 'Zonage Inondable',
       ruissellementcartino2dLayer: 'Zone de ruissellement par modélisation Cartino 2D',
       coursdeauLayer: "Cours d'eau",
       indicateurs12aLayer: 'Population en zone inondable',

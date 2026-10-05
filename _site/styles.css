@@ -84,7 +84,7 @@ img{
   right: 0;
   bottom: var(--footer-height);
   overflow: hidden !important;
-}
+  }
 
 .mapFondDePlan {
     position: absolute;
@@ -98,7 +98,7 @@ img{
     z-index: 1000;
     border-radius: 10px;
     border: 1px solid #ccc;
-}
+  }
 
 .mapLayers {
     position: absolute;
@@ -610,6 +610,9 @@ div.sidebar-item-container{
   color: white;
 }
 
+/* =====================================================
+   Boutons pour rubrique Data Tableau/Graphique
+===================================================== */
 .data-switch {
   display: flex;
   justify-content: center;
@@ -648,6 +651,10 @@ div.sidebar-item-container{
   background: #293574;
   color: white;
 }
+
+/* =====================================================
+   Fin Boutons pour rubrique Data Tableau/Graphique
+===================================================== */
 
 /* Popup*/
 /* =========================
@@ -882,11 +889,13 @@ div.sidebar-item-container{
   display: none;
 }
 
-/* --- Barre verticale façon Géoportail --- */
+/* =====================================================
+   Barre latérale carte
+===================================================== */
 #rightTabs {
   position: absolute;
   top: 40px;
-  right: 0px; /* collé au bord droit */
+  right: 0px; 
   width: 55px;
   background: #F7F9FB;
   border-left: 1px solid #D6DEE6;
@@ -992,6 +1001,7 @@ div.sidebar-item-container{
   width: 100% !important;
   top: 0 !important;
 }
+
 
 /* Animation de rotation du bouton Menu */
 #menuButton svg {
