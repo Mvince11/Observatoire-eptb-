@@ -315,7 +315,7 @@ map = {
   });
   
   
-  // Barre de recherche adresses et parcelles -----------
+      // Barre de recherche adresses et parcelles -----------
   
       // ==================== PÉRIMÈTRE ====================
       // Emprise du PAPI Vienne-Clain [ouest, sud, est, nord]
@@ -431,6 +431,51 @@ map = {
         }
       };
       
+        // ==================== BOUTON RETOUR À LA VUE INITIALE ====================
+    class ResetViewControl {
+      constructor(opts = {}) { this.opts = opts; }
+    
+      onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+    
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ctrl-reset-view';
+        btn.title = 'Revenir à la vue initiale';
+        btn.setAttribute('aria-label', 'Revenir à la vue initiale');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>
+          </svg>`;
+    
+        btn.addEventListener('click', () => {
+          map.fitBounds(this.opts.bounds, {
+            padding: this.opts.padding ?? 40,
+            bearing: 0, pitch: 0,
+            essential: true
+          });
+          this.opts.onReset?.();
+        });
+    
+        this._container.appendChild(btn);
+        return this._container;
+      }
+    
+      onRemove() { this._container.remove(); this._map = undefined; }
+    }
+    
+    // Utilise l'emprise du PAPI définie plus haut
+    map.addControl(
+      new ResetViewControl({
+        bounds: [[west, south], [east, north]],
+        <!-- onReset: () => geocoder.clear()      // optionnel : vide aussi la recherche -->
+      }),
+      'top-left'
+    );
+      
       const geocoder = new MaplibreGeocoder(geocoderApi, {
         maplibregl,
         placeholder: PLACEHOLDERS[mode],
@@ -505,16 +550,6 @@ map = {
   map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
   map.addControl(new maplibregl.ScaleControl({ maxWidth: 80, unit: 'metric' }));
   
-
-  const toggleStyle = (useOrtho) => {
-    if (useOrtho) {
-      map.setLayoutProperty('orthoIGN', 'visibility', 'visible');
-      map.setLayoutProperty('OSM', 'visibility', 'none');
-    } else {
-      map.setLayoutProperty('orthoIGN', 'visibility', 'none');
-      map.setLayoutProperty('OSM', 'visibility', 'visible');
-    }
-  };
 
   map.on('load', () => {
     map.fitBounds(

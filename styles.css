@@ -399,7 +399,19 @@ div.sidebar-item-container{
   border-color: #198754;
 }
 
+.ctrl-reset-view {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #334155;
+  height: 40px !important;
+  width: 40px !important;
+}
 
+.ctrl-reset-view:hover {
+  color: #1d4ed8; 
+  
+}
 
 
 /* =====================================================
@@ -741,6 +753,7 @@ div.sidebar-item-container{
 /* =====================================================
    barre de recherche adresse ou parcelle
 ===================================================== */
+
 .mapboxgl-ctrl-geocoder--input:focus,
 .maplibregl-ctrl-geocoder--input:focus {
     outline: none;
@@ -760,7 +773,9 @@ div.sidebar-item-container{
   border-radius: 14px;
   box-shadow: 0 6px 24px rgba(15, 23, 42, .18), 0 1px 3px rgba(15, 23, 42, .1);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: -44px 0 0 60px !important;
 }
+
 .maplibregl-ctrl-geocoder input[type="text"] {
   height: 46px; padding: 0 40px 0 44px;
   border-radius: 14px; font-size: 14.5px; color: #0f172a;
