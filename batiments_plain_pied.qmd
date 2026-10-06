@@ -1325,7 +1325,7 @@ map = {
     const fondOptions = [
       {
         id: "plan",
-        label: "Plan",
+        label: "OSM",
         img: "Images/OSM.jpg",
         apply: () => toggleStyle(false)
       },

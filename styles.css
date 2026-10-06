@@ -409,7 +409,7 @@ div.sidebar-item-container{
 /* Conteneur général */
 #fondListDiv {
   position: absolute;
-  bottom: 60px;
+  bottom: 30px;
   right: 120px;
   z-index: 999;
 
@@ -429,8 +429,8 @@ div.sidebar-item-container{
 
   top: 0;
 
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 
   overflow: hidden;
 
@@ -539,7 +539,7 @@ div.sidebar-item-container{
 
 #fondListDiv.hover-active .fond-item.inactive {
   left: calc(
-    113px - ((var(--inactive-position) + 1) * 110px)
+    113px - ((var(--inactive-position) + 1) * 90px)
   );
 
   right: auto;
