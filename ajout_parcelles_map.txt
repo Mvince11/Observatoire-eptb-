@@ -1,0 +1,17 @@
+map.on('load', () => {
+  map.addSource('parcelle', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+  map.addLayer({ id: 'parcelle-fill', type: 'fill', source: 'parcelle',
+                 paint: { 'fill-color': '#e07b00', 'fill-opacity': 0.35 } });
+  map.addLayer({ id: 'parcelle-line', type: 'line', source: 'parcelle',
+                 paint: { 'line-color': '#e07b00', 'line-width': 2 } });
+});
+
+geocoder.on('result', ({ result }) => {
+  const c = result.properties?._contour;
+  map.getSource('parcelle')?.setData({
+    type: 'FeatureCollection',
+    features: c ? [{ type: 'Feature', properties: {}, geometry: c }] : []
+  });
+});
+geocoder.on('clear', () =>
+  map.getSource('parcelle')?.setData({ type: 'FeatureCollection', features: [] }));

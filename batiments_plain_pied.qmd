@@ -36,6 +36,10 @@ include-in-header:
     <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
     <script src="js/tabs_dissapear.js" type="text/javascript"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.min.js"></script>
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.css"/>
     <style>
         .footer {
           display: none !important;
@@ -265,6 +269,7 @@ indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
 //| padding: 0px
 //| expandable: false
 //| fill: true
+//| 
 map = {
   const container = html`<div class="map-container" id="map"></div>`;
   yield container;
@@ -308,12 +313,196 @@ map = {
     <!-- center: [-0.04, 46.3051],  -->
     zoom: 11
   });
+  
+  
+  // Barre de recherche adresses et parcelles -----------
+  
+      // ==================== PÉRIMÈTRE ====================
+      // Emprise du PAPI Vienne-Clain [ouest, sud, est, nord]
+      const PERIMETRE = [-0.15, 46.40, 0.70, 46.80];
+      const [west, south, east, north] = PERIMETRE;
+      
+      const dansPerimetre = ([lon, lat]) =>
+        lon >= west && lon <= east && lat >= south && lat <= north;
+      
+      // ==================== OUTILS GÉOMÉTRIQUES ====================
+      const centreGeom = (bb) => [(bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2];
+      
+      function bboxGeom(geom) {
+        const pts = geom.type === 'Polygon' ? geom.coordinates.flat() : geom.coordinates.flat(2);
+        const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+        return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+      }
+      
+      // ==================== ADRESSES (Géoplateforme IGN / BAN) ====================
+        async function chercherAdresse(query, signal) {
+          const cLon = (west + east) / 2, cLat = (south + north) / 2;
+          const url = `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(query)}` +
+            `&index=address&limit=15&lat=${cLat}&lon=${cLon}`;
+          const r = await fetch(url, { signal });
+          if (!r.ok) return [];
+          const gj = await r.json();
+        
+          return (gj.features || []).map(f => {
+            const p = f.properties;
+            const center = f.geometry.coordinates;      // point exact du numéro si trouvé
+            return {
+              type: 'Feature',
+              geometry: { type: 'Point', coordinates: center },
+              place_name: p.label,
+              text: p.label,
+              properties: p,                            // p.type : housenumber | street | municipality…
+              place_type: ['address'],
+              center
+            };
+          });
+        }
+      
+      // ==================== PARCELLES (geo.api.gouv + API Carto) ====================
+      // Analyse "AB 12 Poitiers" ou "Poitiers AB 12"
+      function analyserParcelle(q) {
+        q = q.trim();
+        let m = q.match(/^([A-Za-z]{1,2})\s*0*(\d{1,4})\s+(.{2,})$/);     // section numéro commune
+        if (m) return { section: m[1], numero: m[2], commune: m[3] };
+        m = q.match(/^(.{2,}?)\s+([A-Za-z]{1,2})\s*0*(\d{1,4})$/);        // commune section numéro
+        if (m) return { section: m[2], numero: m[3], commune: m[1] };
+        return null;
+      }
+      
+      async function chercherParcelles(query, signal) {
+        const a = analyserParcelle(query);
+        if (!a) return [];
+      
+        const section = a.section.toUpperCase().padStart(2, '0');
+        const numero  = a.numero.padStart(4, '0');
+      
+        // 1. Commune(s) correspondante(s)
+        const rc = await fetch(
+          `https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(a.commune)}` +
+          `&fields=nom,code,centre&boost=population&limit=3`, { signal });
+        const communes = (await rc.json()).filter(c => c.centre && dansPerimetre(c.centre.coordinates));
+      
+        // 2. Parcelle dans chaque commune
+        const resultats = await Promise.all(communes.map(async c => {
+          const url = `https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=${c.code}` +
+                      `&section=${section}&numero=${numero}`;
+          const r = await fetch(url, { signal });
+          if (!r.ok) return [];
+          const gj = await r.json();
+          return (gj.features || []).map(f => {
+            const bb = bboxGeom(f.geometry);
+            const center = centreGeom(bb);
+            const nom = `Parcelle ${section} ${numero} – ${c.nom}`;
+            return {
+              type: 'Feature',
+              geometry: { type: 'Point', coordinates: center },
+              place_name: nom,
+              text: nom,
+              properties: f.properties,
+              place_type: ['parcel'],
+              center,
+              bbox: bb
+            };
+          });
+        }));
+        return resultats.flat();
+      }
+      
+      // ==================== MODE DE RECHERCHE ====================
+      let mode = 'adresse';   // 'adresse' | 'parcelle'
+      
+      const PLACEHOLDERS = {
+        adresse:  'Rechercher une adresse (ex. 10 rue de la Cathédrale, Poitiers)…',
+        parcelle: 'Rechercher une parcelle (ex. AB 12 Poitiers)…'
+      };
+      
+      const geocoderApi = {
+        forwardGeocode: async (config) => {
+          const signal = AbortSignal.timeout(8000);
+          try {
+            const features = mode === 'parcelle'
+              ? await chercherParcelles(config.query, signal)
+              : await chercherAdresse(config.query, signal); 
+            return { features: features.filter(f => dansPerimetre(f.center)) };
+          } catch (e) {
+            console.error('forwardGeocode a échoué :', e);
+            return { features: [] };
+          }
+        }
+      };
+      
+      const geocoder = new MaplibreGeocoder(geocoderApi, {
+        maplibregl,
+        placeholder: PLACEHOLDERS[mode],
+        showResultsWhileTyping: true,
+        minLength: 3,
+        debounceSearch: 300,
+        zoom: 17
+      });
+      map.addControl(geocoder, 'top-left');
+      
+      // ==================== SOUS-BARRE ADRESSE / PARCELLE ====================
+      // ==================== PANNEAU DE MODE (Adresse / Parcelle) ====================
+      const HINTS = {
+        adresse:  'Ex. : 10 rue de la Cathédrale, Poitiers',
+        parcelle: 'Ex. : AB 12 Poitiers (section, numéro, commune)'
+      };
+      
+      const geoContainer = document.querySelector('.maplibregl-ctrl-geocoder');
+      const geoInput = geoContainer.querySelector('input');
+      
+      const panel = document.createElement('div');
+      panel.className = 'geo-panel';
+      panel.dataset.mode = mode;
+      panel.innerHTML = `
+        <div class="geo-seg" role="tablist" aria-label="Type de recherche">
+          <span class="geo-thumb"></span>
+          <button type="button" role="tab" data-mode="adresse" aria-selected="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>
+            </svg>Adresse
+          </button>
+          <button type="button" role="tab" data-mode="parcelle" aria-selected="false">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5l6-2 4 2 6-2v16l-6 2-4-2-6 2z"/><path d="M10 3v16M14 5v16"/>
+            </svg>Parcelle
+          </button>
+        </div>
+        <p class="geo-hint">${HINTS[mode]}</p>`;
+      geoContainer.appendChild(panel);
+      
+      const hint = panel.querySelector('.geo-hint');
+      
+      function setMode(m) {
+        mode = m;
+        panel.dataset.mode = m;
+        geoInput.placeholder = PLACEHOLDERS[m];
+        hint.textContent = HINTS[m];
+        panel.querySelectorAll('button').forEach(b =>
+          b.setAttribute('aria-selected', b.dataset.mode === m));
+        geoInput.focus();
+        if (geoInput.value.trim().length >= 3) geocoder.query(geoInput.value.trim());
+      }
+      
+      panel.addEventListener('mousedown', e => e.preventDefault()); // le champ garde le focus
+      panel.addEventListener('click', e => {
+        const b = e.target.closest('button[data-mode]');
+        if (b) setMode(b.dataset.mode);
+      });
+      
+      geoInput.addEventListener('focus', () => geoContainer.classList.add('geo-open'));
+      document.addEventListener('mousedown', e => {
+        if (!geoContainer.contains(e.target)) geoContainer.classList.remove('geo-open');
+      });
+
 
   // Utile pour le bouton latérale Couche indicateur --------------
   window.map = map;
     
-  map.addControl(new maplibregl.FullscreenControl(), 'top-left');
-  map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-left');
+  map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+  map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
   map.addControl(new maplibregl.ScaleControl({ maxWidth: 80, unit: 'metric' }));
   
 
@@ -1292,8 +1481,8 @@ map = {
       
       modeBtn.style.cssText = `
         position: absolute;
-        top: 154px;
-        left: 9px;
+        top: 200px;
+        right: 9px;
         width: 30px;
         height: 30px;
         background: white;
@@ -1650,6 +1839,14 @@ indicateur_s12a <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
     `Population en zone fortement inondable` = format(`Population en zone fortement inondable`, big.mark = " ", scientific = FALSE)
   )
 
+cols <- setNames(
+  lapply(names(indicateur_s12a), function(x) {
+    colDef(align = "center")
+  }),
+  names(indicateur_s12a)
+)
+
+
 # Afficher avec reactable
 reactable(indicateur_s12a,
           filterable = TRUE,
@@ -1664,18 +1861,44 @@ reactable(indicateur_s12a,
             stripedColor = "#f5f5f5",
             highlightColor = "#7591e5",
             cellPadding = "8px 12px",
-            style = list(fontSize = "14px", fontFamily = "sans-serif")
+            style = list(fontSize = "14px", fontfamily = "Avenir, Arial, sans-serif",fontweight ="600")
           ))
 
 ## Permet de sauvegarder au format html afin de l'afficher dans la barre latérale de la carte
-widget <- reactable(indicateur_s12a,
+widget <- reactable(
+  indicateur_s12a,
   filterable = TRUE,
   striped = TRUE,
   sortable = TRUE,
   resizable = TRUE,
   pagination = TRUE,
   defaultPageSize = 10,
-  highlight = TRUE
+  highlight = TRUE,
+  
+  columns = cols,
+
+  theme = reactableTheme(
+    borderColor = "#E0E0E0",
+    stripedColor = "#f5f5f5",
+    highlightColor = "#7591e5",
+    cellPadding = "8px 12px",
+    style = list(
+      fontFamily = "Avenir, Arial, sans-serif",
+      fontSize = "16px",
+      fontWeight = "400",
+      textAlign = "center"
+    ),
+    headerStyle = list(
+      fontFamily = "Avenir, Arial, sans-serif",
+      fontWeight = "600",
+      textAlign = "center",
+      fontSize = "16px",
+      alignItems = "center",
+      backgroundColor = "#e5f0f0",
+      borderRadius = "8px",
+      color = "cadetblue"
+    )
+  )
 )
 
 htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
