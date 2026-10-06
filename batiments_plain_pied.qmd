@@ -1481,7 +1481,7 @@ map = {
       
       modeBtn.style.cssText = `
         position: absolute;
-        top: 200px;
+        top: 146px;
         right: 9px;
         width: 30px;
         height: 30px;
