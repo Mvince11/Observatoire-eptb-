@@ -14,7 +14,7 @@ resources:
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
   - layers/ruissellement_cartino2d.pmtiles
-  # - layers/ruissellement_exzeco.pmtiles
+  - layers/parcelles.pmtiles
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs.geojson
@@ -256,12 +256,7 @@ perimetre = FileAttachment("layers/perimetre.json").json();
 slgri = FileAttachment("layers/slgri.json").json();
 tri = FileAttachment("layers/tri.geojson").json();
 perimetre_papi = FileAttachment("layers/perimetre_papi.geojson").json();
-//zone_inondable = FileAttachment("layers/zone_inondable.geojson").json();
-//indicateurs = FileAttachment("layers/indicateurs.json").json();
-//cours_d_eau = FileAttachment("layers/cours_d_eau.geojson").json();
 indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
-//batiments = FileAttachment("layers/batiments_hauteur.geojson").json();
-
 ```
 
 ```{ojs}
@@ -482,7 +477,7 @@ map = {
         showResultsWhileTyping: true,
         minLength: 3,
         debounceSearch: 300,
-        zoom: 17
+        flyTo: false
       });
       map.addControl(geocoder, 'top-left');
       
@@ -668,18 +663,18 @@ map = {
           visibility: "visible"
         }
       },
-      <!-- { -->
-      <!--   pmtiles: true, -->
-      <!--   source: "zoneinondable2d", -->
-      <!--   sourceLayer: "zi_cartino2d", -->
-      <!--   type: "fill", -->
-      <!--   id: "zoneinondable2dLayer", -->
-      <!--   color: "#b4c3ef", -->
-      <!--   opacity: 0.5, -->
-      <!--   layout: { -->
-      <!--     visibility: "visible" -->
-      <!--   } -->
-      <!-- }, -->
+        { 
+          pmtiles: true, 
+          source: "parcelles",
+          sourceLayer: "parcelles", 
+          type: "fill", 
+          id: "parcellesLayer", 
+          color: "#b4c3ef", 
+          opacity: 0.5, 
+          layout: { 
+          visibility: "none"
+          } 
+            }, 
       {
         pmtiles: true,
         source: "zoneinondable",
@@ -919,13 +914,20 @@ map = {
           type: "vector",
           url: `pmtiles://${zonecpapiUrl}`
         });
+        
+        const ZONE_PM_parcelles = "layers/parcelles.pmtiles";
+        const zoneparcellesUrl = new URL(ZONE_PM_parcelles, window.location.href).href;
+        map.addSource("parcelles", {
+          type: "vector",
+          url: `pmtiles://${zoneparcellesUrl}`
+        });
 
     // Ajout des couches vectorielles
       layersData.forEach(layer => {
       
       // ==========================================================
-  // COUCHE PMTILES
-  // ==========================================================
+      // COUCHE PMTILES
+      // ==========================================================
         if (layer.pmtiles === true) {
       
           const layerConfig = {
@@ -1074,6 +1076,8 @@ map = {
       
         map.addLayer(layerConfig);
         
+      });
+        
         map.addLayer({
                   id: 'indicateurs12aLabels',
                   type: 'symbol',
@@ -1092,24 +1096,7 @@ map = {
                   }
                 });
                 
-                map.addLayer({
-                  id: 'indicateurs12aLabels',
-                  type: 'symbol',
-                  source: 'indicateurs12aLayer', // le même id que ta source GeoJSON
-                  layout: {
-                    'text-field': ['get', 'nom'],
-                    'text-size': 11,
-                    'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-                    'text-offset': [0, 0.6],
-                    'text-anchor': 'top'
-                  },
-                  paint: {
-                    'text-color': '#000000',
-                    'text-halo-color': '#ffffff',
-                    'text-halo-width': 1
-                  }
-                });
-                
+               
         map.addLayer({
                  id: 'indicateurs12a-hover',
                  type: 'line',
@@ -1260,7 +1247,28 @@ map = {
          <!--  </div> -->
          <!-- `; -->
       });
-
+      
+      // Parcelles - Couches de surbrillance -----------
+        const none = ['==', ['get', 'idpar'], ''];
+        
+        map.addLayer({
+          id: 'parcelle-fill',
+          type: 'fill',
+          source: 'parcelles',
+          'source-layer': 'parcelles',
+          paint: { 'fill-color': '#e07b00', 'fill-opacity': 0.35 },
+          filter: none
+        });
+        
+        map.addLayer({
+          id: 'parcelle-line',
+          type: 'line',
+          source: 'parcelles',
+          'source-layer': 'parcelles',
+          paint: { 'line-color': '#e07b00', 'line-width': 2 },
+          filter: none
+        });
+        // Fin parcelles - Couches de surbrillance -----------
 
       map.on('mousemove', 'indicateurs12aLayer', (e) => {
         if (e.features.length > 0) {
@@ -1276,8 +1284,98 @@ map = {
           map.setFilter('indicateurs12a-hover', ['==', 'nom', '']);
           map.getCanvas().style.cursor = '';
         });
-      });
-    
+        
+        // Couche invisible servant uniquement à capter les clics
+        map.addLayer({
+          id: 'parcelles-click',
+          type: 'fill',
+          source: 'parcelles',
+          'source-layer': 'parcelles',
+          paint: { 'fill-opacity': 0 }
+        }, 'parcelle-fill');
+        
+        map.on('click', 'parcelles-click', (e) => {
+          const p = e.features[0].properties;
+          console.log('propriétés parcelle :', p); // pour vérifier les noms
+        
+          const id = p.idpar ?? 'Non disponible';
+        
+          // À adapter selon les noms réels dans ta PMTiles
+          const commune = p.idcomtxt ??  'Non disponible';
+        
+          const surfaceM2 = Number(p.dcntpa);
+          const surface = isNaN(surfaceM2)
+            ? 'Non disponible'
+            : surfaceM2 >= 10000
+              ? `${surfaceM2.toLocaleString('fr-FR')} m² (${(surfaceM2 / 10000).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} ha)`
+              : `${surfaceM2.toLocaleString('fr-FR')} m²`;
+        
+          new maplibregl.Popup({ closeButton: true })
+            .setLngLat(e.lngLat)
+            .setHTML(`
+              <div class="popup-body" style="border-left:3px solid blueviolet;background: #e8e5e5;">
+                <h3 class="popup-title" style ="border-bottom: 1px solid #8b99d0;">Parcelle</h3>
+                <div><strong>Identifiant :</strong> ${id}</div>
+                <div><strong>Commune :</strong> ${commune}</div>
+                <div><strong>Surface :</strong> ${surface}</div>
+              </div>
+            `)
+            .addTo(map);
+        });
+        
+        map.on('mouseenter', 'parcelles-click', () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', 'parcelles-click', () => { map.getCanvas().style.cursor = ''; });
+              //});
+      
+     
+    // Recherche de la parcelle pour affichage --------------
+        function highlightSuffix(suffix) {
+        const idpar = ['to-string', ['get', 'idpar']];
+        const f = suffix
+          ? ['==', ['slice', idpar, ['-', ['length', idpar], suffix.length]], suffix]
+          : ['==', idpar, '']; // ne matche rien
+        map.setFilter('parcelle-fill', f);
+        map.setFilter('parcelle-line', f);
+      }
+      
+      // Emprise [minX, minY, maxX, maxY] d'une liste d'entités
+        function bboxOf(features) {
+          let b = [Infinity, Infinity, -Infinity, -Infinity];
+          const walk = (c) => {
+            if (typeof c[0] === 'number') {
+              b = [Math.min(b[0], c[0]), Math.min(b[1], c[1]), Math.max(b[2], c[0]), Math.max(b[3], c[1])];
+            } else c.forEach(walk);
+          };
+          features.forEach(f => walk(f.geometry.coordinates));
+          return b;
+        }
+        
+        geocoder.on('result', ({ result }) => {
+            const m = (result.place_name || '').match(/Parcelle\s+([0-9A-Z]{1,2})\s+(\d{1,4})/i);
+            if (!m) return highlightSuffix(null);
+          
+            highlightSuffix(m[1].toUpperCase() + m[2].padStart(4, '0'));
+          
+            const center = result.center ?? result.geometry?.coordinates;
+          
+            // Saut instantané pour charger les tuiles, puis cadrage sur le polygone entier
+            map.jumpTo({ center, zoom: 17 });
+          
+            map.once('idle', () => {
+              const feats = map.querySourceFeatures('parcelles', {
+                sourceLayer: 'parcelles',
+                filter: map.getFilter('parcelle-fill')
+              });
+              if (!feats.length) return;
+          
+              const [x0, y0, x1, y1] = bboxOf(feats);
+              map.fitBounds([[x0, y0], [x1, y1]], { padding: 120, maxZoom: 18, duration: 800 });
+            });
+          });
+        
+        geocoder.on('clear', () => highlightSuffix(null));
+      // Fin recherche de la parcelle pour affichage --------------
+
 
     // Interface de contrôle des couches
     // --- Conteneur global des couches (sans bouton) ---
@@ -1297,7 +1395,7 @@ map = {
       epciLayer: 'EPCI',
       perimetrepapiLayer: "Périmètre du PAPI",
       communepapiLayer: 'Communes incluses dans le PAPI',
-      <!-- zoneinondable2dLayer: 'Zonage Inondable par modélisation Cartino 2D', -->
+      parcellesLayer: 'Parcelles', 
       zoneinondableLayer: 'Zonage Inondable',
       ruissellementcartino2dLayer: 'Zone de ruissellement par modélisation Cartino 2D',
       coursdeauLayer: "Cours d'eau",
@@ -1305,9 +1403,11 @@ map = {
       batimentsLayer: "Bâtiments"
     };
 
-     const toggleableLayerIds = layersData
-    .map(layer => layer.id)
-    .filter(id => id !== "indicateurs12aLayer");
+     const hiddenFromList = ["indicateurs12aLayer", "parcellesLayer", "parcellesdLayer"];
+
+      const toggleableLayerIds = layersData
+        .map(layer => layer.id)
+        .filter(id => !hiddenFromList.includes(id));
 
     function toggleLayerVisibility(id, visible) {
       const visibility = visible ? 'visible' : 'none';
