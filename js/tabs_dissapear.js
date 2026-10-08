@@ -27,7 +27,7 @@ function initRightTabs() {
           console.error("Carte MapLibre introuvable :", mapLibre);
           return;
         }
-      
+    
         const currentVisibility =
           mapLibre.getLayoutProperty(
             "indicateurs12aLayer",
@@ -46,6 +46,12 @@ function initRightTabs() {
           "visibility",
           newVisibility
         );
+        
+         // Afficher le titre uniquement si l'indicateur est visible
+          if (typeof window.afficherTitre === "function") {
+            window.afficherTitre(newVisibility === "visible");
+          }
+
       
         console.log("Nouvelle visibilité :", newVisibility);
       
@@ -168,189 +174,30 @@ function initRightTabs() {
         // FONCTION GRAPHIQUE
         // ---------------------------------------------------
       
-        function afficherGraphique() {
-      
-          dataContent.innerHTML = "";
-      
-          fetch("layers/data_s12a.json")
-            .then(r => r.json())
-            .then(data => {
-      
-              // Slider
-              const slider = document.createElement("input");
-      
-              slider.type = "range";
-              slider.min = 0;
-              slider.max = 230;
-              slider.step = 10;
-              slider.value = 150;
-      
-              slider.style.width = "20%";
-              slider.style.display = "inline-block";
-      
-      
-              // Valeur du slider
-              const sliderValue = document.createElement("span");
-      
-              sliderValue.textContent =
-                slider.value + " habitants";
-      
-              sliderValue.style.marginLeft = "10px";
-              sliderValue.style.fontWeight = "bold";
-              sliderValue.style.fontSize = "14px";
-              sliderValue.style.border = "1px solid";
-              sliderValue.style.borderRadius = "8px";
-              sliderValue.style.padding = "5px";
-      
-      
-              // Conteneur slider
-              const sliderContainer = document.createElement("div");
-      
-              sliderContainer.style.marginBottom = "5px";
-      
-              sliderContainer.appendChild(slider);
-              sliderContainer.appendChild(sliderValue);
-      
-              dataContent.appendChild(sliderContainer);
-      
-      
-              // Conteneur graphique
-              const plotDiv = document.createElement("div");
-      
-              plotDiv.style.width = "100%";
-              plotDiv.style.height = "600px";
-      
-              dataContent.appendChild(plotDiv);
-      
-      
-              // ---------------------------------------------
-              // RENDU DU GRAPHIQUE
-              // ---------------------------------------------
-      
-              function renderPlot() {
-      
-                const maxVal = Number(slider.value);
-      
-                const sorted = data
-                  .filter(d => d.s12a <= maxVal)
-                  .sort((a, b) => a.s12a - b.s12a);
-      
-      
-                // Toutes les valeurs à 0
-                if (
-                  sorted.length === 0 ||
-                  sorted.every(d => d.s12a === 0)
-                ) {
-      
-                  Plotly.newPlot(
-                    plotDiv,
-                    [],
-                    {
-                      title:
-                        "Population en zone fortement inondable",
-      
-                      yaxis: {
-                        range: [0, 10]
-                      },
-      
-                      xaxis: {
-                        visible: false
-                      },
-      
-                      margin: {
-                        b: 150
-                      }
-                    }
-                  );
-      
-                  return;
-                }
-      
-      
-                const trace = {
-      
-                  x: sorted.map(d => d.nom),
-      
-                  y: sorted.map(d => d.s12a),
-      
-                  type: "bar",
-      
-                  text: sorted.map(d => d.s12a),
-      
-                  textposition: "outside",
-      
-                  marker: {
-      
-                    color: sorted.map(d => {
-      
-                      const val = d.s12a;
-      
-                      if (val === 0) return "#d9d9d9";
-                      if (val < 10) return "#f9e9e9";
-                      if (val < 50) return "#ffaaaa";
-                      if (val < 100) return "#ff5555";
-                      if (val >= 100) return "#ff0000";
-      
-                      return "#b30000";
-                    })
-      
-                  }
-      
-                };
-      
-      
-                const layout = {
-      
-                  title:
-                    "Population en zone fortement inondable",
-      
-                  margin: {
-                    b: 150
-                  },
-      
-                  xaxis: {
-                    tickangle: -45
-                  }
-      
-                };
-      
-      
-                Plotly.newPlot(
-                  plotDiv,
-                  [trace],
-                  layout
-                );
-              }
-      
-      
-              renderPlot();
-      
-      
-              slider.addEventListener(
-                "input",
-                () => {
-      
-                  sliderValue.textContent =
-                    slider.value + " habitants";
-      
-                  renderPlot();
-      
-                }
-              );
-      
-            })
-            .catch(error => {
-      
-              console.error(
-                "Erreur chargement données graphique :",
-                error
-              );
-      
-              dataContent.innerHTML =
-                "<p>Impossible de charger les données du graphique.</p>";
-      
-            });
-        }
+          function afficherGraphique() {
+            dataContent.innerHTML = '';
+            const cfg = window.GRAPHIQUE;
+          
+            if (!cfg) {
+              dataContent.innerHTML = '<p>Aucune donnée de graphique définie pour cette page.</p>';
+              return;
+            }
+            if (typeof window.graphiqueBarres !== 'function') {
+              dataContent.innerHTML = '<p>Le graphique est en cours de chargement, réessayez dans un instant.</p>';
+              return;
+            }
+          
+            fetch(cfg.url)
+              .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
+                return r.json();
+              })
+              .then(data => window.graphiqueBarres(dataContent, data, cfg.options))
+              .catch(err => {
+                console.error('Erreur chargement données graphique :', err);
+                dataContent.innerHTML = '<p>Impossible de charger les données du graphique.</p>';
+              });
+          }
 
 
           // ---------------------------------------------------

@@ -259,6 +259,175 @@ perimetre_papi = FileAttachment("layers/perimetre_papi.geojson").json();
 indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
 ```
 
+```{=html}
+<script>
+window.GRAPHIQUE = {
+  url: 'layers/data_s12a.json',
+  options: {
+    titre: 'Population en zone fortement inondable',
+    sousTitre: "Nombre d'habitants par commune",
+    champValeur: 's12a',
+    unite: 'habitants'
+  }
+};
+</script>
+```
+
+```{=html}
+<script>
+(function () {
+
+  function graphiqueBarres(conteneur, data, opts = {}) {
+    const o = {
+      titre: 'Population en zone fortement inondable',
+      sousTitre: "Nombre d'habitants par commune",
+      champNom: 'nom',
+      champValeur: 's12a',
+      unite: 'habitants',
+      pas: 10,
+      seuilInitial: 150,
+      classes: [
+        { label: 'Aucun',       max: 0,        couleur: '#e2e8f0' },
+        { label: '1 à 9',       max: 9,        couleur: '#fde3c8' },
+        { label: '10 à 49',     max: 49,       couleur: '#fbb27a' },
+        { label: '50 à 99',     max: 99,       couleur: '#f2784b' },
+        { label: '100 et plus', max: Infinity, couleur: '#d1342f' }
+      ],
+      ...opts
+    };
+
+    conteneur.innerHTML = '';
+
+    // ---------- Curseur ----------
+    const maxData = Math.max(...data.map(d => d[o.champValeur]), 0);
+    const sliderMax = Math.ceil(maxData / o.pas) * o.pas || o.pas;
+
+    const barre = document.createElement('div');
+    barre.className = 'gb-slider';
+    barre.innerHTML = `
+      <label for="gb-range">Afficher les communes jusqu'à</label>
+      <input id="gb-range" type="range" min="0" max="${sliderMax}" step="${o.pas}"
+             value="${Math.min(o.seuilInitial, sliderMax)}">
+      <span class="gb-badge"></span>`;
+    conteneur.appendChild(barre);
+
+    const range = barre.querySelector('input');
+    const badge = barre.querySelector('.gb-badge');
+
+    const plotDiv = document.createElement('div');
+    plotDiv.className = 'gb-plot';
+    conteneur.appendChild(plotDiv);
+
+    // ---------- Style commun ----------
+    const police = { family: 'system-ui, -apple-system, "Segoe UI", sans-serif', color: '#334155' };
+    const config = {
+      responsive: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d'],
+      toImageButtonOptions: { filename: 'graphique', scale: 2 }
+    };
+    const titre = {
+      text: `<b>${o.titre}</b><br><span style="font-size:12px;color:#64748b">${o.sousTitre}</span>`,
+      x: 0.01, xanchor: 'left'
+    };
+
+    // ---------- Rendu ----------
+    function couleurDe(v) {
+      return (o.classes.find(c => v <= c.max) || o.classes[o.classes.length - 1]).couleur;
+    }
+
+    function rendre() {
+      const seuil = Number(range.value);
+      badge.textContent = `${seuil.toLocaleString('fr-FR')} ${o.unite}`;
+
+      const tri = data
+        .filter(d => d[o.champValeur] <= seuil)
+        .sort((a, b) => a[o.champValeur] - b[o.champValeur]);
+
+      if (!tri.length || tri.every(d => d[o.champValeur] === 0)) {
+        Plotly.react(plotDiv, [], {
+          font: police, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+          title: titre, xaxis: { visible: false }, yaxis: { visible: false },
+          annotations: [{
+            text: 'Aucune commune concernée pour ce seuil',
+            showarrow: false, xref: 'paper', yref: 'paper', x: 0.5, y: 0.5,
+            font: { size: 15, color: '#94a3b8' }
+          }]
+        }, config);
+        return;
+      }
+
+      const trace = {
+        type: 'bar',
+        x: tri.map(d => d[o.champNom]),
+        y: tri.map(d => d[o.champValeur]),
+        text: tri.map(d => d[o.champValeur] || ''),
+        textposition: 'outside',
+        cliponaxis: false,
+        textfont: { size: 12, color: '#475569' },
+        marker: {
+          color: tri.map(d => couleurDe(d[o.champValeur])),
+          cornerradius: 6,
+          line: { width: 0 }
+        },
+        hovertemplate: `<b>%{x}</b><br>%{y:,} ${o.unite}<extra></extra>`
+      };
+
+      Plotly.react(plotDiv, [trace], {
+        font: police,
+        title: titre,
+        showlegend: false,
+        bargap: 0.35,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        margin: { t: 70, r: 20, b: 20, l: 50 },
+        xaxis: {
+          type: 'category',
+          categoryorder: 'array', categoryarray: tri.map(d => d[o.champNom]),
+          tickangle: -40, automargin: true,
+          showline: false, ticks: '', tickfont: { size: 12, color: '#64748b' }
+        },
+        yaxis: {
+          gridcolor: '#f1f5f9', zeroline: false, showline: false, ticks: '',
+          rangemode: 'tozero', tickfont: { size: 12, color: '#94a3b8' }
+        },
+        hoverlabel: {
+          bgcolor: '#0f172a', bordercolor: '#0f172a',
+          font: { color: '#fff', size: 13 }
+        }
+      }, config);
+    }
+
+    range.addEventListener('input', rendre);   // <-- manquait
+    rendre();                                  // <-- manquait
+  }                                            // <-- fermeture de graphiqueBarres
+
+  // ---------- Chargement de Plotly à la demande ----------
+  let promessePlotly;
+  function chargerPlotly() {
+    if (window.Plotly) return Promise.resolve();
+    if (promessePlotly) return promessePlotly;
+    promessePlotly = new Promise((resolve, reject) => {
+      const ancienDefine = window.define;
+      window.define = undefined;                 // empêche l'enregistrement AMD
+      const s = document.createElement('script');
+      s.src = 'https://cdn.plot.ly/plotly-2.35.2.min.js';
+      s.onload  = () => { window.define = ancienDefine; resolve(); };
+      s.onerror = () => { window.define = ancienDefine; reject(new Error('Plotly introuvable')); };
+      document.head.appendChild(s);
+    });
+    return promessePlotly;
+  }
+
+  window.graphiqueBarres = async function (conteneur, data, opts) {
+    await chargerPlotly();
+    graphiqueBarres(conteneur, data, opts);
+  };
+
+})();
+</script>
+```
+
 ```{ojs}
 //| echo: false
 //| padding: 0px
@@ -309,6 +478,40 @@ map = {
     zoom: 11
   });
   
+  
+      // ==================== TITRE DE L'INDICATEUR ====================
+        const NOM_INDICATEUR =
+          "Nombre de personnes occupant des bâtiments de plain-pied fortement inondables";
+        
+        const titreCarte = document.createElement("div");
+        titreCarte.className = "map-titre";
+        titreCarte.textContent = NOM_INDICATEUR;
+        titreCarte.style.display = "none";
+        
+        map.getContainer().appendChild(titreCarte);
+        
+        window.titreCarte = titreCarte;
+        
+        window.afficherTitre = function(visible) {
+          if (window.titreCarte) {
+            window.titreCarte.style.display = visible ? "block" : "none";
+          }
+        };
+        
+        // Vérifier la visibilité initiale après le chargement du style
+        function synchroniserTitreIndicateur() {
+          const layerId = "indicateurs12aLayer";
+        
+          if (!map.getLayer(layerId)) return;
+        
+          const visibility =
+            map.getLayoutProperty(layerId, "visibility");
+        
+          window.afficherTitre(visibility !== "none");
+        }
+        
+        map.on("load", synchroniserTitreIndicateur);
+        map.on("styledata", synchroniserTitreIndicateur);
   
       // Barre de recherche adresses et parcelles -----------
   
@@ -1220,32 +1423,6 @@ map = {
           .setHTML(popupContent)
           .addTo(map);
           
-         <!--  // Mettre à jour le conteneur HTML avec les informations spécifiques du marqueur  -->
-         <!-- document.getElementById('donnees').innerHTML = ` -->
-         <!--  <div style="text-align:center; font-family:sans-serif; font-size:16px;"> -->
-         <!--    <img src="${image}" style="width:300px; margin-bottom:10px;"><br> -->
-
-         <!--    <strong style="font-size:1.1em;"><i class="bi bi-geo-alt-fill"></i> Commune :</strong> ${nom}<br> -->
-         <!--    <strong style="font-size:1.1em;"><i class="bi bi-people-fill"></i> Nombre d'habitants :</strong> ${population}<br> -->
-         <!--    <strong style="font-size:1.1em;"><i class="bi bi-house-fill"></i> Nombre de bâtiments :</strong> ${batiments}<br> -->
-
-         <!--    <div style="margin-top:10px;"><strong>Dont :</strong></div> -->
-         <!--    <ul style="list-style:none; padding:0;"> -->
-         <!--      <li><h5 style="font-size:1em;">${batindif} <strong>bâtiments indifférenciés</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batsportif} <strong>bâtiments sportifs</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batagricole} <strong>bâtiments agricoles</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batresidentiel} <strong>bâtiments résidentiels</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batannexe} <strong>bâtiments annexes</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batreligieux} <strong>bâtiments religieux</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batindustriel} <strong>bâtiments industriels</strong></h5></li> -->
-         <!--      <li><h5 style="font-size:1em;">${batcommercial} <strong>bâtiments commerciaux</strong></h5></li> -->
-         <!--    </ul> -->
-
-         <!--    <div style="margin-top:10px;"> -->
-         <!--      <strong style="font-size:1.1em;"><i class="bi bi-droplet-half"></i> Nombre de personnes en zone fortement inondable :</strong> ${dommages} -->
-         <!--    </div> -->
-         <!--  </div> -->
-         <!-- `; -->
       });
       
       // Parcelles - Couches de surbrillance -----------
@@ -1406,7 +1583,7 @@ map = {
       batimentsLayer: "Bâtiments"
     };
 
-     const hiddenFromList = ["indicateurs12aLayer", "parcellesLayer", "parcellesdLayer"];
+     const hiddenFromList = ["indicateurs12aLayer", "parcellesLayer"];
 
       const toggleableLayerIds = layersData
         .map(layer => layer.id)
@@ -2057,78 +2234,5 @@ indicateurs <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
 
 # Sauvegarder au format JSON dans le dossier _site
 write_json(indicateurs, "layers/data_s12a.json", auto_unbox = TRUE)
-```
-
-```{ojs}
-//| echo: false
-//| padding: 5px
-//| expandable: false
-import { Plot } from "@observablehq/plot";
-import { Inputs } from "@observablehq/inputs";
-
-// Charger les données depuis le fichier généré par R
-data = FileAttachment("layers/data_s12a.json").json()
-
-html`<label for="slider-s12a" style="display: block;
-  margin-top: 1em;
-  font-weight: bold;
-  margin-bottom: 1em;
-  border: 1px solid rgba(0, 0, 0, 0.6);
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
-  padding: 5px;
-  text-align: center;
-  margin-right: 20%;
-  margin-left: 20%;">
-  Population en zone inondable
-</label>`
-
-// Créer le slider
-viewof slider = Inputs.range(
-  [0, 230], 
-  { value: 230, step: 10, 
-  id: "slider-s12a"
-  }
-)
-
-html`<div style="margin-top: 30px;"></div>`
-
-// Fonction de tri croissant
-sorted = data
-  .filter(d => d.s12a <= slider)
-  .sort((a, b) => a.s12a - b.s12a);
-  
-
-Plot.plot({
-  marks: [
-    Plot.barY(sorted, { x: "nom", y: "s12a", 
-    fill: d => {
-        const val = d.s12a;
-        if (val === 0) return "#d9d9d9";        // null ou 0
-        if (val < 10) return "#f9e9e9";
-        if (val < 50) return "#ffaaaa";
-        if (val < 100) return "#ff5555";
-        if (val >= 100) return "#ff0000";
-        return "#b30000";
-      }
-      }),
-    Plot.text(sorted, { x: "nom", y: "s12a", text: d => `${d.s12a}`, dy: -10 })
-  ],
-  y: { grid: true, label: "Population en zone fortement inondable" },
-  x: { label: "Commune",
-        tickRotate: -45,
-        labelAnchor: "right",
-        labelOffset: 30},
-  width: window.innerWidth * 0.95,
-   height: window.innerHeight * 0.85,
-  height: 600,
-  style: {
-    fontSize: "10px",
-    fill: "black",
-    fontWeight: "bold"
-  },
-  marginBottom: 130
-})
-
 ```
 ::::
