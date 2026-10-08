@@ -1291,6 +1291,7 @@ map = {
           type: 'fill',
           source: 'parcelles',
           'source-layer': 'parcelles',
+          filter: ['==', ['to-string', ['get', 'idpar']], ''],
           paint: { 'fill-opacity': 0 }
         }, 'parcelle-fill');
         
@@ -1339,6 +1340,7 @@ map = {
           : ['==', idpar, ''];                                                           // ne matche rien
         map.setFilter('parcelle-fill', f);
         map.setFilter('parcelle-line', f);
+        map.setFilter('parcelles-click', f);
       }
       
       // Emprise [minX, minY, maxX, maxY] d'une liste d'entités
