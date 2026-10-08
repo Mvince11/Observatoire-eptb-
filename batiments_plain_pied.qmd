@@ -393,7 +393,7 @@ map = {
               geometry: { type: 'Point', coordinates: center },
               place_name: nom,
               text: nom,
-              properties: f.properties,
+              properties: { ...f.properties, _insee: c.code },
               place_type: ['parcel'],
               center,
               bbox: bb
@@ -1329,11 +1329,14 @@ map = {
       
      
     // Recherche de la parcelle pour affichage --------------
-        function highlightSuffix(suffix) {
+        function highlightParcelle(insee, suffix) {
         const idpar = ['to-string', ['get', 'idpar']];
-        const f = suffix
-          ? ['==', ['slice', idpar, ['-', ['length', idpar], suffix.length]], suffix]
-          : ['==', idpar, '']; // ne matche rien
+        const f = (insee && suffix)
+          ? ['all',
+              ['==', ['slice', idpar, 0, 5], insee],                                     // 86194
+              ['==', ['slice', idpar, ['-', ['length', idpar], suffix.length]], suffix]  // AB0494
+            ]
+          : ['==', idpar, ''];                                                           // ne matche rien
         map.setFilter('parcelle-fill', f);
         map.setFilter('parcelle-line', f);
       }
@@ -1351,29 +1354,27 @@ map = {
         }
         
         geocoder.on('result', ({ result }) => {
-            const m = (result.place_name || '').match(/Parcelle\s+([0-9A-Z]{1,2})\s+(\d{1,4})/i);
-            if (!m) return highlightSuffix(null);
-          
-            highlightSuffix(m[1].toUpperCase() + m[2].padStart(4, '0'));
-          
-            const center = result.center ?? result.geometry?.coordinates;
-          
-            // Saut instantané pour charger les tuiles, puis cadrage sur le polygone entier
-            map.jumpTo({ center, zoom: 17 });
-          
-            map.once('idle', () => {
-              const feats = map.querySourceFeatures('parcelles', {
-                sourceLayer: 'parcelles',
-                filter: map.getFilter('parcelle-fill')
-              });
-              if (!feats.length) return;
-          
-              const [x0, y0, x1, y1] = bboxOf(feats);
-              map.fitBounds([[x0, y0], [x1, y1]], { padding: 120, maxZoom: 18, duration: 800 });
-            });
+        const m = (result.place_name || '').match(/Parcelle\s+([0-9A-Z]{1,2})\s+(\d{1,4})/i);
+        const insee = result.properties?._insee;
+        if (!m || !insee) return highlightParcelle(null, null);
+      
+        highlightParcelle(insee, m[1].toUpperCase() + m[2].padStart(4, '0'));
+      
+        const center = result.center ?? result.geometry?.coordinates;
+        map.jumpTo({ center, zoom: 17 });
+      
+        map.once('idle', () => {
+          const feats = map.querySourceFeatures('parcelles', {
+            sourceLayer: 'parcelles',
+            filter: map.getFilter('parcelle-fill')
           });
-        
-        geocoder.on('clear', () => highlightSuffix(null));
+          if (!feats.length) return;
+          const [x0, y0, x1, y1] = bboxOf(feats);
+          map.fitBounds([[x0, y0], [x1, y1]], { padding: 120, maxZoom: 18, duration: 800 });
+        });
+      });
+      
+      geocoder.on('clear', () => highlightParcelle(null, null));
       // Fin recherche de la parcelle pour affichage --------------
 
 
