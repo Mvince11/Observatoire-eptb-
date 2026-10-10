@@ -201,32 +201,32 @@ img{
 }
 
 /* Afficher le menu quand on survole le bouton ou le menu */
-.mapLayers:hover #layersList,
+/*.mapLayers:hover #layersList,
 #layersList:hover {
     visibility: visible;
     /* Rendre visible l'élément */
-    opacity: 1;
-    animation: popEffect 0.4s ease forwards;
+   /* opacity: 1;
+    /*animation: popEffect 0.4s ease forwards;
     /* Animation de pop */
-}
+/*}
 
 /* Définir l'animation de pop */
-@keyframes popEffect {
-    0% {
-        transform: scale(0.0);
+/*@keyframes popEffect {
+    /*0% {
+        /*transform: scale(0.0);
         /* Départ plus petit */
-    }
+    /*}
 
     50% {
         transform: scale(1.1);
         /* Agrandissement au-dessus de 100% */
-    }
+    /*}
 
     100% {
         transform: scale(1);
         /* Retour à la taille normale */
-    }
-}
+    /*}
+/*}
 
 #layersList a {
     font-size: 12px;
@@ -235,11 +235,11 @@ img{
     display: block;
     margin: 0;
     /* padding: 0; */
-    padding: 2px;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    text-align: center;
-}
+   /* padding: 2px;
+    /*text-decoration: none;
+   /* border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+   /* text-align: center;
+/*}
 
 #layersList a:first-child {
     border-top-left-radius: 8px;
@@ -265,8 +265,81 @@ img{
 
 #layersList a.active:hover {
     background: #ffef60;
+}*/
+
+
+:root {
+  --accent: #198754;
+  --accent-soft: #e8f5ee;
+  --texte: #1e293b;
+  --bordure: #cbd5e1;
 }
 
+/* Ligne entière cliquable, avec survol */
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+
+.form-check:hover {
+  background: #f1f5f9; 
+}
+
+.form-check:has(.form-check-input:checked) {
+  background: var(--accent-soft); 
+  }
+
+/* Case */
+.form-check-input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 2px solid var(--bordure);
+  border-radius: 6px;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 0;                    /* coche cachée */
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease,
+              box-shadow .15s ease, background-size .15s ease;
+}
+.form-check-input:hover {
+  border-color: var(--accent); 
+  
+}
+
+.form-check-input:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  background-size: 12px;                 /* coche visible */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7'/%3E%3C/svg%3E");
+}
+
+/* Focus clavier visible et discret */
+.form-check-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(25, 135, 84, .25);
+}
+
+/* Libellé */
+.form-check-label {
+  flex: 1;
+  text-align: left;
+  font: 500 14px/1.3 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--texte);
+  cursor: pointer;
+  user-select: none;
+}
   
 /*-- OJS --*/
 .observablehq td, .observablehq th {
@@ -421,32 +494,6 @@ div.sidebar-item-container{
   opacity: 1;
 }
 
-.form-check {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
- .form-check-input {
-  margin-right: 8px;
-}
-
-.form-check-label {
-  flex: 1;
-  text-align: left;
-}
-
- .form-check-input {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  border: 2px solid #198754; /* Bordure verte */
-}
-
-.form-check-input:checked {
-  background-color: #198754; /* Fond vert quand cochée */
-  border-color: #198754;
-}
 
 .ctrl-reset-view {
   display: flex !important;
