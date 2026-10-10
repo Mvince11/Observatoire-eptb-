@@ -1623,6 +1623,11 @@ map = {
       wrapper.style.marginBottom = "6px";
       wrapper.appendChild(checkbox);
       wrapper.appendChild(label);
+      
+      wrapper.addEventListener('click', (e) => {
+        if (e.target === checkbox || e.target === label) return;   // déjà géré nativement
+        checkbox.click();
+      });
     
       layersListDiv.appendChild(wrapper);
     });
