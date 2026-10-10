@@ -201,18 +201,14 @@ window.addEventListener("load", function () {
      8) Fonction responsive : recalcul hauteur navbar/footer
   ----------------------------------------------------------- */
   function updateLayoutHeights() {
-    const footer = document.querySelector("footer");
-    const navbarHeight = navbar.getBoundingClientRect().height;
-    const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
-
-    document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
-    document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
-  }
+  const navbarHeight = navbar.getBoundingClientRect().height;
+  document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+  if (window.map) window.map.resize();
+}
 
   updateLayoutHeights();
-
   window.addEventListener("resize", updateLayoutHeights);
   window.addEventListener("orientationchange", updateLayoutHeights);
-
-});
+  
+  });
 </script>

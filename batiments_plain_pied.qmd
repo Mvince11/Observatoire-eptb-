@@ -512,6 +512,8 @@ map = {
         
         map.on("load", synchroniserTitreIndicateur);
         map.on("styledata", synchroniserTitreIndicateur);
+      // ==================== Fin TITRE DE L'INDICATEUR (déclencheur sous fichier tabs_dissapear.js) ====================
+        
   
       // Barre de recherche adresses et parcelles -----------
   
