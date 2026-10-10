@@ -1599,38 +1599,42 @@ map = {
     }
     
     toggleableLayerIds.forEach(id => {
-      const name = aliasLayerIds[id] || id;
-    
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = id;
-      checkbox.className = 'form-check-input';
-    
-      map.once('idle', () => {
-        const visibility = map.getLayoutProperty(id, 'visibility');
-        checkbox.checked = visibility === 'visible';
-      });
-    
-      checkbox.addEventListener('change', () => toggleLayerVisibility(id, checkbox.checked));
-    
-      const label = document.createElement('label');
-      label.htmlFor = id;
-      label.className = 'form-check-label';
-      label.innerText = name;
-    
-      const wrapper = document.createElement('div');
-      wrapper.className = 'form-check';
-      wrapper.style.marginBottom = "6px";
-      wrapper.appendChild(checkbox);
-      wrapper.appendChild(label);
+        const name = aliasLayerIds[id] || id;
       
-      wrapper.addEventListener('click', (e) => {
-        if (e.target === checkbox || e.target === label) return;   // déjà géré nativement
-        checkbox.click();
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = id;
+        checkbox.className = 'form-check-input';
+      
+        const wrapper = document.createElement('div');
+        wrapper.className = 'form-check';            // plus de style en ligne
+      
+        // État initial, une fois la carte prête
+        map.once('idle', () => {
+          checkbox.checked = map.getLayoutProperty(id, 'visibility') !== 'none';
+          wrapper.classList.toggle('actif', checkbox.checked);
+        });
+      
+        checkbox.addEventListener('change', () => {
+          toggleLayerVisibility(id, checkbox.checked);
+          wrapper.classList.toggle('actif', checkbox.checked);
+        });
+      
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.className = 'form-check-label';
+        label.textContent = name;
+      
+        wrapper.append(checkbox, label);
+      
+        // Clic n'importe où sur la ligne
+        wrapper.addEventListener('click', (e) => {
+          if (e.target === checkbox || e.target === label) return;
+          checkbox.click();
+        });
+      
+        layersListDiv.appendChild(wrapper);
       });
-    
-      layersListDiv.appendChild(wrapper);
-    });
 
      
      /* ============================================================

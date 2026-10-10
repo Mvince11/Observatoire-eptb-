@@ -291,9 +291,13 @@ img{
   background: #f1f5f9; 
 }
 
-.form-check:has(.form-check-input:checked) {
-  background: var(--accent-soft); 
-  }
+.form-check {
+  border-left: 3px solid transparent;   /* réserve la place, évite le décalage */
+}
+.form-check.actif {
+  background: var(--accent-soft);
+  border-left-color: cadetblue;
+}
 
 /* Case */
 .form-check-input {
