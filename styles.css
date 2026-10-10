@@ -123,8 +123,13 @@ img{
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
   }
+  
+  html.page-carte,
+html.page-carte body {
+  height: 100%;
+  overflow: hidden;
+}
 
  .map-container {
   position: fixed;
