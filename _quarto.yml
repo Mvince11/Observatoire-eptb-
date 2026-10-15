@@ -21,60 +21,117 @@ website:
           text: Mieux comprendre les inondations
         #- sidebar:Objectifs
         
-        - text: "Objectif n°1: Augmenter la sécurité des populations"
+        # ================= DÉBORDEMENT =================
+        - text: "Population"
           menu:
-           - href: batiments_plain_pied.qmd
-             text: Bâtiments plain-pied
-           - href: etablissements_sensibles.qmd
-             text: Etablissements sensibles
-           - href: enjeux_susceptibles_dysfonctionner.qmd
-             text: Etablissements utiles à la gestion de crise
-           - href: campings.qmd
-             text: Campings
-           - href: routes.qmd
-             text: Routes
-           - href: pcs.qmd
-             text: Plan communal de sauvegarde (PCS)
-           - href: dicrim.qmd
-             text: Document d'information communal sur les risques majeurs (DICRIM)
-             
-        - text: "Objectif n°2: Stabiliser/réduire le coût des dommages"
+          - href: debordement/habitants_zones_inondables.qmd
+            text: Résidents exposés (S3/1a)
+          - href: debordement/batiments_plain_pied.qmd
+            text: Bâtiments plain-pied (S1/2a)
+          - href: debordement/personnes_agees.qmd
+            text: Personnes âgées (S3/1j)
+          - href: debordement/menages_pauvres.qmd
+            text: Ménages pauvres (S3/3)
+          - href: debordement/fragilite_electrique.qmd
+            text: Fragilité électrique (S1/10b)
+          - href: debordement/pcs.qmd
+            text: PCS à jour (S1/14b)
+          - href: debordement/dicrim.qmd
+            text: DICRIM à jour (S1/14c)
+          - href: debordement/reperes_crues.qmd
+            text: Repères de crues (S1/13b)
+
+        - text: "Urbanisation"
           menu:
-           - href: dommages_habitations.qmd
-             text: Dommages aux habitations
-           - href: dommages_entreprises.qmd
-             text: Dommages aux entreprises
-           - href: dommages_cultures.qmd
-             text: Dommages aux cultures
-           - href: monuments.qmd
-             text: Patrimoines et monuments historiques
-           - href: espaces_naturels.qmd
-             text: Espaces naturels
-           - href: installations_polluantes.qmd
-             text: Installations polluantes
-           - href: eau_potable.qmd
-             text: Station d'alimentation en eau potable
-           - href: reseaux.qmd
-             text: Réseaux
-           - href: voies_ferrees.qmd
-             text: Voies ferrées
-           - href: reseaux_bus.qmd
-             text: Réseau de bus
-             
-        - text: "Objectif n°3: Raccourcir le délai de retour à la normale"
+          - href: debordement/batiments_habitation.qmd
+            text: Bâtiments d'habitation (S3/1h)
+          - href: debordement/dommages_habitations.qmd
+            text: Dommages aux logements (S2/2a)
+          - href: debordement/retour_normale_logements.qmd
+            text: Retour à la normale des logements (S3/2a)
+          - href: debordement/zones_a_urbaniser.qmd
+            text: Zones à urbaniser (S2/14a)
+
+        - text: "Économie"
           menu:
-           - href: habitants_zones_inondables.qmd
-             text: Nombre et proportion d'habitants en zone inondable
-           - href: surfaces_habitations.qmd
-             text: Surface des habitations
-           - href: retour_normale_logements.qmd
-             text: Logements
-           - href: employes.qmd
-             text: Employés
-           - href: surface_agricole.qmd
-             text: Surface agricole
-           - href: reseau_routier.qmd
-             text: Routes inondées
+          - href: debordement/dommages_entreprises.qmd
+            text: Dommages aux entreprises (S2/7a)
+          - href: debordement/employes.qmd
+            text: Emplois exposés (S3/6a)
+          - href: debordement/entreprises_exposees.qmd
+            text: Entreprises exposées
+          - href: debordement/installations_polluantes.qmd
+            text: Installations polluantes (S2/5b)
+
+        - text: "Infrastructures"
+          menu:
+          - href: debordement/etablissements_sensibles.qmd
+            text: Établissements sensibles (S1/4a)
+          - href: debordement/enjeux_susceptibles_dysfonctionner.qmd
+            text: Gestion de crise (S1/14e)
+          - href: debordement/campings.qmd
+            text: Campings
+          - href: debordement/monuments.qmd
+            text: Patrimoine et monuments (S2/4a)
+          - href: debordement/reseaux.qmd
+            text: Postes électriques (S2/10a)
+          - href: debordement/reseau_routier.qmd
+            text: Routes (S2/10e)
+          - href: debordement/voies_ferrees.qmd
+            text: Voies ferrées (S2/10c)
+          - href: debordement/reseaux_bus.qmd
+            text: Réseau de bus (S2/10d)
+
+        - text: "Agriculture"
+          menu:
+          - href: debordement/dommages_cultures.qmd
+            text: Dommages aux cultures (S2/6a)
+          - href: debordement/batiments_agricoles.qmd
+            text: Bâtiments agricoles (S2/6d)
+          - href: debordement/surface_agricole.qmd
+            text: Surface agricole inondable (S3/1f)
+
+        - text: "Environnement"
+          menu:
+          - href: debordement/espaces_naturels.qmd
+            text: Espaces naturels (S2/5c)
+          - href: debordement/eau_potable.qmd
+            text: Captages AEP (S2/5d)
+          - href: debordement/surface_communale.qmd
+            text: Surface communale inondable (S3/1g)
+
+      # ================= RUISSELLEMENT =================
+        - text: "Population"
+          menu:
+          - href: ruissellement/habitations_vitesse_elevee.qmd
+            text: Habitations en zone de vitesse élevée (S1/1)
+          - href: ruissellement/habitants_zones_inondables.qmd
+            text: Résidents exposés (S3/1a)
+          - href: ruissellement/personnes_agees.qmd
+            text: Personnes âgées (S3/1j)
+          - href: ruissellement/menages_pauvres.qmd
+            text: Ménages pauvres (S3/3)
+          - href: ruissellement/fragilite_electrique.qmd
+            text: Fragilité électrique (S1/10b)
+
+
+        - text: "Facteurs de ruissellement"
+          menu:
+          - href: ruissellement/pente.qmd
+            text: Pente forte (> 15 %)
+          - href: ruissellement/infiltrabilite.qmd
+            text: Potentiel d'infiltrabilité des sols
+          - href: ruissellement/haies.qmd
+            text: Densité de haies
+          - href: ruissellement/couverture_sols.qmd
+            text: Taux de couverture des sols
+          - href: ruissellement/surface_agricole_boisee.qmd
+            text: Surfaces agricoles et boisées
+          - href: ruissellement/impermeabilisation.qmd
+            text: Taux d'imperméabilisation
+          - href: ruissellement/sensibilisation.qmd
+            text: Actions de sensibilisation
+
             
         - text: Â propos
           menu:
@@ -151,7 +208,8 @@ format:
     toc-location: right
     toc-depth: 2
     link-external-newwindow: true
-    include-in-header: assets/inject-script.html
+    include-in-header:
+      - assets/inject-script.html
     #include-after-body: assets/logo.html
     
 

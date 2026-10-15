@@ -26,32 +26,36 @@ resources:
     
 include-in-header:
   text: |
-    <script src="js/pmtiles.js"></script>
-    <script src="js/maplibre.js"></script>
-    <link href="js/maplibre.css" rel="stylesheet">
-    <script src="js/jquery_3.5.min.js" type="text/javascript"></script>
+    <script>
+      (function () {
+        var p = location.pathname;
+        var base = (p.indexOf("/debordement/") !== -1 || p.indexOf("/ruissellement/") !== -1) ? "../" : "";
+        window.SITE_BASE = base;
+        function css(h) { document.write('<link rel="stylesheet" href="' + base + h + '">'); }
+        function js(s) { document.write('<script src="' + base + s + '"><\/script>'); }
+        js("js/pmtiles.js");
+        js("js/maplibre.js");
+        css("js/maplibre.css");
+        js("js/jquery_3.5.min.js");
+        css("js/photon-geocoder-autocomplete.min.css");
+        js("js/photon-geocoder-autocomplete.min.js");
+        js("js/tabs_dissapear.js");
+      })();
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="js/photon-geocoder-autocomplete.min.css" type="text/css">
-    <script src="js/photon-geocoder-autocomplete.min.js" type="text/javascript"></script>
-    <script src="js/tabs_dissapear.js" type="text/javascript"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.css"/>
     <script>document.documentElement.classList.add('page-carte');</script>
-    <link
-    rel="stylesheet"
-    href="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.5.0/dist/maplibre-gl-geocoder.css"/>
     <style>
-        .footer {
-          display: none !important;
-        }
+      .footer { display: none !important; }
     </style>
 ---
 
 ```{ojs}
 //| echo: false
 //| output: false
-bbox_sru = FileAttachment("layers/bb.json").json()
+bbox_sru = FileAttachment("../layers/bb.json").json()
 ```
 
 ```{=html}
@@ -249,21 +253,21 @@ document.querySelectorAll(".collapse-header").forEach(header => {
 //| echo: false
 //| output: false
 
-bassin_vienne = FileAttachment("layers/bassin_vienne.geojson").json();
-departement = FileAttachment("layers/departement.geojson").json();
-region = FileAttachment("layers/region.geojson").json();
-epci = FileAttachment("layers/epci.geojson").json();
-perimetre = FileAttachment("layers/perimetre.json").json();
-slgri = FileAttachment("layers/slgri.json").json();
-tri = FileAttachment("layers/tri.geojson").json();
-perimetre_papi = FileAttachment("layers/perimetre_papi.geojson").json();
-indicateursGeojson = FileAttachment("layers/indicateurs.geojson").json();
+bassin_vienne = FileAttachment("../layers/bassin_vienne.geojson").json();
+departement = FileAttachment("../layers/departement.geojson").json();
+region = FileAttachment("../layers/region.geojson").json();
+epci = FileAttachment("../layers/epci.geojson").json();
+perimetre = FileAttachment("../layers/perimetre.json").json();
+slgri = FileAttachment("../layers/slgri.json").json();
+tri = FileAttachment("../layers/tri.geojson").json();
+perimetre_papi = FileAttachment("../layers/perimetre_papi.geojson").json();
+indicateursGeojson = FileAttachment("../layers/indicateurs.geojson").json();
 ```
 
 ```{=html}
 <script>
 window.GRAPHIQUE = {
-  url: 'layers/data_s12a.json',
+  url: '../layers/data_s12a.json',
   options: {
     titre: 'Population en zone fortement inondable',
     sousTitre: "Nombre d'habitants par commune",
@@ -1063,7 +1067,7 @@ map = {
         /* ===========================================================
             Déclaration des couches PMTiles
         =========================================================== */
-         const PMTILES_URL = "layers/batiments_hauteur.pmtiles";
+         const PMTILES_URL = "../layers/batiments_hauteur.pmtiles";
 
           // Reconstruit proprement l'URL absolue HTTP/HTTPS
           const absoluteFileUrl = new URL(PMTILES_URL, window.location.href).href;
@@ -1074,7 +1078,7 @@ map = {
             url: `pmtiles://${absoluteFileUrl}`
           });
           
-        <!--   const ZONE_PM = "layers/zi_cartino2d.pmtiles"; -->
+        <!--   const ZONE_PM = "../layers/zi_cartino2d.pmtiles"; -->
 
         <!-- // Reconstruit proprement l'URL absolue HTTP/HTTPS -->
         <!-- const zoneAbsoluteUrl = new URL(ZONE_PM, window.location.href).href; -->
@@ -1084,7 +1088,7 @@ map = {
         <!--   url: `pmtiles://${zoneAbsoluteUrl}` -->
         <!-- }); -->
         
-         const ZONE_PM_azi = "layers/zi_perimetre_papi_vc.pmtiles";
+         const ZONE_PM_azi = "../layers/zi_perimetre_papi_vc.pmtiles";
 
         // Reconstruit proprement l'URL absolue HTTP/HTTPS
         const zoneAbsoluteaziUrl = new URL(ZONE_PM_azi, window.location.href).href;
@@ -1094,7 +1098,7 @@ map = {
           url: `pmtiles://${zoneAbsoluteaziUrl}`
         });
         
-        const ZONE_PM_rui2d = "layers/ruissellement_cartino2d.pmtiles";
+        const ZONE_PM_rui2d = "../layers/ruissellement_cartino2d.pmtiles";
         
         const zoneRui2dUrl = new URL(ZONE_PM_rui2d, window.location.href).href;
         
@@ -1103,7 +1107,7 @@ map = {
           url: `pmtiles://${zoneRui2dUrl}`
         });
         
-        const ZONE_PM_cdeau = "layers/coursdeau_perimetre_papi_vc.pmtiles";
+        const ZONE_PM_cdeau = "../layers/coursdeau_perimetre_papi_vc.pmtiles";
         
         const zoneCdeaudUrl = new URL(ZONE_PM_cdeau, window.location.href).href;
         
@@ -1112,7 +1116,7 @@ map = {
           url: `pmtiles://${zoneCdeaudUrl}`
         });
         
-        const ZONE_PM_cpapi = "layers/communes_zone_papi.pmtiles";
+        const ZONE_PM_cpapi = "../layers/communes_zone_papi.pmtiles";
         
         const zonecpapiUrl = new URL(ZONE_PM_cpapi, window.location.href).href;
         
@@ -1121,7 +1125,7 @@ map = {
           url: `pmtiles://${zonecpapiUrl}`
         });
         
-        const ZONE_PM_parcelles = "layers/parcelles.pmtiles";
+        const ZONE_PM_parcelles = "../layers/parcelles.pmtiles";
         const zoneparcellesUrl = new URL(ZONE_PM_parcelles, window.location.href).href;
         map.addSource("parcelles", {
           type: "vector",
@@ -1653,19 +1657,19 @@ map = {
       {
         id: "plan",
         label: "OSM",
-        img: "Images/OSM.jpg",
+        img: "../Images/OSM.jpg",
         apply: () => toggleStyle(false)
       },
       {
         id: "ortho",
         label: "Photos aériennes",
-        img: "Images/ORTHOPHOTOS.jpg",
+        img: "../Images/ORTHOPHOTOS.jpg",
         apply: () => toggleStyle(true)
       },
       {
         id: "none",
         label: "Aucun fond",
-        img: "Images/aucun_fond.jpg",
+        img: "../Images/aucun_fond.jpg",
         apply: () => toggleStyle("none")
       }
 
@@ -2151,7 +2155,7 @@ library(reactable)
 library(htmlwidgets)
 
 # Charger et transformer les données
-indicateur_s12a <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
+indicateur_s12a <- st_read("../layers/indicateurs.geojson", quiet = TRUE) %>%
   mutate(s12a = ifelse(is.na(s12a), 0, s12a)) %>%
   st_drop_geometry() %>%
   select(insee_com, nom, population, s12a) %>%
@@ -2239,12 +2243,12 @@ library(dplyr)
 library(jsonlite)
 
 # Charger le GeoJSON
-indicateurs <- st_read("layers/indicateurs.geojson", quiet = TRUE) %>%
+indicateurs <- st_read("../layers/indicateurs.geojson", quiet = TRUE) %>%
   st_drop_geometry() %>%
   select(nom, s12a) %>%
   filter(!is.na(s12a))
 
 # Sauvegarder au format JSON dans le dossier _site
-write_json(indicateurs, "layers/data_s12a.json", auto_unbox = TRUE)
+write_json(indicateurs, "../layers/data_s12a.json", auto_unbox = TRUE)
 ```
 ::::
