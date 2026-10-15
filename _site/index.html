@@ -702,6 +702,7 @@ window.addEventListener("load", function () {
 });
 
 </script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -1005,13 +1006,115 @@ window.addEventListener("load", function () {
 
 
 
-<section id="pourquoi-un-observatoire" class="level2">
-<h2 class="anchored" data-anchor-id="pourquoi-un-observatoire">Pourquoi un observatoire ?</h2>
-<p align="justify">
+<!-- ============ BANDEAU ============ -->
+<section class="hero">
+  <i class="bi bi-droplet-fill goutte"></i>
+  <i class="bi bi-droplet-fill goutte"></i>
+  <i class="bi bi-droplet-fill goutte"></i>
+  <i class="bi bi-droplet-fill goutte"></i>
 
-<font size="4.5px" face="calibri"> L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population.<br> La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national.<br> Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire.<br><br> </font>
+  <h1>Observatoire de la vulnérabilité<br>aux inondations</h1>
+  <p class="sous-titre">Bassins de la Vienne et du Clain : mieux savoir pour mieux agir.</p>
+  <div class="badge-cle">
+    <i class="bi bi-water"></i>
+    Crue centennale : <strong>1 chance sur 100</strong> de se produire chaque année
+  </div>
 
-</p>
+  <div class="vagues">
+    <svg viewbox="0 0 1200 90" preserveaspectratio="none">
+      <path fill="#fff" d="M0 45 Q150 0 300 45 T600 45 T900 45 T1200 45 V90 H0Z"></path>
+    </svg>
+    <svg viewbox="0 0 1200 90" preserveaspectratio="none">
+      <path fill="#fff" d="M0 55 Q150 15 300 55 T600 55 T900 55 T1200 55 V90 H0Z"></path>
+    </svg>
+  </div>
+</section>
+
+<style>
+:root {
+  --acc-bleu: #0a6ebd;
+  --acc-bleu-fonce: #08406e;
+  --acc-cyan: #38bdf8;
+  --acc-texte: #1e293b;
+  --acc-doux: #f1f5f9;
+}
+
+/* ---------- Bandeau ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  margin: 10px 0 40px; padding: 70px 40px 110px;
+  border-radius: 24px; color: #fff; text-align: center;
+  background: linear-gradient(135deg, var(--acc-bleu-fonce), var(--acc-bleu) 60%, #1b8fd6);
+  box-shadow: 0 20px 50px rgba(8, 64, 110, .3);
+}
+.hero h1 {
+  margin: 0 0 12px; font: 800 clamp(1.8rem, 4vw, 3rem)/1.15 system-ui, "Segoe UI", sans-serif;
+  color: #fff; border: 0;
+}
+.hero p.sous-titre {
+  max-width: 640px; margin: 0 auto 28px;
+  font-size: clamp(1rem, 2vw, 1.2rem); opacity: .92;
+}
+.hero .badge-cle {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 20px; border-radius: 999px;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.35); font-weight: 600;
+}
+.hero .badge-cle strong { font-size: 1.3em; color: #fde68a; }
+
+/* Vagues */
+.vagues { position: absolute; left: 0; bottom: 0; width: 100%; height: 90px; overflow: hidden; }
+.vagues svg {
+  position: absolute; bottom: 0; left: 0; width: 200%; height: 100%;
+  animation: houle 12s linear infinite;
+}
+.vagues svg:nth-child(2) { opacity: .5; animation-duration: 20s; animation-direction: reverse; }
+@keyframes houle { to { transform: translateX(-50%); } }
+
+/* Gouttes flottantes */
+.goutte {
+  position: absolute; color: rgba(255,255,255,.22);
+  animation: flotte 6s ease-in-out infinite;
+}
+.goutte:nth-of-type(1) { top: 18%; left: 8%;  font-size: 2.2rem; }
+.goutte:nth-of-type(2) { top: 55%; left: 16%; font-size: 1.4rem; animation-delay: -2s; }
+.goutte:nth-of-type(3) { top: 22%; right: 10%; font-size: 2.6rem; animation-delay: -4s; }
+.goutte:nth-of-type(4) { top: 60%; right: 18%; font-size: 1.6rem; animation-delay: -1s; }
+@keyframes flotte { 50% { transform: translateY(-14px); } }
+
+/* ---------- Sections ---------- */
+.section-titre {
+  display: flex; align-items: center; gap: 14px; margin: 50px 0 18px;
+  font: 700 1.7rem system-ui, "Segoe UI", sans-serif; color: var(--acc-bleu-fonce);
+}
+.section-titre i {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--acc-cyan), var(--acc-bleu)); color: #fff; font-size: 1.3rem;
+}
+.texte { font-size: 1.1rem; line-height: 1.7; color: var(--acc-texte); text-align: justify; }
+</style>
+<style>
+.style-h2{
+font-family: 'Lora', 'Georgia', serif;
+}
+
+.avec-icone > h2::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f059";        /* code de l'icône */
+  margin-right: .6rem;
+  color: var(--mode-main); /* suit la couleur du switch */
+}
+</style>
+<section id="pourquoi-un-observatoire" class="level2 style-h2 avec-icone">
+<h2 class="style-h2 avec-icone anchored" data-anchor-id="pourquoi-un-observatoire">Pourquoi un observatoire ?</h2>
+<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population.<br> La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national.
+<br>
+Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire.
+<br><br> 
+</div>
 <div>
   <div id="photos_crues">
     <img src="Images/crue_poitiers.jpg" alt="Crue Poitiers">
@@ -1019,27 +1122,46 @@ window.addEventListener("load", function () {
   </div>
 </div>
 <br><br>
+<style>
+.avec-icone2 > h2::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f201";        /* code de l'icône */
+  margin-right: .6rem;
+  color: var(--mode-main); /* suit la couleur du switch */
+}
+</style>
 </section>
-<section id="des-indicateurs-pour-connaître-la-vulnérabilité" class="level2">
-<h2 class="anchored" data-anchor-id="des-indicateurs-pour-connaître-la-vulnérabilité">Des indicateurs pour connaître la vulnérabilité</h2>
-<p align="justify">
+<section id="des-indicateurs-pour-connaître-la-vulnérabilité" class="level2 style-h2 avec-icone2">
+<h2 class="style-h2 avec-icone2 anchored" data-anchor-id="des-indicateurs-pour-connaître-la-vulnérabilité">Des indicateurs pour connaître la vulnérabilité</h2>
+<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
 
-<font size="4.5px" face="calibri"> L’observatoire permet la visualisation de plusieurs indicateurs, calculés à partir d’une méthode nationale. Ils s’appuient tous sur une crue dite centennale c’est-à-dire qui a «une chance» sur 100 de se produire tous les ans.<br> Ces indicateurs permettent de décrire la vulnérabilité mais ils peuvent également être utilisés pour évaluer l'efficacité des actions menées sur le terrain qui visent à réduire le risque.<br><br> Ils sont répartis selon 3 objectifs : <br> • Objectif 1 : Augmenter la sécurité des populations exposées, <br> • Objectif 2 : Stabiliser à court terme et réduire à moyen terme le coût des dommages, <br> • Objectif 3 : Raccourcir fortement le délai de retour à la normale des territoires sinistrés. <br> </font>
+L’observatoire permet la visualisation de plusieurs indicateurs, calculés à partir d’une méthode nationale. Ils s’appuient tous sur une crue dite centennale c’est-à-dire qui a «une chance» sur 100 de se produire tous les ans.<br> Ces indicateurs permettent de décrire la vulnérabilité mais ils peuvent également être utilisés pour évaluer l'efficacité des actions menées sur le terrain qui visent à réduire le risque.<br><br> Ils sont répartis selon 3 objectifs : <br> • Objectif 1 : Augmenter la sécurité des populations exposées, <br> • Objectif 2 : Stabiliser à court terme et réduire à moyen terme le coût des dommages, <br> • Objectif 3 : Raccourcir fortement le délai de retour à la normale des territoires sinistrés. <br> 
+</div>
 
-</p>
-<p align="justify">
-<br> <font size="4.5px" face="calibri"> Les indicateurs ont été actuellement calculés sur le territoire de Grand Poitiers et quelques communes qui jalonnent la Vienne dont Châtellerault. Dans le futur, ils ont vocation à être étendus au périmètre de la stratégie locale de gestion du risque inondation Vienne – Clain.<br> Cet observatoire vous permet de consulter pour chaque indicateur de vulnérabilité un onglet dédié comprenant une carte dynamique, des graphiques et des résultats bruts et une fiche téléchargeable et imprimable avec les éléments de construction de l'indicateur et la carte de vulnérabilité. </font>
+<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+<br>
+Les indicateurs ont été actuellement calculés sur le territoire de Grand Poitiers et quelques communes qui jalonnent la Vienne dont Châtellerault. Dans le futur, ils ont vocation à être étendus au périmètre de la stratégie locale de gestion du risque inondation Vienne – Clain.<br> Cet observatoire vous permet de consulter pour chaque indicateur de vulnérabilité un onglet dédié comprenant une carte dynamique, des graphiques et des résultats bruts et une fiche téléchargeable et imprimable avec les éléments de construction de l'indicateur et la carte de vulnérabilité.
 
-</p>
+</div>
 <p><br></p>
+<style>
+.avec-icone3 > h2::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f0c0";        /* code de l'icône */
+  margin-right: .6rem;
+  color: var(--mode-main); /* suit la couleur du switch */
+}
+</style>
 </section>
-<section id="les-auteurs-de-lobservatoire" class="level2">
-<h2 class="anchored" data-anchor-id="les-auteurs-de-lobservatoire">Les auteurs de l’observatoire</h2>
-<p align="justify">
+<section id="les-auteurs-de-lobservatoire" class="level2 style-h2 avec-icone3">
+<h2 class="style-h2 avec-icone3 anchored" data-anchor-id="les-auteurs-de-lobservatoire">Les auteurs de l’observatoire</h2>
+<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
 
-<font size="4.5px" face="calibri"> L’observatoire est le fruit d’une collaboration entre l’Etablissement Public Territorial du Bassin (EPTB) de la Vienne et le CEREMA. Plusieurs collectivités et services de l’Etat ont contribué également à son élaboration (Grand Poitiers, Grand Châtellerault, CC. Vienne et Gartempe, Département de la Vienne, DDT de la Vienne, DREAL Nouvelle Aquitaine). Le financement de ce projet s’insère dans un Programme d’Action de Prévention des Inondations (PAPI) financé par l’Etat (Fonds Barnier) et l’Europe (Plan Loire). <br></font>
+ L’observatoire est le fruit d’une collaboration entre l’Etablissement Public Territorial du Bassin (EPTB) de la Vienne et le CEREMA. Plusieurs collectivités et services de l’Etat ont contribué également à son élaboration (Grand Poitiers, Grand Châtellerault, CC. Vienne et Gartempe, Département de la Vienne, DDT de la Vienne, DREAL Nouvelle Aquitaine). Le financement de ce projet s’insère dans un Programme d’Action de Prévention des Inondations (PAPI) financé par l’Etat (Fonds Barnier) et l’Europe (Plan Loire). <br>
 
-</p>
+</div>
 
 <br> 
 
@@ -1064,6 +1186,10 @@ window.addEventListener("load", function () {
   justify-content: space-between; /* Contact à gauche, logo à droite */
   align-items: center;
   margin: 20px 0;
+  border: 2px solid cadetblue;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: aliceblue;
 }
 
 .contact-left {
