@@ -6,6 +6,7 @@ format:
     grid:
       sidebar-width: 0px
       body-width: 1200px
+    toc: false
 include-in-header:
   text: |
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
