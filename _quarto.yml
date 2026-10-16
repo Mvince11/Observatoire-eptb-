@@ -25,94 +25,94 @@ website:
         - text: "Population"
           menu:
           - href: debordement/habitants_zones_inondables.qmd
-            text: Résidents exposés (S3/1a)
+            text: Résidents exposés
           - href: debordement/batiments_plain_pied.qmd
-            text: Bâtiments plain-pied (S1/2a)
+            text: Bâtiments plain-pied
           - href: debordement/personnes_agees.qmd
-            text: Personnes âgées (S3/1j)
+            text: Personnes âgées
           - href: debordement/menages_pauvres.qmd
-            text: Ménages pauvres (S3/3)
+            text: Ménages pauvres
           - href: debordement/fragilite_electrique.qmd
-            text: Fragilité électrique (S1/10b)
+            text: Fragilité électrique
           - href: debordement/pcs.qmd
-            text: PCS à jour (S1/14b)
+            text: PCS à jour
           - href: debordement/dicrim.qmd
-            text: DICRIM à jour (S1/14c)
+            text: DICRIM à jour
           - href: debordement/reperes_crues.qmd
-            text: Repères de crues (S1/13b)
+            text: Repères de crues
 
         - text: "Urbanisation"
           menu:
           - href: debordement/batiments_habitation.qmd
-            text: Bâtiments d'habitation (S3/1h)
+            text: Bâtiments d'habitation
           - href: debordement/dommages_habitations.qmd
-            text: Dommages aux logements (S2/2a)
+            text: Dommages aux logements
           - href: debordement/retour_normale_logements.qmd
-            text: Retour à la normale des logements (S3/2a)
+            text: Retour à la normale des logements
           - href: debordement/zones_a_urbaniser.qmd
-            text: Zones à urbaniser (S2/14a)
+            text: Zones à urbaniser
 
         - text: "Économie"
           menu:
           - href: debordement/dommages_entreprises.qmd
-            text: Dommages aux entreprises (S2/7a)
+            text: Dommages aux entreprises
           - href: debordement/employes.qmd
-            text: Emplois exposés (S3/6a)
+            text: Emplois exposés
           - href: debordement/entreprises_exposees.qmd
             text: Entreprises exposées
           - href: debordement/installations_polluantes.qmd
-            text: Installations polluantes (S2/5b)
+            text: Installations polluantes
 
         - text: "Infrastructures"
           menu:
           - href: debordement/etablissements_sensibles.qmd
-            text: Établissements sensibles (S1/4a)
+            text: Établissements sensibles
           - href: debordement/enjeux_susceptibles_dysfonctionner.qmd
-            text: Gestion de crise (S1/14e)
+            text: Gestion de crise
           - href: debordement/campings.qmd
             text: Campings
           - href: debordement/monuments.qmd
-            text: Patrimoine et monuments (S2/4a)
+            text: Patrimoine et monuments
           - href: debordement/reseaux.qmd
-            text: Postes électriques (S2/10a)
+            text: Postes électriques
           - href: debordement/reseau_routier.qmd
-            text: Routes (S2/10e)
+            text: Routes
           - href: debordement/voies_ferrees.qmd
-            text: Voies ferrées (S2/10c)
+            text: Voies ferrées
           - href: debordement/reseaux_bus.qmd
-            text: Réseau de bus (S2/10d)
+            text: Réseau de bus
 
         - text: "Agriculture"
           menu:
           - href: debordement/dommages_cultures.qmd
-            text: Dommages aux cultures (S2/6a)
+            text: Dommages aux cultures
           - href: debordement/batiments_agricoles.qmd
-            text: Bâtiments agricoles (S2/6d)
+            text: Bâtiments agricoles
           - href: debordement/surface_agricole.qmd
-            text: Surface agricole inondable (S3/1f)
+            text: Surface agricole inondable
 
         - text: "Environnement"
           menu:
           - href: debordement/espaces_naturels.qmd
-            text: Espaces naturels (S2/5c)
+            text: Espaces naturels
           - href: debordement/eau_potable.qmd
-            text: Captages AEP (S2/5d)
+            text: Captages AEP
           - href: debordement/surface_communale.qmd
-            text: Surface communale inondable (S3/1g)
+            text: Surface communale inondable
 
       # ================= RUISSELLEMENT =================
         - text: "Population"
           menu:
           - href: ruissellement/habitations_vitesse_elevee.qmd
-            text: Habitations en zone de vitesse élevée (S1/1)
+            text: Habitations en zone de vitesse élevée
           - href: ruissellement/habitants_zones_inondables.qmd
-            text: Résidents exposés (S3/1a)
+            text: Résidents exposés
           - href: ruissellement/personnes_agees.qmd
-            text: Personnes âgées (S3/1j)
+            text: Personnes âgées
           - href: ruissellement/menages_pauvres.qmd
-            text: Ménages pauvres (S3/3)
+            text: Ménages pauvres
           - href: ruissellement/fragilite_electrique.qmd
-            text: Fragilité électrique (S1/10b)
+            text: Fragilité électrique
 
 
         - text: "Facteurs de ruissellement"

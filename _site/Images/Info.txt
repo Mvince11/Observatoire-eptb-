@@ -1,0 +1,27 @@
+Logo
+----
+Le logo est stocké dans le dossier `www` de l'application
+il est appelé deux fois :
+	1. au lancement de l'appli, dans un écran d'attente
+	2. sur l'interface principale de l'application
+
+
+Partie texte
+------------
+La partie éditoriale est éditée en majeure partie sous la forme de fichiers markdown.
+Ces fichiers markdown sont localisés dans le dossier `www`
+On peut les éditer avec logiciels markdown pad ou typora, par exemple, voire même avec un bloc-notes.
+C'est dans le script `ui.R` que les fichiers markdowns sont appelés.
+
+Par exemple : 
+```r
+tabItem(tabName = "apropos_mentions_legales",
+              tagList(
+                div(
+                  includeMarkdown("www/mentions_legales.md"),
+                  tags$br(),
+                  class="a_propos"
+                )
+              )
+            )
+```
