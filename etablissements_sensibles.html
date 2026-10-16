@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,10 +70,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e55257969e79e1b23715b75ca28f8bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,11 +101,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Recherche"
   }
 }</script>
-
-
 <script>
 
 window.addEventListener("load", function () {
+
+
+
+  /* ===========================================================
+
+     RÉGLAGES
+
+  =========================================================== */
+
+  // Couleurs par mode : main = navbar / titres du menu, accent = liens et bordures
+
+  // Autres couleurs de la charte, disponibles : rgb(200,210,0), rgb(242,149,51)
+
+  const COLORS = {
+
+    debordement:   { main: "rgb(0,158,224)", accent: "rgb(67,84,129)" },
+
+    ruissellement: { main: "rgb(151,190,13)",  accent: "rgb(0,144,54)" }
+
+  };
+
+  const REDIRECT_ON_SWITCH = false;   // true : va à <mode>/index.html quand on bascule
 
 
 
@@ -123,7 +143,7 @@ window.addEventListener("load", function () {
 
   /* -----------------------------------------------------------
 
-     2) Ajouter le bouton Menu dans la navbar
+     2) Bouton Menu
 
   ----------------------------------------------------------- */
 
@@ -177,29 +197,15 @@ window.addEventListener("load", function () {
 
   const brandContainer = navbar.querySelector(".navbar-brand-container");
 
+  if (!brandContainer) return;
+
   brandContainer.parentNode.insertBefore(menuButton, brandContainer);
-
-
-
-  /* Label "Menu" */
-
-  //const menuLabel = document.createElement("div");
-
-  //menuLabel.id = "menuLabel";
-
-  //menuLabel.classList.add("menu-label");
-
-  //menuLabel.textContent = "Menu";
-
-  //navbar.appendChild(menuLabel);
-
-
 
 
 
   /* -----------------------------------------------------------
 
-     3) Récupérer le collapse Quarto (menu YAML)
+     3) Récupérer le collapse Quarto (menu YAML) et le cloner
 
   ----------------------------------------------------------- */
 
@@ -209,25 +215,17 @@ window.addEventListener("load", function () {
 
     document.getElementById("navbarCollapse");
 
-
-
   if (!collapse) return;
 
 
 
   const collapseClone = collapse.cloneNode(true);
 
-
-
   const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
 
   const toolsClone = toolsOriginal ? toolsOriginal.cloneNode(true) : null;
 
-
-
   collapse.remove();
-
-
 
 
 
@@ -261,7 +259,7 @@ window.addEventListener("load", function () {
 
     padding-right: 5px;
 
-    overflow-y: auto;
+    overflow-y: hidden;
 
     transform: translateX(-100%);
 
@@ -270,8 +268,6 @@ window.addEventListener("load", function () {
     z-index: 2000;
 
   `;
-
-
 
   sideMenu.innerHTML = `
 
@@ -283,8 +279,6 @@ window.addEventListener("load", function () {
 
   `;
 
-
-
   document.body.appendChild(sideMenu);
 
 
@@ -295,33 +289,47 @@ window.addEventListener("load", function () {
 
 
 
-
-
   /* -----------------------------------------------------------
 
-     5) Transformer le menu YAML en sideMenu
+     5) Transformer le menu YAML en accordéon (avec étiquette de mode)
 
   ----------------------------------------------------------- */
+
+  const clean = (txt) => txt.replace(/_/g, "").replace(/\s+/g, " ").trim();
+
+
 
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
 
 
-  const link = item.querySelector("a.nav-link, a.dropdown-toggle");
+    const link = item.querySelector("a.nav-link, a.dropdown-toggle");
 
-  const submenu = item.querySelector("ul.dropdown-menu");
-
-
-
-  // --- Correction du titre (version anti-underscore) ---
-
-  let rawTitle = link ? link.innerText.trim() : "Menu";
-
-  rawTitle = rawTitle.replace(/_/g, "");   // supprime tous les underscores
-
-  const title = rawTitle.replace(/\s+/g, " ").trim();
+    const submenu = item.querySelector("ul.dropdown-menu");
 
 
+
+    // Ignore les <li> sans lien ni sous-menu
+
+    if (!link && !submenu) return;
+
+
+
+    const title = link ? clean(link.innerText) : "Menu";
+
+
+
+    // Mode de l'entrée, déduit du dossier de ses liens
+
+    const probe = submenu ? submenu.querySelector("a.dropdown-item") : link;
+
+    const p = probe ? probe.pathname : "";
+
+    const mode = p.includes("/debordement/") ? "debordement"
+
+               : p.includes("/ruissellement/") ? "ruissellement"
+
+               : "";   // "" = visible dans les deux modes
 
 
 
@@ -357,9 +365,11 @@ window.addEventListener("load", function () {
 
 
 
+      linkEl.dataset.mode = mode;
+
       accordion.appendChild(linkEl);
 
-      return;   // IMPORTANT
+      return;
 
     }
 
@@ -423,35 +433,13 @@ window.addEventListener("load", function () {
 
         subLink.appendChild(iconClone);
 
-        subLink.appendChild(
-
-          document.createTextNode(
-
-            sub.textContent
-
-              .replace(/_/g, "")
-
-              .replace(/\s+/g, " ")
-
-              .trim()
-
-          )
-
-        );
+        subLink.appendChild(document.createTextNode(clean(sub.textContent)));
 
       } else {
 
-        subLink.textContent = sub.textContent
+        subLink.textContent = clean(sub.textContent);
 
-          .replace(/_/g, "")
-
-          .replace(/\s+/g, " ")
-
-          .trim();
-
-              }
-
-
+      }
 
       body.appendChild(subLink);
 
@@ -459,17 +447,17 @@ window.addEventListener("load", function () {
 
 
 
+    accItem.dataset.mode = mode;
+
     accordion.appendChild(accItem);
 
   });
 
 
 
-
-
   /* -----------------------------------------------------------
 
-     6) Ajouter les tools dans le sideMenu
+     6) Tools dans le sideMenu
 
   ----------------------------------------------------------- */
 
@@ -477,11 +465,9 @@ window.addEventListener("load", function () {
 
 
 
-
-
   /* -----------------------------------------------------------
 
-     7) Toggle du sideMenu + rotation bouton
+     7) Toggle du sideMenu
 
   ----------------------------------------------------------- */
 
@@ -497,35 +483,23 @@ window.addEventListener("load", function () {
 
 
 
-
-
   /* -----------------------------------------------------------
 
-     8) Fonction responsive : recalcul hauteur navbar/footer
+     8) Hauteur de la navbar (responsive)
 
   ----------------------------------------------------------- */
 
   function updateLayoutHeights() {
 
-    const footer = document.querySelector("footer");
-
     const navbarHeight = navbar.getBoundingClientRect().height;
-
-    const footerHeight = footer ? footer.getBoundingClientRect().height : 0;
-
-
 
     document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
 
-    document.documentElement.style.setProperty("--footer-height", footerHeight + "px");
+    if (window.map) window.map.resize();
 
   }
 
-
-
   updateLayoutHeights();
-
-
 
   window.addEventListener("resize", updateLayoutHeights);
 
@@ -533,10 +507,235 @@ window.addEventListener("load", function () {
 
 
 
+  /* -----------------------------------------------------------
+
+     9) Switch Débordement / Ruissellement + couleurs par mode
+
+  ----------------------------------------------------------- */
+
+  const style = document.createElement("style");
+
+  style.textContent = `
+
+    :root { --mode-main: ${COLORS.debordement.main}; --mode-accent: ${COLORS.debordement.accent}; }
+
+
+
+    /* --- Navbar --- */
+
+    nav.navbar { background-color: var(--mode-main) !important; transition: background-color .3s ease; }
+
+    nav.navbar .navbar-title, nav.navbar .navbar-brand, nav.navbar a { color: #fff !important; }
+
+
+
+    /* --- Logos : pastille blanche pour qu'ils ressortent sur la couleur du mode --- */
+
+    nav.navbar img {
+
+      background: #fff;
+
+      padding: 4px 8px;
+
+      border-radius: 6px;
+
+      box-sizing: content-box;
+
+      margin: 0 4px;
+
+    }
+
+    /* Variante : logos tout blancs (décommenter, et supprimer la règle ci-dessus)
+
+    nav.navbar img { filter: brightness(0) invert(1); }
+
+    */
+
+
+
+    /* --- Bouton menu --- */
+
+    #menuButton { border: 2px solid var(--mode-accent) !important; }
+
+    #menuButton svg { fill: var(--mode-main); transition: fill .3s ease; }
+
+
+
+    /* --- Menu latéral --- */
+
+    #sideMenu { border-right: 5px solid var(--mode-main) !important; transition: transform .3s ease, border-color .3s ease; }
+
+    #sideMenu .accordion-button { color: var(--mode-main); font-weight: 600; box-shadow: none; }
+
+    #sideMenu .accordion-button:not(.collapsed) { background-color: var(--mode-main); color: #fff; }
+
+    #sideMenu .accordion-button:not(.collapsed)::after { filter: brightness(0) invert(1); }
+
+    #sideMenu .accordion-body a, #sideMenu #menuAccordion > a { color: var(--mode-accent); text-decoration: none; }
+
+    #sideMenu .accordion-body a:hover, #sideMenu #menuAccordion > a:hover { color: var(--mode-main); text-decoration: underline; }
+
+
+
+    /* --- Switch --- */
+
+    .mode-switch { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); z-index: 10;
+
+                   display: flex; align-items: center; gap: .6rem; }
+
+    .mode-switch label.lbl { margin: 0; cursor: pointer; font-size: .9rem; color: #fff; opacity: .65; user-select: none; }
+
+    .mode-switch label.lbl.active { opacity: 1; font-weight: 700; }
+
+
+
+    .mode-track { position: relative; display: inline-block; width: 54px; height: 28px; margin: 0; cursor: pointer; }
+
+    .mode-track input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; z-index: 2; }
+
+    .mode-track .slider { position: absolute; inset: 0; border: 2px solid #fff; border-radius: 28px;
+
+                          background: rgba(255,255,255,.25); transition: background .25s ease; }
+
+    .mode-track .slider::before { content: ""; position: absolute; left: 2px; top: 2px; width: 20px; height: 20px;
+
+                                  border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.35);
+
+                                  transition: transform .25s ease; }
+
+    .mode-track input:checked + .slider::before { transform: translateX(26px); }
+
+    .mode-track input:focus-visible + .slider { outline: 2px solid #fff; outline-offset: 2px; }
+
+
+
+    @media (max-width: 768px) {
+
+      .mode-switch { gap: .3rem; right: 8px; }
+
+      .mode-switch label.lbl { font-size: .75rem; }
+
+    }
+
+  `;
+
+  document.head.appendChild(style);
+
+
+
+  const switchEl = document.createElement("div");
+
+  switchEl.className = "mode-switch";
+
+  switchEl.innerHTML = `
+
+    <label class="lbl" id="lbl-deb" for="mode-toggle">Débordement</label>
+
+    <label class="mode-track">
+
+      <input type="checkbox" id="mode-toggle" role="switch" aria-label="Basculer entre débordement et ruissellement">
+
+      <span class="slider"></span>
+
+    </label>
+
+    <label class="lbl" id="lbl-ruis" for="mode-toggle">Ruissellement</label>
+
+  `;
+
+
+
+  // Placé en absolu tout à droite de la navbar, indépendamment de sa structure interne
+
+  if (getComputedStyle(navbar).position === "static") navbar.style.position = "relative";
+
+  navbar.appendChild(switchEl);
+
+
+
+  const toggle = switchEl.querySelector("#mode-toggle");
+
+
+
+  function applyMode(m) {
+
+    // Menu : n'affiche que les entrées du mode (ou communes)
+
+    accordion.querySelectorAll(":scope > [data-mode]").forEach(el => {
+
+      el.style.display = (el.dataset.mode === "" || el.dataset.mode === m) ? "" : "none";
+
+    });
+
+    // Couleurs
+
+    const c = COLORS[m];
+
+    document.documentElement.style.setProperty("--mode-main", c.main);
+
+    document.documentElement.style.setProperty("--mode-accent", c.accent);
+
+    // Switch
+
+    toggle.checked = (m === "ruissellement");
+
+    switchEl.querySelector("#lbl-deb").classList.toggle("active", m === "debordement");
+
+    switchEl.querySelector("#lbl-ruis").classList.toggle("active", m === "ruissellement");
+
+    try { localStorage.setItem("mode", m); } catch (e) {}
+
+  }
+
+
+
+  // Mode initial : dossier de la page, sinon dernier choix, sinon débordement
+
+  let mode = "debordement";
+
+  if (location.pathname.includes("/ruissellement/")) {
+
+    mode = "ruissellement";
+
+  } else if (!location.pathname.includes("/debordement/")) {
+
+    try { mode = localStorage.getItem("mode") || mode; } catch (e) {}
+
+  }
+
+
+
+  toggle.addEventListener("change", () => {
+
+    const m = toggle.checked ? "ruissellement" : "debordement";
+
+    applyMode(m);
+
+
+
+    if (REDIRECT_ON_SWITCH) {
+
+      const re = /(debordement|ruissellement)\/[^\/]*$/;
+
+      const root = re.test(location.pathname)
+
+        ? location.pathname.replace(re, "")
+
+        : location.pathname.replace(/[^\/]*$/, "");
+
+      location.href = location.origin + root + m + "/index.html";
+
+    }
+
+  });
+
+
+
+  applyMode(mode);
+
 });
 
 </script>
-
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 <script src="site_libs/core-js-2.5.3/shim.min.js"></script>
@@ -551,9 +750,9 @@ window.addEventListener("load", function () {
 
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 
-<link href="site_libs/reactable-0.4.4/reactable.css" rel="stylesheet">
+<link href="site_libs/reactable-0.4.5/reactable.css" rel="stylesheet">
 
-<script src="site_libs/reactable-binding-0.4.4/reactable.js"></script>
+<script src="site_libs/reactable-binding-0.4.5/reactable.js"></script>
 
 <script src="js/maplibre.js"></script>
 <link href="js/maplibre.css" rel="stylesheet">
@@ -596,115 +795,226 @@ window.addEventListener("load", function () {
 <span class="menu-text">Mieux comprendre les inondations</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-objectif-n°1-augmenter-la-sécurité-des-populations" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Objectif n°1: Augmenter la sécurité des populations</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-population" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Population</span>
     </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°1-augmenter-la-sécurité-des-populations">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-population">    
         <li>
-    <a class="dropdown-item" href="./batiments_plain_pied.html">
- <span class="dropdown-text">Bâtiments plain-pied</span></a>
+    <a class="dropdown-item" href="./debordement/habitants_zones_inondables.qmd">
+ <span class="dropdown-text">Résidents exposés (S3/1a)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./etablissements_sensibles.html">
- <span class="dropdown-text">Etablissements sensibles</span></a>
+    <a class="dropdown-item" href="./debordement/batiments_plain_pied.html">
+ <span class="dropdown-text">Bâtiments plain-pied (S1/2a)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./enjeux_susceptibles_dysfonctionner.html">
- <span class="dropdown-text">Etablissements utiles à la gestion de crise</span></a>
+    <a class="dropdown-item" href="./debordement/personnes_agees.qmd">
+ <span class="dropdown-text">Personnes âgées (S3/1j)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./campings.html">
+    <a class="dropdown-item" href="./debordement/menages_pauvres.qmd">
+ <span class="dropdown-text">Ménages pauvres (S3/3)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/fragilite_electrique.qmd">
+ <span class="dropdown-text">Fragilité électrique (S1/10b)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/pcs.qmd">
+ <span class="dropdown-text">PCS à jour (S1/14b)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/dicrim.qmd">
+ <span class="dropdown-text">DICRIM à jour (S1/14c)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/reperes_crues.qmd">
+ <span class="dropdown-text">Repères de crues (S1/13b)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-urbanisation" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Urbanisation</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-urbanisation">    
+        <li>
+    <a class="dropdown-item" href="./debordement/batiments_habitation.qmd">
+ <span class="dropdown-text">Bâtiments d’habitation (S3/1h)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/dommages_habitations.qmd">
+ <span class="dropdown-text">Dommages aux logements (S2/2a)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/retour_normale_logements.qmd">
+ <span class="dropdown-text">Retour à la normale des logements (S3/2a)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/zones_a_urbaniser.qmd">
+ <span class="dropdown-text">Zones à urbaniser (S2/14a)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-conomie" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Économie</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-conomie">    
+        <li>
+    <a class="dropdown-item" href="./debordement/dommages_entreprises.qmd">
+ <span class="dropdown-text">Dommages aux entreprises (S2/7a)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/employes.qmd">
+ <span class="dropdown-text">Emplois exposés (S3/6a)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/entreprises_exposees.qmd">
+ <span class="dropdown-text">Entreprises exposées</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/installations_polluantes.qmd">
+ <span class="dropdown-text">Installations polluantes (S2/5b)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-infrastructures" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Infrastructures</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-infrastructures">    
+        <li>
+    <a class="dropdown-item" href="./debordement/etablissements_sensibles.qmd">
+ <span class="dropdown-text">Établissements sensibles (S1/4a)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/enjeux_susceptibles_dysfonctionner.qmd">
+ <span class="dropdown-text">Gestion de crise (S1/14e)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./debordement/campings.qmd">
  <span class="dropdown-text">Campings</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./routes.html">
- <span class="dropdown-text">Routes</span></a>
+    <a class="dropdown-item" href="./debordement/monuments.qmd">
+ <span class="dropdown-text">Patrimoine et monuments (S2/4a)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./pcs.html">
- <span class="dropdown-text">Plan communal de sauvegarde (PCS)</span></a>
+    <a class="dropdown-item" href="./debordement/reseaux.qmd">
+ <span class="dropdown-text">Postes électriques (S2/10a)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./dicrim.html">
- <span class="dropdown-text">Document d’information communal sur les risques majeurs (DICRIM)</span></a>
-  </li>  
-    </ul>
-  </li>
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-objectif-n°2-stabiliserréduire-le-coût-des-dommages" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Objectif n°2: Stabiliser/réduire le coût des dommages</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°2-stabiliserréduire-le-coût-des-dommages">    
-        <li>
-    <a class="dropdown-item" href="./dommages_habitations.html">
- <span class="dropdown-text">Dommages aux habitations</span></a>
+    <a class="dropdown-item" href="./debordement/reseau_routier.qmd">
+ <span class="dropdown-text">Routes (S2/10e)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./dommages_entreprises.html">
- <span class="dropdown-text">Dommages aux entreprises</span></a>
+    <a class="dropdown-item" href="./debordement/voies_ferrees.qmd">
+ <span class="dropdown-text">Voies ferrées (S2/10c)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./dommages_cultures.html">
- <span class="dropdown-text">Dommages aux cultures</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./monuments.html">
- <span class="dropdown-text">Patrimoines et monuments historiques</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./espaces_naturels.html">
- <span class="dropdown-text">Espaces naturels</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./installations_polluantes.html">
- <span class="dropdown-text">Installations polluantes</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./eau_potable.html">
- <span class="dropdown-text">Station d’alimentation en eau potable</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./reseaux.html">
- <span class="dropdown-text">Réseaux</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./voies_ferrees.html">
- <span class="dropdown-text">Voies ferrées</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./reseaux_bus.html">
- <span class="dropdown-text">Réseau de bus</span></a>
+    <a class="dropdown-item" href="./debordement/reseaux_bus.qmd">
+ <span class="dropdown-text">Réseau de bus (S2/10d)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-objectif-n°3-raccourcir-le-délai-de-retour-à-la-normale" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Objectif n°3: Raccourcir le délai de retour à la normale</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-agriculture" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Agriculture</span>
     </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-objectif-n°3-raccourcir-le-délai-de-retour-à-la-normale">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-agriculture">    
         <li>
-    <a class="dropdown-item" href="./habitants_zones_inondables.html">
- <span class="dropdown-text">Nombre et proportion d’habitants en zone inondable</span></a>
+    <a class="dropdown-item" href="./debordement/dommages_cultures.qmd">
+ <span class="dropdown-text">Dommages aux cultures (S2/6a)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./surfaces_habitations.html">
- <span class="dropdown-text">Surface des habitations</span></a>
+    <a class="dropdown-item" href="./debordement/batiments_agricoles.qmd">
+ <span class="dropdown-text">Bâtiments agricoles (S2/6d)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./retour_normale_logements.html">
- <span class="dropdown-text">Logements</span></a>
+    <a class="dropdown-item" href="./debordement/surface_agricole.qmd">
+ <span class="dropdown-text">Surface agricole inondable (S3/1f)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-environnement" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Environnement</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-environnement">    
+        <li>
+    <a class="dropdown-item" href="./debordement/espaces_naturels.qmd">
+ <span class="dropdown-text">Espaces naturels (S2/5c)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./employes.html">
- <span class="dropdown-text">Employés</span></a>
+    <a class="dropdown-item" href="./debordement/eau_potable.qmd">
+ <span class="dropdown-text">Captages AEP (S2/5d)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./surface_agricole.html">
- <span class="dropdown-text">Surface agricole</span></a>
+    <a class="dropdown-item" href="./debordement/surface_communale.qmd">
+ <span class="dropdown-text">Surface communale inondable (S3/1g)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-population-1" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Population</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-population-1">    
+        <li>
+    <a class="dropdown-item" href="./ruissellement/habitations_vitesse_elevee.qmd">
+ <span class="dropdown-text">Habitations en zone de vitesse élevée (S1/1)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./reseau_routier.html">
- <span class="dropdown-text">Routes inondées</span></a>
+    <a class="dropdown-item" href="./ruissellement/habitants_zones_inondables.qmd">
+ <span class="dropdown-text">Résidents exposés (S3/1a)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/personnes_agees.qmd">
+ <span class="dropdown-text">Personnes âgées (S3/1j)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/menages_pauvres.qmd">
+ <span class="dropdown-text">Ménages pauvres (S3/3)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/fragilite_electrique.qmd">
+ <span class="dropdown-text">Fragilité électrique (S1/10b)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-facteurs-de-ruissellement" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Facteurs de ruissellement</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-facteurs-de-ruissellement">    
+        <li>
+    <a class="dropdown-item" href="./ruissellement/pente.qmd">
+ <span class="dropdown-text">Pente forte (&gt; 15 %)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/infiltrabilite.qmd">
+ <span class="dropdown-text">Potentiel d’infiltrabilité des sols</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/haies.qmd">
+ <span class="dropdown-text">Densité de haies</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/couverture_sols.qmd">
+ <span class="dropdown-text">Taux de couverture des sols</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/surface_agricole_boisee.qmd">
+ <span class="dropdown-text">Surfaces agricoles et boisées</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/impermeabilisation.qmd">
+ <span class="dropdown-text">Taux d’imperméabilisation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/sensibilisation.qmd">
+ <span class="dropdown-text">Actions de sensibilisation</span></a>
   </li>  
     </ul>
   </li>
@@ -1439,8 +1749,8 @@ La zone inondable correspond à l'aléa centennal construit à partir des donné
 <h4 data-anchor-id="row-1">Row</h4>
 <div class="cell" data-expandable="false">
 <div class="cell-output-display">
-<div class="reactable html-widget html-fill-item" id="htmlwidget-5a54a6616e3590fb1808" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-5a54a6616e3590fb1808">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Code INSEE":["86095","86014","86088","86253","86062","86239","86114","86032","86298","86163","86124","86020","86261","86046","86091","86028","86213","86070","86233","86202","86058","86135","86226","86031","86024","86133","86194","86027","86158","86066","86041","86174","86139","86019","86115","86214","86116","86222","86244","86045","86256","86198","86157","86268","86080","86263","86297","86100","86083"],"Commune":["Dissay","Availles-en-Châtellerault","Croutelle","Sanxay","Chasseneuil-du-Poitou","Sainte-Radégonde","Jardres","Bonneuil-Matours","Vouneuil-sur-Vienne","Montamisé","Lavoux","Bellefonds","Sèvres-Anxaumont","Cenon-sur-Vienne","Curzay-sur-Vonne","Bignoux","Rouillé","Chauvigny","Valdivienne","La Puye","La Chapelle-Moulière","Liniers","Saint-Julien-l'Ars","Bonnes","Béruges","Ligugé","Poitiers","Biard","Migné-Auxances","Châtellerault","Buxerolles","Naintré","Lusignan","Beaumont Saint-Cyr","Jaunay-Marigny","Saint-Benoît","Jazeneuil","Saint-Georges-lès-Baillargeaux","Saint-Sauvant","Celle-Lévescault","Savigny-Lévescault","Pouillé","Mignaloux-Beauvoir","Tercé","Cloué","Smarves","Vouneuil-sous-Biard","Fontaine-le-Comte","Coulombiers"],"Population":[" 3 233"," 1 757","   851","   548"," 4 704","   169"," 1 273"," 2 104"," 2 198"," 3 630"," 1 180","   254"," 2 181"," 1 778","   410"," 1 054"," 2 468"," 7 049"," 2 747","   606","   705","   561"," 2 660"," 1 729"," 1 469"," 3 349","88 291"," 1 751"," 6 071","31 840","10 023"," 5 911"," 2 649"," 3 035"," 7 530"," 7 233","   804"," 4 168"," 1 258"," 1 356"," 1 168","   657"," 4 577"," 1 116","   496"," 2 810"," 5 896"," 3 853"," 1 164"],"Nombre d'établissements sensibles en zone inondable":["1","0","0","1","0","0","0","2","1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","1","0","0","4","0","0","3","0","1","1","0","0","1","0","0","0","0","0","0","0","0","1","0","0","0","0"]},"columns":[{"id":"Code INSEE","name":"Code INSEE","type":"character"},{"id":"Commune","name":"Commune","type":"character"},{"id":"Population","name":"Population","type":"character"},{"id":"Nombre d'établissements sensibles en zone inondable","name":"Nombre d'établissements sensibles en zone inondable","type":"character"}],"resizable":true,"filterable":true,"defaultPageSize":10,"highlight":true,"striped":true,"theme":{"borderColor":"#E0E0E0","stripedColor":"#f5f5f5","highlightColor":"#7591e5","cellPadding":"8px 12px","style":{"fontSize":"14px","fontFamily":"sans-serif"}},"dataKey":"586978764e31e75af2a8e33d0b5541da"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="reactable html-widget html-fill-item" id="htmlwidget-182bc955d31b1a13a6b7" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-182bc955d31b1a13a6b7">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Code INSEE":["86095","86014","86088","86253","86062","86239","86114","86032","86298","86163","86124","86020","86261","86046","86091","86028","86213","86070","86233","86202","86058","86135","86226","86031","86024","86133","86194","86027","86158","86066","86041","86174","86139","86019","86115","86214","86116","86222","86244","86045","86256","86198","86157","86268","86080","86263","86297","86100","86083"],"Commune":["Dissay","Availles-en-Châtellerault","Croutelle","Sanxay","Chasseneuil-du-Poitou","Sainte-Radégonde","Jardres","Bonneuil-Matours","Vouneuil-sur-Vienne","Montamisé","Lavoux","Bellefonds","Sèvres-Anxaumont","Cenon-sur-Vienne","Curzay-sur-Vonne","Bignoux","Rouillé","Chauvigny","Valdivienne","La Puye","La Chapelle-Moulière","Liniers","Saint-Julien-l'Ars","Bonnes","Béruges","Ligugé","Poitiers","Biard","Migné-Auxances","Châtellerault","Buxerolles","Naintré","Lusignan","Beaumont Saint-Cyr","Jaunay-Marigny","Saint-Benoît","Jazeneuil","Saint-Georges-lès-Baillargeaux","Saint-Sauvant","Celle-Lévescault","Savigny-Lévescault","Pouillé","Mignaloux-Beauvoir","Tercé","Cloué","Smarves","Vouneuil-sous-Biard","Fontaine-le-Comte","Coulombiers"],"Population":[" 3 233"," 1 757","   851","   548"," 4 704","   169"," 1 273"," 2 104"," 2 198"," 3 630"," 1 180","   254"," 2 181"," 1 778","   410"," 1 054"," 2 468"," 7 049"," 2 747","   606","   705","   561"," 2 660"," 1 729"," 1 469"," 3 349","88 291"," 1 751"," 6 071","31 840","10 023"," 5 911"," 2 649"," 3 035"," 7 530"," 7 233","   804"," 4 168"," 1 258"," 1 356"," 1 168","   657"," 4 577"," 1 116","   496"," 2 810"," 5 896"," 3 853"," 1 164"],"Nombre d'établissements sensibles en zone inondable":["1","0","0","1","0","0","0","2","1","0","0","0","0","0","0","0","0","1","0","0","0","0","0","1","0","0","4","0","0","3","0","1","1","0","0","1","0","0","0","0","0","0","0","0","1","0","0","0","0"]},"columns":[{"id":"Code INSEE","name":"Code INSEE","type":"character"},{"id":"Commune","name":"Commune","type":"character"},{"id":"Population","name":"Population","type":"character"},{"id":"Nombre d'établissements sensibles en zone inondable","name":"Nombre d'établissements sensibles en zone inondable","type":"character"}],"resizable":true,"filterable":true,"defaultPageSize":10,"highlight":true,"striped":true,"theme":{"borderColor":"#E0E0E0","stripedColor":"#f5f5f5","highlightColor":"#7591e5","cellPadding":"8px 12px","style":{"fontSize":"14px","fontFamily":"sans-serif"}},"dataKey":"586978764e31e75af2a8e33d0b5541da"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -1879,7 +2189,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/Mvince11\.github\.io\/Observatoire-eptb-\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
