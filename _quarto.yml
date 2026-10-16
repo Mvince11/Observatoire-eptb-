@@ -133,11 +133,11 @@ website:
             text: Actions de sensibilisation
 
             
-        - text: Â propos
-          menu:
-          - text: EPTB-vienne.fr
-            href: https://www.eptb-vienne.fr
-            target: _blank
+        # - text: Â propos
+        #   menu:
+        #   - text: EPTB-vienne.fr
+        #     href: https://www.eptb-vienne.fr
+        #     target: _blank
         
         - icon: person-circle
           href: login.qmd
@@ -164,40 +164,6 @@ website:
       - icon: youtube
         href: https://www.youtube.com/@cerema3139
           
-           
-  # sidebar:
-  #    - id: Objectifs
-  #      title: "Objectifs"
-  #      style: "docked"
-  #      search: true
-  #      background: light
-  #      collapse-level: 2
-  #      contents: 
-  #        - section: "Objectif n°1"
-  #          contents:         
-  #        - text: Description de l'objectif n°1
-  #          href: objectif1.qmd
-  #        - text: Bâtiments de plain-pied
-  #          href: batiments_plain_pied.qmd
-           
-  
-  #      - text: Objectif n°1:Augmenter la sécurité des populations
-  #        href: objectif1.qmd
-  #      - text: ▼
-  #        menu:
-  #        - text: Bâtiments de plain-pied
-  # sidebar:
-  #   style: "docked"  # ou "docked" pour qu’elle reste fixée
-  #   contents:
-  #       - text: "Accueil"
-  #         href: index.qmd
-  #       - href: mieux_comprendre.qmd
-  #         text: "Comprendre les inondations"
-  #       - text: "Â propos"
-  #        menu:
-  #        - text: EPTB-vienne.fr
-  #          href: https://www.eptb-vienne.fr
-  #          target: _blank
         
 format:
   html:

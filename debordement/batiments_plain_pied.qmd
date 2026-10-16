@@ -75,6 +75,10 @@ perimetre_papi = FileAttachment("../layers/perimetre_papi.geojson").json();
 indicateursGeojson = FileAttachment("../layers/indicateurs.geojson").json();
 ```
 
+<!-- /* ============================================================ -->
+<!--            CREATION GRAPHIQUE -->
+<!--         ============================================================ */ -->
+
 ```{=html}
 <script>
 window.GRAPHIQUE = {
@@ -244,6 +248,10 @@ window.GRAPHIQUE = {
 </script>
 ```
 
+
+<!-- /* ============================================================ -->
+<!--            CREATION GRAPHIQUE -->
+<!--         ============================================================ */ -->
 ```{ojs}
 //| echo: false
 //| padding: 0px
@@ -1764,6 +1772,10 @@ map = {
 };
 ```
 
+<!-- /* ============================================================ -->
+<!--            CREATION INFO-INDICATEUR -->
+<!--         ============================================================ */ -->
+
 :::: {#hidden-content style="display:none;"}
 
 ```{=html}
@@ -1860,19 +1872,9 @@ Les données population de l’INSEE datent de 2019. Au regard de l’expansion 
 ©INSEE GeoSIREN (2026)\
 :::
 
-```{ojs}
-//| echo: false
-//| padding: 5px
-//| expandable: false
-md`
-<div id="donnees" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; margin-top:1%;text-align:center;">
-    Cliquez sur une commune de la rubrique "Cartographie" pour voir les informations ici.<br>
-</div>
-
-`
-
-
-```
+<!-- /* ============================================================ -->
+<!--            CREATION TABLEAU -->
+<!--         ============================================================ */ -->
 
 ```{r}
 #| echo: false
