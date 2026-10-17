@@ -566,6 +566,28 @@ div.sidebar-item-container{
 }
 
 
+@media(max-width:568px){
+  .fond-item {
+  width: 50px;
+  height: 50px;
+  }
+  
+  #fondListDiv.hover-active .fond-item.inactive {
+  left: calc(
+    113px - ((var(--inactive-position) + 1) * 55px)
+  ) !important;
+  }
+  
+  #fondListDiv {
+  bottom: 0px;
+  right: 70px;
+  }
+  
+  .fond-item span {
+  padding: 0 !important;
+  font-size: 9px !important;
+  }
+}
 /* =====================================================
    Image
 ===================================================== */
@@ -814,16 +836,32 @@ div.sidebar-item-container{
 
 .maplibregl-popup-content {
   padding: 0 !important;
-  width: 290px;
+  width: min(290px, calc(100vw - 32px));   /* ne dépasse jamais l'écran */
   border: none !important;
   border-radius: 12px !important;
-  overflow: hidden;
+  overflow: hidden;                         /* garde les coins arrondis de l'image */
   background: #ffffff;
-
   box-shadow:
     0 8px 24px rgba(41, 53, 116, 0.18),
     0 2px 6px rgba(0, 0, 0, 0.08);
 }
+
+/* Le défilement se fait dans le contenu, le bouton fermer reste fixe */
+.popup-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.popup-image {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.popup-indicator > div:last-child { min-width: 0; }
+.popup-label { display: block; overflow-wrap: anywhere; }
 
 /* Petite pointe de la popup */
 .maplibregl-popup-tip {
@@ -837,22 +875,34 @@ div.sidebar-item-container{
   right: 8px !important;
   width: 28px;
   height: 28px;
-
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.92) !important;
-
   color: #293574 !important;
   font-size: 20px !important;
   line-height: 26px !important;
-
   z-index: 10;
-
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .maplibregl-popup-close-button:hover {
   background: #293574 !important;
   color: white !important;
+}
+
+/* ===== Smartphone / petite résolution : panneau fixé en bas ===== */
+@media (max-width: 576px) {
+  .maplibregl-popup-content { width: min(260px, calc(100vw - 32px)); }
+  .popup-content { max-height: 50vh; }
+  .popup-image { height: 90px; }
+  .popup-title { font-size: 1rem; }
+  .popup-value { font-size: 1rem; }
+
+  .maplibregl-popup-close-button {
+    width: 36px;
+    height: 36px;
+    line-height: 34px !important;
+    font-size: 24px !important;
+  }
 }
 
 /* =====================================================
@@ -945,6 +995,59 @@ div.sidebar-item-container{
 /* =====================================================
    Fin barre de recherche adresse ou parcelle
 ===================================================== */
+
+/* Conteneur : c'est lui qui est positionné */
+.legend-stack {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;     /* population en haut, bâtiments en dessous */
+  gap: 8px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100% - 80px);
+  overflow-y: auto;
+  pointer-events: none;       /* la carte reste cliquable entre les légendes */
+}
+
+.map-legend {
+  --legend-font: 12px;
+  --legend-pad: 10px;
+  --legend-swatch: 12px;
+
+  pointer-events: auto;
+  background: #fff;
+  padding: var(--legend-pad);
+  font-size: var(--legend-font);
+  line-height: 1.3;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+
+.map-legend .legend-swatch {
+  display: inline-block;
+  width: var(--legend-swatch);
+  height: var(--legend-swatch);
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+
+@media (max-width: 768px) {
+  .legend-stack { bottom: 50px; gap: 6px; }
+  .map-legend { --legend-font: 11px; --legend-pad: 8px; --legend-swatch: 10px; }
+}
+
+@media (max-width: 576px) {
+  .legend-stack { bottom: 40px; left: 6px; gap: 5px; }
+  .map-legend { --legend-font: 10px; --legend-pad: 6px; --legend-swatch: 9px; }
+}
+
+@media (max-width: 380px), (max-height: 420px) {
+  .legend-stack { bottom: 30px; gap: 4px; }
+  .map-legend { --legend-font: 9px; --legend-pad: 5px; --legend-swatch: 8px; }
+}
+
 
 /* Contenu général */
 .popup-content {

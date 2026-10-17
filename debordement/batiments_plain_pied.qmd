@@ -772,109 +772,72 @@ map = {
            LÉGENDE POPULATION
         ============================================================ */
         
-        const legend = document.createElement("div");
-        legend.id = "legend";
-        legend.style.cssText = `
-          position:absolute;
-          bottom:60px;          /* position normale en bas */
-          left:10px;
-          background:white;
-          padding:10px;
-          font-size:12px;
-          border-radius:4px;
-          box-shadow:0 1px 4px rgba(0,0,0,0.3);
-          z-index:10;
-        `;
-        
-        legend.innerHTML = `
-          <strong>Population en zone <br>fortement inondable</strong><br>
-          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 0</div>
-          <div><span style="background:#ffffff;width:12px;height:12px;display:inline-block;margin-right:5px;border:1px solid #ccc;"></span> < 10 </div>
-          <div><span style="background:#ffaaaa;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 10-50 </div>
-          <div><span style="background:#ff5555;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> 50-100 </div>
-          <div><span style="background:#ff0000;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> > 100 </div>
-        `;
-        
-        map.getContainer().appendChild(legend);
-        
-        
-        /* ============================================================
-           LÉGENDE BÂTIMENTS
-        ============================================================ */
-        
-        const batimentLegend = document.createElement("div");
-        batimentLegend.id = "batiment-legend";
-        batimentLegend.style.cssText = `
-          position:absolute;
-          bottom:60px;          /* même base */
-          left:10px;
-          background:white;
-          padding:10px;
-          font-size:12px;
-          border-radius:4px;
-          box-shadow:0 1px 4px rgba(0,0,0,0.3);
-          z-index:10;
-          display:none;
-        `;
-        
-        batimentLegend.innerHTML = `
-          <strong>Type de bâtiment</strong><br>
-          <div><span style="background:#1f77b4;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Activité</div>
-          <div><span style="background:#2ca02c;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Appartement</div>
-          <div><span style="background:#d9d9d9;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Aucun local</div>
-          <div><span style="background:#9467bd;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Dépendance</div>
-          <div><span style="background:#ff7f0e;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Maison</div>
-          <div><span style="background:#e377c2;width:12px;height:12px;display:inline-block;margin-right:5px;"></span> Mixte</div>
-        `;
-        
-        map.getContainer().appendChild(batimentLegend);
-        
-        
-        /* ============================================================
-           POSITIONNEMENT INTELLIGENT (bas à gauche)
-        ============================================================ */
-        
-        function updateLegendPositions() {
-          const popVisible = legend.style.display !== "none";
-          const batVisible = batimentLegend.style.display !== "none";
-        
-          if (popVisible && batVisible) {
-            // Les deux visibles → on empile proprement
-            legend.style.bottom = "230px";          // légende population en haut
-            batimentLegend.style.bottom = "60px";  // légende bâtiment en bas
+        const legendStack = document.createElement("div");
+          legendStack.className = "legend-stack";
+          map.getContainer().appendChild(legendStack);
+          
+          function makeLegend(id, title, items, hidden = false) {
+            const el = document.createElement("div");
+            el.id = id;
+            el.className = "map-legend";
+            if (hidden) el.style.display = "none";
+          
+            el.innerHTML = `<strong>${title}</strong><br>` + items.map(([color, label, border]) =>
+              `<div><span class="legend-swatch" style="background:${color};${border ? "border:1px solid #ccc;" : ""}"></span>${label}</div>`
+            ).join("");
+          
+            legendStack.appendChild(el);   // au lieu de map.getContainer().appendChild(el)
+            return el;
           }
-          else if (popVisible && !batVisible) {
-            legend.style.bottom = "60px";          // position normale
-          }
-          else if (!popVisible && batVisible) {
-            batimentLegend.style.bottom = "120px";  // position normale
-          }
-        }
-        
+          
+          const legend = makeLegend(
+            "legend",
+            "Population en zone <br>fortement inondable",
+            [
+              ["#d9d9d9", "0"],
+              ["#ffffff", "&lt; 10", true],
+              ["#ffaaaa", "10-50"],
+              ["#ff5555", "50-100"],
+              ["#ff0000", "&gt; 100"]
+            ]
+          );
+          
+          const batimentLegend = makeLegend(
+            "batiment-legend",
+            "Type de bâtiment",
+            [
+              ["#1f77b4", "Activité"],
+              ["#2ca02c", "Appartement"],
+              ["#d9d9d9", "Aucun local"],
+              ["#9467bd", "Dépendance"],
+              ["#ff7f0e", "Maison"],
+              ["#e377c2", "Mixte"]
+            ],
+            true
+          );
+          
         
         /* ============================================================
            VISIBILITÉ POPULATION
         ============================================================ */
         
         function updateLegendVisibility() {
+          if (!map.getLayer("indicateurs12aLayer")) return;
           const visibility = map.getLayoutProperty("indicateurs12aLayer", "visibility");
           legend.style.display = (visibility === "none") ? "none" : "block";
-          updateLegendPositions();
         }
         
-        
-        /* ============================================================
+         /* ============================================================
            VISIBILITÉ BÂTIMENTS
         ============================================================ */
         
         function updateBatimentLegendVisibility() {
+          if (!map.getLayer("batimentsLayer")) return;
           const visibility = map.getLayoutProperty("batimentsLayer", "visibility");
           batimentLegend.style.display = (visibility === "none") ? "none" : "block";
-          updateLegendPositions();
         }
         
-        
-        /* ============================================================
+         /* ============================================================
            ÉCOUTE MAPLIBRE
         ============================================================ */
         
@@ -1244,10 +1207,10 @@ map = {
               </div>
         `;
       
-        new maplibregl.Popup({closeButton: false})
-          .setLngLat(e.lngLat)
-          .setHTML(popupContent)
-          .addTo(map);
+        new maplibregl.Popup({ closeButton: true, maxWidth: "none", offset: 12 })
+        .setLngLat(e.lngLat)
+        .setHTML(popupContent)
+        .addTo(map);
           
       });
       
