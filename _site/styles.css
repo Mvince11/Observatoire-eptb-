@@ -1695,6 +1695,23 @@ div.sidebar-item-container{
   }
 }
 
+@media(max-width:930px){
+  #quarto-document-content {
+  padding-top: 170px; 
+}
+}
+
+@media(min-width:320px) and (max-width:666px){
+  #quarto-document-content {
+  padding-top: 190px; 
+}
+}
+
+@media(max-width:785px){
+  .hero .badge-cle{
+    display: block !important;
+  }
+}
 
 @media (max-width: 768px) {
   :root {
@@ -1747,6 +1764,10 @@ div.sidebar-item-container{
   .menu-label {
     top: 92px;
     font-size: 15px;
+  }
+  
+  .header-flex img{
+    width:250px !important;
   }
 }
 

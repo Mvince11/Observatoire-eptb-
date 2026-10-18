@@ -253,7 +253,13 @@ window.addEventListener("load", function () {
     .mode-track input:focus-visible + .slider { outline: 2px solid #fff; outline-offset: 2px; }
 
     /* La navbar peut passer à la ligne : le switch descend sous les logos et le titre */
-    nav.navbar { flex-wrap: wrap; }
+    nav.navbar {
+      flex-wrap: wrap !important;
+      height: auto !important;          /* une hauteur fixée ailleurs empêcherait la 2e ligne */
+      overflow: visible !important;
+    }
+    nav.navbar > .container-fluid,
+    nav.navbar > .navbar-container { flex: 1 1 100%; }
     .mode-switch.below {
       position: static; transform: none; width: 100%;
       justify-content: flex-end; padding: 4px 16px 8px;
