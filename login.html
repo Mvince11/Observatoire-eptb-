@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.38">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,10 +36,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d61e42c43b060e2bf75dd1c7499ce943.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e55257969e79e1b23715b75ca28f8bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -265,6 +265,42 @@ window.addEventListener("load", function () {
 
 
 
+  // Lien du menu : icône et texte dans deux éléments distincts (le soulignement ne touche que le texte)
+
+  function buildMenuLink(href, text, icon, extraClass) {
+
+    const a = document.createElement("a");
+
+    a.href = href;
+
+    a.className = "menu-link " + extraClass;
+
+    if (icon) {
+
+      const ic = icon.cloneNode(true);
+
+      ic.classList.add("menu-icon");
+
+      ic.style.margin = "0";
+
+      a.appendChild(ic);
+
+    }
+
+    const span = document.createElement("span");
+
+    span.className = "menu-text";
+
+    span.textContent = text;
+
+    a.appendChild(span);
+
+    return a;
+
+  }
+
+
+
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
 
@@ -303,31 +339,7 @@ window.addEventListener("load", function () {
 
     if (!submenu) {
 
-      const linkEl = document.createElement("a");
-
-      linkEl.href = link.href;
-
-      linkEl.className = "d-block mb-3";
-
-
-
-      const icon = link.querySelector("i");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.marginRight = "6px";
-
-        linkEl.appendChild(iconClone);
-
-        linkEl.appendChild(document.createTextNode(title));
-
-      } else {
-
-        linkEl.textContent = title;
-
-      }
+      const linkEl = buildMenuLink(link.href, title, link.querySelector("i"), "mb-3");
 
 
 
@@ -381,33 +393,7 @@ window.addEventListener("load", function () {
 
     submenu.querySelectorAll("a.dropdown-item").forEach(sub => {
 
-      const subLink = document.createElement("a");
-
-      subLink.href = sub.href;
-
-      subLink.className = "d-block mb-2";
-
-
-
-      const icon = sub.querySelector("i");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.marginRight = "0px";
-
-        subLink.appendChild(iconClone);
-
-        subLink.appendChild(document.createTextNode(clean(sub.textContent)));
-
-      } else {
-
-        subLink.textContent = clean(sub.textContent);
-
-      }
-
-      body.appendChild(subLink);
+      body.appendChild(buildMenuLink(sub.href, clean(sub.textContent), sub.querySelector("i"), "mb-2"));
 
     });
 
@@ -539,7 +525,21 @@ window.addEventListener("load", function () {
 
     #sideMenu .accordion-body a, #sideMenu #menuAccordion > a { color: var(--mode-accent); text-decoration: none; }
 
-    #sideMenu .accordion-body a:hover, #sideMenu #menuAccordion > a:hover { color: var(--mode-main); text-decoration: underline; }
+    #sideMenu .accordion-body a:hover, #sideMenu #menuAccordion > a:hover { color: var(--mode-main); }
+
+
+
+    /* Liens du menu : icône et texte en flex, soulignement uniquement sur le texte (évite le trait sous Firefox) */
+
+    #sideMenu a.menu-link { display: flex !important; align-items: center; gap: .5rem; text-decoration: none !important; }
+
+    #sideMenu a.menu-link:hover { text-decoration: none !important; }
+
+    #sideMenu a.menu-link:hover .menu-text { text-decoration: underline; }
+
+    #sideMenu a.menu-link .menu-icon { flex-shrink: 0; text-decoration: none; }
+
+    #sideMenu #toolsContainer a { text-decoration: none; }
 
 
 
@@ -572,6 +572,32 @@ window.addEventListener("load", function () {
     .mode-track input:checked + .slider::before { transform: translateX(26px); }
 
     .mode-track input:focus-visible + .slider { outline: 2px solid #fff; outline-offset: 2px; }
+
+
+
+    /* La navbar peut passer à la ligne : le switch descend sous les logos et le titre */
+
+    nav.navbar {
+
+      flex-wrap: wrap !important;
+
+      height: auto !important;          /* une hauteur fixée ailleurs empêcherait la 2e ligne */
+
+      overflow: visible !important;
+
+    }
+
+    nav.navbar > .container-fluid,
+
+    nav.navbar > .navbar-container { flex: 1 1 100%; }
+
+    .mode-switch.below {
+
+      position: static; transform: none; width: 100%;
+
+      justify-content: flex-end; padding: 4px 16px 8px;
+
+    }
 
 
 
@@ -698,6 +724,82 @@ window.addEventListener("load", function () {
 
 
   applyMode(mode);
+
+
+
+  /* -----------------------------------------------------------
+
+     10) Switch sous les logos/titre quand il n'y a plus la place
+
+  ----------------------------------------------------------- */
+
+  // Bord droit du contenu réel (logos + titre), sans compter les conteneurs étirés
+
+  function brandRight() {
+
+    let right = menuButton.getBoundingClientRect().right;
+
+    const walker = document.createTreeWalker(brandContainer, NodeFilter.SHOW_ALL);
+
+    let n;
+
+    while ((n = walker.nextNode())) {
+
+      let r = null;
+
+      if (n.nodeType === 3 && n.textContent.trim()) {
+
+        const range = document.createRange();
+
+        range.selectNodeContents(n);
+
+        r = range.getBoundingClientRect();
+
+      } else if (n.nodeType === 1 && n.tagName === "IMG") {
+
+        r = n.getBoundingClientRect();
+
+      }
+
+      if (r && r.width > 0) right = Math.max(right, r.right);
+
+    }
+
+    return right;
+
+  }
+
+
+
+  function checkSwitchLayout() {
+
+    switchEl.classList.remove("below");               // mesure en position normale (à droite)
+
+    const switchLeft = switchEl.getBoundingClientRect().left;
+
+    if (brandRight() + 16 > switchLeft) switchEl.classList.add("below");
+
+    updateLayoutHeights();                            // la navbar a pu changer de hauteur
+
+  }
+
+
+
+  checkSwitchLayout();
+
+  window.addEventListener("resize", checkSwitchLayout);
+
+  window.addEventListener("orientationchange", checkSwitchLayout);
+
+  brandContainer.querySelectorAll("img").forEach(img => {
+
+    if (!img.complete) img.addEventListener("load", checkSwitchLayout);
+
+  });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(checkSwitchLayout);
+
+  setTimeout(checkSwitchLayout, 300);
 
 });
 
@@ -1032,6 +1134,7 @@ window.addEventListener("load", function () {
   align-items: center;
   background: linear-gradient(135deg, #f0f4f8, #dfe7ec);
   padding: 20px;
+  margin-top: 65px;
 }
 
 /* --- CARTE VERRE --- */
@@ -1139,8 +1242,13 @@ window.addEventListener("load", function () {
   }
 }
 
-</style>
+@media (max-width : 912px){
+  .login-wrapper{
+  margin-top: 115px;
+  }
+}
 
+</style>
 
 
 
@@ -1235,7 +1343,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/Mvince11\.github\.io\/Observatoire-eptb-\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
