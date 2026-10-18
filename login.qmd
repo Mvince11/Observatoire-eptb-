@@ -58,6 +58,7 @@ format:
   align-items: center;
   background: linear-gradient(135deg, #f0f4f8, #dfe7ec);
   padding: 20px;
+  margin-top: 65px;
 }
 
 /* --- CARTE VERRE --- */
@@ -165,6 +166,11 @@ format:
   }
 }
 
-</style>
+@media (max-width : 912px){
+  .login-wrapper{
+  margin-top: 115px;
+  }
+}
 
+</style>
 ```
