@@ -575,6 +575,32 @@ window.addEventListener("load", function () {
 
 
 
+    /* La navbar peut passer à la ligne : le switch descend sous les logos et le titre */
+
+    nav.navbar {
+
+      flex-wrap: wrap !important;
+
+      height: auto !important;          /* une hauteur fixée ailleurs empêcherait la 2e ligne */
+
+      overflow: visible !important;
+
+    }
+
+    nav.navbar > .container-fluid,
+
+    nav.navbar > .navbar-container { flex: 1 1 100%; }
+
+    .mode-switch.below {
+
+      position: static; transform: none; width: 100%;
+
+      justify-content: flex-end; padding: 4px 16px 8px;
+
+    }
+
+
+
     @media (max-width: 768px) {
 
       .mode-switch { gap: .3rem; right: 8px; }
@@ -698,6 +724,82 @@ window.addEventListener("load", function () {
 
 
   applyMode(mode);
+
+
+
+  /* -----------------------------------------------------------
+
+     10) Switch sous les logos/titre quand il n'y a plus la place
+
+  ----------------------------------------------------------- */
+
+  // Bord droit du contenu réel (logos + titre), sans compter les conteneurs étirés
+
+  function brandRight() {
+
+    let right = menuButton.getBoundingClientRect().right;
+
+    const walker = document.createTreeWalker(brandContainer, NodeFilter.SHOW_ALL);
+
+    let n;
+
+    while ((n = walker.nextNode())) {
+
+      let r = null;
+
+      if (n.nodeType === 3 && n.textContent.trim()) {
+
+        const range = document.createRange();
+
+        range.selectNodeContents(n);
+
+        r = range.getBoundingClientRect();
+
+      } else if (n.nodeType === 1 && n.tagName === "IMG") {
+
+        r = n.getBoundingClientRect();
+
+      }
+
+      if (r && r.width > 0) right = Math.max(right, r.right);
+
+    }
+
+    return right;
+
+  }
+
+
+
+  function checkSwitchLayout() {
+
+    switchEl.classList.remove("below");               // mesure en position normale (à droite)
+
+    const switchLeft = switchEl.getBoundingClientRect().left;
+
+    if (brandRight() + 16 > switchLeft) switchEl.classList.add("below");
+
+    updateLayoutHeights();                            // la navbar a pu changer de hauteur
+
+  }
+
+
+
+  checkSwitchLayout();
+
+  window.addEventListener("resize", checkSwitchLayout);
+
+  window.addEventListener("orientationchange", checkSwitchLayout);
+
+  brandContainer.querySelectorAll("img").forEach(img => {
+
+    if (!img.complete) img.addEventListener("load", checkSwitchLayout);
+
+  });
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(checkSwitchLayout);
+
+  setTimeout(checkSwitchLayout, 300);
 
 });
 
