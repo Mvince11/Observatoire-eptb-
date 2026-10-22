@@ -1,0 +1,369 @@
+<script>
+window.addEventListener("load", function () {
+
+  /* ===========================================================
+     RÉGLAGES
+  =========================================================== */
+  // Couleurs par mode : main = navbar / titres du menu, accent = liens et bordures
+  // Autres couleurs de la charte, disponibles : rgb(200,210,0), rgb(242,149,51)
+  const COLORS = {
+    debordement:   { main: "rgb(0,158,224)", accent: "rgb(67,84,129)" },
+    ruissellement: { main: "rgb(151,190,13)",  accent: "rgb(0,144,54)" }
+  };
+  const REDIRECT_ON_SWITCH = false;   // true : va à <mode>/index.html quand on bascule
+
+  /* -----------------------------------------------------------
+     1) Récupérer la navbar Quarto
+  ----------------------------------------------------------- */
+  const navbar = document.querySelector("nav.navbar");
+  if (!navbar) return;
+
+  /* -----------------------------------------------------------
+     2) Bouton Menu
+  ----------------------------------------------------------- */
+  const menuButton = document.createElement("button");
+  menuButton.id = "menuButton";
+  menuButton.style = `
+    background: #ffffff;
+    border: 1px solid #d0d0d0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    margin-right: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    cursor: pointer;
+    margin-top: 5px;
+  `;
+  menuButton.innerHTML = `
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#444">
+      <rect x="3" y="6" width="18" height="2"></rect>
+      <rect x="3" y="11" width="18" height="2"></rect>
+      <rect x="3" y="16" width="18" height="2"></rect>
+    </svg>
+  `;
+
+  const brandContainer = navbar.querySelector(".navbar-brand-container");
+  if (!brandContainer) return;
+  brandContainer.parentNode.insertBefore(menuButton, brandContainer);
+
+  /* -----------------------------------------------------------
+     3) Récupérer le collapse Quarto (menu YAML) et le cloner
+  ----------------------------------------------------------- */
+  const collapse =
+    document.getElementById("quarto-navbar-collapse") ||
+    document.getElementById("navbarCollapse");
+  if (!collapse) return;
+
+  const collapseClone = collapse.cloneNode(true);
+  const toolsOriginal = collapse.querySelector(".quarto-navbar-tools");
+  const toolsClone = toolsOriginal ? toolsOriginal.cloneNode(true) : null;
+  collapse.remove();
+
+  /* -----------------------------------------------------------
+     4) Créer le sideMenu
+  ----------------------------------------------------------- */
+  const sideMenu = document.createElement("div");
+  sideMenu.id = "sideMenu";
+  sideMenu.style = `
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    width: 320px;
+    height: calc(100% - var(--navbar-height));
+    background: white;
+    border-right: 1px solid #ccc;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+    padding-right: 5px;
+    overflow-y: hidden;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 2000;
+  `;
+  sideMenu.innerHTML = `
+    <div class="accordion" style="padding:15px 0 0 15px;" id="menuAccordion"></div>
+    <hr>
+    <div id="toolsContainer"></div>
+  `;
+  document.body.appendChild(sideMenu);
+
+  const accordion = sideMenu.querySelector("#menuAccordion");
+  const toolsContainer = sideMenu.querySelector("#toolsContainer");
+
+  /* -----------------------------------------------------------
+     5) Transformer le menu YAML en accordéon (avec étiquette de mode)
+  ----------------------------------------------------------- */
+  const clean = (txt) => txt.replace(/_/g, "").replace(/\s+/g, " ").trim();
+
+  // Lien du menu : icône et texte dans deux éléments distincts (le soulignement ne touche que le texte)
+  function buildMenuLink(href, text, icon, extraClass) {
+    const a = document.createElement("a");
+    a.href = href;
+    a.className = "menu-link " + extraClass;
+    if (icon) {
+      const ic = icon.cloneNode(true);
+      ic.classList.add("menu-icon");
+      ic.style.margin = "0";
+      a.appendChild(ic);
+    }
+    const span = document.createElement("span");
+    span.className = "menu-text";
+    span.textContent = text;
+    a.appendChild(span);
+    return a;
+  }
+
+  collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
+
+    const link = item.querySelector("a.nav-link, a.dropdown-toggle");
+    const submenu = item.querySelector("ul.dropdown-menu");
+
+    // Ignore les <li> sans lien ni sous-menu
+    if (!link && !submenu) return;
+
+    const title = link ? clean(link.innerText) : "Menu";
+
+    // Mode de l'entrée, déduit du dossier de ses liens
+    const probe = submenu ? submenu.querySelector("a.dropdown-item") : link;
+    const p = probe ? probe.pathname : "";
+    const mode = p.includes("/debordement/") ? "debordement"
+               : p.includes("/ruissellement/") ? "ruissellement"
+               : "";   // "" = visible dans les deux modes
+
+    /* CAS 1 : item SANS sous-menu */
+    if (!submenu) {
+      const linkEl = buildMenuLink(link.href, title, link.querySelector("i"), "mb-3");
+
+      linkEl.dataset.mode = mode;
+      accordion.appendChild(linkEl);
+      return;
+    }
+
+    /* CAS 2 : item AVEC sous-menu */
+    const id = "acc" + index;
+
+    const accItem = document.createElement("div");
+    accItem.className = "accordion-item";
+    accItem.innerHTML = `
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button"
+          data-bs-toggle="collapse" data-bs-target="#${id}">
+          ${title}
+        </button>
+      </h2>
+      <div id="${id}" class="accordion-collapse collapse">
+        <div class="accordion-body"></div>
+      </div>
+    `;
+
+    const body = accItem.querySelector(".accordion-body");
+
+    submenu.querySelectorAll("a.dropdown-item").forEach(sub => {
+      body.appendChild(buildMenuLink(sub.href, clean(sub.textContent), sub.querySelector("i"), "mb-2"));
+    });
+
+    accItem.dataset.mode = mode;
+    accordion.appendChild(accItem);
+  });
+
+  /* -----------------------------------------------------------
+     6) Tools dans le sideMenu
+  ----------------------------------------------------------- */
+  if (toolsClone) toolsContainer.appendChild(toolsClone);
+
+  /* -----------------------------------------------------------
+     7) Toggle du sideMenu
+  ----------------------------------------------------------- */
+  menuButton.onclick = () => {
+    const isOpen = sideMenu.style.transform === "translateX(0%)";
+    sideMenu.style.transform = isOpen ? "translateX(-100%)" : "translateX(0%)";
+    menuButton.classList.toggle("rotated", !isOpen);
+  };
+
+  /* -----------------------------------------------------------
+     8) Hauteur de la navbar (responsive)
+  ----------------------------------------------------------- */
+  function updateLayoutHeights() {
+    const navbarHeight = navbar.getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--navbar-height", navbarHeight + "px");
+    if (window.map) window.map.resize();
+  }
+  updateLayoutHeights();
+  window.addEventListener("resize", updateLayoutHeights);
+  window.addEventListener("orientationchange", updateLayoutHeights);
+
+  /* -----------------------------------------------------------
+     9) Switch Débordement / Ruissellement + couleurs par mode
+  ----------------------------------------------------------- */
+  const style = document.createElement("style");
+  style.textContent = `
+    :root { --mode-main: ${COLORS.debordement.main}; --mode-accent: ${COLORS.debordement.accent}; }
+
+    /* --- Navbar --- */
+    nav.navbar { background-color: var(--mode-main) !important; transition: background-color .3s ease; }
+    nav.navbar .navbar-title, nav.navbar .navbar-brand, nav.navbar a { color: #fff !important; }
+
+    /* --- Logos : pastille blanche pour qu'ils ressortent sur la couleur du mode --- */
+    nav.navbar img {
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      box-sizing: content-box;
+      margin: 0 4px;
+    }
+    /* Variante : logos tout blancs (décommenter, et supprimer la règle ci-dessus)
+    nav.navbar img { filter: brightness(0) invert(1); }
+    */
+
+    /* --- Bouton menu --- */
+    #menuButton { border: 2px solid var(--mode-accent) !important; }
+    #menuButton svg { fill: var(--mode-main); transition: fill .3s ease; }
+
+    /* --- Menu latéral --- */
+    #sideMenu { border-right: 5px solid var(--mode-main) !important; transition: transform .3s ease, border-color .3s ease; }
+    #sideMenu .accordion-button { color: var(--mode-main); font-weight: 600; box-shadow: none; }
+    #sideMenu .accordion-button:not(.collapsed) { background-color: var(--mode-main); color: #fff; }
+    #sideMenu .accordion-button:not(.collapsed)::after { filter: brightness(0) invert(1); }
+    #sideMenu .accordion-body a, #sideMenu #menuAccordion > a { color: var(--mode-accent); text-decoration: none; }
+    #sideMenu .accordion-body a:hover, #sideMenu #menuAccordion > a:hover { color: var(--mode-main); }
+
+    /* Liens du menu : icône et texte en flex, soulignement uniquement sur le texte (évite le trait sous Firefox) */
+    #sideMenu a.menu-link { display: flex !important; align-items: center; gap: .5rem; text-decoration: none !important; }
+    #sideMenu a.menu-link:hover { text-decoration: none !important; }
+    #sideMenu a.menu-link:hover .menu-text { text-decoration: underline; }
+    #sideMenu a.menu-link .menu-icon { flex-shrink: 0; text-decoration: none; }
+    #sideMenu #toolsContainer a { text-decoration: none; }
+
+    /* --- Switch --- */
+    .mode-switch { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); z-index: 10;
+                   display: flex; align-items: center; gap: .6rem; }
+    .mode-switch label.lbl { margin: 0; cursor: pointer; font-size: .9rem; color: #fff; opacity: .65; user-select: none; }
+    .mode-switch label.lbl.active { opacity: 1; font-weight: 700; }
+
+    .mode-track { position: relative; display: inline-block; width: 54px; height: 28px; margin: 0; cursor: pointer; }
+    .mode-track input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; z-index: 2; }
+    .mode-track .slider { position: absolute; inset: 0; border: 2px solid #fff; border-radius: 28px;
+                          background: rgba(255,255,255,.25); transition: background .25s ease; }
+    .mode-track .slider::before { content: ""; position: absolute; left: 2px; top: 2px; width: 20px; height: 20px;
+                                  border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.35);
+                                  transition: transform .25s ease; }
+    .mode-track input:checked + .slider::before { transform: translateX(26px); }
+    .mode-track input:focus-visible + .slider { outline: 2px solid #fff; outline-offset: 2px; }
+
+    /* La navbar peut passer à la ligne : le switch descend sous les logos et le titre */
+    nav.navbar {
+      flex-wrap: wrap !important;
+      height: auto !important;          /* une hauteur fixée ailleurs empêcherait la 2e ligne */
+      overflow: visible !important;
+    }
+    nav.navbar > .container-fluid,
+    nav.navbar > .navbar-container { flex: 1 1 100%; }
+    .mode-switch.below {
+      position: static; transform: none; width: 100%;
+      justify-content: flex-end; padding: 4px 16px 8px;
+    }
+
+    @media (max-width: 768px) {
+      .mode-switch { gap: .3rem; right: 8px; }
+      .mode-switch label.lbl { font-size: .75rem; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const switchEl = document.createElement("div");
+  switchEl.className = "mode-switch";
+  switchEl.innerHTML = `
+    <label class="lbl" id="lbl-deb" for="mode-toggle">Débordement</label>
+    <label class="mode-track">
+      <input type="checkbox" id="mode-toggle" role="switch" aria-label="Basculer entre débordement et ruissellement">
+      <span class="slider"></span>
+    </label>
+    <label class="lbl" id="lbl-ruis" for="mode-toggle">Ruissellement</label>
+  `;
+
+  // Placé en absolu tout à droite de la navbar, indépendamment de sa structure interne
+  if (getComputedStyle(navbar).position === "static") navbar.style.position = "relative";
+  navbar.appendChild(switchEl);
+
+  const toggle = switchEl.querySelector("#mode-toggle");
+
+  function applyMode(m) {
+    // Menu : n'affiche que les entrées du mode (ou communes)
+    accordion.querySelectorAll(":scope > [data-mode]").forEach(el => {
+      el.style.display = (el.dataset.mode === "" || el.dataset.mode === m) ? "" : "none";
+    });
+    // Couleurs
+    const c = COLORS[m];
+    document.documentElement.style.setProperty("--mode-main", c.main);
+    document.documentElement.style.setProperty("--mode-accent", c.accent);
+    // Switch
+    toggle.checked = (m === "ruissellement");
+    switchEl.querySelector("#lbl-deb").classList.toggle("active", m === "debordement");
+    switchEl.querySelector("#lbl-ruis").classList.toggle("active", m === "ruissellement");
+    try { localStorage.setItem("mode", m); } catch (e) {}
+  }
+
+  // Mode initial : dossier de la page, sinon dernier choix, sinon débordement
+  let mode = "debordement";
+  if (location.pathname.includes("/ruissellement/")) {
+    mode = "ruissellement";
+  } else if (!location.pathname.includes("/debordement/")) {
+    try { mode = localStorage.getItem("mode") || mode; } catch (e) {}
+  }
+
+  toggle.addEventListener("change", () => {
+    const m = toggle.checked ? "ruissellement" : "debordement";
+    applyMode(m);
+
+    if (REDIRECT_ON_SWITCH) {
+      const re = /(debordement|ruissellement)\/[^\/]*$/;
+      const root = re.test(location.pathname)
+        ? location.pathname.replace(re, "")
+        : location.pathname.replace(/[^\/]*$/, "");
+      location.href = location.origin + root + m + "/index.html";
+    }
+  });
+
+  applyMode(mode);
+
+  /* -----------------------------------------------------------
+     10) Switch sous les logos/titre quand il n'y a plus la place
+  ----------------------------------------------------------- */
+  // Bord droit du contenu réel (logos + titre), sans compter les conteneurs étirés
+  function brandRight() {
+    let right = menuButton.getBoundingClientRect().right;
+    const walker = document.createTreeWalker(brandContainer, NodeFilter.SHOW_ALL);
+    let n;
+    while ((n = walker.nextNode())) {
+      let r = null;
+      if (n.nodeType === 3 && n.textContent.trim()) {
+        const range = document.createRange();
+        range.selectNodeContents(n);
+        r = range.getBoundingClientRect();
+      } else if (n.nodeType === 1 && n.tagName === "IMG") {
+        r = n.getBoundingClientRect();
+      }
+      if (r && r.width > 0) right = Math.max(right, r.right);
+    }
+    return right;
+  }
+
+  function checkSwitchLayout() {
+    switchEl.classList.remove("below");               // mesure en position normale (à droite)
+    const switchLeft = switchEl.getBoundingClientRect().left;
+    if (brandRight() + 16 > switchLeft) switchEl.classList.add("below");
+    updateLayoutHeights();                            // la navbar a pu changer de hauteur
+  }
+
+  checkSwitchLayout();
+  window.addEventListener("resize", checkSwitchLayout);
+  window.addEventListener("orientationchange", checkSwitchLayout);
+  brandContainer.querySelectorAll("img").forEach(img => {
+    if (!img.complete) img.addEventListener("load", checkSwitchLayout);
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(checkSwitchLayout);
+  setTimeout(checkSwitchLayout, 300);
+});
+</script>
