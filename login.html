@@ -1127,18 +1127,44 @@ window.addEventListener("load", function () {
 }
 
 /* --- CONTENEUR GLOBAL --- */
-.login-wrapper {
-  height: 100vh;
+/* La page = une colonne de la hauteur de l'écran */
+body {
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  padding-top: var(--navbar-height, 65px) !important;  /* place pour la navbar fixe */
+}
+
+/* Le contenu prend tout l'espace libre, le footer reste en bas */
+#quarto-content {
+  flex: 1 0 auto;
+  display: flex !important;
+  flex-direction: column;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+main.content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.login-wrapper {
+  box-sizing: border-box;
+  flex: 1 0 auto;          /* remplit l'espace entre la navbar et le footer */
+  display: flex;
   background: linear-gradient(135deg, #f0f4f8, #dfe7ec);
   padding: 20px;
-  margin-top: 65px;
 }
 
 /* --- CARTE VERRE --- */
 .login-card {
+  margin: auto;
   width: 380px;
   padding: 40px 35px;
   border-radius: 18px;
@@ -1242,9 +1268,9 @@ window.addEventListener("load", function () {
   }
 }
 
-@media (max-width : 912px){
-  .login-wrapper{
-  margin-top: 115px;
+@media (max-width: 620px) {
+  .login-card {
+    margin-top: 16px;
   }
 }
 

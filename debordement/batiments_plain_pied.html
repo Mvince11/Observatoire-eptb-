@@ -299,6 +299,42 @@ window.addEventListener("load", function () {
 
 
 
+  // Lien du menu : icône et texte dans deux éléments distincts (le soulignement ne touche que le texte)
+
+  function buildMenuLink(href, text, icon, extraClass) {
+
+    const a = document.createElement("a");
+
+    a.href = href;
+
+    a.className = "menu-link " + extraClass;
+
+    if (icon) {
+
+      const ic = icon.cloneNode(true);
+
+      ic.classList.add("menu-icon");
+
+      ic.style.margin = "0";
+
+      a.appendChild(ic);
+
+    }
+
+    const span = document.createElement("span");
+
+    span.className = "menu-text";
+
+    span.textContent = text;
+
+    a.appendChild(span);
+
+    return a;
+
+  }
+
+
+
   collapseClone.querySelectorAll("li.nav-item, li.dropdown").forEach((item, index) => {
 
 
@@ -337,31 +373,7 @@ window.addEventListener("load", function () {
 
     if (!submenu) {
 
-      const linkEl = document.createElement("a");
-
-      linkEl.href = link.href;
-
-      linkEl.className = "d-block mb-3";
-
-
-
-      const icon = link.querySelector("i");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.marginRight = "6px";
-
-        linkEl.appendChild(iconClone);
-
-        linkEl.appendChild(document.createTextNode(title));
-
-      } else {
-
-        linkEl.textContent = title;
-
-      }
+      const linkEl = buildMenuLink(link.href, title, link.querySelector("i"), "mb-3");
 
 
 
@@ -415,33 +427,7 @@ window.addEventListener("load", function () {
 
     submenu.querySelectorAll("a.dropdown-item").forEach(sub => {
 
-      const subLink = document.createElement("a");
-
-      subLink.href = sub.href;
-
-      subLink.className = "d-block mb-2";
-
-
-
-      const icon = sub.querySelector("i");
-
-      if (icon) {
-
-        const iconClone = icon.cloneNode(true);
-
-        iconClone.style.marginRight = "0px";
-
-        subLink.appendChild(iconClone);
-
-        subLink.appendChild(document.createTextNode(clean(sub.textContent)));
-
-      } else {
-
-        subLink.textContent = clean(sub.textContent);
-
-      }
-
-      body.appendChild(subLink);
+      body.appendChild(buildMenuLink(sub.href, clean(sub.textContent), sub.querySelector("i"), "mb-2"));
 
     });
 
@@ -573,7 +559,21 @@ window.addEventListener("load", function () {
 
     #sideMenu .accordion-body a, #sideMenu #menuAccordion > a { color: var(--mode-accent); text-decoration: none; }
 
-    #sideMenu .accordion-body a:hover, #sideMenu #menuAccordion > a:hover { color: var(--mode-main); text-decoration: underline; }
+    #sideMenu .accordion-body a:hover, #sideMenu #menuAccordion > a:hover { color: var(--mode-main); }
+
+
+
+    /* Liens du menu : icône et texte en flex, soulignement uniquement sur le texte (évite le trait sous Firefox) */
+
+    #sideMenu a.menu-link { display: flex !important; align-items: center; gap: .5rem; text-decoration: none !important; }
+
+    #sideMenu a.menu-link:hover { text-decoration: none !important; }
+
+    #sideMenu a.menu-link:hover .menu-text { text-decoration: underline; }
+
+    #sideMenu a.menu-link .menu-icon { flex-shrink: 0; text-decoration: none; }
+
+    #sideMenu #toolsContainer a { text-decoration: none; }
 
 
 
