@@ -1,3 +1,17 @@
+function siteBase() {
+  if (window.SITE_BASE !== undefined) {
+    return window.SITE_BASE;
+  }
+
+  const meta = document.querySelector('meta[name="quarto:offset"]');
+  if (meta && meta.content) {
+    return meta.content;
+  }
+
+  return "./";
+}
+
+
 function initRightTabs() {
   const rightTabs = window.rightTabs;
   const rightPanel = window.rightPanel;
@@ -94,6 +108,108 @@ function initRightTabs() {
   dlg.showModal();
 }
 
+function ouvrirModalDonnees(btn) {
+  const ancienne = document.getElementById("donneesDialog");
+  if (ancienne) ancienne.remove();
+
+  const dlg = document.createElement("dialog");
+  dlg.id = "donneesDialog";
+  dlg.className = "indicateur-dialog donnees-dialog";
+
+  dlg.innerHTML = `
+    <div class="indicateur-dialog-header">
+      <h2>Données de la commune</h2>
+      <button type="button" class="dialog-close-btn" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+        <span>Fermer</span>
+      </button>
+    </div>
+
+    <div class="data-switch">
+      <button type="button" class="data-switch-btn active" data-vue="tableau">
+        <i class="bi bi-table"></i> Tableau
+      </button>
+      <button type="button" class="data-switch-btn" data-vue="graphique">
+        <i class="bi bi-bar-chart"></i> Graphique
+      </button>
+    </div>
+
+    <div class="donnees-dialog-body"></div>
+  `;
+
+  const dataContent = dlg.querySelector(".donnees-dialog-body");
+  const btnTableau = dlg.querySelector('[data-vue="tableau"]');
+  const btnGraphique = dlg.querySelector('[data-vue="graphique"]');
+
+  function afficherTableau() {
+  dataContent.innerHTML = "";
+
+  const iframe = document.createElement("iframe");
+  iframe.src = new URL("tableau_commune.html", window.location.href).href;
+
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+
+  console.log("URL du tableau :", iframe.src);
+
+  dataContent.appendChild(iframe);
+}
+
+  function afficherGraphique() {
+    dataContent.innerHTML = "";
+    const cfg = window.GRAPHIQUE;
+
+    if (!cfg) {
+      dataContent.innerHTML = "<p>Aucune donnée de graphique définie pour cette page.</p>";
+      return;
+    }
+    if (typeof window.graphiqueBarres !== "function") {
+      dataContent.innerHTML = "<p>Le graphique est en cours de chargement, réessayez dans un instant.</p>";
+      return;
+    }
+
+    fetch(cfg.url)
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
+        return r.json();
+      })
+      .then(data => {
+        window.graphiqueBarres(dataContent, data, cfg.options);
+        // Force le recalcul de la taille du graphique dans la modale
+        requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+      })
+      .catch(err => {
+        console.error("Erreur chargement données graphique :", err);
+        dataContent.innerHTML = "<p>Impossible de charger les données du graphique.</p>";
+      });
+  }
+
+  btnTableau.onclick = () => {
+    btnTableau.classList.add("active");
+    btnGraphique.classList.remove("active");
+    afficherTableau();
+  };
+  btnGraphique.onclick = () => {
+    btnGraphique.classList.add("active");
+    btnTableau.classList.remove("active");
+    afficherGraphique();
+  };
+
+  // Fermeture : bouton, clic sur le fond assombri, touche Échap (native)
+  dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener("close", () => {
+    btn.classList.remove("active");
+    dlg.remove();
+  });
+
+  document.body.appendChild(dlg);
+  btn.classList.add("active");
+  dlg.showModal();
+  afficherTableau();
+}
+
   function undockPanel() {
     ["position", "top", "right", "left", "height"]
       .forEach(p => rightPanel.style.removeProperty(p));
@@ -167,6 +283,16 @@ function initRightTabs() {
       }
 
       // -------------------------------------------------
+      // OUTILS AFFICHÉS DANS UNE MODALE
+      // -------------------------------------------------
+      if (tool === "infoindicateur" || tool === "donneesgraphique") {
+        fermerPanneau();
+        if (tool === "infoindicateur") ouvrirModalIndicateur(btn);
+        else ouvrirModalDonnees(btn);
+        return;
+      }
+
+      // -------------------------------------------------
       // AUTRES OUTILS
       // -------------------------------------------------
       panelButtons().forEach(b => b.classList.remove("active"));
@@ -212,14 +338,6 @@ function initRightTabs() {
         activeTool = null;
       };
       
-      // -------------------------------------------------
-      // INFORMATIONS SUR L'INDICATEUR (callouts clonés)
-      // -------------------------------------------------
-      if (tool === "infoindicateur") {
-        fermerPanneau();
-        ouvrirModalIndicateur(btn);
-        return;
-      }
 
       // -------------------------------------------------
       // COUCHES
@@ -228,98 +346,6 @@ function initRightTabs() {
         rightPanel.className = "rightpanel-large";
         content.appendChild(window.layersListDiv);
         dockPanel();
-      }
-
-      // -------------------------------------------------
-      // TABLEAU / GRAPHIQUE
-      // -------------------------------------------------
-      if (tool === "donneesgraphique") {
-
-        rightPanel.className = "rightpanel-full2";
-
-        const title = rightPanel.querySelector("h3");
-        if (title) title.style.display = "none";
-
-        content.innerHTML = "";
-
-        // Switch tableau / graphique
-        const switchContainer = document.createElement("div");
-        switchContainer.className = "data-switch";
-
-        switchContainer.innerHTML = `
-          <button id="btnTableau" class="data-switch-btn active">
-            <i class="bi bi-table"></i>
-            Tableau
-          </button>
-
-          <button id="btnGraphique" class="data-switch-btn">
-            <i class="bi bi-bar-chart"></i>
-            Graphique
-          </button>
-        `;
-
-        content.appendChild(switchContainer);
-
-        // Conteneur du contenu
-        const dataContent = document.createElement("div");
-        dataContent.id = "dataContent";
-        content.appendChild(dataContent);
-
-        function afficherTableau() {
-          dataContent.innerHTML = "";
-
-          const iframe = document.createElement("iframe");
-          iframe.src = "tableau_commune.html";
-          iframe.style.width = "100%";
-          iframe.style.height = "calc(100vh - 170px)";
-          iframe.style.border = "none";
-          iframe.style.display = "block";
-
-          dataContent.appendChild(iframe);
-        }
-
-        function afficherGraphique() {
-          dataContent.innerHTML = "";
-          const cfg = window.GRAPHIQUE;
-
-          if (!cfg) {
-            dataContent.innerHTML = "<p>Aucune donnée de graphique définie pour cette page.</p>";
-            return;
-          }
-          if (typeof window.graphiqueBarres !== "function") {
-            dataContent.innerHTML = "<p>Le graphique est en cours de chargement, réessayez dans un instant.</p>";
-            return;
-          }
-
-          fetch(cfg.url)
-            .then(r => {
-              if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
-              return r.json();
-            })
-            .then(data => window.graphiqueBarres(dataContent, data, cfg.options))
-            .catch(err => {
-              console.error("Erreur chargement données graphique :", err);
-              dataContent.innerHTML = "<p>Impossible de charger les données du graphique.</p>";
-            });
-        }
-
-        const btnTableau = switchContainer.querySelector("#btnTableau");
-        const btnGraphique = switchContainer.querySelector("#btnGraphique");
-
-        btnTableau.onclick = () => {
-          btnTableau.classList.add("active");
-          btnGraphique.classList.remove("active");
-          afficherTableau();
-        };
-
-        btnGraphique.onclick = () => {
-          btnGraphique.classList.add("active");
-          btnTableau.classList.remove("active");
-          afficherGraphique();
-        };
-
-        // Affichage initial
-        afficherTableau();
       }
     };
   });

@@ -67,13 +67,66 @@ img{
   background-color: rgba(255, 255, 255, 1); 
 }
 
+
+#donneesDialog {
+  width: 96vw !important;
+  max-width: 1600px !important;
+  height: 92vh !important;
+  height: 92dvh !important;
+  max-height: none !important;
+  margin: auto !important;
+  padding: 0 !important;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#donneesDialog[open] {
+  display: flex !important;
+  flex-direction: column;
+}
+
+#donneesDialog .indicateur-dialog-header,
+#donneesDialog .data-switch {
+  flex: 0 0 auto;
+}
+
+#donneesDialog .data-switch { padding: 8px 16px; }
+
+#donneesDialog .donnees-dialog-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 !important;
+}
+
+#donneesDialog .donnees-dialog-body iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#donneesDialog::backdrop { background: rgba(0, 0, 0, .5); }
+
+@media (max-width: 576px) {
+  #donneesDialog {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    border-radius: 0;
+  }
+}
+
 /* -----------------------------------------------------------
    Graphique
 ----------------------------------------------------------- */
 
 .gb-slider {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  margin: 6px 0 12px; font: 500 13px system-ui, sans-serif; color: #64748b;
+  margin: 6px 0 12px 18px; font: 500 13px system-ui, sans-serif; color: #64748b;
 }
 .gb-slider input[type="range"] { flex: 0 1 240px; accent-color: #f2784b; cursor: pointer; }
 .gb-badge {
