@@ -653,6 +653,18 @@ map = {
       { data: region, type: 'line', id: 'regionLayer', color: 'red', layout: {visibility:'none'} },
       { data: departement, type: 'line', id: 'departementLayer', color: '#a772b9', width: 2,  layout:{visibility:'none'}},
       { data: epci, type: 'line', id: 'epciLayer', color: '#567ae3', layout: {visibility:'none'} },
+      {
+        pmtiles: true,
+        source: "communepapi",
+        sourceLayer: "communes_zone_papi",
+        type: "fill",
+        id: "communepapiLayer",
+        color: "#ff8800",
+        opacity: 0.5,
+        layout: {
+          visibility: "none"
+        }
+      },
       { data: perimetre_papi, type: 'line', id: 'perimetrepapiLayer', color: 'black', layout: {visibility:'none'} },
       { data: indicateursGeojson, // GeoJSON contenant une propriété 's12a' -->
         type: 'fill',
@@ -723,19 +735,6 @@ map = {
         type: "fill",
         id: "ruissellementcartino2dLayer",
         color: "#b4c3ef",
-        opacity: 0.5,
-        layout: {
-          visibility: "none"
-        }
-      },
-      
-    {
-        pmtiles: true,
-        source: "communepapi",
-        sourceLayer: "communes_zone_papi",
-        type: "fill",
-        id: "communepapiLayer",
-        color: "#ff8800",
         opacity: 0.5,
         layout: {
           visibility: "none"

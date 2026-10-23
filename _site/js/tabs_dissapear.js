@@ -147,6 +147,12 @@ function ouvrirModalDonnees(btn) {
   const iframe = document.createElement("iframe");
   iframe.src = new URL("tableau_commune.html", window.location.href).href;
 
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+
+  console.log("URL du tableau :", iframe.src);
+
   dataContent.appendChild(iframe);
 }
 
@@ -306,7 +312,7 @@ function ouvrirModalDonnees(btn) {
 
       // Titre
       let titre = "";
-      if (tool === "layers") titre = "Couches";
+      //if (tool === "layers") titre = "Couches";
       if (tool === "donneesgraphique") titre = "Données de la commune";
       if (tool === "infoindicateur") titre = "Informations relatives à l'indicateur";
 
@@ -317,7 +323,7 @@ function ouvrirModalDonnees(btn) {
             <span>Fermer</span>
           </button>
         </div>
-        <h3>${titre}</h3>
+        ${titre ? `<h3>${titre}</h3>` : ""}
         <div id="panelContent"></div>
       `;
 

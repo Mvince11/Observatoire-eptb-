@@ -312,7 +312,7 @@ function ouvrirModalDonnees(btn) {
 
       // Titre
       let titre = "";
-      if (tool === "layers") titre = "Couches";
+      //if (tool === "layers") titre = "Couches";
       if (tool === "donneesgraphique") titre = "Données de la commune";
       if (tool === "infoindicateur") titre = "Informations relatives à l'indicateur";
 
@@ -323,7 +323,7 @@ function ouvrirModalDonnees(btn) {
             <span>Fermer</span>
           </button>
         </div>
-        <h3>${titre}</h3>
+        ${titre ? `<h3>${titre}</h3>` : ""}
         <div id="panelContent"></div>
       `;
 
