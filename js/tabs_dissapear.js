@@ -147,6 +147,12 @@ function ouvrirModalDonnees(btn) {
   const iframe = document.createElement("iframe");
   iframe.src = new URL("tableau_commune.html", window.location.href).href;
 
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+
+  console.log("URL du tableau :", iframe.src);
+
   dataContent.appendChild(iframe);
 }
 
@@ -203,6 +209,47 @@ function ouvrirModalDonnees(btn) {
   dlg.showModal();
   afficherTableau();
 }
+
+function ouvrirModalCouches(btn) {
+  const ancienne = document.getElementById("couchesDialog");
+  if (ancienne) ancienne.remove();
+
+  const dlg = document.createElement("dialog");
+  dlg.id = "couchesDialog";
+  dlg.className = "indicateur-dialog couches-dialog";
+
+  dlg.innerHTML = `
+    <div class="indicateur-dialog-header">
+      <h2>Couches</h2>
+      <button type="button" class="dialog-close-btn" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+        <span>Fermer</span>
+      </button>
+    </div>
+    <div class="couches-dialog-body"></div>
+  `;
+
+  const body = dlg.querySelector(".couches-dialog-body");
+
+  if (window.layersListDiv) {
+    body.appendChild(window.layersListDiv);   // déplacé, pas cloné : les écouteurs sont conservés
+  } else {
+    body.innerHTML = "<p>La liste des couches n'est pas disponible.</p>";
+  }
+
+  // Fermeture : bouton, clic sur le fond, touche Échap (native)
+  dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener("close", () => {
+    btn.classList.remove("active");
+    dlg.remove();   // window.layersListDiv reste référencé et sera redéplacé à la prochaine ouverture
+  });
+
+  document.body.appendChild(dlg);
+  btn.classList.add("active");
+  dlg.showModal();
+}
+
 
   function undockPanel() {
     ["position", "top", "right", "left", "height"]
@@ -279,10 +326,15 @@ function ouvrirModalDonnees(btn) {
       // -------------------------------------------------
       // OUTILS AFFICHÉS DANS UNE MODALE
       // -------------------------------------------------
-      if (tool === "infoindicateur" || tool === "donneesgraphique") {
+      const MODALES = {
+        infoindicateur: ouvrirModalIndicateur,
+        donneesgraphique: ouvrirModalDonnees,
+        layers: ouvrirModalCouches
+      };
+      
+      if (MODALES[tool]) {
         fermerPanneau();
-        if (tool === "infoindicateur") ouvrirModalIndicateur(btn);
-        else ouvrirModalDonnees(btn);
+        MODALES[tool](btn);
         return;
       }
 
@@ -306,7 +358,7 @@ function ouvrirModalDonnees(btn) {
 
       // Titre
       let titre = "";
-      if (tool === "layers") titre = "Couches";
+      //if (tool === "layers") titre = "Couches";
       if (tool === "donneesgraphique") titre = "Données de la commune";
       if (tool === "infoindicateur") titre = "Informations relatives à l'indicateur";
 
@@ -317,7 +369,7 @@ function ouvrirModalDonnees(btn) {
             <span>Fermer</span>
           </button>
         </div>
-        <h3>${titre}</h3>
+        ${titre ? `<h3>${titre}</h3>` : ""}
         <div id="panelContent"></div>
       `;
 
@@ -339,7 +391,7 @@ function ouvrirModalDonnees(btn) {
       if (tool === "layers") {
         rightPanel.className = "rightpanel-large";
         content.appendChild(window.layersListDiv);
-        dockPanel();
+        //dockPanel();
       }
     };
   });
