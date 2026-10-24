@@ -210,6 +210,47 @@ function ouvrirModalDonnees(btn) {
   afficherTableau();
 }
 
+function ouvrirModalCouches(btn) {
+  const ancienne = document.getElementById("couchesDialog");
+  if (ancienne) ancienne.remove();
+
+  const dlg = document.createElement("dialog");
+  dlg.id = "couchesDialog";
+  dlg.className = "indicateur-dialog couches-dialog";
+
+  dlg.innerHTML = `
+    <div class="indicateur-dialog-header">
+      <h2>Couches</h2>
+      <button type="button" class="dialog-close-btn" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+        <span>Fermer</span>
+      </button>
+    </div>
+    <div class="couches-dialog-body"></div>
+  `;
+
+  const body = dlg.querySelector(".couches-dialog-body");
+
+  if (window.layersListDiv) {
+    body.appendChild(window.layersListDiv);   // déplacé, pas cloné : les écouteurs sont conservés
+  } else {
+    body.innerHTML = "<p>La liste des couches n'est pas disponible.</p>";
+  }
+
+  // Fermeture : bouton, clic sur le fond, touche Échap (native)
+  dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener("close", () => {
+    btn.classList.remove("active");
+    dlg.remove();   // window.layersListDiv reste référencé et sera redéplacé à la prochaine ouverture
+  });
+
+  document.body.appendChild(dlg);
+  btn.classList.add("active");
+  dlg.showModal();
+}
+
+
   function undockPanel() {
     ["position", "top", "right", "left", "height"]
       .forEach(p => rightPanel.style.removeProperty(p));
@@ -285,10 +326,15 @@ function ouvrirModalDonnees(btn) {
       // -------------------------------------------------
       // OUTILS AFFICHÉS DANS UNE MODALE
       // -------------------------------------------------
-      if (tool === "infoindicateur" || tool === "donneesgraphique") {
+      const MODALES = {
+        infoindicateur: ouvrirModalIndicateur,
+        donneesgraphique: ouvrirModalDonnees,
+        layers: ouvrirModalCouches
+      };
+      
+      if (MODALES[tool]) {
         fermerPanneau();
-        if (tool === "infoindicateur") ouvrirModalIndicateur(btn);
-        else ouvrirModalDonnees(btn);
+        MODALES[tool](btn);
         return;
       }
 
@@ -345,7 +391,7 @@ function ouvrirModalDonnees(btn) {
       if (tool === "layers") {
         rightPanel.className = "rightpanel-large";
         content.appendChild(window.layersListDiv);
-        dockPanel();
+        //dockPanel();
       }
     };
   });
