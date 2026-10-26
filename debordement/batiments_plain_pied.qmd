@@ -1937,6 +1937,13 @@ library(sf)
 library(dplyr)
 library(jsonlite)
 
+# indicateur <- st_read("Indicateur.geojson")
+# 
+# indicateur <- indicateur |>
+#   mutate(logo = paste0("../Images/logo/", nom, ".png"))
+# 
+# st_write(indicateur, "Indicateur_logo.geojson", delete_dsn = TRUE)
+
 # Charger le GeoJSON
 indicateurs <- st_read("../layers/indicateurs.geojson", quiet = TRUE) %>%
   st_drop_geometry() %>%
