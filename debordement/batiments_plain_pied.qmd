@@ -9,7 +9,7 @@ format:
     
 resources:
   - Images/icons/*.svg
-  - layers/data_s12a.json
+  - layers/data_s12a_pop_bat_pp_zd_q100.json
   - layers/batiments_hauteur.pmtiles
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
@@ -17,7 +17,7 @@ resources:
   - layers/parcelles.pmtiles
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
-  - layers/indicateurs.geojson
+  - layers/indicateurs_debce.geojson
   - tableau_commune.html
   - Images/*.jpg
   - Images/logo/*.jpg
@@ -72,7 +72,7 @@ perimetre = FileAttachment("../layers/perimetre.json").json();
 slgri = FileAttachment("../layers/slgri.json").json();
 tri = FileAttachment("../layers/tri.geojson").json();
 perimetre_papi = FileAttachment("../layers/perimetre_papi.geojson").json();
-indicateursGeojson = FileAttachment("../layers/indicateurs.geojson").json();
+indicateursGeojson = FileAttachment("../layers/indicateurs_debce.geojson").json();
 ```
 
 <!-- /* ============================================================ -->
@@ -82,11 +82,11 @@ indicateursGeojson = FileAttachment("../layers/indicateurs.geojson").json();
 ```{=html}
 <script>
 window.GRAPHIQUE = {
-  url: '../layers/data_s12a.json',
+  url: '../layers/data_s12a_pop_bat_pp_zd_q100.json',
   options: {
     titre: 'Population en zone fortement inondable',
     sousTitre: "Nombre d'habitants par commune",
-    champValeur: 's12a',
+    champValeur: 's12a_pop_bat_pp_zd_q100',
     unite: 'habitants'
   }
 };
@@ -97,29 +97,94 @@ window.GRAPHIQUE = {
 <script>
 (function () {
 
+  /* ============================================================
+     Lecture d'une valeur : na (non concerné), zero, moins20 (secret
+     statistique, "- de 20") ou num
+  ============================================================ */
+  function lireValeur(brut) {
+    const NA = { type: 'na', val: null };
+
+    if (brut === null || brut === undefined) return NA;
+
+    if (typeof brut === 'string') {
+      const s = brut.trim().toLowerCase();
+      if (s === '' || ['na', 'nan', 'n/a', 'null', 'non concerné', 'non concerne'].includes(s)) return NA;
+      // "<20", "< 20", "-20", "- de 20", "moins de 20"
+      if (/^(<|-|moins)/.test(s)) return { type: 'moins20', val: null };
+      const n = Number(s.replace(/\s/g, '').replace(',', '.'));
+      if (!isFinite(n)) return NA;
+      brut = n;
+    }
+
+    if (typeof brut === 'number') {
+      if (!isFinite(brut)) return NA;
+      if (brut === 0) return { type: 'zero', val: 0 };
+      if (brut < 0)   return { type: 'moins20', val: null };   // codé -20, -1, etc.
+      return { type: 'num', val: brut };
+    }
+    return NA;
+  }
+
+  const ORDRE = { na: 0, zero: 1, moins20: 2, num: 3 };   // à valeur de barre égale
+
   function graphiqueBarres(conteneur, data, opts = {}) {
     const o = {
       titre: 'Population en zone fortement inondable',
       sousTitre: "Nombre d'habitants par commune",
       champNom: 'nom',
-      champValeur: 's12a',
+      champValeur: 's12a_pop_bat_pp_zd_q100',
       unite: 'habitants',
       pas: 10,
-      seuilInitial: 150,
+      seuilInitial: 0,
+      inclureZero: true,      // afficher les communes à 0
+      inclureNA: false,       // afficher les communes "non concernées"
+      legende: true,
       classes: [
-        { label: 'Aucun',       max: 0,        couleur: '#e2e8f0' },
-        { label: '1 à 9',       max: 9,        couleur: '#fde3c8' },
-        { label: '10 à 49',     max: 49,       couleur: '#fbb27a' },
-        { label: '50 à 99',     max: 99,       couleur: '#f2784b' },
-        { label: '100 et plus', max: Infinity, couleur: '#d1342f' }
+        { label: 'Non concerné', special: 'na',      couleur: '#f1f5f9' },
+        { label: 'Aucun',        special: 'zero',    couleur: '#e2e8f0' },
+        { label: '1 à 19',       special: 'moins20', couleur: '#fde3c8' }
       ],
       ...opts
     };
 
     conteneur.innerHTML = '';
 
-    // ---------- Curseur ----------
-    const maxData = Math.max(...data.map(d => d[o.champValeur]), 0);
+    // ---------- Préparation des lignes ----------
+    function classeDe(v) {
+      return o.classes.find(c =>
+        c.special ? c.special === v.type : (v.type === 'num' && v.val <= c.max)
+      ) || o.classes[o.classes.length - 1];
+    }
+
+    const fmt = n => n.toLocaleString('fr-FR');
+
+    const lignes = data.map(d => {
+      const v = lireValeur(d[o.champValeur]);
+      return {
+        nom: d[o.champNom],
+        v,
+        classe: classeDe(v),
+        // hauteur de la barre : "moins de 20" est dessiné à 20, les autres cas à 0
+        hauteur: v.type === 'num' ? v.val : (v.type === 'moins20' ? 20 : 0),
+        etiquette: v.type === 'num'     ? fmt(v.val)
+                 : v.type === 'num' ? fmt(v.val) : v.type === 'moins20' ? '1-19'
+                 : v.type === 'zero'    ? ''
+                 :                        'n.c.',
+        detail: v.type === 'num'     ? `${fmt(v.val)} ${o.unite}`
+              : v.type === 'moins20' ? `1 à 19 ${o.unite}`
+              : v.type === 'zero'    ? 'Aucun'
+              :                        'Non concerné'
+      };
+    }).sort((a, b) =>
+      a.hauteur - b.hauteur ||
+      ORDRE[a.v.type] - ORDRE[b.v.type] ||
+      String(a.nom).localeCompare(String(b.nom), 'fr')
+    );
+
+    // ---------- Curseur (calculé sur les valeurs numériques seulement) ----------
+    const maxNum = Math.max(0, ...lignes.filter(l => l.v.type === 'num').map(l => l.v.val));
+    const aMoins20 = lignes.some(l => l.v.type === 'moins20');
+    const maxData = Math.max(maxNum, aMoins20 ? 20 : 0);
     const sliderMax = Math.ceil(maxData / o.pas) * o.pas || o.pas;
 
     const barre = document.createElement('div');
@@ -138,6 +203,22 @@ window.GRAPHIQUE = {
     plotDiv.className = 'gb-plot';
     conteneur.appendChild(plotDiv);
 
+    // ---------- Légende (classes réellement présentes) ----------
+    if (o.legende) {
+      const presentes = o.classes.filter(c => lignes.some(l => l.classe === c))
+        .filter(c => !(c.special === 'na' && !o.inclureNA))
+        .filter(c => !(c.special === 'zero' && !o.inclureZero));
+
+      const leg = document.createElement('div');
+      leg.className = 'gb-legend';
+      leg.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin-top:6px;font-size:12px;color:#475569;';
+      leg.innerHTML = presentes.map(c =>
+        `<span style="display:inline-flex;align-items:center;gap:6px;">` +
+        `<span style="width:12px;height:12px;border-radius:3px;background:${c.couleur};border:1px solid #cbd5e1;"></span>${c.label}</span>`
+      ).join('');
+      conteneur.appendChild(leg);
+    }
+
     // ---------- Style commun ----------
     const police = { family: 'system-ui, -apple-system, "Segoe UI", sans-serif', color: '#334155' };
     const config = {
@@ -152,19 +233,22 @@ window.GRAPHIQUE = {
     };
 
     // ---------- Rendu ----------
-    function couleurDe(v) {
-      return (o.classes.find(c => v <= c.max) || o.classes[o.classes.length - 1]).couleur;
-    }
-
     function rendre() {
       const seuil = Number(range.value);
-      badge.textContent = `${seuil.toLocaleString('fr-FR')} ${o.unite}`;
+      badge.textContent = `${fmt(seuil)} ${o.unite}`;
 
-      const tri = data
-        .filter(d => d[o.champValeur] <= seuil)
-        .sort((a, b) => a[o.champValeur] - b[o.champValeur]);
+      const visibles = lignes.filter(l => {
+        switch (l.v.type) {
+          case 'num':     return l.v.val <= seuil;
+          case 'moins20': return seuil >= 20;
+          case 'zero':    return o.inclureZero;
+          case 'na':      return o.inclureNA;
+        }
+        return false;
+      });
 
-      if (!tri.length || tri.every(d => d[o.champValeur] === 0)) {
+      // Rien à montrer : aucune valeur chiffrée ni "moins de 20"
+      if (!visibles.some(l => l.v.type === 'num' || l.v.type === 'moins20')) {
         Plotly.react(plotDiv, [], {
           font: police, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
           title: titre, xaxis: { visible: false }, yaxis: { visible: false },
@@ -179,18 +263,19 @@ window.GRAPHIQUE = {
 
       const trace = {
         type: 'bar',
-        x: tri.map(d => d[o.champNom]),
-        y: tri.map(d => d[o.champValeur]),
-        text: tri.map(d => d[o.champValeur] || ''),
+        x: visibles.map(l => l.nom),
+        y: visibles.map(l => l.hauteur),
+        text: visibles.map(l => l.etiquette),
         textposition: 'outside',
         cliponaxis: false,
         textfont: { size: 12, color: '#475569' },
+        customdata: visibles.map(l => l.detail),
         marker: {
-          color: tri.map(d => couleurDe(d[o.champValeur])),
+          color: visibles.map(l => l.classe.couleur),
           cornerradius: 6,
           line: { width: 0 }
         },
-        hovertemplate: `<b>%{x}</b><br>%{y:,} ${o.unite}<extra></extra>`
+        hovertemplate: '<b>%{x}</b><br>%{customdata}<extra></extra>'
       };
 
       Plotly.react(plotDiv, [trace], {
@@ -203,7 +288,7 @@ window.GRAPHIQUE = {
         margin: { t: 70, r: 20, b: 20, l: 50 },
         xaxis: {
           type: 'category',
-          categoryorder: 'array', categoryarray: tri.map(d => d[o.champNom]),
+          categoryorder: 'array', categoryarray: visibles.map(l => l.nom),
           tickangle: -40, automargin: true,
           showline: false, ticks: '', tickfont: { size: 12, color: '#64748b' }
         },
@@ -218,9 +303,9 @@ window.GRAPHIQUE = {
       }, config);
     }
 
-    range.addEventListener('input', rendre);   // <-- manquait
-    rendre();                                  // <-- manquait
-  }                                            // <-- fermeture de graphiqueBarres
+    range.addEventListener('input', rendre);
+    rendre();
+  }
 
   // ---------- Chargement de Plotly à la demande ----------
   let promessePlotly;
@@ -259,49 +344,50 @@ window.GRAPHIQUE = {
 //| fill: true
 //| 
 map = {
-  const container = html`<div class="map-container" id="map"></div>`;
-  yield container;
+    const container = html`<div class="map-container" id="map"></div>`;
+    yield container;
+    
+    // add the PMTiles plugin to the maplibregl global.
+      const protocol = new pmtiles.Protocol();
+      maplibregl.addProtocol('pmtiles', (request) => {
+          return new Promise((resolve, reject) => {
+              const callback = (err, data) => {
+                  if (err) {
+                      reject(err);
+                  } else {
+                      resolve({data});
+                  }
+              };
+              protocol.tile(request, callback);
+          });
+      });
+    
   
-  // add the PMTiles plugin to the maplibregl global.
-    const protocol = new pmtiles.Protocol();
-    maplibregl.addProtocol('pmtiles', (request) => {
-        return new Promise((resolve, reject) => {
-            const callback = (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve({data});
-                }
-            };
-            protocol.tile(request, callback);
-        });
+    <!-- const sourcePlanIGN = { -->
+    <!--   style: 'normal', -->
+    <!--   format: 'image/png', -->
+    <!--   layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2' -->
+    <!-- }; -->
+  
+    const sourceOrtho = {
+      style: 'normal',
+      format: 'image/jpeg',
+      layer: 'HR.ORTHOIMAGERY.ORTHOPHOTOS'
+    };
+  
+    const map = new maplibregl.Map({
+      container: container,
+      //style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+      style: {
+      version: 8,
+      sources: {},
+      layers: []
+    },
+      <!-- center: [-0.04, 46.3051],  -->
+      zoom: 11
     });
   
-
-  <!-- const sourcePlanIGN = { -->
-  <!--   style: 'normal', -->
-  <!--   format: 'image/png', -->
-  <!--   layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2' -->
-  <!-- }; -->
-
-  const sourceOrtho = {
-    style: 'normal',
-    format: 'image/jpeg',
-    layer: 'HR.ORTHOIMAGERY.ORTHOPHOTOS'
-  };
-
-  const map = new maplibregl.Map({
-    container: container,
-    //style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
-    style: {
-    version: 8,
-    sources: {},
-    layers: []
-  },
-    <!-- center: [-0.04, 46.3051],  -->
-    zoom: 11
-  });
-  
+  <!-- map.on('error', e => console.error('MapLibre :', e.error?.message || e)); -->
   
       // ==================== TITRE DE L'INDICATEUR ====================
         const NOM_INDICATEUR =
@@ -568,25 +654,25 @@ map = {
 
 
   // Utile pour le bouton latérale Couche indicateur --------------
-  window.map = map;
+      window.map = map;
+        
+      map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+      map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+      map.addControl(new maplibregl.ScaleControl({ maxWidth: 80, unit: 'metric' }));
+      
     
-  map.addControl(new maplibregl.FullscreenControl(), 'top-right');
-  map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
-  map.addControl(new maplibregl.ScaleControl({ maxWidth: 80, unit: 'metric' }));
-  
-
-  map.on('load', () => {
-    map.fitBounds(
-    [
-      [-0.04, 46.3051],   // Sud-Ouest
-      [0.7741, 46.8565]   // Nord-Est
-    ],
-    {
-      padding: 20,
-      linear: true,
-      duration: 0
-    }
-  );
+      map.on('load', () => {
+        map.fitBounds(
+        [
+          [-0.04, 46.3051],   // Sud-Ouest
+          [0.7741, 46.8565]   // Nord-Est
+        ],
+        {
+          padding: 20,
+          linear: true,
+          duration: 0
+        }
+      );
     // Ajout des fonds raster IGN
     <!-- map.addSource('raster-planign', { -->
     <!--   type: 'raster', -->
@@ -643,9 +729,30 @@ map = {
       layout: { visibility: 'visible' } // tu peux le laisser caché au départ si tu veux le basculer ensuite
     });
     
-    //fetch('layers/indicateurs.geojson')
-     //.then(response => response.json())
-     //.then(indicateursGeojson => { 
+    // ---- Population en zone fortement inondable ----
+      function couleurPopulation(prop) {
+        const v = ['to-number', ['get', prop], -999];   // un texte non convertible devient -999
+        return [
+          'case',
+          ['==', ['typeof', ['get', prop]], 'null'], '#f5f58f',   // null ou propriété absente : non concerné
+          ['==', v, 0],   '#fe9929',                              // aucun
+          ['<',  v, 0],   '#ea6332',                              // -20 : de 1 à 19
+          ['<',  v, 50],  '#ffaaaa',
+          ['<',  v, 100], '#ff5555',
+          '#ff0000'
+        ];
+      }
+      
+      function formatPopulation(v) {
+        if (v === null || v === undefined) return 'Non concerné';
+        const s = String(v).trim().toLowerCase();
+        if (['', 'na', 'nan', 'null', 'undefined'].includes(s)) return 'Non concerné';
+        const n = Number(s.replace(',', '.'));
+        if (isNaN(n)) return '1 à 19';          // texte du type "- de 20"
+        if (n === 0)  return 'Aucune';
+        if (n < 0)    return '1 à 19';
+        return n.toLocaleString('fr-FR');
+      }
               
     
     const layersData = [
@@ -666,24 +773,15 @@ map = {
         }
       },
       { data: perimetre_papi, type: 'line', id: 'perimetrepapiLayer', color: 'black', layout: {visibility:'none'} },
-      { data: indicateursGeojson, // GeoJSON contenant une propriété 's12a' -->
+      {
+        data: indicateursGeojson,
         type: 'fill',
         id: 'indicateurs12aLayer',
         opacity: 0.5,
         width: 1,
-        dynamicColor: { 
-        property: 's12a',
-        mapping: { 
-           //'-1': '#f1eeed',
-           //'0': '#ffffff', 
-           '10': '#ffffff',
-           '50': '#ffaaaa', 
-           '100': '#ff5555'
-          }, 
-         default: '#d9d9d9'
-        }
-        , layout: {visibility:'visible'}
-         },
+        dynamicColor: { property: 's12a_pop_bat_pp_zd_q100' },
+        layout: { visibility: 'visible' }
+      },
       {
         pmtiles: true,
         source: "coursdeau",
@@ -793,11 +891,9 @@ map = {
             "legend",
             "Population en zone <br>fortement inondable",
             [
-              ["#d9d9d9", "0"],
-              ["#ffffff", "&lt; 10", true],
-              ["#ffaaaa", "10-50"],
-              ["#ff5555", "50-100"],
-              ["#ff0000", "&gt; 100"]
+              ["#f5f58f", "Non concerné"],
+              ["#fe9929", "Aucune", true],
+              ["#ea6332", "1 à 19"]
             ]
           );
           
@@ -1022,17 +1118,7 @@ map = {
       
         if (layer.type === 'fill') {
           if (layer.dynamicColor) {
-            const prop = ['get', layer.dynamicColor.property];
-            layerConfig.paint['fill-color'] = [
-              'case',
-              ['!', ['has', layer.dynamicColor.property]], '#d9d9d9',                       // Propriété absente
-              ['any', ['==', ['get', layer.dynamicColor.property], null], ['==', ['get', layer.dynamicColor.property], 0]], '#d9d9d9', // null ou 0
-              ['<', ['get', layer.dynamicColor.property], 10], '#ffffff',
-              ['<', ['get', layer.dynamicColor.property], 50], '#ffaaaa',
-              ['<', ['get', layer.dynamicColor.property], 100], '#ff5555',
-              ['>=', ['get', layer.dynamicColor.property], 100], '#ff0000',
-              '#d9d9d9' // fallback
-            ];
+            layerConfig.paint['fill-color'] = couleurPopulation(layer.dynamicColor.property);
           } else {
             layerConfig.paint['fill-color'] = layer.color || '#000000';
           }
@@ -1109,27 +1195,26 @@ map = {
         ? feature.properties.population.toLocaleString('fr-FR') + ' habitants'
         : 'Non disponible';
         
-        const s12aValue = feature.properties.s12a || '0';
-        const dommages = (Number(s12aValue) || 0).toLocaleString('fr-FR');
-        const batimentsValue = feature.properties.nb_batiments;
-        const batiments = !isNaN(parseFloat(batimentsValue))
-          ? parseInt(batimentsValue).toLocaleString('fr-FR')
-          : 'Non disponible';
-        const batindif = feature.properties.nb_bat_indif?.toLocaleString('fr-FR');
-        const batsportifValue = parseFloat(feature.properties.nb_bat_sportif);
-        const batsportif = (!isNaN(batsportifValue) ? batsportifValue : 0).toLocaleString('fr-FR');
-        const batagricolefValue = parseFloat(feature.properties.nb_bat_agricole);
-        const batagricole = (!isNaN(batagricolefValue) ? batagricolefValue : 0).toLocaleString('fr-FR');
-        const batresidentielValue = parseFloat(feature.properties.nb_bat_residentiel);
-        const batresidentiel = (!isNaN(batresidentielValue) ? batresidentielValue : 0).toLocaleString('fr-FR');
-        const batannexeValue = parseFloat(feature.properties.nb_bat_annexe);
-        const batannexe = (!isNaN(batannexeValue) ? batannexeValue : 0).toLocaleString('fr-FR');
-        const batreligieuxValue = parseFloat(feature.properties.nb_bat_religieux);
-        const batreligieux = (!isNaN(batreligieuxValue) ? batreligieuxValue : 0).toLocaleString('fr-FR');
-        const batindustrielValue = parseFloat(feature.properties.nb_bat_industriel);
-        const batindustriel = (!isNaN(batindustrielValue) ? batindustrielValue : 0).toLocaleString('fr-FR');
-        const batcommercialValue = parseFloat(feature.properties.nb_bat_commercial);
-        const batcommercial = (!isNaN(batcommercialValue) ? batcommercialValue : 0).toLocaleString('fr-FR');
+        const dommages = formatPopulation(feature.properties.s12a_pop_bat_pp_zd_q100);
+        <!-- const batimentsValue = feature.properties.nb_batiments; -->
+        <!-- const batiments = !isNaN(parseFloat(batimentsValue)) -->
+        <!--   ? parseInt(batimentsValue).toLocaleString('fr-FR') -->
+        <!--   : 'Non disponible'; -->
+        <!-- const batindif = feature.properties.nb_bat_indif?.toLocaleString('fr-FR'); -->
+        <!-- const batsportifValue = parseFloat(feature.properties.nb_bat_sportif); -->
+        <!-- const batsportif = (!isNaN(batsportifValue) ? batsportifValue : 0).toLocaleString('fr-FR'); -->
+        <!-- const batagricolefValue = parseFloat(feature.properties.nb_bat_agricole); -->
+        <!-- const batagricole = (!isNaN(batagricolefValue) ? batagricolefValue : 0).toLocaleString('fr-FR'); -->
+        <!-- const batresidentielValue = parseFloat(feature.properties.nb_bat_residentiel); -->
+        <!-- const batresidentiel = (!isNaN(batresidentielValue) ? batresidentielValue : 0).toLocaleString('fr-FR'); -->
+        <!-- const batannexeValue = parseFloat(feature.properties.nb_bat_annexe); -->
+        <!-- const batannexe = (!isNaN(batannexeValue) ? batannexeValue : 0).toLocaleString('fr-FR'); -->
+        <!-- const batreligieuxValue = parseFloat(feature.properties.nb_bat_religieux); -->
+        <!-- const batreligieux = (!isNaN(batreligieuxValue) ? batreligieuxValue : 0).toLocaleString('fr-FR'); -->
+        <!-- const batindustrielValue = parseFloat(feature.properties.nb_bat_industriel); -->
+        <!-- const batindustriel = (!isNaN(batindustrielValue) ? batindustrielValue : 0).toLocaleString('fr-FR'); -->
+        <!-- const batcommercialValue = parseFloat(feature.properties.nb_bat_commercial); -->
+        <!-- const batcommercial = (!isNaN(batcommercialValue) ? batcommercialValue : 0).toLocaleString('fr-FR'); -->
       
         const popupContent = `
               <div class="popup-content">
@@ -1172,7 +1257,7 @@ map = {
               
                     <div>
                       <span class="popup-label">
-                        Personnes en zone fortement inondable
+                        Personne en zone fortement inondable
                       </span>
               
                       <span class="popup-value">
@@ -1183,23 +1268,23 @@ map = {
                   </div>
               
               
-                  <div class="popup-indicator">
-              
-                    <div class="popup-icon">
-                      <i class="bi bi-house-fill"></i>
-                    </div>
-              
-                    <div>
-                      <span class="popup-label">
-                        Nombre de bâtiments
-                      </span>
-              
-                      <span class="popup-value">
-                        ${batiments}
-                      </span>
-                    </div>
-              
-                  </div>
+                  <!-- <div class="popup-indicator"> -->
+
+                  <!--   <div class="popup-icon"> -->
+                  <!--     <i class="bi bi-house-fill"></i> -->
+                  <!--   </div> -->
+
+                  <!--   <div> -->
+                  <!--     <span class="popup-label"> -->
+                  <!--       Nombre de bâtiments -->
+                  <!--     </span> -->
+
+                  <!--     <span class="popup-value"> -->
+                  <!--       {batiments} -->
+                  <!--     </span> -->
+                  <!--   </div> -->
+
+                  <!-- </div> -->
               
                 </div>
               
@@ -1850,26 +1935,37 @@ library(reactable)
 library(htmlwidgets)
 
 # Charger et transformer les données
-indicateur_s12a <- st_read("../layers/indicateurs.geojson", quiet = TRUE) %>%
-  mutate(s12a = ifelse(is.na(s12a), 0, s12a)) %>%
+indicateur_s12a <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) %>%
+  mutate(s12a_pop_bat_pp_zd_q100 = ifelse(is.na(s12a_pop_bat_pp_zd_q100), "Non concerné", s12a_pop_bat_pp_zd_q100)) %>%
   st_drop_geometry() %>%
-  select(insee_com, nom, population, s12a) %>%
+  select(insee_com, nom, population, s12a_pop_bat_pp_zd_q100) %>%
   rename(
     Commune = nom,
     `Code INSEE` = insee_com,
     Population = population,
-    `Population en zone fortement inondable` = s12a
+    `Population en zone fortement inondable` = s12a_pop_bat_pp_zd_q100
   ) %>%
   mutate(
     Population = format(Population, big.mark = " ", scientific = FALSE),
     `Population en zone fortement inondable` = format(`Population en zone fortement inondable`, big.mark = " ", scientific = FALSE)
   )
 
-cols <- setNames(
-  lapply(names(indicateur_s12a), function(x) {
-    colDef(align = "center")
-  }),
-  names(indicateur_s12a)
+cols <- list(
+  `Code INSEE` = colDef(align = "center"),
+  Commune      = colDef(align = "center"),
+  Population   = colDef(
+    align = "center",
+    format = colFormat(separators = TRUE, locales = "fr-FR")
+  ),
+  `Population en zone fortement inondable` = colDef(
+    align = "center",
+    cell = function(value) {
+      if (value== "Non concerné") "Non concerné"
+      else if (value == 0) "0"
+      else if (value < 0)  "- de 20 personnes"
+      else format(value, big.mark = " ", scientific = FALSE)
+    }
+  )
 )
 
 
@@ -1933,24 +2029,65 @@ htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
 
 ```{r}
 #| echo: false
-library(sf)
-library(dplyr)
-library(jsonlite)
-
-# indicateur <- st_read("Indicateur.geojson")
+# library(sf)
+# library(dplyr)
+# library(jsonlite)
+# library(stringi)
 # 
-# indicateur <- indicateur |>
-#   mutate(logo = paste0("../Images/logo/", nom, ".png"))
+# # Normalise un nom : minuscules, sans accents, sans espaces ni ponctuation
+# normaliser <- function(x) {
+#   x |>
+#     stri_trans_general("Latin-ASCII") |>
+#     tolower() |>
+#     gsub("[^a-z0-9]+", "-", x = _) |>
+#     gsub("^-|-$", "", x = _)
+# }
 # 
-# st_write(indicateur, "Indicateur_logo.geojson", delete_dsn = TRUE)
-
-# Charger le GeoJSON
-indicateurs <- st_read("../layers/indicateurs.geojson", quiet = TRUE) %>%
-  st_drop_geometry() %>%
-  select(nom, s12a) %>%
-  filter(!is.na(s12a))
-
-# Sauvegarder au format JSON dans le dossier _site
-write_json(indicateurs, "../layers/data_s12a.json", auto_unbox = TRUE)
+# # 1) Inventaire des logos disponibles (tous formats)
+# dossier_logos <- "../Images/logo"
+# 
+# logos <- tibble(
+#   fichier = list.files(
+#     dossier_logos,
+#     pattern = "\\.(png|jpg|jpeg|webp|svg|gif)$",
+#     ignore.case = TRUE
+#   )
+# ) |>
+#   mutate(cle = normaliser(tools::file_path_sans_ext(fichier))) |>
+#   distinct(cle, .keep_all = TRUE)     # si une commune a deux fichiers, on garde le premier
+# 
+# # 2) Association par nom de commune
+# indicateurs_debce <- st_read("../Layers/indicateurs_debce.geojson", quiet = TRUE) |>
+#   mutate(cle = normaliser(nom)) |>
+#   left_join(logos, by = "cle") |>
+#   mutate(
+#     image = if_else(
+#       is.na(fichier),
+#       "../Images/logo/defaut.png",                        # logo de secours
+#       paste0("../Images/logo/", sapply(fichier, URLencode))
+#     )
+#   ) |>
+#   select(-cle, -fichier)
+# 
+# # 3) Contrôle : communes sans logo
+# indicateurs_debce |>
+#   st_drop_geometry() |>
+#   filter(image == "../Images/logo/defaut.png") |>
+#   pull(nom)
+# 
+# st_write(
+#   indicateurs_debce,
+#   "../layers/indicateurs_debce.geojson",
+#   delete_dsn = TRUE,                                       # écrase le fichier existant
+#   layer_options = c("RFC7946=YES", "COORDINATE_PRECISION=6")
+# )
+# 
+# # Charger le GeoJSON
+# indicateurs <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) %>%
+#   st_drop_geometry() %>%
+#   select(nom, s12a_pop_bat_pp_zd_q100)
+# 
+# write_json(indicateurs, "../layers/data_s12a_pop_bat_pp_zd_q100.json",
+#            auto_unbox = TRUE, na = "null")
 ```
 ::::
