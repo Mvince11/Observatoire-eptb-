@@ -31,8 +31,9 @@ function initRightTabs() {
   // ===================================================
   const INDICATEUR_LAYERS = [
     "indicateurs12aLayer",
+    "indicateurs31aLayer",
     "indicateurs31jLayer",
-    "indicateurs31aLayer"
+    "indicateurs33Layer"
   ];
 
   // ===================================================
