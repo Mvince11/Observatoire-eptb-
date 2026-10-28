@@ -25,6 +25,17 @@ function initRightTabs() {
   let activeTool = null;
 
   // ===================================================
+  // COUCHES PILOTÉES PAR LE BOUTON "indicateur"
+  // Toutes ces couches sont affichées / masquées ensemble.
+  // Pour en ajouter une : l'ajouter simplement à cette liste.
+  // ===================================================
+  const INDICATEUR_LAYERS = [
+    "indicateurs12aLayer",
+    "indicateurs31jLayer",
+    "indicateurs31aLayer"
+  ];
+
+  // ===================================================
   // OUTILS "DOCKÉS" : le panneau s'ouvre à gauche de la
   // barre, qui reste visible
   // ===================================================
@@ -41,214 +52,214 @@ function initRightTabs() {
     set("height", `calc(100vh - ${r.top}px - 20px)`);
     rightPanel.dataset.docked = "1";
   }
-  
+
   function ouvrirModalIndicateur(btn) {
 
-  // Callouts d'origine (on supprime d'abord une éventuelle modale ouverte,
-  // pour ne pas cloner ses propres clones)
-  const ancienne = document.getElementById("indicateurDialog");
-  if (ancienne) ancienne.remove();
+    // Callouts d'origine (on supprime d'abord une éventuelle modale ouverte,
+    // pour ne pas cloner ses propres clones)
+    const ancienne = document.getElementById("indicateurDialog");
+    if (ancienne) ancienne.remove();
 
-  const callouts = document.querySelectorAll(".callout.info_indicateur");
-  console.log("Nombre de callouts .info_indicateur :", callouts.length);
+    const callouts = document.querySelectorAll(".callout.info_indicateur");
+    console.log("Nombre de callouts .info_indicateur :", callouts.length);
 
-  const dlg = document.createElement("dialog");
-  dlg.id = "indicateurDialog";
-  dlg.className = "indicateur-dialog";
+    const dlg = document.createElement("dialog");
+    dlg.id = "indicateurDialog";
+    dlg.className = "indicateur-dialog";
 
-  dlg.innerHTML = `
-    <div class="indicateur-dialog-header">
-      <h2>Informations relatives à l'indicateur</h2>
-      <button type="button" class="dialog-close-btn" aria-label="Fermer">
-        <i class="bi bi-x-lg"></i>
-        <span>Fermer</span>
-      </button>
-    </div>
-    <div class="indicateur-dialog-body"></div>
-  `;
+    dlg.innerHTML = `
+      <div class="indicateur-dialog-header">
+        <h2>Informations relatives à l'indicateur</h2>
+        <button type="button" class="dialog-close-btn" aria-label="Fermer">
+          <i class="bi bi-x-lg"></i>
+          <span>Fermer</span>
+        </button>
+      </div>
+      <div class="indicateur-dialog-body"></div>
+    `;
 
-  const body = dlg.querySelector(".indicateur-dialog-body");
+    const body = dlg.querySelector(".indicateur-dialog-body");
 
-  if (callouts.length === 0) {
-    body.innerHTML = "<p style='color:red;'>Aucun callout trouvé.</p>";
+    if (callouts.length === 0) {
+      body.innerHTML = "<p style='color:red;'>Aucun callout trouvé.</p>";
+    }
+
+    callouts.forEach((original, index) => {
+      const clone = original.cloneNode(true);
+
+      const header = clone.querySelector(".callout-header");
+      const collapseEl = clone.querySelector(".callout-collapse");
+
+      // Callout repliable : id unique + bandeau réorienté vers cet id
+      if (header && collapseEl) {
+        const uid = `callout-clone-${Date.now()}-${index}`;
+        collapseEl.id = uid;
+        header.setAttribute("data-bs-target", `#${uid}`);
+        header.setAttribute("aria-controls", uid);
+      }
+
+      clone.style.width = "100%";
+      clone.style.margin = "0 0 16px 0";
+
+      body.appendChild(clone);
+    });
+
+    // Fermeture : bouton, clic sur le fond assombri, touche Échap (native)
+    dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
+    dlg.addEventListener("click", e => {
+      if (e.target === dlg) dlg.close();
+    });
+    dlg.addEventListener("close", () => {
+      btn.classList.remove("active");
+      dlg.remove();
+    });
+
+    document.body.appendChild(dlg);
+    btn.classList.add("active");
+    dlg.showModal();
   }
 
-  callouts.forEach((original, index) => {
-    const clone = original.cloneNode(true);
+  function ouvrirModalDonnees(btn) {
+    const ancienne = document.getElementById("donneesDialog");
+    if (ancienne) ancienne.remove();
 
-    const header = clone.querySelector(".callout-header");
-    const collapseEl = clone.querySelector(".callout-collapse");
+    const dlg = document.createElement("dialog");
+    dlg.id = "donneesDialog";
+    dlg.className = "indicateur-dialog donnees-dialog";
 
-    // Callout repliable : id unique + bandeau réorienté vers cet id
-    if (header && collapseEl) {
-      const uid = `callout-clone-${Date.now()}-${index}`;
-      collapseEl.id = uid;
-      header.setAttribute("data-bs-target", `#${uid}`);
-      header.setAttribute("aria-controls", uid);
+    dlg.innerHTML = `
+      <div class="indicateur-dialog-header">
+        <h2>Données de la commune</h2>
+        <button type="button" class="dialog-close-btn" aria-label="Fermer">
+          <i class="bi bi-x-lg"></i>
+          <span>Fermer</span>
+        </button>
+      </div>
+
+      <div class="data-switch">
+        <button type="button" class="data-switch-btn active" data-vue="tableau">
+          <i class="bi bi-table"></i> Tableau
+        </button>
+        <button type="button" class="data-switch-btn" data-vue="graphique">
+          <i class="bi bi-bar-chart"></i> Graphique
+        </button>
+      </div>
+
+      <div class="donnees-dialog-body"></div>
+    `;
+
+    const dataContent = dlg.querySelector(".donnees-dialog-body");
+    const btnTableau = dlg.querySelector('[data-vue="tableau"]');
+    const btnGraphique = dlg.querySelector('[data-vue="graphique"]');
+
+    function afficherTableau() {
+      dataContent.innerHTML = "";
+
+      const iframe = document.createElement("iframe");
+      iframe.src = new URL("tableau_commune.html", window.location.href).href;
+
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+      iframe.style.border = "none";
+
+      console.log("URL du tableau :", iframe.src);
+
+      dataContent.appendChild(iframe);
     }
 
-    clone.style.width = "100%";
-    clone.style.margin = "0 0 16px 0";
+    function afficherGraphique() {
+      dataContent.innerHTML = "";
+      const cfg = window.GRAPHIQUE;
 
-    body.appendChild(clone);
-  });
+      if (!cfg) {
+        dataContent.innerHTML = "<p>Aucune donnée de graphique définie pour cette page.</p>";
+        return;
+      }
+      if (typeof window.graphiqueBarres !== "function") {
+        dataContent.innerHTML = "<p>Le graphique est en cours de chargement, réessayez dans un instant.</p>";
+        return;
+      }
 
-  // Fermeture : bouton, clic sur le fond assombri, touche Échap (native)
-  dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
-  dlg.addEventListener("click", e => {
-    if (e.target === dlg) dlg.close();
-  });
-  dlg.addEventListener("close", () => {
-    btn.classList.remove("active");
-    dlg.remove();
-  });
-
-  document.body.appendChild(dlg);
-  btn.classList.add("active");
-  dlg.showModal();
-}
-
-function ouvrirModalDonnees(btn) {
-  const ancienne = document.getElementById("donneesDialog");
-  if (ancienne) ancienne.remove();
-
-  const dlg = document.createElement("dialog");
-  dlg.id = "donneesDialog";
-  dlg.className = "indicateur-dialog donnees-dialog";
-
-  dlg.innerHTML = `
-    <div class="indicateur-dialog-header">
-      <h2>Données de la commune</h2>
-      <button type="button" class="dialog-close-btn" aria-label="Fermer">
-        <i class="bi bi-x-lg"></i>
-        <span>Fermer</span>
-      </button>
-    </div>
-
-    <div class="data-switch">
-      <button type="button" class="data-switch-btn active" data-vue="tableau">
-        <i class="bi bi-table"></i> Tableau
-      </button>
-      <button type="button" class="data-switch-btn" data-vue="graphique">
-        <i class="bi bi-bar-chart"></i> Graphique
-      </button>
-    </div>
-
-    <div class="donnees-dialog-body"></div>
-  `;
-
-  const dataContent = dlg.querySelector(".donnees-dialog-body");
-  const btnTableau = dlg.querySelector('[data-vue="tableau"]');
-  const btnGraphique = dlg.querySelector('[data-vue="graphique"]');
-
-  function afficherTableau() {
-  dataContent.innerHTML = "";
-
-  const iframe = document.createElement("iframe");
-  iframe.src = new URL("tableau_commune.html", window.location.href).href;
-
-  iframe.style.width = "100%";
-  iframe.style.height = "100%";
-  iframe.style.border = "none";
-
-  console.log("URL du tableau :", iframe.src);
-
-  dataContent.appendChild(iframe);
-}
-
-  function afficherGraphique() {
-    dataContent.innerHTML = "";
-    const cfg = window.GRAPHIQUE;
-
-    if (!cfg) {
-      dataContent.innerHTML = "<p>Aucune donnée de graphique définie pour cette page.</p>";
-      return;
-    }
-    if (typeof window.graphiqueBarres !== "function") {
-      dataContent.innerHTML = "<p>Le graphique est en cours de chargement, réessayez dans un instant.</p>";
-      return;
+      fetch(cfg.url)
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
+          return r.json();
+        })
+        .then(data => {
+          window.graphiqueBarres(dataContent, data, cfg.options);
+          // Force le recalcul de la taille du graphique dans la modale
+          requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+        })
+        .catch(err => {
+          console.error("Erreur chargement données graphique :", err);
+          dataContent.innerHTML = "<p>Impossible de charger les données du graphique.</p>";
+        });
     }
 
-    fetch(cfg.url)
-      .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
-        return r.json();
-      })
-      .then(data => {
-        window.graphiqueBarres(dataContent, data, cfg.options);
-        // Force le recalcul de la taille du graphique dans la modale
-        requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
-      })
-      .catch(err => {
-        console.error("Erreur chargement données graphique :", err);
-        dataContent.innerHTML = "<p>Impossible de charger les données du graphique.</p>";
-      });
-  }
+    btnTableau.onclick = () => {
+      btnTableau.classList.add("active");
+      btnGraphique.classList.remove("active");
+      afficherTableau();
+    };
+    btnGraphique.onclick = () => {
+      btnGraphique.classList.add("active");
+      btnTableau.classList.remove("active");
+      afficherGraphique();
+    };
 
-  btnTableau.onclick = () => {
-    btnTableau.classList.add("active");
-    btnGraphique.classList.remove("active");
+    // Fermeture : bouton, clic sur le fond assombri, touche Échap (native)
+    dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
+    dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener("close", () => {
+      btn.classList.remove("active");
+      dlg.remove();
+    });
+
+    document.body.appendChild(dlg);
+    btn.classList.add("active");
+    dlg.showModal();
     afficherTableau();
-  };
-  btnGraphique.onclick = () => {
-    btnGraphique.classList.add("active");
-    btnTableau.classList.remove("active");
-    afficherGraphique();
-  };
-
-  // Fermeture : bouton, clic sur le fond assombri, touche Échap (native)
-  dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
-  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
-  dlg.addEventListener("close", () => {
-    btn.classList.remove("active");
-    dlg.remove();
-  });
-
-  document.body.appendChild(dlg);
-  btn.classList.add("active");
-  dlg.showModal();
-  afficherTableau();
-}
-
-function ouvrirModalCouches(btn) {
-  const ancienne = document.getElementById("couchesDialog");
-  if (ancienne) ancienne.remove();
-
-  const dlg = document.createElement("dialog");
-  dlg.id = "couchesDialog";
-  dlg.className = "indicateur-dialog couches-dialog";
-
-  dlg.innerHTML = `
-    <div class="indicateur-dialog-header">
-      <h2>Couches</h2>
-      <button type="button" class="dialog-close-btn" aria-label="Fermer">
-        <i class="bi bi-x-lg"></i>
-        <span>Fermer</span>
-      </button>
-    </div>
-    <div class="couches-dialog-body"></div>
-  `;
-
-  const body = dlg.querySelector(".couches-dialog-body");
-
-  if (window.layersListDiv) {
-    body.appendChild(window.layersListDiv);   // déplacé, pas cloné : les écouteurs sont conservés
-  } else {
-    body.innerHTML = "<p>La liste des couches n'est pas disponible.</p>";
   }
 
-  // Fermeture : bouton, clic sur le fond, touche Échap (native)
-  dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
-  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
-  dlg.addEventListener("close", () => {
-    btn.classList.remove("active");
-    dlg.remove();   // window.layersListDiv reste référencé et sera redéplacé à la prochaine ouverture
-  });
+  function ouvrirModalCouches(btn) {
+    const ancienne = document.getElementById("couchesDialog");
+    if (ancienne) ancienne.remove();
 
-  document.body.appendChild(dlg);
-  btn.classList.add("active");
-  dlg.showModal();
-}
+    const dlg = document.createElement("dialog");
+    dlg.id = "couchesDialog";
+    dlg.className = "indicateur-dialog couches-dialog";
+
+    dlg.innerHTML = `
+      <div class="indicateur-dialog-header">
+        <h2>Couches</h2>
+        <button type="button" class="dialog-close-btn" aria-label="Fermer">
+          <i class="bi bi-x-lg"></i>
+          <span>Fermer</span>
+        </button>
+      </div>
+      <div class="couches-dialog-body"></div>
+    `;
+
+    const body = dlg.querySelector(".couches-dialog-body");
+
+    if (window.layersListDiv) {
+      body.appendChild(window.layersListDiv);   // déplacé, pas cloné : les écouteurs sont conservés
+    } else {
+      body.innerHTML = "<p>La liste des couches n'est pas disponible.</p>";
+    }
+
+    // Fermeture : bouton, clic sur le fond, touche Échap (native)
+    dlg.querySelector(".dialog-close-btn").onclick = () => dlg.close();
+    dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener("close", () => {
+      btn.classList.remove("active");
+      dlg.remove();   // window.layersListDiv reste référencé et sera redéplacé à la prochaine ouverture
+    });
+
+    document.body.appendChild(dlg);
+    btn.classList.add("active");
+    dlg.showModal();
+  }
 
 
   function undockPanel() {
@@ -256,13 +267,13 @@ function ouvrirModalCouches(btn) {
       .forEach(p => rightPanel.style.removeProperty(p));
     delete rightPanel.dataset.docked;
   }
-  
+
   function fermerPanneau() {
-  rightPanel.style.display = "none";
-  undockPanel();
-  rightTabs.style.display = "flex";   // la barre reste visible
-  panelButtons().forEach(b => b.classList.remove("active"));
-  activeTool = null;
+    rightPanel.style.display = "none";
+    undockPanel();
+    rightTabs.style.display = "flex";   // la barre reste visible
+    panelButtons().forEach(b => b.classList.remove("active"));
+    activeTool = null;
   }
 
   window.addEventListener("resize", () => {
@@ -284,7 +295,7 @@ function ouvrirModalCouches(btn) {
       const tool = btn.dataset.tool;
 
       // -------------------------------------------------
-      // COUCHE INDICATEUR (affiche/masque la couche carte)
+      // COUCHES INDICATEUR (affiche/masque les couches carte)
       // -------------------------------------------------
       if (tool === "indicateur") {
 
@@ -297,19 +308,31 @@ function ouvrirModalCouches(btn) {
           return;
         }
 
+        // On ne garde que les couches réellement présentes sur la carte
+        const layers = INDICATEUR_LAYERS.filter(id => {
+          const existe = !!mapLibre.getLayer(id);
+          if (!existe) console.warn("Couche introuvable :", id);
+          return existe;
+        });
+
+        if (layers.length === 0) {
+          console.error("Aucune couche indicateur trouvée parmi :", INDICATEUR_LAYERS);
+          return;
+        }
+
+        // La visibilité de la première couche sert de référence
         const currentVisibility =
-          mapLibre.getLayoutProperty("indicateurs12aLayer", "visibility");
+          mapLibre.getLayoutProperty(layers[0], "visibility");
 
         console.log("Visibilité actuelle :", currentVisibility);
 
         const newVisibility =
           currentVisibility === "none" ? "visible" : "none";
 
-        mapLibre.setLayoutProperty(
-          "indicateurs12aLayer",
-          "visibility",
-          newVisibility
-        );
+        // Même état appliqué à toutes les couches
+        layers.forEach(id => {
+          mapLibre.setLayoutProperty(id, "visibility", newVisibility);
+        });
 
         // Afficher le titre uniquement si l'indicateur est visible
         if (typeof window.afficherTitre === "function") {
@@ -331,7 +354,7 @@ function ouvrirModalCouches(btn) {
         donneesgraphique: ouvrirModalDonnees,
         layers: ouvrirModalCouches
       };
-      
+
       if (MODALES[tool]) {
         fermerPanneau();
         MODALES[tool](btn);
@@ -383,7 +406,7 @@ function ouvrirModalCouches(btn) {
         panelButtons().forEach(b => b.classList.remove("active"));
         activeTool = null;
       };
-      
+
 
       // -------------------------------------------------
       // COUCHES

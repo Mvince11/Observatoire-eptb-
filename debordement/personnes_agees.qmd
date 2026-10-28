@@ -58,8 +58,6 @@ include-in-header:
 bbox_sru = FileAttachment("../layers/bb.json").json()
 ```
 
-
-
 ```{ojs}
 //| echo: false
 //| output: false
@@ -76,7 +74,9 @@ indicateursGeojson = FileAttachment("../layers/indicateurs_debce.geojson").json(
 ```
 
 <!-- /* ============================================================ -->
+
 <!--            CREATION GRAPHIQUE -->
+
 <!--         ============================================================ */ -->
 
 ```{=html}
@@ -336,10 +336,12 @@ window.GRAPHIQUE = {
 </script>
 ```
 
-
 <!-- /* ============================================================ -->
+
 <!--            CREATION GRAPHIQUE -->
+
 <!--         ============================================================ */ -->
+
 ```{ojs}
 //| echo: false
 //| padding: 0px
@@ -732,18 +734,17 @@ map = {
       layout: { visibility: 'visible' } // tu peux le laisser caché au départ si tu veux le basculer ensuite
     });
     
-    // ---- Population en zone fortement inondable ----
+    // ---- Population âgée en zone fortement inondable ----
       function couleurPopulationagee(prop) {
         const v = ['to-number', ['get', prop], -999];   // un texte non convertible devient -999
         return [
           'case',
-          ['==', ['typeof', ['get', prop]], 'null'], '#f5f58f',   // null ou propriété absente : non concerné
-          ['==', v, 0],   '#fe9929',                              // aucun
-          ['<',  v, 0],   '#ea6332',                              // -20 : de 1 à 19
-          ['<',  v, 58],  '#ffaaaa',
-          ['<',  v, 135], '#ff5555',
-          ['>',  v, 135], '##ff0000',
-          '#ff0000'
+          ['==', ['typeof', ['get', prop]], 'null'], '#f7fcf5',   // null ou propriété absente : non concerné
+          ['==', v, 0],   '#c9eac2',                              // aucun
+          ['<',  v, 0],   '#7bc77c',                              // -20 : de 1 à 19
+          ['<',  v, 58],  '#2a924b',
+          ['<',  v, 135], '#00441b',
+          '#6a786f'                
         ];
       }
       
@@ -893,15 +894,15 @@ map = {
           
           const legend = makeLegend(
             "legend",
-            "Population âgée en zone <br>fortement inondable",
+            "Population âgée habitant <br> la zone inondée",
             [
-              ["#f5f58f", "Non concerné"],
-              ["#fe9929", "Aucune", true],
-              ["#ea6332", "1 à 19"],
-              ["#ffaaaa", "20 à 58"],
-              ["#ff5555", "59 à 135"],
-              ["#ff5555", "136 et plus"]
-              
+              ["#f7fcf5", "Non concerné"],
+              ["#c9eac2", "Aucune", true],
+              ["#7bc77c", "1 à 19"],
+              ["#2a924b", "20 à 57"],
+              ["#00441b", "58 à 134"],
+              ["#6a786f", "135 et plus"]
+            ]
           );
           
           const batimentLegend = makeLegend(
@@ -1125,7 +1126,7 @@ map = {
       
         if (layer.type === 'fill') {
           if (layer.dynamicColor) {
-            layerConfig.paint['fill-color'] = couleurPopulation(layer.dynamicColor.property);
+            layerConfig.paint['fill-color'] = couleurPopulationagee(layer.dynamicColor.property);
           } else {
             layerConfig.paint['fill-color'] = layer.color || '#000000';
           }
@@ -1202,7 +1203,7 @@ map = {
         ? feature.properties.population.toLocaleString('fr-FR') + ' habitants'
         : 'Non disponible';
         
-        const dommages = formatPopulation(feature.properties.s31j_pop_bat_pp_zd_q100);
+        const dommages = formatPopulationagee(feature.properties.s31j_pop_agee_zx_q100);
         <!-- const batimentsValue = feature.properties.nb_batiments; -->
         <!-- const batiments = !isNaN(parseFloat(batimentsValue)) -->
         <!--   ? parseInt(batimentsValue).toLocaleString('fr-FR') -->
@@ -1264,7 +1265,7 @@ map = {
               
                     <div>
                       <span class="popup-label">
-                        Personne en zone fortement inondable
+                        Personne âgée habitant dans la zone inondée
                       </span>
               
                       <span class="popup-value">
@@ -1459,7 +1460,7 @@ map = {
       zoneinondableLayer: 'Zonage Inondable',
       ruissellementcartino2dLayer: 'Zone de ruissellement par modélisation Cartino 2D',
       coursdeauLayer: "Cours d'eau",
-      indicateurs31jLayer: 'Population en zone inondable',
+      indicateurs31jLayer: 'Population âgée habitant dans la zone inondée',
       batimentsLayer: "Bâtiments"
     };
 
@@ -1827,11 +1828,12 @@ map = {
 ```
 
 <!-- /* ============================================================ -->
+
 <!--            CREATION INFO-INDICATEUR -->
+
 <!--         ============================================================ */ -->
 
-:::: {#hidden-content style="display:none;"}
-
+:::::::: {#hidden-content style="display:none;"}
 ```{=html}
 <style>
 /* Bandeau */
@@ -1901,33 +1903,31 @@ map = {
 </style>
 ```
 
-:::  {.callout-warning .info_indicateur title="Intitulé" collapse="false"}
-Nombre de personnes occupant des bâtiments de plain-pied fortement inondables\
+::: {.callout-warning .info_indicateur title="Intitulé" collapse="false"}
+Nombre de personnes âgées (de plus de 65 ans) habitant dans la zone inondée\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-description title="Description" collapse="true"}
-Le niveau des eaux peut monter relativement vite et piéger des personnes dans des locaux ne disposant pas d’un accès vers un étage refuge. Dans les locaux où la hauteur d’eau peut être importante (supérieure à 1m), cela représente un danger pour la vie des personnes.\
+::: {.callout-warning .info_indicateur .ind-description title="Description" collapse="true"}
+Une première approche de la capacité d’un territoire à «revenir à la normale», c’est-à-dire à un état stable où les fonctions précédentes (habitat, activité, services publics, transports ...) sont restaurées sans être nécessairement identiques, consiste à évaluer les habitants touchés directement par l’événement. Et plus particulièrement la population âgée est un sujet majeur, car elles sont plus vulnérables pendant la crise mais également après la crise, sur ses capacités à rester dans son logement endommagé ou à faire face aux travaux de remise en état nécessaires.\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-On sélectionne les bâtiments (habitation ou activité) de plain-pied qui intersectent la zone d’aléa supérieure à 1 m et on comptabilise le nombre de personnes (habitants ou employés).
-Le résultat est ensuite agrégé à la commune.\
+::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
+Le nombre total de personnes âgée est calculé sur la zone inondable à partir de la couche carroyée 200m de l’INSEE (filosofi). Plus précisément, les champs « ind_65_79 » (individus agés entre 65 et 79 ans) et « ind_80p » (individus de plus de 80 ans) ont été utilisés.
+Le décompte est agrégé à la commune.\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
-Pour les effectifs des employés, les valeurs renseignées dans SIREN sont des fourchettes de valeurs hautes et basses. Ici, le choix de prendre la valeur haute a été retenu pour éviter de minimiser le total.
-Lors de l’affectation des personnes au bâtiment, pour des carreaux à faible densité de personnes, des valeurs décimales ont pu être attribuées aux bâtiments.
-Les données population de l’INSEE datent de 2019. Au regard de l’expansion démographique de la métropole ces chiffres sont sûrement un peu minimisés.\
+::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
+Aucun\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
-©IGN BD TOPO - Bâtiments (2026)\
-©CEREMA Fichiers fonciers (2025)\
-©INSEE GeoSIREN (2026)\
+::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
+
 :::
 
 <!-- /* ============================================================ -->
+
 <!--            CREATION TABLEAU -->
+
 <!--         ============================================================ */ -->
 
 ```{r}
@@ -1950,11 +1950,11 @@ indicateur_s31j <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) 
     Commune = nom,
     `Code INSEE` = insee_com,
     Population = population,
-    `Population en zone fortement inondable` = s31j_pop_agee_zx_q100
+    `Population âgée habitant dans la zone inondée` = s31j_pop_agee_zx_q100
   ) %>%
   mutate(
     Population = format(Population, big.mark = " ", scientific = FALSE),
-    `Population en zone fortement inondable` = format(`Population en zone fortement inondable`, big.mark = " ", scientific = FALSE)
+    `Population âgée habitant dans la zone inondée` = format(`Population âgée habitant dans la zone inondée`, big.mark = " ", scientific = FALSE)
   )
 
 cols <- list(
@@ -1964,7 +1964,7 @@ cols <- list(
     align = "center",
     format = colFormat(separators = TRUE, locales = "fr-FR")
   ),
-  `Population en zone fortement inondable` = colDef(
+  `Population âgée habitant dans la zone inondée` = colDef(
     align = "center",
     cell = function(value) {
       if (value== "Non concerné") "Non concerné"
@@ -2097,4 +2097,4 @@ htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
 #  write_json(indicateurs, "../layers/data_s31j_pop_agee_zx_q100.json",
 #             auto_unbox = TRUE, na = "null")
 ```
-::::
+::::::::
