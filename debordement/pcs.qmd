@@ -1876,20 +1876,20 @@ Communes avec un PCS à jour (moins de 5 ans)\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-description title="Description" collapse="true"}
-L’inondation, en impactant des installations du réseau électrique, peut engendrer une coupure de ce réseau dont les conséquences vont au-delà de la simple zone inondable. Les personnes qui dépendent d’un dispositif électrique peuvent potentiellement être mises en danger.\
+L’existence d’un plan communal de sauvegarde récent (moins de 5 ans) contribue à une prise en compte générale du risque dans la commune. Ce n’est cependant pas l’assurance d’une bonne gestion si une crise intervient.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-On sélectionne les logements qui sont à proximité (moins de 10m) de lignes électriques de desserte locale impactées par la zone inondable et on comptabilise les habitants. Le résultat est ensuite agrégé à la commune.\
+Cet indicateur met en avant les communes, potentiellement inondables, dont le PCS est donc obligatoire et n’a pas été réalisé ou n’a pas été mis à jour.
+Le résultat est affiché à la commune.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
-La méthode de calcul détermine dans un premier temps les postes de distribution électrique situés dans la zone inondable, puis on sélectionne les lignes qui partent de ces postes. On ne tient pas compte d’éventuelles surélévations des postes électriques pour les mettre à l’abri de l’inondation, et donc cela peut majorer le nombre de lignes impactées. Un rapprochement avec les services gestionnaires fiabiliserait grandement cet indicateur.\
+Les différentes étiquettes sont : en cours, réalisé et 5 ans ou moins, réalisé et supérieur à 5 ans, non réalisé.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
-©CEREMA Fichiers fonciers (2025)\
-©ENEDIS - postes et lignes électriques (aérien et souterrain) (2026)
+
 :::
 
 <!-- /* ============================================================ -->
