@@ -18,7 +18,8 @@ resources:
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs_debce.geojson
-  - tableau_commune.html
+  - tableaux/*.html
+  - tableaux/lib/**
   - Images/*.jpg
   - Images/logo/*.jpg
   - Images/logo/*.png
@@ -80,6 +81,10 @@ indicateursGeojson = FileAttachment("../layers/indicateurs_debce.geojson").json(
 <!--         ============================================================ */ -->
 
 ```{=html}
+<script>
+window.TABLEAU_URL = "tableaux/debordement_s33.html";
+</script>
+
 <script>
 window.GRAPHIQUE = {
   url: '../layers/data_s33_menages_pauvres_zx_q100.json',
@@ -1916,16 +1921,11 @@ Le niveau social moyen des individus et une des composantes dans la capacité qu
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-L’indicateur consiste à estimer le nombre de ménages dits « pauvres » impactés par la zone inondable. Selon l’INSEE, un individu (ou un ménage) est considéré comme pauvre lorsqu’il vit dans un ménage dont le niveau de vie est inférieur au seuil de pauvreté.
-En France et en Europe, le seuil est le plus souvent fixé à 60 % du niveau de vie médian.
-La couche des carreaux 200m de l’INSEE contient la variable « men_pauv » qui dénombre les ménages dits « pauvres ».
-Selon la surface intersectée entre la zone inondable et le carreau de 200m, un ratio du nombre de ménages est calculé, puis ce décompte est agrégé à la commune.\
+L’indicateur consiste à estimer le nombre de ménages dits « pauvres » impactés par la zone inondable. Selon l’INSEE, un individu (ou un ménage) est considéré comme pauvre lorsqu’il vit dans un ménage dont le niveau de vie est inférieur au seuil de pauvreté. En France et en Europe, le seuil est le plus souvent fixé à 60 % du niveau de vie médian. La couche des carreaux 200m de l’INSEE contient la variable « men_pauv » qui dénombre les ménages dits « pauvres ». Selon la surface intersectée entre la zone inondable et le carreau de 200m, un ratio du nombre de ménages est calculé, puis ce décompte est agrégé à la commune.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
-Cet indicateur comporte beaucoup de biais, le principal étant le ratio de l’intersection entre la zone inondable et le carreau, qui ne tient pas compte de l’emplacement réel des habitations.
-Par ailleurs, les données sont issues de la base filosofi 2019 de l’INSEE, la plus récente disponible.
-Enfin, un seuil de 11 ménages est appliqué pour respecter le secret statistique.\
+Cet indicateur comporte beaucoup de biais, le principal étant le ratio de l’intersection entre la zone inondable et le carreau, qui ne tient pas compte de l’emplacement réel des habitations. Par ailleurs, les données sont issues de la base filosofi 2019 de l’INSEE, la plus récente disponible. Enfin, un seuil de 11 ménages est appliqué pour respecter le secret statistique.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
@@ -1939,107 +1939,14 @@ Enfin, un seuil de 11 ménages est appliqué pour respecter le secret statistiqu
 <!--         ============================================================ */ -->
 
 ```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| expandable: false
+source("../_tableau.R")
 
-library(sf)
-library(dplyr)
-library(reactable)
-library(htmlwidgets)
-
-# Charger et transformer les données
-indicateur_s33 <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) %>%
-  mutate(s33_menages_pauvres_zx_q100 = ifelse(is.na(s33_menages_pauvres_zx_q100), "Non concerné", s33_menages_pauvres_zx_q100)) %>%
-  st_drop_geometry() %>%
-  select(insee_com, nom, population, s33_menages_pauvres_zx_q100) %>%
-  rename(
-    Commune = nom,
-    `Code INSEE` = insee_com,
-    Population = population,
-    `Nombre de ménages pauvres` = s33_menages_pauvres_zx_q100
-  ) %>%
-  mutate(
-    Population = format(Population, big.mark = " ", scientific = FALSE),
-    `Nombre de ménages pauvres` = format(`Nombre de ménages pauvres`, big.mark = " ", scientific = FALSE)
-  )
-
-cols <- list(
-  `Code INSEE` = colDef(align = "center"),
-  Commune      = colDef(align = "center"),
-  Population   = colDef(
-    align = "center",
-    format = colFormat(separators = TRUE, locales = "fr-FR")
-  ),
-  `Nombre de ménages pauvres` = colDef(
-    align = "center",
-    cell = function(value) {
-      if (value== "Non concerné") "Non concerné"
-      else if (value == 0) "0"
-      else if (value < 0)  "- de 20 personnes"
-      else format(value, big.mark = " ", scientific = FALSE)
-    }
-  )
+creer_tableau(
+  champ   = "s33_menages_pauvres_zx_q100",
+  libelle = "Nombre de ménages pauvres",
+  fichier = "debordement_s33.html",
+  unite   = "ménages"
 )
-
-
-# Afficher avec reactable
-reactable(indicateur_s33,
-          filterable = TRUE,
-          striped = TRUE,
-          sortable = TRUE,
-          resizable = TRUE,
-          pagination = TRUE,
-          defaultPageSize = 10,
-          highlight = TRUE,
-          theme = reactableTheme(
-            borderColor = "#E0E0E0",
-            stripedColor = "#f5f5f5",
-            highlightColor = "#7591e5",
-            cellPadding = "8px 12px",
-            style = list(fontSize = "14px", fontfamily = "Avenir, Arial, sans-serif",fontweight ="600")
-          ))
-
-## Permet de sauvegarder au format html afin de l'afficher dans la barre latérale de la carte
-widget <- reactable(
-  indicateur_s33,
-  filterable = TRUE,
-  striped = TRUE,
-  sortable = TRUE,
-  resizable = TRUE,
-  pagination = TRUE,
-  defaultPageSize = 10,
-  highlight = TRUE,
-  
-  columns = cols,
-
-  theme = reactableTheme(
-    borderColor = "#E0E0E0",
-    stripedColor = "#f5f5f5",
-    highlightColor = "#7591e5",
-    cellPadding = "8px 12px",
-    style = list(
-      fontFamily = "Avenir, Arial, sans-serif",
-      fontSize = "16px",
-      fontWeight = "400",
-      textAlign = "center"
-    ),
-    headerStyle = list(
-      fontFamily = "Avenir, Arial, sans-serif",
-      fontWeight = "600",
-      textAlign = "center",
-      fontSize = "16px",
-      alignItems = "center",
-      backgroundColor = "#e5f0f0",
-      borderRadius = "8px",
-      color = "cadetblue"
-    )
-  )
-)
-
-htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
-
 ```
 
 ```{r}
@@ -2106,4 +2013,3 @@ htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
 #               auto_unbox = TRUE, na = "null")
 ```
 ::::::::
-

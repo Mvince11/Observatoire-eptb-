@@ -156,16 +156,23 @@ function initRightTabs() {
 
     function afficherTableau() {
       dataContent.innerHTML = "";
-
+    
+      // Chaque page déclare son tableau : window.TABLEAU_URL = "tableaux/debordement_s33.html"
+      if (!window.TABLEAU_URL) {
+        dataContent.innerHTML = "<p>Aucun tableau défini pour cette page.</p>";
+        console.warn("window.TABLEAU_URL n'est pas défini sur cette page");
+        return;
+      }
+    
       const iframe = document.createElement("iframe");
-      iframe.src = new URL("tableau_commune.html", window.location.href).href;
-
+      iframe.src = new URL(siteBase() + window.TABLEAU_URL, window.location.href).href;
+    
       iframe.style.width = "100%";
       iframe.style.height = "100%";
       iframe.style.border = "none";
-
+    
       console.log("URL du tableau :", iframe.src);
-
+    
       dataContent.appendChild(iframe);
     }
 

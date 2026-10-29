@@ -18,7 +18,8 @@ resources:
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs_debce.geojson
-  - tableau_commune.html
+  - tableaux/*.html
+  - tableaux/lib/**
   - Images/*.jpg
   - Images/logo/*.jpg
   - Images/logo/*.png
@@ -80,6 +81,10 @@ indicateursGeojson = FileAttachment("../layers/indicateurs_debce.geojson").json(
 <!--         ============================================================ */ -->
 
 ```{=html}
+<script>
+window.TABLEAU_URL = "tableaux/debordement_s110b.html";
+</script>
+
 <script>
 window.GRAPHIQUE = {
   url: '../layers/data_s110b_pop_zti_q100.json',
@@ -339,7 +344,7 @@ window.GRAPHIQUE = {
 
 <!-- /* ============================================================ -->
 
-<!--            CREATION GRAPHIQUE -->
+<!--            CREATION MAP -->
 
 <!--         ============================================================ */ -->
 
@@ -1916,17 +1921,15 @@ L’inondation, en impactant des installations du réseau électrique, peut enge
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-On sélectionne les logements qui sont à proximité (moins de 10m) de lignes électriques de desserte locale impactées par la zone inondable et on comptabilise les habitants.
-Le résultat est ensuite agrégé à la commune.\
+On sélectionne les logements qui sont à proximité (moins de 10m) de lignes électriques de desserte locale impactées par la zone inondable et on comptabilise les habitants. Le résultat est ensuite agrégé à la commune.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
-La méthode de calcul détermine dans un premier temps les postes de distribution électrique situés dans la zone inondable, puis on sélectionne les lignes qui partent de ces postes. On ne tient pas compte d’éventuelles surélévations des postes électriques pour les mettre à l’abri de l’inondation, et donc cela peut majorer le nombre de lignes impactées.
-Un rapprochement avec les services gestionnaires fiabiliserait grandement cet indicateur.\
+La méthode de calcul détermine dans un premier temps les postes de distribution électrique situés dans la zone inondable, puis on sélectionne les lignes qui partent de ces postes. On ne tient pas compte d’éventuelles surélévations des postes électriques pour les mettre à l’abri de l’inondation, et donc cela peut majorer le nombre de lignes impactées. Un rapprochement avec les services gestionnaires fiabiliserait grandement cet indicateur.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
-©CEREMA Fichiers fonciers (2025)  
+©CEREMA Fichiers fonciers (2025)\
 ©ENEDIS - postes et lignes électriques (aérien et souterrain) (2026)
 :::
 
@@ -1937,107 +1940,14 @@ Un rapprochement avec les services gestionnaires fiabiliserait grandement cet in
 <!--         ============================================================ */ -->
 
 ```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| expandable: false
+source("../_tableau.R")
 
-library(sf)
-library(dplyr)
-library(reactable)
-library(htmlwidgets)
-
-# Charger et transformer les données
-indicateur_s110b <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) %>%
-  mutate(s110b_pop_zti_q100 = ifelse(is.na(s110b_pop_zti_q100), "Non concerné", s110b_pop_zti_q100)) %>%
-  st_drop_geometry() %>%
-  select(insee_com, nom, population, s110b_pop_zti_q100) %>%
-  rename(
-    Commune = nom,
-    `Code INSEE` = insee_com,
-    Population = population,
-    `Nombre d’habitants situés dans une zone de fragilité électrique en cas d’inondation` = s110b_pop_zti_q100
-  ) %>%
-  mutate(
-    Population = format(Population, big.mark = " ", scientific = FALSE),
-    `Nombre d’habitants situés dans une zone de fragilité électrique en cas d’inondation` = format(`Nombre d’habitants situés dans une zone de fragilité électrique en cas d’inondation`, big.mark = " ", scientific = FALSE)
-  )
-
-cols <- list(
-  `Code INSEE` = colDef(align = "center"),
-  Commune      = colDef(align = "center"),
-  Population   = colDef(
-    align = "center",
-    format = colFormat(separators = TRUE, locales = "fr-FR")
-  ),
-  `Nombre d’habitants situés dans une zone de fragilité électrique en cas d’inondation` = colDef(
-    align = "center",
-    cell = function(value) {
-      if (value== "Non concerné") "Non concerné"
-      else if (value == 0) "0"
-      else if (value < 0)  "- de 20 personnes"
-      else format(value, big.mark = " ", scientific = FALSE)
-    }
-  )
+creer_tableau(
+  champ   = "s110b_pop_zti_q100",
+  libelle = "Nombre d’habitants situés dans une zone de fragilité électrique en cas d’inondation",
+  fichier = "debordement_s110b.html",
+  unite   = "habitants"
 )
-
-
-# Afficher avec reactable
-reactable(indicateur_s110b,
-          filterable = TRUE,
-          striped = TRUE,
-          sortable = TRUE,
-          resizable = TRUE,
-          pagination = TRUE,
-          defaultPageSize = 10,
-          highlight = TRUE,
-          theme = reactableTheme(
-            borderColor = "#E0E0E0",
-            stripedColor = "#f5f5f5",
-            highlightColor = "#7591e5",
-            cellPadding = "8px 12px",
-            style = list(fontSize = "14px", fontfamily = "Avenir, Arial, sans-serif",fontweight ="600")
-          ))
-
-## Permet de sauvegarder au format html afin de l'afficher dans la barre latérale de la carte
-widget <- reactable(
-  indicateur_s110b,
-  filterable = TRUE,
-  striped = TRUE,
-  sortable = TRUE,
-  resizable = TRUE,
-  pagination = TRUE,
-  defaultPageSize = 10,
-  highlight = TRUE,
-  
-  columns = cols,
-
-  theme = reactableTheme(
-    borderColor = "#E0E0E0",
-    stripedColor = "#f5f5f5",
-    highlightColor = "#7591e5",
-    cellPadding = "8px 12px",
-    style = list(
-      fontFamily = "Avenir, Arial, sans-serif",
-      fontSize = "16px",
-      fontWeight = "400",
-      textAlign = "center"
-    ),
-    headerStyle = list(
-      fontFamily = "Avenir, Arial, sans-serif",
-      fontWeight = "600",
-      textAlign = "center",
-      fontSize = "16px",
-      alignItems = "center",
-      backgroundColor = "#e5f0f0",
-      borderRadius = "8px",
-      color = "cadetblue"
-    )
-  )
-)
-
-htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
-
 ```
 
 ```{r}
@@ -2104,4 +2014,3 @@ htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
 #               auto_unbox = TRUE, na = "null")
 ```
 ::::::::
-

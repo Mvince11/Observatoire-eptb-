@@ -18,7 +18,8 @@ resources:
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs_debce.geojson
-  - tableau_commune.html
+  - tableaux/*.html
+  - tableaux/lib/**
   - Images/*.jpg
   - Images/logo/*.jpg
   - Images/logo/*.png
@@ -58,8 +59,6 @@ include-in-header:
 bbox_sru = FileAttachment("../layers/bb.json").json()
 ```
 
-
-
 ```{ojs}
 //| echo: false
 //| output: false
@@ -76,7 +75,9 @@ indicateursGeojson = FileAttachment("../layers/indicateurs_debce.geojson").json(
 ```
 
 <!-- /* ============================================================ -->
+
 <!--            CREATION GRAPHIQUE -->
+
 <!--         ============================================================ */ -->
 
 ```{=html}
@@ -331,12 +332,18 @@ window.GRAPHIQUE = {
 
 })();
 </script>
+
+<script>
+window.TABLEAU_URL = "tableaux/debordement_s12a.html";
+</script>
 ```
 
-
 <!-- /* ============================================================ -->
+
 <!--            CREATION GRAPHIQUE -->
+
 <!--         ============================================================ */ -->
+
 ```{ojs}
 //| echo: false
 //| padding: 0px
@@ -1820,11 +1827,12 @@ map = {
 ```
 
 <!-- /* ============================================================ -->
+
 <!--            CREATION INFO-INDICATEUR -->
+
 <!--         ============================================================ */ -->
 
-:::: {#hidden-content style="display:none;"}
-
+:::::::: {#hidden-content style="display:none;"}
 ```{=html}
 <style>
 /* Bandeau */
@@ -1894,137 +1902,43 @@ map = {
 </style>
 ```
 
-:::  {.callout-warning .info_indicateur title="Intitulé" collapse="false"}
+::: {.callout-warning .info_indicateur title="Intitulé" collapse="false"}
 Nombre de personnes occupant des bâtiments de plain-pied fortement inondables\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-description title="Description" collapse="true"}
+::: {.callout-warning .info_indicateur .ind-description title="Description" collapse="true"}
 Le niveau des eaux peut monter relativement vite et piéger des personnes dans des locaux ne disposant pas d’un accès vers un étage refuge. Dans les locaux où la hauteur d’eau peut être importante (supérieure à 1m), cela représente un danger pour la vie des personnes.\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-On sélectionne les bâtiments (habitation ou activité) de plain-pied qui intersectent la zone d’aléa supérieure à 1 m et on comptabilise le nombre de personnes (habitants ou employés).
-Le résultat est ensuite agrégé à la commune.\
+::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
+On sélectionne les bâtiments (habitation ou activité) de plain-pied qui intersectent la zone d’aléa supérieure à 1 m et on comptabilise le nombre de personnes (habitants ou employés). Le résultat est ensuite agrégé à la commune.\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
-Pour les effectifs des employés, les valeurs renseignées dans SIREN sont des fourchettes de valeurs hautes et basses. Ici, le choix de prendre la valeur haute a été retenu pour éviter de minimiser le total.
-Lors de l’affectation des personnes au bâtiment, pour des carreaux à faible densité de personnes, des valeurs décimales ont pu être attribuées aux bâtiments.
-Les données population de l’INSEE datent de 2019. Au regard de l’expansion démographique de la métropole ces chiffres sont sûrement un peu minimisés.\
+::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
+Pour les effectifs des employés, les valeurs renseignées dans SIREN sont des fourchettes de valeurs hautes et basses. Ici, le choix de prendre la valeur haute a été retenu pour éviter de minimiser le total. Lors de l’affectation des personnes au bâtiment, pour des carreaux à faible densité de personnes, des valeurs décimales ont pu être attribuées aux bâtiments. Les données population de l’INSEE datent de 2019. Au regard de l’expansion démographique de la métropole ces chiffres sont sûrement un peu minimisés.\
 :::
 
-:::  {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
+::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
 ©IGN BD TOPO - Bâtiments (2026)\
 ©CEREMA Fichiers fonciers (2025)\
 ©INSEE GeoSIREN (2026)\
 :::
 
 <!-- /* ============================================================ -->
+
 <!--            CREATION TABLEAU -->
+
 <!--         ============================================================ */ -->
 
 ```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| expandable: false
+source("../_tableau.R")
 
-library(sf)
-library(dplyr)
-library(reactable)
-library(htmlwidgets)
-
-# Charger et transformer les données
-indicateur_s12a <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) %>%
-  mutate(s12a_pop_bat_pp_zd_q100 = ifelse(is.na(s12a_pop_bat_pp_zd_q100), "Non concerné", s12a_pop_bat_pp_zd_q100)) %>%
-  st_drop_geometry() %>%
-  select(insee_com, nom, population, s12a_pop_bat_pp_zd_q100) %>%
-  rename(
-    Commune = nom,
-    `Code INSEE` = insee_com,
-    Population = population,
-    `Population en zone fortement inondable` = s12a_pop_bat_pp_zd_q100
-  ) %>%
-  mutate(
-    Population = format(Population, big.mark = " ", scientific = FALSE),
-    `Population en zone fortement inondable` = format(`Population en zone fortement inondable`, big.mark = " ", scientific = FALSE)
-  )
-
-cols <- list(
-  `Code INSEE` = colDef(align = "center"),
-  Commune      = colDef(align = "center"),
-  Population   = colDef(
-    align = "center",
-    format = colFormat(separators = TRUE, locales = "fr-FR")
-  ),
-  `Population en zone fortement inondable` = colDef(
-    align = "center",
-    cell = function(value) {
-      if (value== "Non concerné") "Non concerné"
-      else if (value == 0) "0"
-      else if (value < 0)  "- de 20 personnes"
-      else format(value, big.mark = " ", scientific = FALSE)
-    }
-  )
+creer_tableau(
+  champ   = "s12a_pop_bat_pp_zd_q100",
+  libelle = "Population en zone fortement inondable",
+  fichier = "debordement_s12a.html",
+  unite   = "population"
 )
-
-
-# Afficher avec reactable
-reactable(indicateur_s12a,
-          filterable = TRUE,
-          striped = TRUE,
-          sortable = TRUE,
-          resizable = TRUE,
-          pagination = TRUE,
-          defaultPageSize = 10,
-          highlight = TRUE,
-          theme = reactableTheme(
-            borderColor = "#E0E0E0",
-            stripedColor = "#f5f5f5",
-            highlightColor = "#7591e5",
-            cellPadding = "8px 12px",
-            style = list(fontSize = "14px", fontfamily = "Avenir, Arial, sans-serif",fontweight ="600")
-          ))
-
-## Permet de sauvegarder au format html afin de l'afficher dans la barre latérale de la carte
-widget <- reactable(
-  indicateur_s12a,
-  filterable = TRUE,
-  striped = TRUE,
-  sortable = TRUE,
-  resizable = TRUE,
-  pagination = TRUE,
-  defaultPageSize = 10,
-  highlight = TRUE,
-  
-  columns = cols,
-
-  theme = reactableTheme(
-    borderColor = "#E0E0E0",
-    stripedColor = "#f5f5f5",
-    highlightColor = "#7591e5",
-    cellPadding = "8px 12px",
-    style = list(
-      fontFamily = "Avenir, Arial, sans-serif",
-      fontSize = "16px",
-      fontWeight = "400",
-      textAlign = "center"
-    ),
-    headerStyle = list(
-      fontFamily = "Avenir, Arial, sans-serif",
-      fontWeight = "600",
-      textAlign = "center",
-      fontSize = "16px",
-      alignItems = "center",
-      backgroundColor = "#e5f0f0",
-      borderRadius = "8px",
-      color = "cadetblue"
-    )
-  )
-)
-
-htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
-
 ```
 
 ```{r}
@@ -2090,4 +2004,4 @@ htmlwidgets::saveWidget(widget, "tableau_commune.html", selfcontained = TRUE)
 # write_json(indicateurs, "../layers/data_s12a_pop_bat_pp_zd_q100.json",
 #            auto_unbox = TRUE, na = "null")
 ```
-::::
+::::::::
