@@ -1,6 +1,19 @@
 project:
   type: website
   title: "Observatoire de la vulnérabilité aux inondations Vienne - Clain"
+  resources:
+    - Images/icons/*.svg
+    - Images/*.jpg
+    - Images/logo/*.jpg
+    - Images/logo/*.png
+    - Images/logo/*.webp
+    - layers/*.json
+    - layers/*.geojson
+    - layers/*.pmtiles
+    - tableaux/**
+    - js/*.js
+    - js/*.css
+    - assets/*.html
   
 website:
   back-to-top-navigation: true
