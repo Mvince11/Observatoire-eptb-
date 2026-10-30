@@ -69,7 +69,39 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <script>
 
-window.addEventListener("load", function () {
+/* ===========================================================
+
+   ANTI-CLIGNOTEMENT : la navbar d'origine reste masquée jusqu'à
+
+   ce qu'elle soit transformée (filet de sécurité : 1,5 s max)
+
+=========================================================== */
+
+(function () {
+
+  const s = document.createElement("style");
+
+  s.textContent = "nav.navbar:not(.nav-ready){visibility:hidden}";
+
+  document.head.appendChild(s);
+
+
+
+  setTimeout(function () {
+
+    const nav = document.querySelector("nav.navbar");
+
+    if (nav) nav.classList.add("nav-ready");
+
+  }, 1500);
+
+})();
+
+
+
+
+
+function initNavbar() {
 
 
 
@@ -104,6 +136,12 @@ window.addEventListener("load", function () {
   const navbar = document.querySelector("nav.navbar");
 
   if (!navbar) return;
+
+
+
+  // Ne laisse jamais la navbar masquée si on sort plus tôt
+
+  const afficherNavbar = () => navbar.classList.add("nav-ready");
 
 
 
@@ -163,7 +201,7 @@ window.addEventListener("load", function () {
 
   const brandContainer = navbar.querySelector(".navbar-brand-container");
 
-  if (!brandContainer) return;
+  if (!brandContainer) { afficherNavbar(); return; }
 
   brandContainer.parentNode.insertBefore(menuButton, brandContainer);
 
@@ -181,7 +219,7 @@ window.addEventListener("load", function () {
 
     document.getElementById("navbarCollapse");
 
-  if (!collapse) return;
+  if (!collapse) { afficherNavbar(); return; }
 
 
 
@@ -801,9 +839,30 @@ window.addEventListener("load", function () {
 
   setTimeout(checkSwitchLayout, 300);
 
-});
+
+
+  // La navbar est prête : on la révèle
+
+  afficherNavbar();
+
+}
+
+
+
+// Démarrage dès que le DOM est prêt (sans attendre images, tuiles et PMTiles)
+
+if (document.readyState === "loading") {
+
+  document.addEventListener("DOMContentLoaded", initNavbar);
+
+} else {
+
+  initNavbar();
+
+}
 
 </script>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 

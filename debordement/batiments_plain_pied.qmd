@@ -108,8 +108,10 @@ window.GRAPHIQUE = {
     if (brut === null || brut === undefined) return NA;
 
     if (typeof brut === 'string') {
-      const s = brut.trim().toLowerCase();
-      if (s === '' || ['na', 'nan', 'n/a', 'null', 'non concerné', 'non concerne'].includes(s)) return NA;
+      const s = brut.replace(/\s+/g, ' ').trim().toLowerCase();
+      if (s === '' || s === '-' || s === '–' ||
+          ['na', 'nan', 'n/a', 'null', 'nd', 'nc', 'n.c.',
+           'non concerné', 'non concerne', 'non concernée'].includes(s)) return NA;
       // "<20", "< 20", "-20", "- de 20", "moins de 20"
       if (/^(<|-|moins)/.test(s)) return { type: 'moins20', val: null };
       const n = Number(s.replace(/\s/g, '').replace(',', '.'));
@@ -126,208 +128,180 @@ window.GRAPHIQUE = {
     return NA;
   }
 
-  const ORDRE = { na: 0, zero: 1, moins20: 2, num: 3 };   // à valeur de barre égale
+  const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-  function graphiqueBarres(conteneur, data, opts = {}) {
+  /* ============================================================
+     Graphique : répartition des communes par catégorie
+     (adapté aux données qui valent 0 ou "- de 20")
+  ============================================================ */
+  function graphiqueCommunes(conteneur, data, opts = {}) {
     const o = {
       titre: 'Population en zone fortement inondable',
-      sousTitre: "Nombre d'habitants par commune",
+      sousTitre: 'Répartition des communes selon le nombre d\'habitants concernés',
       champNom: 'nom',
       champValeur: 's12a_pop_bat_pp_zd_q100',
       unite: 'habitants',
-      pas: 10,
-      seuilInitial: 0,
       inclureZero: true,      // afficher les communes à 0
       inclureNA: false,       // afficher les communes "non concernées"
-      legende: true,
-      classes: [
-        { label: 'Non concerné', special: 'na',      couleur: '#f1f5f9' },
-        { label: 'Aucun',        special: 'zero',    couleur: '#e2e8f0' },
-        { label: '1 à 19',       special: 'moins20', couleur: '#fde3c8' }
+      // Mêmes couleurs que la carte
+      groupes: [
+        { cle: 'num',     label: '20 habitants et plus', couleur: '#ff5555',
+          aide: 'Effectif chiffré.' },
+        { cle: 'moins20', label: '1 à 19 habitants',     couleur: '#ea6332',
+          aide: 'Effectif compris entre 1 et 19 (valeur exacte non communiquée : secret statistique).' },
+        { cle: 'zero',    label: 'Aucun habitant',       couleur: '#fe9929',
+          aide: 'Aucune personne concernée.' },
+        { cle: 'na',      label: 'Non concerné',         couleur: '#f5f58f',
+          aide: 'Commune non concernée par l\'indicateur.' }
       ],
       ...opts
     };
 
     conteneur.innerHTML = '';
-
-    // ---------- Préparation des lignes ----------
-    function classeDe(v) {
-      return o.classes.find(c =>
-        c.special ? c.special === v.type : (v.type === 'num' && v.val <= c.max)
-      ) || o.classes[o.classes.length - 1];
-    }
-
     const fmt = n => n.toLocaleString('fr-FR');
 
-    const lignes = data.map(d => {
-      const v = lireValeur(d[o.champValeur]);
-      return {
-        nom: d[o.champNom],
-        v,
-        classe: classeDe(v),
-        // hauteur de la barre : "moins de 20" est dessiné à 20, les autres cas à 0
-        hauteur: v.type === 'num' ? v.val : (v.type === 'moins20' ? 20 : 0),
-        etiquette: v.type === 'num'     ? fmt(v.val)
-                 : v.type === 'num' ? fmt(v.val) : v.type === 'moins20' ? '1-19'
-                 : v.type === 'zero'    ? ''
-                 :                        'n.c.',
-        detail: v.type === 'num'     ? `${fmt(v.val)} ${o.unite}`
-              : v.type === 'moins20' ? `1 à 19 ${o.unite}`
-              : v.type === 'zero'    ? 'Aucun'
-              :                        'Non concerné'
-      };
-    }).sort((a, b) =>
-      a.hauteur - b.hauteur ||
-      ORDRE[a.v.type] - ORDRE[b.v.type] ||
-      String(a.nom).localeCompare(String(b.nom), 'fr')
-    );
+    // ---------- Préparation ----------
+    const lignes = data.map(d => ({ nom: d[o.champNom], v: lireValeur(d[o.champValeur]) }));
 
-    // ---------- Curseur (calculé sur les valeurs numériques seulement) ----------
-    const maxNum = Math.max(0, ...lignes.filter(l => l.v.type === 'num').map(l => l.v.val));
-    const aMoins20 = lignes.some(l => l.v.type === 'moins20');
-    const maxData = Math.max(maxNum, aMoins20 ? 20 : 0);
-    const sliderMax = Math.ceil(maxData / o.pas) * o.pas || o.pas;
+    const nbNA = lignes.filter(l => l.v.type === 'na').length;
 
-    const barre = document.createElement('div');
-    barre.className = 'gb-slider';
-    barre.innerHTML = `
-      <label for="gb-range">Afficher les communes jusqu'à</label>
-      <input id="gb-range" type="range" min="0" max="${sliderMax}" step="${o.pas}"
-             value="${Math.min(o.seuilInitial, sliderMax)}">
-      <span class="gb-badge"></span>`;
-    conteneur.appendChild(barre);
+    const groupes = o.groupes
+      .filter(g => !(g.cle === 'zero' && !o.inclureZero))
+      .filter(g => !(g.cle === 'na'   && !o.inclureNA))
+      .map(g => ({
+        ...g,
+        communes: lignes
+          .filter(l => l.v.type === g.cle)
+          .sort((a, b) => (b.v.val ?? 0) - (a.v.val ?? 0) ||
+                          String(a.nom).localeCompare(String(b.nom), 'fr'))
+      }))
+      .filter(g => g.communes.length > 0);
 
-    const range = barre.querySelector('input');
-    const badge = barre.querySelector('.gb-badge');
+    const total = groupes.reduce((s, g) => s + g.communes.length, 0);
 
-    const plotDiv = document.createElement('div');
-    plotDiv.className = 'gb-plot';
-    conteneur.appendChild(plotDiv);
+    // ---------- Titre ----------
+    const entete = document.createElement('div');
+    entete.className = 'gc-head';
+    entete.style.cssText = 'padding:4px 8px 10px;';
+    entete.innerHTML =
+      `<div style="font-weight:700;color:#334155;">${o.titre}</div>` +
+      `<div style="font-size:12px;color:#64748b;">${o.sousTitre}</div>`;
+    conteneur.appendChild(entete);
 
-    // ---------- Légende (classes réellement présentes) ----------
-    if (o.legende) {
-      const presentes = o.classes.filter(c => lignes.some(l => l.classe === c))
-        .filter(c => !(c.special === 'na' && !o.inclureNA))
-        .filter(c => !(c.special === 'zero' && !o.inclureZero));
-
-      const leg = document.createElement('div');
-      leg.className = 'gb-legend';
-      leg.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin-top:6px;font-size:12px;color:#475569;';
-      leg.innerHTML = presentes.map(c =>
-        `<span style="display:inline-flex;align-items:center;gap:6px;">` +
-        `<span style="width:12px;height:12px;border-radius:3px;background:${c.couleur};border:1px solid #cbd5e1;"></span>${c.label}</span>`
-      ).join('');
-      conteneur.appendChild(leg);
+    if (!total) {
+      conteneur.insertAdjacentHTML('beforeend',
+        "<p style='text-align:center;color:#94a3b8;margin:30px 0;'>Aucune commune à afficher.</p>");
+      return;
     }
 
-    // ---------- Style commun ----------
-    const police = { family: 'system-ui, -apple-system, "Segoe UI", sans-serif', color: '#334155' };
-    const config = {
-      responsive: true,
-      displaylogo: false,
-      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d'],
-      toImageButtonOptions: { filename: 'graphique', scale: 2 }
-    };
-    const titre = {
-      text: `<b>${o.titre}</b><br><span style="font-size:12px;color:#64748b">${o.sousTitre}</span>`,
-      x: 0.01, xanchor: 'left'
-    };
-
-    // ---------- Rendu ----------
-    function rendre() {
-      const seuil = Number(range.value);
-      badge.textContent = `${fmt(seuil)} ${o.unite}`;
-
-      const visibles = lignes.filter(l => {
-        switch (l.v.type) {
-          case 'num':     return l.v.val <= seuil;
-          case 'moins20': return seuil >= 20;
-          case 'zero':    return o.inclureZero;
-          case 'na':      return o.inclureNA;
-        }
-        return false;
-      });
-
-      // Rien à montrer : aucune valeur chiffrée ni "moins de 20"
-      if (!visibles.some(l => l.v.type === 'num' || l.v.type === 'moins20')) {
-        Plotly.react(plotDiv, [], {
-          font: police, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
-          title: titre, xaxis: { visible: false }, yaxis: { visible: false },
-          annotations: [{
-            text: 'Aucune commune concernée pour ce seuil',
-            showarrow: false, xref: 'paper', yref: 'paper', x: 0.5, y: 0.5,
-            font: { size: 15, color: '#94a3b8' }
-          }]
-        }, config);
-        return;
-      }
-
-      const trace = {
-        type: 'bar',
-        x: visibles.map(l => l.nom),
-        y: visibles.map(l => l.hauteur),
-        text: visibles.map(l => l.etiquette),
-        textposition: 'outside',
-        cliponaxis: false,
-        textfont: { size: 12, color: '#475569' },
-        customdata: visibles.map(l => l.detail),
-        marker: {
-          color: visibles.map(l => l.classe.couleur),
-          cornerradius: 6,
-          line: { width: 0 }
-        },
-        hovertemplate: '<b>%{x}</b><br>%{customdata}<extra></extra>'
-      };
-
-      Plotly.react(plotDiv, [trace], {
-        font: police,
-        title: titre,
-        showlegend: false,
-        bargap: 0.35,
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        margin: { t: 70, r: 20, b: 20, l: 50 },
-        xaxis: {
-          type: 'category',
-          categoryorder: 'array', categoryarray: visibles.map(l => l.nom),
-          tickangle: -40, automargin: true,
-          showline: false, ticks: '', tickfont: { size: 12, color: '#64748b' }
-        },
-        yaxis: {
-          gridcolor: '#f1f5f9', zeroline: false, showline: false, ticks: '',
-          rangemode: 'tozero', tickfont: { size: 12, color: '#94a3b8' }
-        },
-        hoverlabel: {
-          bgcolor: '#0f172a', bordercolor: '#0f172a',
-          font: { color: '#fff', size: 13 }
-        }
-      }, config);
-    }
-
-    range.addEventListener('input', rendre);
-    rendre();
-  }
-
-  // ---------- Chargement de Plotly à la demande ----------
-  let promessePlotly;
-  function chargerPlotly() {
-    if (window.Plotly) return Promise.resolve();
-    if (promessePlotly) return promessePlotly;
-    promessePlotly = new Promise((resolve, reject) => {
-      const ancienDefine = window.define;
-      window.define = undefined;                 // empêche l'enregistrement AMD
-      const s = document.createElement('script');
-      s.src = 'https://cdn.plot.ly/plotly-2.35.2.min.js';
-      s.onload  = () => { window.define = ancienDefine; resolve(); };
-      s.onerror = () => { window.define = ancienDefine; reject(new Error('Plotly introuvable')); };
-      document.head.appendChild(s);
+    // ---------- Barre de proportion (100 %) ----------
+    const prop = document.createElement('div');
+    prop.className = 'gc-prop';
+    prop.style.cssText = 'display:flex;height:34px;border-radius:8px;overflow:hidden;margin:0 8px 14px;border:1px solid #e2e8f0;';
+    groupes.forEach(g => {
+      const pct = g.communes.length / total * 100;
+      const seg = document.createElement('div');
+      seg.style.cssText =
+        `flex:0 0 ${pct}%;background:${g.couleur};display:flex;align-items:center;justify-content:center;` +
+        `font-size:13px;font-weight:700;color:#1f2937;white-space:nowrap;overflow:hidden;`;
+      seg.title = `${g.label} : ${g.communes.length} commune${g.communes.length > 1 ? 's' : ''} (${Math.round(pct)} %)`;
+      seg.textContent = pct >= 8 ? g.communes.length : '';
+      prop.appendChild(seg);
     });
-    return promessePlotly;
+    conteneur.appendChild(prop);
+
+    // ---------- Recherche ----------
+    const rech = document.createElement('input');
+    rech.type = 'search';
+    rech.placeholder = 'Rechercher une commune…';
+    rech.setAttribute('aria-label', 'Rechercher une commune');
+    rech.style.cssText =
+      'display:block;width:calc(100% - 16px);margin:0 8px 12px;padding:7px 12px;font-size:14px;' +
+      'border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box;';
+    conteneur.appendChild(rech);
+
+    // ---------- Groupes de communes ----------
+    const liste = document.createElement('div');
+    liste.className = 'gc-liste';
+    liste.style.cssText = 'padding:0 8px;overflow-y:auto;max-height:55vh;';
+    conteneur.appendChild(liste);
+
+    const blocs = groupes.map(g => {
+      const det = document.createElement('details');
+      det.open = true;
+      det.style.cssText = 'margin-bottom:10px;border:1px solid #e2e8f0;border-radius:8px;';
+
+      const sum = document.createElement('summary');
+      sum.style.cssText = 'cursor:pointer;padding:8px 12px;display:flex;align-items:center;gap:10px;font-weight:600;color:#334155;';
+      sum.innerHTML =
+        `<span style="width:14px;height:14px;border-radius:3px;background:${g.couleur};border:1px solid #cbd5e1;flex:0 0 auto;"></span>` +
+        `<span>${g.label}</span>` +
+        `<span class="gc-count" style="margin-left:auto;font-weight:400;color:#64748b;font-size:13px;"></span>`;
+      det.appendChild(sum);
+
+      const aide = document.createElement('div');
+      aide.style.cssText = 'padding:0 12px 6px;font-size:12px;color:#64748b;';
+      aide.textContent = g.aide;
+      det.appendChild(aide);
+
+      const chips = document.createElement('div');
+      chips.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 12px;';
+      const puces = g.communes.map(c => {
+        const el = document.createElement('span');
+        el.style.cssText =
+          `padding:3px 10px;border-radius:999px;font-size:13px;color:#1f2937;` +
+          `background:${g.couleur}33;border:1px solid ${g.couleur};`;
+        el.textContent = c.v.type === 'num' ? `${c.nom} · ${fmt(c.v.val)}` : c.nom;
+        el.title = c.v.type === 'num' ? `${fmt(c.v.val)} ${o.unite}`
+                 : c.v.type === 'moins20' ? `1 à 19 ${o.unite}`
+                 : g.label;
+        el._nom = norm(c.nom);
+        chips.appendChild(el);
+        return el;
+      });
+      det.appendChild(chips);
+      liste.appendChild(det);
+
+      return { g, det, puces, compteur: sum.querySelector('.gc-count') };
+    });
+
+    function majAffichage() {
+      const q = norm(rech.value.trim());
+      blocs.forEach(b => {
+        let visibles = 0;
+        b.puces.forEach(p => {
+          const ok = !q || p._nom.includes(q);
+          p.style.display = ok ? '' : 'none';
+          if (ok) visibles++;
+        });
+        const n = b.g.communes.length;
+        const pct = Math.round(n / total * 100);
+        b.compteur.textContent = q
+          ? `${visibles} / ${n} commune${n > 1 ? 's' : ''}`
+          : `${n} commune${n > 1 ? 's' : ''} · ${pct} %`;
+        b.det.style.display = (q && visibles === 0) ? 'none' : '';
+      });
+    }
+    rech.addEventListener('input', majAffichage);
+    majAffichage();
+
+    // ---------- Note ----------
+    const notes = [];
+    if (!o.inclureNA && nbNA > 0) {
+      notes.push(`${nbNA} commune${nbNA > 1 ? 's' : ''} non concernée${nbNA > 1 ? 's' : ''} non représentée${nbNA > 1 ? 's' : ''}.`);
+    }
+    if (notes.length) {
+      const n = document.createElement('div');
+      n.style.cssText = 'margin:8px;font-size:11.5px;color:#64748b;text-align:center;';
+      n.textContent = notes.join(' ');
+      conteneur.appendChild(n);
+    }
   }
 
-  window.graphiqueBarres = async function (conteneur, data, opts) {
-    await chargerPlotly();
-    graphiqueBarres(conteneur, data, opts);
+  // Même nom et même signature qu'avant : le reste de la page n'est pas modifié.
+  // Plus besoin de Plotly pour ce graphique.
+  window.graphiqueBarres = function (conteneur, data, opts) {
+    graphiqueCommunes(conteneur, data, opts);
   };
 
 })();
@@ -336,6 +310,7 @@ window.GRAPHIQUE = {
 <script>
 window.TABLEAU_URL = "tableaux/debordement_s12a.html";
 </script>
+
 ```
 
 <!-- /* ============================================================ -->
