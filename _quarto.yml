@@ -8,6 +8,7 @@ project:
     - Images/logo/*.png
     - Images/logo/*.webp
     - Images/logo/*.JPG
+    - Images/logo/*.svg
     - layers/*.json
     - layers/*.geojson
     - layers/*.pmtiles
