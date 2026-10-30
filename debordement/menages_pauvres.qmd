@@ -139,9 +139,9 @@ window.GRAPHIQUE = {
       champNom: 'nom',
       champValeur: 's33_menages_pauvres_zx_q100',
       unite: 'habitants',
-      pas: 10,
-      seuilInitial: 50,
-      inclureZero: true,      // afficher les communes à 0
+      pas: 20,
+      seuilInitial: 100,
+      inclureZero: false,      // afficher les communes à 0
       inclureNA: false,       // afficher les communes "non concernées"
       legende: true,
       classes: [

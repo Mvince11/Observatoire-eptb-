@@ -7,6 +7,7 @@ project:
     - Images/logo/*.jpg
     - Images/logo/*.png
     - Images/logo/*.webp
+    - Images/logo/*.JPG
     - layers/*.json
     - layers/*.geojson
     - layers/*.pmtiles

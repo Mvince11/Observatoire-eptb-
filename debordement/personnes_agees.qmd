@@ -141,7 +141,7 @@ window.GRAPHIQUE = {
       unite: 'habitants',
       pas: 10,
       seuilInitial: 50,
-      inclureZero: true,      // afficher les communes à 0
+      inclureZero: false,      // afficher les communes à 0
       inclureNA: false,       // afficher les communes "non concernées"
       legende: true,
       classes: [
@@ -1917,8 +1917,7 @@ Une première approche de la capacité d’un territoire à «revenir à la norm
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-Le nombre total de personnes âgée est calculé sur la zone inondable à partir de la couche carroyée 200m de l’INSEE (filosofi). Plus précisément, les champs « ind_65_79 » (individus agés entre 65 et 79 ans) et « ind_80p » (individus de plus de 80 ans) ont été utilisés.
-Le décompte est agrégé à la commune.\
+Le nombre total de personnes âgée est calculé sur la zone inondable à partir de la couche carroyée 200m de l’INSEE (filosofi). Plus précisément, les champs « ind_65_79 » (individus agés entre 65 et 79 ans) et « ind_80p » (individus de plus de 80 ans) ont été utilisés. Le décompte est agrégé à la commune.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
@@ -1926,7 +1925,6 @@ Aucun\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
-
 :::
 
 <!-- /* ============================================================ -->

@@ -139,8 +139,8 @@ window.GRAPHIQUE = {
       champNom: 'nom',
       champValeur: 's110b_pop_zti_q100',
       unite: 'habitants',
-      pas: 1,
-      seuilInitial: 1,
+      pas: 100,
+      seuilInitial: 400,
       inclureZero: true,      // afficher les communes à 0
       inclureNA: false,       // afficher les communes "non concernées"
       legende: true,
@@ -752,7 +752,7 @@ map = {
           ['<',  v, 44],  '#e66101',
           ['<',  v, 133], '#fdb863',
           ['<',  v, 352], '#ffea46',
-          ['<',  v, 987], '#b2abd2',
+          ['<',  v, 988], '#b2abd2',
           '#5e3c99'                
         ];
       }
