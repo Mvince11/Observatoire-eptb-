@@ -39,6 +39,7 @@ function initRightTabs() {
     "indicateurs31aLayer",
     "indicateurs31hLayer",
     "indicateurs31jLayer",
+    "indicateurs32aLayer",
     "indicateurs33Layer"
   ];
 
