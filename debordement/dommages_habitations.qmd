@@ -1890,9 +1890,7 @@ La pénétration d’eau dans les logements entraîne des dégâts dépendant pr
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-Application de la méthode du référentiel national.
-Les dommages aux bâtiments d’habitation sont estimés en fonction de la hauteur d’eau et de la durée de submersion d’après le guide AMC.
-Les résultats sont ensuite agrégés par commune.\
+Application de la méthode du référentiel national. Les dommages aux bâtiments d’habitation sont estimés en fonction de la hauteur d’eau et de la durée de submersion d’après le guide AMC. Les résultats sont ensuite agrégés par commune.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
@@ -1900,8 +1898,7 @@ On prend les valeurs pour une durée de submersion supérieure à 48 h sur tout 
 :::
 
 ::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
-©IGN BD TOPO - Bâtiments (2026)
-©INRAE - Courbes de dommage AMC (2023)
+©IGN BD TOPO - Bâtiments (2026) ©INRAE - Courbes de dommage AMC (2023)
 :::
 
 <!-- /* ============================================================ -->
@@ -1987,4 +1984,3 @@ creer_tableau(
 #                auto_unbox = TRUE, na = "null")
 ```
 ::::::::
-
