@@ -147,12 +147,6 @@ website:
           - href: ruissellement/sensibilisation.qmd
             text: Actions de sensibilisation
 
-            
-        # - text: Â propos
-        #   menu:
-        #   - text: EPTB-vienne.fr
-        #     href: https://www.eptb-vienne.fr
-        #     target: _blank
         
         - icon: person-circle
           href: login.qmd
