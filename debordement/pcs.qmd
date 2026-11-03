@@ -1880,8 +1880,7 @@ L’existence d’un plan communal de sauvegarde récent (moins de 5 ans) contri
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-Cet indicateur met en avant les communes, potentiellement inondables, dont le PCS est donc obligatoire et n’a pas été réalisé ou n’a pas été mis à jour.
-Le résultat est affiché à la commune.\
+Cet indicateur met en avant les communes, potentiellement inondables, dont le PCS est donc obligatoire et n’a pas été réalisé ou n’a pas été mis à jour. Le résultat est affiché à la commune.\
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
@@ -1889,7 +1888,6 @@ Les différentes étiquettes sont : en cours, réalisé et 5 ans ou moins, réal
 :::
 
 ::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
-
 :::
 
 <!-- /* ============================================================ -->
