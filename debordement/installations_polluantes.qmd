@@ -1876,13 +1876,13 @@ L’inondation d’installations polluantes est potentiellement la source de pol
 :::
 
 ::: {.callout-warning .info_indicateur .ind-calcul title="Modalité de calcul" collapse="true"}
-A partir de la base de données des installations classées (ICPE), on n’a conservé que les éléments dont le code NAF est de type :  
-- 06 : "Extraction d'hydrocarbures"  
-- 20 : "Industrie chimique"  
-- 21 : "Industrie pharmaceutique"  
-- 36 : "Captage, traitement et distribution d'eau"  
-- 37 : "Collecte et traitement des eaux usées"  
-- 38 : "Collecte, traitement et élimination des déchets ; récupération".  
+A partir de la base de données des installations classées (ICPE), on n’a conservé que les éléments dont le code NAF est de type :\
+- 06 : "Extraction d'hydrocarbures"\
+- 20 : "Industrie chimique"\
+- 21 : "Industrie pharmaceutique"\
+- 36 : "Captage, traitement et distribution d'eau"\
+- 37 : "Collecte et traitement des eaux usées"\
+- 38 : "Collecte, traitement et élimination des déchets ; récupération".\
 Le décompte des installations est agrégé à la commune.\
 :::
 
@@ -1975,4 +1975,3 @@ creer_tableau(
 #               auto_unbox = TRUE, na = "null")
 ```
 ::::::::
-

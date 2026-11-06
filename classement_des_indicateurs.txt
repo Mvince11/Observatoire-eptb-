@@ -1,0 +1,108 @@
+Nouveau classement des indicateurs.
+
+Débordement de cours d'eau
+
+Thème    numéro    Titre
+Population    S1/2a    Nombre de personnes occupant des bâtiments de plain-pied fortement inondables
+Population    S1/10b    Nombre de personnes en zone de fragilité électrique
+Population    S1/13b    Nombre de repères de crues par commune
+Population    S1/13c    Méconnaissance du risque par la population: nombre de personnes sensibilisés lors d'actions spécifiques de culture du risque
+Population    S1/13d    Méconnaissance du risque par la population: nombre de scolaires sensibilisés lors d'actions spécifiques de culture du risque
+Population    S1/14b    Communes avec un PCS à jour (moins de 5 ans)
+Population    S1/14c    Communes avec un DICRIM à jour (moins de 5 ans)
+Population    S1/14d    Communes ayant réalisé un exercice de crise dans les trois dernières années
+Population    S3/1a    Nombre et proportion de résidents exposés à l'inondation
+Population    S3/1j    Nombre de personnes âgées (de plus de 65 ans) habitant dans la zone inondée
+Population    S3/3    Nombre de ménages pauvres (définition INSEE) par commune dont l'habitation est impactée par la zone inondable
+       
+Urbanisation    S2/2a    Dommages aux logements en fonction de la hauteur d'eau et de la durée de submersion
+Urbanisation    S2/2b    Nombre de logements ayant fait l'objet d'un diagnostic de vulnerabilité
+Urbanisation    S2/2c    Nombre de logements ayant fait l'objet de travaux de réduction de vulnerabilité
+Urbanisation    S2/14a    Surface de zones à urbaniser en zone inondable (hors PPRi)
+Urbanisation    S3/1h    Nombre de bâtiments d'habitation en zone inondable
+Urbanisation    S3/2a    Nombre de logements dont la durée de retour à la normale est supérieure à 6 mois
+Urbanisation    S3/2d    Nombre de logements  inondés
+       
+Economie    S1/9    Nombre d'enjeux (centres commerciaux, supermarchés, etc.) associés à des zones de concentration
+Economie    S2/5b    Nombre d'installations susceptibles de déverser des produits polluants (dont ICPE, STEU, etc.)
+Economie    S2/7a    Dommages aux entreprises en fonction de paramètres hydrauliques et du délai d'intervention
+Economie    S2/7b    Nombre de diagnostics de vulnérabilité des entreprises réalisés
+Economie    S2/7c    Nombre de travaux de réduction de vulnérabilité des entreprises réalisés
+Economie    S3/6a    Nombre d'emplois exposés à l'inondation
+Economie        Nombre d'entreprises exposées à l'inondation
+       
+Infrastructures    S1/4a    Nombre d'établissements sensibles en zone inondable
+Infrastructures    S1/10a    Nombre d'établissements de santé en zone de fragilité électrique
+Infrastructures    S1/12    Nombre d'établissements dangereux susceptibles d'engendrer un sur-aléa
+Infrastructures    S1/14e    Nombre d'enjeux utiles à la gestion de crise susceptibles de dysfonctionner
+Infrastructures    S2/4a    Nombre de musées / bâtiments et édifices patrimoniaux / monuments susceptibles d'être endommagés (enjeux culturels)
+Infrastructures    S2/8a    Dommages aux établissements publics en fonction de paramètres hydrauliques
+Infrastructures    S2/8b    Nombre de diagnostics de vulnérabilité des établissements publics réalisés
+Infrastructures    S2/8c    Nombre de travaux de réduction de vulnérabilité  des établissements publics réalisés
+Infrastructures    S2/9    Nombre de véhicules (terrestres) exposés à l'aléa (sur la base des capacités des parkings de surface et souterrains)
+Infrastructures    S2/10a    Nombre de postes de distribution électrique susceptibles d'être endommagés par l'inondation
+Infrastructures    S2/10e    Linéaire de routes intercepté par la zone inondable
+Infrastructures    S2/10c    Linéaire de voies ferrées intercepté par la zone inondable
+Infrastructures    S2/10d    Linéaire de circuit des réseaux de transport urbain (bus urbain) et de bus de transport départemental intercepté par la zone inondable
+       
+Agriculture    S2/6a    Dommages aux cultures en fonction de paramètres hydrauliques
+Agriculture    S2/6d    Nombre de bâtiments agricoles en zone inondable
+Agriculture    S2/6e    Nombre d'exploitations d'élevage
+Agriculture    S3/1f    Part de la surface agricole inondable comparé à la surface agricole de la commune
+       
+Environnement    S2/5c    Surface d'espaces naturels protégés vulnérables
+Environnement    S2/5d    Nombre et/ou capacité de captages AEP en zone inondable
+Environnement    S3/1g    Part de la surface communale inondable (exposition du territoire à l'inondation)
+
+
+Ruissellement
+
+Population    S1/1    Nombre d'habitations / de personnes dans les zones de vitesse élevée
+Population    S1/10b    Nombre de personnes en zone de fragilité électrique
+Population    S1/13c    Méconnaissance du risque par la population: nombre de personnes sensibilisés lors d'actions spécifiques de culture du risque
+Population    S1/13d    Méconnaissance du risque par la population: nombre de scolaires sensibilisés lors d'actions spécifiques de culture du risque
+Population    S3/1a    Nombre et proportion de résidents exposés à l'inondation
+Population    S3/1j    Nombre de personnes âgées (de plus de 65 ans) habitant dans la zone inondée
+Population    S3/3    Nombre de ménages pauvres (définition INSEE) par commune dont l'habitation est impactée par la zone inondable
+       
+Urbanisation    S2/2a    Dommages aux logements en fonction de la hauteur d'eau et de la durée de submersion
+Urbanisation    S2/14a    Surface de zones à urbaniser en zone inondable (hors PPRi)
+Urbanisation    S3/1h    Nombre de bâtiments d'habitation en zone inondable
+Urbanisation    S3/2d    Nombre de logements  inondés
+       
+Economie    S1/9    Nombre d'enjeux (centres commerciaux, supermarchés, etc.) associés à des zones de concentration
+Economie    S2/5b    Nombre d'installations susceptibles de déverser des produits polluants (dont ICPE, STEU, etc.)
+Economie    S2/7a    Dommages aux entreprises en fonction de paramètres hydrauliques et du délai d'intervention
+Economie    S3/6a    Nombre d'emplois exposés à l'inondation
+Economie        Nombre d'entreprises exposées à l'inondation
+       
+Infrastructures    S1/4a    Nombre d'établissements sensibles en zone inondable
+Infrastructures    S1/12    Nombre d'établissements dangereux susceptibles d'engendrer un sur-aléa
+Infrastructures    S1/10a    Nombre d'établissements de santé en zone de fragilité électrique
+Infrastructures    S1/14e    Nombre d'enjeux utiles à la gestion de crise susceptibles de dysfonctionner
+Infrastructures    S2/4a    Nombre de musées / bâtiments et édifices patrimoniaux / monuments susceptibles d'être endommagés (enjeux culturels)
+Infrastructures    S2/8a    Dommages aux établissements publics en fonction de paramètres hydrauliques
+Infrastructures    S2/9    Nombre de véhicules (terrestres) exposés à l'aléa (sur la base des capacités des parkings de surface et souterrains)
+Infrastructures    S2/10a    Nombre de postes de distribution électrique susceptibles d'être endommagés par l'inondation
+Infrastructures    S2/10e    Linéaire de routes intercepté par la zone inondable
+Infrastructures    S2/10c    Linéaire de voies ferrées intercepté par la zone inondable
+Infrastructures    S2/10d    Linéaire de circuit des réseaux de transport urbain (bus urbain) et de bus de transport départemental intercepté par la zone inondable
+       
+Agriculture    S2/6a    Dommages aux cultures en fonction de paramètres hydrauliques
+Agriculture    S2/6d    Nombre de bâtiments agricoles en zone inondable
+Agriculture    S2/6e    Nombre d'exploitations d'élevage
+Agriculture    S3/1f    Part de la surface agricole inondable comparé à la surface agricole de la commune
+       
+Environnement    S2/5c    Surface d'espaces naturels protégés vulnérables
+Environnement    S2/5d    Nombre et/ou capacité de captages AEP en zone inondable
+Environnement    S3/1g    Part de la surface communale inondable (exposition du territoire à l'inondation)
+       
+Ruissellement        Densité de haies par commune (Σ linéaire de haies / SAU communale)
+Ruissellement        Taux de couverture des sols communal (Σ surface avec couverts végétaux/SAU communale)
+Ruissellement        Pente forte (> 15 %)
+Ruissellement        Potentiel d'infiltrabilité des sols
+Ruissellement        Taux de surface agricole communal ( Σ surface agricoles / SAU communale)
+Ruissellement        Taux de surface boisée communal ( Σ surface boisées /SAU communale)
+Ruissellement        Taux d'imperméabilisation communal (Σ surface imperméabilisée /surface communale)
+Ruissellement        Linéaire de haies plantées par commune et par campagne de plantation (Σ linéaire de haies plantées / SAU communale)
+Ruissellement        Nombre d'actions de sensibilisation par commune

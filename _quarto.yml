@@ -55,6 +55,8 @@ website:
             text: DICRIM à jour
           - href: debordement/reperes_crues.qmd
             text: Repères de crues
+          - href: debordement/personnes_sensibilisees.qmd
+            text: Nombre de personnes sensibilisées
 
         - text: "Urbanisation"
           menu:

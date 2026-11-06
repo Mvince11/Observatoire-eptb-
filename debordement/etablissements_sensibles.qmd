@@ -901,7 +901,7 @@ map = {
           
           const legend = makeLegend(
             "legend",
-            "Nombre d'établissements concernés",
+            "Nombre d'établissements <br> concernés",
             [
               ["#fff5eb", "Aucun", true],
               ["#fdd2a5", "1"],
