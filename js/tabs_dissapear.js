@@ -31,12 +31,14 @@ function initRightTabs() {
   // ===================================================
   const INDICATEUR_LAYERS = [
     "indicateurs12aLayer",
+    "indicateurs14aLayer",
     "indicateurs110bLayer",
     "indicateurs113bLayer",
     "indicateurs114bLayer",
     "indicateurs114cLayer",
     "indicateurs214aLayer",
     "indicateurs22aLayer",
+    "indicateurs25bLayer",
     "indicateurs27aLayer",
     "indicateurs31aLayer",
     "indicateurs31hLayer",
