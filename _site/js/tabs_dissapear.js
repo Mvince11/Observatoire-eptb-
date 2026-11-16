@@ -201,20 +201,52 @@ function initRightTabs() {
         return;
       }
 
-      fetch(cfg.url)
-        .then(r => {
-          if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
-          return r.json();
-        })
-        .then(data => {
-          window.graphiqueBarres(dataContent, data, cfg.options);
-          // Force le recalcul de la taille du graphique dans la modale
-          requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
-        })
-        .catch(err => {
-          console.error("Erreur chargement données graphique :", err);
-          dataContent.innerHTML = "<p>Impossible de charger les données du graphique.</p>";
-        });
+      // Plotly dans une iframe : le charger dans la page vole le contexte
+      // WebGL de MapLibre et la carte devient blanche.
+      const iframe = document.createElement("iframe");
+      iframe.title = "Graphique";
+      iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;";
+      iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+        html, body { margin: 0; height: 100%; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+        #g { height: 100vh; }
+        .gb-slider {
+          display: flex; align-items: center; gap: 14px; flex-wrap: nowrap;
+          margin: 8px 16px 8px 48px;
+          font: 500 13px system-ui, -apple-system, "Segoe UI", sans-serif;
+          color: #64748b;
+        }
+        .gb-slider label { margin: 0; white-space: nowrap; }
+        .gb-slider input[type="range"] { flex: 0 1 280px; margin: 0; accent-color: #f2784b; cursor: pointer; }
+        .gb-badge {
+          padding: 5px 14px; border-radius: 999px;
+          background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa;
+          font-weight: 600; font-size: 13px; white-space: nowrap;
+        }
+        .gb-legend { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+      </style></head><body><div id="g"></div></body></html>`;
+      dataContent.appendChild(iframe);
+
+      iframe.onload = () => {
+        const doc = iframe.contentDocument;
+        const script = doc.createElement("script");
+        script.src = "https://cdn.plot.ly/plotly-2.35.2.min.js";
+        script.onload = () => {
+          fetch(cfg.url)
+            .then(r => {
+              if (!r.ok) throw new Error(`HTTP ${r.status} sur ${cfg.url}`);
+              return r.json();
+            })
+            .then(data => window.graphiqueBarres(doc.getElementById("g"), data, cfg.options))
+            .catch(err => {
+              console.error("Erreur chargement données graphique :", err);
+              dataContent.innerHTML = "<p>Impossible de charger les données du graphique.</p>";
+            });
+        };
+        script.onerror = () => {
+          dataContent.innerHTML = "<p>Impossible de charger le graphique.</p>";
+        };
+        doc.head.appendChild(script);
+      };
     }
 
     btnTableau.onclick = () => {
@@ -234,6 +266,13 @@ function initRightTabs() {
     dlg.addEventListener("close", () => {
       btn.classList.remove("active");
       dlg.remove();
+      const carte = window.map;
+      if (carte && typeof carte.resize === "function") {
+        requestAnimationFrame(() => {
+          carte.resize();
+          carte.triggerRepaint();
+        });
+      }
     });
 
     document.body.appendChild(dlg);

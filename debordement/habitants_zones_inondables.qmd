@@ -13,7 +13,7 @@ resources:
   - layers/batiments_hauteur.pmtiles
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
-  - layers/ruissellement_cartino2d.pmtiles
+  - layers/ruissellement_exzeco5.pmtiles
   - layers/parcelles.pmtiles
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
@@ -840,28 +840,16 @@ map = {
       },
       {
         pmtiles: true,
-        source: "ruissellement2d",
-        sourceLayer: "ruissellement_cartino2d",
+        source: "ruissellementexzeco",
+        sourceLayer: "ruissellement_exzeco5",
         type: "fill",
-        id: "ruissellementcartino2dLayer",
+        id: "ruissellementexzecoLayer",
         color: "#b4c3ef",
         opacity: 0.5,
         layout: {
           visibility: "none"
         }
       },
-      <!-- { -->
-      <!--   pmtiles: true, -->
-      <!--   source: "ruissellementexzeco", -->
-      <!--   sourceLayer: "ruissellement_exzeco", -->
-      <!--   type: "fill", -->
-      <!--   id: "ruissellementexzecoLayer", -->
-      <!--   color: "#b4c3ef", -->
-      <!--   opacity: 0.5, -->
-      <!--   layout: { -->
-      <!--     visibility: "none" -->
-      <!--   } -->
-      <!-- }, -->
       {
         pmtiles: true,
         source: "batiments",
@@ -990,11 +978,11 @@ map = {
           url: `pmtiles://${zoneAbsoluteaziUrl}`
         });
         
-        const ZONE_PM_rui2d = "../layers/ruissellement_cartino2d.pmtiles";
+        const ZONE_PM_rui2d = "../layers/ruissellement_exzeco5.pmtiles";
         
         const zoneRui2dUrl = new URL(ZONE_PM_rui2d, window.location.href).href;
         
-        map.addSource("ruissellement2d", {
+        map.addSource("ruissellementexzeco", {
           type: "vector",
           url: `pmtiles://${zoneRui2dUrl}`
         });
@@ -1465,7 +1453,7 @@ map = {
       communepapiLayer: 'Communes incluses dans le PAPI',
       parcellesLayer: 'Parcelles', 
       zoneinondableLayer: 'Zonage Inondable',
-      ruissellementcartino2dLayer: 'Zone de ruissellement par modélisation Cartino 2D',
+      ruissellementexzecoLayer: 'Zone de ruissellement par modélisation Exzeco',
       coursdeauLayer: "Cours d'eau",
       indicateurs31aLayer: "Nombre et proportion de résidents exposés à l'inondation",
       batimentsLayer: "Bâtiments"
