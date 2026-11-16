@@ -1229,6 +1229,22 @@ map = {
           layout: { visibility: 'none' }
         }, avantEtiquettes);
 
+        map.addSource('raster-osm', {
+          type: 'raster',
+          tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+          tileSize: 256,
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          minzoom: 0,
+          maxzoom: 19
+        });
+
+        map.addLayer({
+          id: 'osm',
+          type: 'raster',
+          source: 'raster-osm',
+          layout: { visibility: 'none' }
+        }, avantEtiquettes);
+
         function couleurHabitation(prop) {
           const v = ['to-number', ['get', prop], -999];
           return [
@@ -2012,42 +2028,38 @@ map = {
         });
 
         /* ============================================================
-               Fonds de Plan (Plan clair, Plan IGN, Photos aériennes, Aucun)
+               Fonds de Plan (OpenStreetMap, Plan IGN, Photos aériennes, Aucun)
             ============================================================ */
         const fondListDiv = document.createElement("div");
         fondListDiv.id = "fondListDiv";
         map.getContainer().appendChild(fondListDiv);
 
-        const svgPlanClair = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+        const svgOsm = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
           '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">' +
-          '<rect width="160" height="160" fill="#f3f5f6"/>' +
-          '<path d="M0 108c34-22 58-6 88-16s44-4 72 10v58H0z" fill="#cbd8e1"/>' +
-          '<path d="M12 44h136M44 20v64M114 28v52" stroke="#e2e8f0" stroke-width="7"/>' +
-          '<circle cx="76" cy="68" r="7" fill="#f38443"/></svg>'
+          '<rect width="160" height="160" fill="#f2efe9"/>' +
+          '<path d="M0 96c28-18 52 8 80-4s48-22 80 6v62H0z" fill="#c5e0b4"/>' +
+          '<path d="M0 118c40-16 70 10 110-6 20-8 34-6 50 4v44H0z" fill="#aad3df"/>' +
+          '<path d="M8 36h144M28 18v78M78 24v70M122 20v64" stroke="#e6e1d8" stroke-width="8"/>' +
+          '<path d="M18 70c24-8 40 6 62-2 16-6 28-4 46 6" stroke="#7eb8d4" stroke-width="5" fill="none"/>' +
+          '</svg>'
         );
 
+        function visibilite(id, visible) {
+          if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+        }
+
         function toggleStyle(mode) {
-          if (mode === false || mode === 'clair') {
-            afficherFondClair(true);
-            map.setLayoutProperty('planIGN', 'visibility', 'none');
-            map.setLayoutProperty('orthoIGN', 'visibility', 'none');
-          } else if (mode === 'planign') {
-            afficherFondClair(false);
-            map.setLayoutProperty('planIGN', 'visibility', 'visible');
-            map.setLayoutProperty('orthoIGN', 'visibility', 'none');
-          } else if (mode === true || mode === 'ortho') {
-            afficherFondClair(false);
-            map.setLayoutProperty('planIGN', 'visibility', 'none');
-            map.setLayoutProperty('orthoIGN', 'visibility', 'visible');
-          } else if (mode === 'none') {
-            afficherFondClair(false);
-            map.setLayoutProperty('planIGN', 'visibility', 'none');
-            map.setLayoutProperty('orthoIGN', 'visibility', 'none');
-          }
+          const osm = mode === false || mode === 'clair' || mode === 'osm';
+          const planign = mode === 'planign';
+          const ortho = mode === true || mode === 'ortho';
+          afficherFondClair(false);
+          visibilite('osm', osm);
+          visibilite('planIGN', planign);
+          visibilite('orthoIGN', ortho);
         }
 
         const fondOptions = [
-          { id: 'clair',   label: 'Plan clair',       img: svgPlanClair,                 apply: () => toggleStyle('clair') },
+          { id: 'osm',     label: 'OpenStreetMap', caption: 'OpenStreet<br>Map', img: svgOsm, apply: () => toggleStyle('osm') },
           { id: 'planign', label: 'Plan IGN',         img: '../Images/OSM.jpg',          apply: () => toggleStyle('planign') },
           { id: 'ortho',   label: 'Photos aériennes', img: '../Images/ORTHOPHOTOS.jpg',  apply: () => toggleStyle('ortho') },
           { id: 'none',    label: 'Aucun fond',       img: '../Images/aucun_fond.jpg',   apply: () => toggleStyle('none') }
@@ -2062,10 +2074,11 @@ map = {
       item.className = "fond-item";
       item.dataset.id = opt.id;
     
-      item.innerHTML = `
-        <img src="${opt.img}" alt="${opt.label}">
-        <span>${opt.label}</span>
-      `;
+      const legende = document.createElement('span');
+      legende.innerHTML = opt.caption || opt.label;
+      item.append(document.createElement('img'), legende);
+      item.querySelector('img').src = opt.img;
+      item.querySelector('img').alt = opt.label;
     
       if (opt.id === 'planign') {
         item.classList.add("active");

@@ -713,10 +713,11 @@ div.sidebar-item-container{
   right: 6px;
   bottom: 4px;
 
-  padding: 3px 5px;
+  padding: 3px 4px;
 
-  font-size: 12px;
-  line-height: 1.2;
+  font-size: 11px;
+  line-height: 1.15;
+  overflow: hidden;
 
   color: white;
 
