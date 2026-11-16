@@ -606,13 +606,21 @@ window.GRAPHIQUE = {
     const barre = document.createElement('div');
     barre.className = 'gb-slider';
     barre.innerHTML = `
-      <label for="gb-range">Afficher les communes jusqu'à</label>
-      <input id="gb-range" type="range" min="0" max="${sliderMax}" step="${o.pas}"
-             value="${Math.min(o.seuilInitial, sliderMax)}">
+      <span class="gb-slider-label">Communes entre</span>
+      <div class="gb-range">
+        <div class="gb-range-track"></div>
+        <div class="gb-range-fill"></div>
+        <input class="gb-min" type="range" min="0" max="${sliderMax}" step="${o.pas}"
+               value="${Math.min(80, sliderMax)}" aria-label="Minimum">
+        <input class="gb-max" type="range" min="0" max="${sliderMax}" step="${o.pas}"
+               value="${sliderMax}" aria-label="Maximum">
+      </div>
       <span class="gb-badge"></span>`;
     conteneur.appendChild(barre);
 
-    const range = barre.querySelector('input');
+    const rangeMin = barre.querySelector('.gb-min');
+    const rangeMax = barre.querySelector('.gb-max');
+    const rangeFill = barre.querySelector('.gb-range-fill');
     const badge = barre.querySelector('.gb-badge');
 
     const plotDiv = document.createElement('div');
@@ -651,15 +659,33 @@ window.GRAPHIQUE = {
     };
 
     // ---------- Rendu ----------
+    function bornes() {
+      let bas = Number(rangeMin.value);
+      let haut = Number(rangeMax.value);
+      if (bas > haut) {
+        if (conteneur.ownerDocument.activeElement === rangeMin) {
+          haut = bas;
+          rangeMax.value = String(bas);
+        } else {
+          bas = haut;
+          rangeMin.value = String(haut);
+        }
+      }
+      const pct = v => (sliderMax === 0 ? 0 : (v / sliderMax) * 100);
+      rangeFill.style.left = pct(bas) + '%';
+      rangeFill.style.width = (pct(haut) - pct(bas)) + '%';
+      return [bas, haut];
+    }
+
     function rendre() {
-      const seuil = Number(range.value);
-      badge.textContent = `${fmt(seuil)} ${o.unite}`;
+      const [bas, haut] = bornes();
+      badge.textContent = `${fmt(bas)} – ${fmt(haut)} ${o.unite}`;
 
       const visibles = lignes.filter(l => {
         switch (l.v.type) {
-          case 'num':     return l.v.val <= seuil;
-          case 'moins20': return seuil >= 20;
-          case 'zero':    return o.inclureZero;
+          case 'num':     return l.v.val >= bas && l.v.val <= haut;
+          case 'moins20': return bas <= 19 && haut >= 1;
+          case 'zero':    return o.inclureZero && bas <= 0;
           case 'na':      return o.inclureNA;
         }
         return false;
@@ -721,7 +747,8 @@ window.GRAPHIQUE = {
       }, config);
     }
 
-    range.addEventListener('input', rendre);
+    rangeMin.addEventListener('input', rendre);
+    rangeMax.addEventListener('input', rendre);
     rendre();
   }
 
@@ -1160,6 +1187,10 @@ map = {
             duration: 0
           }
         );
+        // Les noms de communes s'affichent à partir du zoom 9,4.
+        if (map.getZoom() < 9.5) {
+          map.jumpTo({ center: map.getCenter(), zoom: 9.5 });
+        }
 
         // Fonds raster IGN (Plan IGN + Orthophotos) chargés à la demande par MapLibre
         map.addSource('raster-planign', {
