@@ -310,7 +310,6 @@ window.GRAPHIQUE = {
 <script>
 window.TABLEAU_URL = "tableaux/debordement_s12a.html";
 </script>
-
 ```
 
 <!-- /* ============================================================ -->
