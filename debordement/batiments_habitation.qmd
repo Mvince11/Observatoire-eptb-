@@ -1551,6 +1551,7 @@ map = {
         }
 
         let geojsonAlea = null;
+        let idsBatimentsAlea = [];
         let chargementAlea = null;
 
         function indicateurVisible() {
@@ -1571,7 +1572,13 @@ map = {
               if (!r.ok) throw new Error('Couche des bâtiments en zone inondable introuvable');
               return r.json();
             })
-            .then(gj => { geojsonAlea = gj; return gj; });
+            .then(gj => {
+              geojsonAlea = gj;
+              idsBatimentsAlea = [...new Set(
+                (gj.features || []).map(f => f.properties?.id_bat).filter(Boolean)
+              )];
+              return gj;
+            });
           return chargementAlea;
         }
 
@@ -1593,7 +1600,7 @@ map = {
                   '#64748b'],
                 'fill-extrusion-height': ['coalesce', ['to-number', ['get', 'hauteur']], 5],
                 'fill-extrusion-base': 0,
-                'fill-extrusion-opacity': 0.95
+                'fill-extrusion-opacity': 0.92
               }
             });
             brancherPopupBatiment();
@@ -1609,13 +1616,17 @@ map = {
           if (avecIndicateur) {
             try { await assurerCoucheAlea(); }
             catch (e) { console.error(e); }
+            map.setFilter('batimentsLayer', idsBatimentsAlea.length
+              ? ['!', ['in', ['get', 'id'], ['literal', idsBatimentsAlea]]]
+              : null);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.4);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.6);
             if (map.getLayer('batimentsAleaLayer')) {
               map.setLayoutProperty('batimentsAleaLayer', 'visibility', 'visible');
             }
             ecrireLegendeBatiments('alea');
           } else {
+            map.setFilter('batimentsLayer', null);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', COULEURS_BATIMENTS);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.88);
             if (map.getLayer('batimentsAleaLayer')) {
