@@ -625,8 +625,9 @@ window.GRAPHIQUE = {
 
     const plotDiv = document.createElement('div');
     plotDiv.className = 'gb-plot';
-    plotDiv.style.height = 'calc(100vh - 150px)';
-    plotDiv.style.minHeight = '280px';
+    plotDiv.style.flex = '1 1 auto';
+    plotDiv.style.minHeight = '0';
+    plotDiv.style.width = '100%';
     conteneur.appendChild(plotDiv);
 
     // ---------- Légende (classes réellement présentes) ----------
@@ -680,6 +681,13 @@ window.GRAPHIQUE = {
     function rendre() {
       const [bas, haut] = bornes();
       badge.textContent = `${fmt(bas)} – ${fmt(haut)} ${o.unite}`;
+      const legende = conteneur.querySelector('.gb-legend');
+      const hauteur = Math.max(
+        220,
+        conteneur.clientHeight - barre.offsetHeight - (legende ? legende.offsetHeight : 0) - 12
+      );
+      const largeur = conteneur.clientWidth;
+      plotDiv.style.height = hauteur + 'px';
 
       const visibles = lignes.filter(l => {
         switch (l.v.type) {
@@ -694,6 +702,7 @@ window.GRAPHIQUE = {
       // Rien à montrer : aucune valeur chiffrée ni "moins de 20"
       if (!visibles.some(l => l.v.type === 'num' || l.v.type === 'moins20')) {
         Plotly.react(plotDiv, [], {
+          width: largeur, height: hauteur,
           font: police, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
           title: titre, xaxis: { visible: false }, yaxis: { visible: false },
           annotations: [{
@@ -723,6 +732,7 @@ window.GRAPHIQUE = {
       };
 
       Plotly.react(plotDiv, [trace], {
+        width: largeur, height: hauteur,
         font: police,
         title: titre,
         showlegend: false,

@@ -207,16 +207,23 @@ function initRightTabs() {
       iframe.title = "Graphique";
       iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;";
       iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
-        html, body { margin: 0; height: 100%; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
-        #g { height: 100vh; }
+        html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+        #g { height: 100%; display: flex; flex-direction: column; min-height: 0; }
         .gb-slider {
-          display: flex; align-items: center; gap: 14px; flex-wrap: nowrap;
+          flex: 0 0 auto;
+          align-self: flex-start;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: nowrap;
+          width: max-content;
+          max-width: calc(100% - 64px);
           margin: 8px 16px 8px 48px;
           font: 500 13px system-ui, -apple-system, "Segoe UI", sans-serif;
           color: #64748b;
         }
         .gb-slider-label { margin: 0; white-space: nowrap; }
-        .gb-range { position: relative; flex: 0 1 320px; height: 28px; }
+        .gb-range { position: relative; width: 280px; flex: 0 0 280px; height: 28px; }
         .gb-range-track, .gb-range-fill {
           position: absolute; top: 12px; height: 4px; border-radius: 999px; pointer-events: none;
         }
@@ -242,7 +249,7 @@ function initRightTabs() {
           background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa;
           font-weight: 600; font-size: 13px; white-space: nowrap;
         }
-        .gb-legend { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+        .gb-legend { flex: 0 0 auto; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
       </style></head><body><div id="g"></div></body></html>`;
       dataContent.appendChild(iframe);
 
