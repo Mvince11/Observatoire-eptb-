@@ -10,7 +10,7 @@ format:
 resources:
   - Images/icons/*.svg
   - layers/data_s31h_logt_inond_zx_q100.json
-  - layers/batiments_hauteur.pmtiles
+  - layers/batiments_perim_papi.pmtiles
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
   - layers/ruissellement_exzeco5.pmtiles
@@ -1395,13 +1395,13 @@ map = {
             group: 'Enjeux bâtis',
             pmtiles: true,
             source: 'batiments',
-            url: '../layers/batiments_hauteur.pmtiles',
-            sourceLayer: 'batiments_hauteur',
+            url: '../layers/batiments_perim_papi.pmtiles',
+            sourceLayer: 'data.batiments_perim_papi',
             type: 'fill-extrusion',
             id: 'batimentsLayer',
             opacity: 0.88,
             heightProperty: 'hauteur',
-            colorByType: 'ff_dteloctxt',
+            colorByType: 'usage1',
             layout: { visibility: 'none' }
           }
         ];
@@ -1491,22 +1491,17 @@ map = {
           }
         });
 
-        const COULEURS_BATIMENTS = ['match', ['get', 'ff_dteloctxt'],
-          'ACTIVITE', '#1f77b4',
-          'APPARTEMENT', '#2ca02c',
-          'AUCUN LOCAL', '#d9d9d9',
-          'DEPENDANCE', '#9467bd',
-          'MAISON', '#ff7f0e',
-          'MIXTE', '#e377c2',
-          '#94a3b8'];
         const COULEURS_USAGE = [
           ['Résidentiel', '#ff7f0e'],
           ['Commercial et services', '#1f77b4'],
           ['Industriel', '#8c564b'],
+          ['Agricole', '#bcbd22'],
           ['Annexe', '#9467bd'],
+          ['Religieux', '#e377c2'],
           ['Sportif', '#2ca02c'],
           ['Indifférencié', '#64748b']
         ];
+        const COULEURS_BATIMENTS = ['match', ['get', 'usage1'], ...COULEURS_USAGE.flat(), '#94a3b8'];
         const GRIS_BATIMENTS = '#d6d3d1';
 
         function lignesLegende(couples) {
@@ -1531,15 +1526,8 @@ map = {
               <div class="legend-rows">${lignesLegende([[GRIS_BATIMENTS, 'Autres bâtiments']])}</div>`;
           } else {
             batimentLegend.innerHTML = `
-              <div class="legend-head"><span class="legend-title">Type de bâtiment (3D)</span></div>
-              <div class="legend-rows">${lignesLegende([
-                ['#1f77b4', 'Activité'],
-                ['#2ca02c', 'Appartement'],
-                ['#ff7f0e', 'Maison'],
-                ['#e377c2', 'Mixte'],
-                ['#9467bd', 'Dépendance'],
-                ['#d9d9d9', 'Aucun local']
-              ])}</div>`;
+              <div class="legend-head"><span class="legend-title">Usage des bâtiments</span></div>
+              <div class="legend-rows">${lignesLegende(COULEURS_USAGE.map(([l, c]) => [c, l]))}</div>`;
           }
         }
         ecrireLegendeBatiments('general');
@@ -1617,7 +1605,7 @@ map = {
             try { await assurerCoucheAlea(); }
             catch (e) { console.error(e); }
             map.setFilter('batimentsLayer', idsBatimentsAlea.length
-              ? ['!', ['in', ['get', 'id'], ['literal', idsBatimentsAlea]]]
+              ? ['!', ['in', ['get', 'id_bdt'], ['literal', idsBatimentsAlea]]]
               : null);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.6);
@@ -1684,7 +1672,7 @@ map = {
                 layerConfig.layout['line-join'] = 'round';
               }
             } else if (layer.type === 'fill-extrusion') {
-              layerConfig.paint['fill-extrusion-color'] = layer.colorByType === 'ff_dteloctxt'
+              layerConfig.paint['fill-extrusion-color'] = layer.colorByType === 'usage1'
                 ? COULEURS_BATIMENTS
                 : (layer.color || '#94a3b8');
               layerConfig.paint['fill-extrusion-height'] = ['coalesce', ['get', layer.heightProperty || 'hauteur'], 5];
