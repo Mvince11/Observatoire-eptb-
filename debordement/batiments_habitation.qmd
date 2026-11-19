@@ -18,12 +18,15 @@ resources:
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs_debce.geojson
+  - layers/logos_index.json
   - layers/s31h_bat_hab_zi_debce.geojson
   - tableaux/*.html
   - tableaux/lib/**
   - Images/*.jpg
   - Images/logo/*.jpg
   - Images/logo/*.png
+  - Images/logo/*.webp
+  - Images/logo/*.svg
   
     
 include-in-header:
@@ -1777,6 +1780,22 @@ map = {
         // ==================== SURVOL FLUIDE + POPUP COMPACTE ====================
         let hoveredCommuneId = null;
         let popupCommuneOuverte = null;
+        const logosParNom = new Map();
+        fetch('../layers/logos_index.json')
+          .then(r => r.ok ? r.json() : {})
+          .then(index => {
+            Object.entries(index).forEach(([cle, chemin]) => logosParNom.set(cle, chemin));
+          })
+          .catch(() => {});
+
+        function cleLogo(nom) {
+          return String(nom || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '');
+        }
 
         const hoverTip = new maplibregl.Popup({
           closeButton: false,
@@ -1841,7 +1860,7 @@ map = {
           }
           const feature = e.features[0];
           const p = feature.properties;
-          const image = p.image || '../Images/logo/defaut.png';
+          const image = logosParNom.get(cleLogo(p.nom));
           const nom = p.nom || 'Commune';
           const insee = p.insee_com ? `INSEE ${p.insee_com}` : '';
           const population = p.population
@@ -1856,7 +1875,7 @@ map = {
           popupEl.className = 'popup-compact';
           popupEl.innerHTML = `
             <div class="popup-compact-head">
-              <img src="${image}" alt="" class="popup-compact-logo" onerror="this.style.display='none'">
+              ${image ? `<img src="${image}" alt="" class="popup-compact-logo" onerror="this.style.display='none'">` : ''}
               <div>
                 <h3 class="popup-compact-title">${nom}</h3>
                 <div class="popup-compact-sub">${[population, insee].filter(Boolean).join(' · ')}</div>
