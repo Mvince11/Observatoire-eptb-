@@ -1250,7 +1250,7 @@ map = {
           id: 'planIGN',
           type: 'raster',
           source: 'raster-planign',
-          layout: { visibility: 'visible' }
+          layout: { visibility: 'none' }
         }, avantEtiquettes);
 
         map.addLayer({
@@ -1273,7 +1273,7 @@ map = {
           id: 'osm',
           type: 'raster',
           source: 'raster-osm',
-          layout: { visibility: 'none' }
+          layout: { visibility: 'visible' }
         }, avantEtiquettes);
 
         function couleurHabitation(prop) {
@@ -2283,7 +2283,7 @@ map = {
       item.querySelector('img').src = opt.img;
       item.querySelector('img').alt = opt.label;
     
-      if (opt.id === 'planign') {
+      if (opt.id === 'osm') {
         item.classList.add("active");
       } else {
         item.classList.add("inactive");
