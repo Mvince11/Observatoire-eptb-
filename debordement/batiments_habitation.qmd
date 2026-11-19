@@ -1786,6 +1786,10 @@ map = {
           maxWidth: '260px'
         });
 
+        function vueBatimentsProche() {
+          return map.getZoom() >= 14 && map.getPitch() > 15;
+        }
+
         map.on('mousemove', 'indicateurs31hLayer', (e) => {
           if (!e.features || !e.features.length) return;
           const feat = e.features[0];
@@ -1801,6 +1805,11 @@ map = {
           }
 
           map.getCanvas().style.cursor = 'pointer';
+
+          if (vueBatimentsProche()) {
+            hoverTip.remove();
+            return;
+          }
 
           if (!popupCommuneOuverte) {
             const p = feat.properties;
@@ -1824,6 +1833,7 @@ map = {
         });
 
         map.on('click', 'indicateurs31hLayer', (e) => {
+          if (vueBatimentsProche()) return;
           if (map.getLayer('batimentsAleaLayer')
               && map.getLayoutProperty('batimentsAleaLayer', 'visibility') !== 'none'
               && map.queryRenderedFeatures(e.point, { layers: ['batimentsAleaLayer'] }).length) {
@@ -1916,7 +1926,7 @@ map = {
                 <span class="legend-swatch" style="background:${couleur};width:14px;height:14px"></span>
                 <div>
                   <h3 class="popup-compact-title">${p.usage1 || 'Bâtiment'}</h3>
-                  <div class="popup-compact-sub">Bâtiment en zone inondable${p.id_bat ? ' · ' + p.id_bat : ''}</div>
+                  <div class="popup-compact-sub">Bâtiment en zone inondable</div>
                 </div>
               </div>
               <div class="popup-compact-body popup-bat-list">
