@@ -122,6 +122,8 @@ website:
           menu:
           - href: ruissellement/habitations_vitesse_elevee.qmd
             text: Habitations en zone de vitesse élevée
+          - href: ruissellement/batiments_habitation.qmd
+            text: Bâtiments d'habitation
           - href: ruissellement/habitants_zones_inondables.qmd
             text: Résidents exposés
           - href: ruissellement/personnes_agees.qmd

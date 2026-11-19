@@ -13,9 +13,7 @@ resources:
   - layers/batiments_perim_papi.pmtiles
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
-  - layers/ruissellement_exzeco5.pmtiles
   - layers/parcelles.pmtiles
-  - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs_debce.geojson
   - layers/logos_index.json
@@ -1322,19 +1320,6 @@ map = {
           { group: 'Périmètres de gestion',     lazyGeojson: '../layers/bassin_vienne.geojson',  type: 'line', id: 'bassinvienneLayer',  color: '#15803d', width: 1.8, layout: { visibility: 'none' } },
           { group: 'Périmètres de gestion',     lazyGeojson: '../layers/perimetre_papi.geojson', type: 'line', id: 'perimetrepapiLayer', color: '#0f172a', width: 2,   layout: { visibility: 'none' } },
           {
-            group: 'Périmètres de gestion',
-            pmtiles: true,
-            source: 'communepapi',
-            url: '../layers/communes_zone_papi.pmtiles',
-            sourceLayer: 'communes_zone_papi',
-            type: 'fill',
-            id: 'communepapiLayer',
-            color: '#f59e0b',
-            outlineColor: '#b45309',
-            opacity: 0.28,
-            layout: { visibility: 'none' }
-          },
-          {
             data: indicateursGeojson,
             type: 'fill',
             id: 'indicateurs31hLayer',
@@ -1354,19 +1339,6 @@ map = {
             color: '#0284c7',
             outlineColor: '#0369a1',
             opacity: 0.36,
-            layout: { visibility: 'none' }
-          },
-          {
-            group: 'Hydrographie & aléas',
-            pmtiles: true,
-            source: 'ruissellementexzeco',
-            url: '../layers/ruissellement_exzeco5.pmtiles',
-            sourceLayer: 'ruissellement_exzeco5',
-            type: 'fill',
-            id: 'ruissellementexzecoLayer',
-            color: '#06b6d4',
-            outlineColor: '#0e7490',
-            opacity: 0.40,
             layout: { visibility: 'none' }
           },
           {
@@ -2111,9 +2083,7 @@ map = {
           departementLayer: 'Départements',
           epciLayer: 'Intercommunalités (EPCI)',
           perimetrepapiLayer: 'Périmètre du PAPI',
-          communepapiLayer: 'Communes incluses dans le PAPI',
           zoneinondableLayer: 'Zone inondable centennale (débordement)',
-          ruissellementexzecoLayer: 'Axe de ruissellement (Exzeco)',
           coursdeauLayer: "Réseau hydrographique",
           batimentsLayer: 'Bâtiments en 3D (hauteur & usage)'
         };
