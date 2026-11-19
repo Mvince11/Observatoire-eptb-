@@ -1570,23 +1570,29 @@ map = {
           }
         }
 
+        let modeAleaApplique = null;
+
         async function synchroniserBatimentsAlea() {
           const actifs = batimentsVisibles();
           const avecIndicateur = actifs && indicateurVisible();
+          const mode = !actifs ? 'off' : (avecIndicateur ? 'alea' : 'general');
           batimentLegend.style.display = actifs ? 'block' : 'none';
           if (!map.getLayer('batimentsLayer')) return;
+          if (mode === modeAleaApplique && (mode !== 'alea' || map.getLayer('batimentsAleaLayer'))) return;
 
           if (avecIndicateur) {
             try { await assurerCoucheAlea(); }
             catch (e) { console.error(e); }
-            map.setFilter('batimentsLayer', idsBatimentsAlea.length
-              ? ['!', ['in', ['get', 'id_bdt'], ['literal', idsBatimentsAlea]]]
-              : null);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.6);
             if (map.getLayer('batimentsAleaLayer')) {
               map.setLayoutProperty('batimentsAleaLayer', 'visibility', 'visible');
             }
+            try {
+              map.setFilter('batimentsLayer', idsBatimentsAlea.length
+                ? ['!', ['in', ['get', 'id_bdt'], ['literal', idsBatimentsAlea]]]
+                : null);
+            } catch (e) { console.error(e); }
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.6);
             ecrireLegendeBatiments('alea');
           } else {
             map.setFilter('batimentsLayer', null);
@@ -1597,6 +1603,7 @@ map = {
             }
             if (actifs) ecrireLegendeBatiments('general');
           }
+          modeAleaApplique = mode;
         }
         window.synchroniserBatimentsAlea = synchroniserBatimentsAlea;
 
