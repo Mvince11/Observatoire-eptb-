@@ -739,6 +739,38 @@ function initNavbar() {
 
     const m = toggle.checked ? "ruissellement" : "debordement";
 
+    const fichier = location.pathname.split("/").pop();
+
+    const dansUnAlea = /\/(debordement|ruissellement)\//.test(location.pathname);
+
+
+
+    // Même indicateur dans l'autre dossier, s'il existe
+
+    if (dansUnAlea && fichier && fichier !== "index.html") {
+
+      const racine = location.pathname.replace(/(debordement|ruissellement)\/[^/]*$/, "");
+
+      const cible = racine + m + "/" + fichier;
+
+      fetch(location.origin + cible, { method: "HEAD" })
+
+        .then(r => {
+
+          if (r.ok) location.href = location.origin + cible;
+
+          else applyMode(m);
+
+        })
+
+        .catch(() => applyMode(m));
+
+      return;
+
+    }
+
+
+
     applyMode(m);
 
 
@@ -1071,6 +1103,10 @@ if (document.readyState === "loading") {
         <li>
     <a class="dropdown-item" href="./ruissellement/habitations_vitesse_elevee.qmd">
  <span class="dropdown-text">Habitations en zone de vitesse élevée</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./ruissellement/batiments_habitation.html">
+ <span class="dropdown-text">Bâtiments d’habitation</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./ruissellement/habitants_zones_inondables.qmd">
