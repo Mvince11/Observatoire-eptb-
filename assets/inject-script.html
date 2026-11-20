@@ -341,6 +341,16 @@ function initNavbar() {
     if (dansUnAlea && fichier && fichier !== "index.html") {
       const racine = location.pathname.replace(/(debordement|ruissellement)\/[^/]*$/, "");
       const cible = racine + m + "/" + fichier;
+
+      // Bascule à chaud sans recharger la page : toutes les couches communes
+      // restent en mémoire, seules les données propres à l'aléa permutent.
+      if (typeof window.basculerAleaCarte === "function") {
+        applyMode(m);
+        try { history.pushState({ mode: m }, "", cible); } catch (e) {}
+        window.basculerAleaCarte(m);
+        return;
+      }
+
       const carte = window.map;
       const caseBat = (window.layersListDiv && window.layersListDiv.querySelector("#batimentsLayer"))
         || document.getElementById("batimentsLayer");
@@ -388,6 +398,16 @@ function initNavbar() {
         ? location.pathname.replace(re, "")
         : location.pathname.replace(/[^\/]*$/, "");
       location.href = location.origin + root + m + "/index.html";
+    }
+  });
+
+  window.addEventListener("popstate", () => {
+    if (typeof window.basculerAleaCarte !== "function") return;
+    const m = location.pathname.includes("/ruissellement/") ? "ruissellement"
+      : location.pathname.includes("/debordement/") ? "debordement" : null;
+    if (m) {
+      applyMode(m);
+      window.basculerAleaCarte(m);
     }
   });
 
