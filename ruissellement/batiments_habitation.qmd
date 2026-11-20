@@ -991,8 +991,9 @@ map = {
       fadeDuration: 160,
       maxPitch: 68,
       zoom: 9,
+      antialias: true,
       // Sans cela, Chrome vide le canevas WebGL dès qu'une fenêtre passe au premier plan.
-      canvasContextAttributes: { preserveDrawingBuffer: true }
+      preserveDrawingBuffer: true
     });
 
     map.on('style.load', () => { styleCharge = true; });
@@ -1304,6 +1305,16 @@ map = {
         }
         afficherFondClair(false);
 
+        // Éclairage directionnel des volumes bâtis (différencie nettement toits et façades)
+        try {
+          map.setLight({
+            anchor: 'viewport',
+            color: '#fffaf2',
+            intensity: 0.45,
+            position: [1.35, 215, 38]
+          });
+        } catch (e) {}
+
         let vueBatiments = null;
         try {
           const brut = sessionStorage.getItem('observatoire-vue-batiments');
@@ -1597,17 +1608,17 @@ map = {
         });
 
         const COULEURS_USAGE = [
-          ['Résidentiel', '#ff7f0e'],
-          ['Commercial et services', '#1f77b4'],
-          ['Industriel', '#8c564b'],
-          ['Agricole', '#bcbd22'],
-          ['Annexe', '#9467bd'],
-          ['Religieux', '#e377c2'],
-          ['Sportif', '#2ca02c'],
+          ['Résidentiel', '#f97316'],
+          ['Commercial et services', '#0284c7'],
+          ['Industriel', '#92400e'],
+          ['Agricole', '#65a30d'],
+          ['Annexe', '#8b5cf6'],
+          ['Religieux', '#db2777'],
+          ['Sportif', '#059669'],
           ['Indifférencié', '#64748b']
         ];
         const COULEURS_BATIMENTS = ['match', ['get', 'usage1'], ...COULEURS_USAGE.flat(), '#94a3b8'];
-        const GRIS_BATIMENTS = '#d6d3d1';
+        const GRIS_BATIMENTS = '#dde3ea';
 
         function lignesLegende(couples) {
           return couples.map(([c, l]) => `
@@ -1649,11 +1660,13 @@ map = {
           debordement: {
             gj: null, ids: [], promesse: null,
             sourceId: 'batimentsAlea_debordement',
+            baseLayerId: 'batimentsAleaBase_debordement',
             layerId: 'batimentsAleaLayer_debordement'
           },
           ruissellement: {
             gj: null, ids: [], promesse: null,
             sourceId: 'batimentsAlea_ruissellement',
+            baseLayerId: 'batimentsAleaBase_ruissellement',
             layerId: 'batimentsAleaLayer_ruissellement'
           }
         };
@@ -1694,6 +1707,20 @@ map = {
           if (!map.getSource(etat.sourceId)) {
             map.addSource(etat.sourceId, { type: 'geojson', data: gj, maxzoom: 16 });
           }
+          if (!map.getLayer(etat.baseLayerId)) {
+            map.addLayer({
+              id: etat.baseLayerId,
+              type: 'line',
+              source: etat.sourceId,
+              minzoom: 14.5,
+              layout: { visibility: 'none', 'line-join': 'round' },
+              paint: {
+                'line-color': 'rgba(15, 23, 42, 0.38)',
+                'line-width': ['interpolate', ['linear'], ['zoom'], 14.5, 0.7, 17, 1.6],
+                'line-blur': 0.4
+              }
+            });
+          }
           if (!map.getLayer(etat.layerId)) {
             map.addLayer({
               id: etat.layerId,
@@ -1706,7 +1733,8 @@ map = {
                   '#64748b'],
                 'fill-extrusion-height': ['coalesce', ['to-number', ['get', 'hauteur']], 5],
                 'fill-extrusion-base': 0,
-                'fill-extrusion-opacity': 0.92
+                'fill-extrusion-opacity': 0.95,
+                'fill-extrusion-vertical-gradient': true
               }
             });
             brancherPopupBatiment(etat.layerId);
@@ -1736,27 +1764,29 @@ map = {
             catch (e) { console.error(e); }
             if (modeDemande !== modeCourant) return;
             Object.entries(etatAleaBatiments).forEach(([m, et]) => {
-              if (map.getLayer(et.layerId)) {
-                map.setLayoutProperty(et.layerId, 'visibility', m === modeCourant ? 'visible' : 'none');
-              }
+              const vis = m === modeCourant ? 'visible' : 'none';
+              if (map.getLayer(et.baseLayerId)) map.setLayoutProperty(et.baseLayerId, 'visibility', vis);
+              if (map.getLayer(et.layerId)) map.setLayoutProperty(et.layerId, 'visibility', vis);
             });
             try {
-              // 'match' compile une table de hachage O(1) dans MapLibre (contrairement à 'in' linéaire)
-              map.setFilter('batimentsLayer', etatActif.ids.length
+              const filtreExcl = etatActif.ids.length
                 ? ['match', ['get', 'id_bdt'], etatActif.ids, false, true]
-                : null);
+                : null;
+              // 'match' compile une table de hachage O(1) dans MapLibre (contrairement à 'in' linéaire)
+              map.setFilter('batimentsLayer', filtreExcl);
+              if (map.getLayer('batimentsLayer-base')) map.setFilter('batimentsLayer-base', filtreExcl);
             } catch (e) { console.error(e); }
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.6);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.78);
             ecrireLegendeBatiments('alea');
           } else {
             map.setFilter('batimentsLayer', null);
+            if (map.getLayer('batimentsLayer-base')) map.setFilter('batimentsLayer-base', null);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', COULEURS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.88);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.92);
             Object.values(etatAleaBatiments).forEach(et => {
-              if (map.getLayer(et.layerId)) {
-                map.setLayoutProperty(et.layerId, 'visibility', 'none');
-              }
+              if (map.getLayer(et.baseLayerId)) map.setLayoutProperty(et.baseLayerId, 'visibility', 'none');
+              if (map.getLayer(et.layerId)) map.setLayoutProperty(et.layerId, 'visibility', 'none');
             });
             if (actifs) ecrireLegendeBatiments('general');
           }
@@ -1811,12 +1841,28 @@ map = {
                 layerConfig.layout['line-join'] = 'round';
               }
             } else if (layer.type === 'fill-extrusion') {
+              if (!map.getLayer(layer.id + '-base')) {
+                map.addLayer({
+                  id: layer.id + '-base',
+                  type: 'line',
+                  source: layer.source,
+                  'source-layer': layer.sourceLayer,
+                  minzoom: 14.5,
+                  layout: { ...(layer.layout || {}), 'line-join': 'round' },
+                  paint: {
+                    'line-color': 'rgba(15, 23, 42, 0.28)',
+                    'line-width': ['interpolate', ['linear'], ['zoom'], 14.5, 0.6, 17, 1.3],
+                    'line-blur': 0.4
+                  }
+                });
+              }
               layerConfig.paint['fill-extrusion-color'] = layer.colorByType === 'usage1'
                 ? COULEURS_BATIMENTS
                 : (layer.color || '#94a3b8');
               layerConfig.paint['fill-extrusion-height'] = ['coalesce', ['get', layer.heightProperty || 'hauteur'], 5];
               layerConfig.paint['fill-extrusion-base'] = 0;
-              layerConfig.paint['fill-extrusion-opacity'] = layer.opacity ?? 0.88;
+              layerConfig.paint['fill-extrusion-opacity'] = layer.opacity ?? 0.92;
+              layerConfig.paint['fill-extrusion-vertical-gradient'] = true;
             }
             map.addLayer(layerConfig, layer.type === 'fill-extrusion' ? undefined : beforeId);
             return;
@@ -2276,6 +2322,9 @@ map = {
 
           if (map.getLayer(id)) {
             map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+          }
+          if (map.getLayer(id + '-base')) {
+            map.setLayoutProperty(id + '-base', 'visibility', visible ? 'visible' : 'none');
           }
 
           if (id === 'batimentsLayer' && visible) {
