@@ -2121,6 +2121,14 @@ map = {
             map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
           }
 
+          if (id === 'batimentsLayer' && visible) {
+            const alea = document.getElementById('ruissellementexzecoLayer');
+            if (alea && !alea.checked) {
+              alea.checked = true;
+              alea.dispatchEvent(new Event('change'));
+            }
+          }
+
           if (id === 'batimentsLayer' && visible && map.getZoom() < 14.5) {
             map.easeTo({ zoom: Math.max(map.getZoom(), 15), pitch: 55, duration: 750 });
             is3D = true;
