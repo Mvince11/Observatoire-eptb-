@@ -15,7 +15,7 @@ resources:
   - layers/batiments_perim_papi.pmtiles
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
-  - layers/ruissellement_exzeco5.pmtiles
+  - layers/zx_ruissellement_exzeco_2m.pmtiles
   - layers/parcelles.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
   - layers/indicateurs_debce.geojson
@@ -1462,8 +1462,8 @@ map = {
             aleaMode: 'ruissellement',
             pmtiles: true,
             source: 'ruissellementexzeco',
-            url: '../layers/ruissellement_exzeco5.pmtiles',
-            sourceLayer: 'ruissellement_exzeco',
+            url: '../layers/zx_ruissellement_exzeco_2m.pmtiles',
+            sourceLayer: 'zx_ruissellement_exzeco_b',
             type: 'fill',
             id: 'ruissellementexzecoLayer',
             color: '#06b6d4',

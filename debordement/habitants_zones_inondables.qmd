@@ -13,7 +13,7 @@ resources:
   - layers/batiments_hauteur.pmtiles
   # - layers/zi_cartino2d.pmtiles
   - layers/zi_perimetre_papi_vc.pmtiles
-  - layers/ruissellement_exzeco5.pmtiles
+  - layers/zx_ruissellement_exzeco_2m.pmtiles
   - layers/parcelles.pmtiles
   - layers/communes_zone_papi.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
@@ -841,7 +841,7 @@ map = {
       {
         pmtiles: true,
         source: "ruissellementexzeco",
-        sourceLayer: "ruissellement_exzeco",
+        sourceLayer: "zx_ruissellement_exzeco_b",
         type: "fill",
         id: "ruissellementexzecoLayer",
         color: "#b4c3ef",
@@ -978,7 +978,7 @@ map = {
           url: `pmtiles://${zoneAbsoluteaziUrl}`
         });
         
-        const ZONE_PM_rui2d = "../layers/ruissellement_exzeco5.pmtiles";
+        const ZONE_PM_rui2d = "../layers/zx_ruissellement_exzeco_2m.pmtiles";
         
         const zoneRui2dUrl = new URL(ZONE_PM_rui2d, window.location.href).href;
         
