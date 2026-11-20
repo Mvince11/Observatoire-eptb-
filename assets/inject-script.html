@@ -341,10 +341,40 @@ function initNavbar() {
     if (dansUnAlea && fichier && fichier !== "index.html") {
       const racine = location.pathname.replace(/(debordement|ruissellement)\/[^/]*$/, "");
       const cible = racine + m + "/" + fichier;
+      const carte = window.map;
+      const caseBat = (window.layersListDiv && window.layersListDiv.querySelector("#batimentsLayer"))
+        || document.getElementById("batimentsLayer");
+      const batActif = Boolean(
+        (carte && typeof carte.getLayer === "function"
+          && carte.getLayer("batimentsLayer")
+          && carte.getLayoutProperty("batimentsLayer", "visibility") !== "none")
+        || (caseBat && caseBat.checked)
+      );
+      let vueASauver = null;
+      if (batActif && carte && typeof carte.getZoom === "function") {
+        const c = carte.getCenter();
+        vueASauver = {
+          zoom: carte.getZoom(),
+          lng: c.lng,
+          lat: c.lat,
+          pitch: carte.getPitch(),
+          bearing: carte.getBearing()
+        };
+      }
       fetch(location.origin + cible, { method: "HEAD" })
         .then(r => {
-          if (r.ok) location.href = location.origin + cible;
-          else applyMode(m);
+          if (r.ok) {
+            try {
+              if (vueASauver) {
+                sessionStorage.setItem("observatoire-vue-batiments", JSON.stringify(vueASauver));
+              } else {
+                sessionStorage.removeItem("observatoire-vue-batiments");
+              }
+            } catch (e) {}
+            location.href = location.origin + cible;
+          } else {
+            applyMode(m);
+          }
         })
         .catch(() => applyMode(m));
       return;

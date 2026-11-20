@@ -1209,19 +1209,38 @@ map = {
         }
         afficherFondClair(false);
 
-        map.fitBounds(
-          [
-            [-0.04, 46.3051],
-            [0.7741, 46.8565]
-          ],
-          {
-            padding: { top: 64, bottom: 32, left: 24, right: 70 },
-            duration: 0
+        let vueBatiments = null;
+        try {
+          const brut = sessionStorage.getItem('observatoire-vue-batiments');
+          if (brut) {
+            sessionStorage.removeItem('observatoire-vue-batiments');
+            vueBatiments = JSON.parse(brut);
           }
-        );
-        // Les noms de communes s'affichent à partir du zoom 9,4.
-        if (map.getZoom() < 9.5) {
-          map.jumpTo({ center: map.getCenter(), zoom: 9.5 });
+        } catch (e) {}
+
+        if (vueBatiments && Number.isFinite(vueBatiments.zoom)) {
+          map.jumpTo({
+            center: [vueBatiments.lng, vueBatiments.lat],
+            zoom: vueBatiments.zoom,
+            pitch: vueBatiments.pitch || 0,
+            bearing: vueBatiments.bearing || 0
+          });
+          window.vueBatimentsARestaurer = true;
+        } else {
+          map.fitBounds(
+            [
+              [-0.04, 46.3051],
+              [0.7741, 46.8565]
+            ],
+            {
+              padding: { top: 64, bottom: 32, left: 24, right: 70 },
+              duration: 0
+            }
+          );
+          // Les noms de communes s'affichent à partir du zoom 9,4.
+          if (map.getZoom() < 9.5) {
+            map.jumpTo({ center: map.getCenter(), zoom: 9.5 });
+          }
         }
 
         // Fonds raster IGN (Plan IGN + Orthophotos) chargés à la demande par MapLibre
@@ -2120,14 +2139,14 @@ map = {
           }
 
           if (id === 'batimentsLayer' && visible) {
-            const alea = document.getElementById('zoneinondableLayer');
+            const alea = layersListDiv.querySelector('#zoneinondableLayer');
             if (alea && !alea.checked) {
               alea.checked = true;
               alea.dispatchEvent(new Event('change'));
             }
           }
 
-          if (id === 'batimentsLayer' && visible && map.getZoom() < 14.5) {
+          if (id === 'batimentsLayer' && visible && map.getZoom() < 14.5 && !window.conserverZoomBatiments) {
             map.easeTo({ zoom: Math.max(map.getZoom(), 15), pitch: 55, duration: 750 });
             is3D = true;
             modeBtn.classList.add('is-3d');
@@ -2408,7 +2427,12 @@ map = {
       
       
       // --- Logique 2D / 3D ---
-      let is3D = false;
+      let is3D = map.getPitch() > 15;
+      if (is3D) {
+        modeBtn.classList.add('is-3d');
+        const label3d = document.getElementById('mode3d-label');
+        if (label3d) label3d.textContent = '2D';
+      }
 
       modeBtn.title = "Basculer la vue 2D / 3D";
       modeBtn.addEventListener("click", () => {
@@ -2425,6 +2449,17 @@ map = {
       /* ============================================================
            Fin Bouton 2D/3D
        ============================================================ */
+
+      if (window.vueBatimentsARestaurer) {
+        window.conserverZoomBatiments = true;
+        const bat = layersListDiv.querySelector('#batimentsLayer');
+        if (bat && !bat.checked) {
+          bat.checked = true;
+          bat.dispatchEvent(new Event('change'));
+        }
+        window.vueBatimentsARestaurer = false;
+        setTimeout(() => { window.conserverZoomBatiments = false; }, 200);
+      }
 
 
 
