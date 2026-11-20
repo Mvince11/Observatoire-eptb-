@@ -1455,7 +1455,7 @@ map = {
             color: '#0284c7',
             outlineColor: '#0369a1',
             opacity: 0.36,
-            layout: { visibility: 'none' }
+            layout: { visibility: modeCourant === 'debordement' ? 'visible' : 'none' }
           },
           {
             group: 'Hydrographie & aléas',
@@ -1469,7 +1469,7 @@ map = {
             color: '#06b6d4',
             outlineColor: '#0e7490',
             opacity: 0.40,
-            layout: { visibility: 'none' }
+            layout: { visibility: modeCourant === 'ruissellement' ? 'visible' : 'none' }
           },
           {
             group: 'Hydrographie & aléas',
