@@ -9,14 +9,19 @@ format:
     
 resources:
   - Images/icons/*.svg
+  - layers/data_s31h_logt_inond_zx_q100.json
   - layers/data_s31h_logt_inond_zx_q101.json
+  - layers/valeurs_s31h.json
   - layers/batiments_perim_papi.pmtiles
   # - layers/zi_cartino2d.pmtiles
+  - layers/zi_perimetre_papi_vc.pmtiles
   - layers/ruissellement_exzeco5.pmtiles
   - layers/parcelles.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
+  - layers/indicateurs_debce.geojson
   - layers/indicateurs_ruissel.geojson
   - layers/logos_index.json
+  - layers/s31h_bat_hab_zi_debce.geojson
   - layers/s31h_bat_hab_zi_ruissel.geojson
   - tableaux/*.html
   - tableaux/lib/**
@@ -491,6 +496,16 @@ include-in-header:
 //| output: false
 indicateursGeojson = {
   const gj = await FileAttachment("../layers/indicateurs_ruissel.geojson").json();
+  try {
+    const r = await fetch("../layers/valeurs_s31h.json");
+    if (r.ok) {
+      const vals = await r.json();
+      gj.features.forEach(f => {
+        const v = vals[f.properties?.insee_com];
+        if (v) Object.assign(f.properties, v);
+      });
+    }
+  } catch (e) {}
   gj.features.forEach((f, idx) => {
     f.id = idx + 1;
   });
@@ -507,18 +522,17 @@ indicateursGeojson = {
 ```{=html}
 <script>
 window.TABLEAU_URL = "tableaux/ruissellement_s31h.html";
+window.basculerAleaCarte = function (m) { window._modeAleaEnAttente = m; };
 </script>
 
 <script>
 window.GRAPHIQUE = {
-  url: '../layers/data_s31h_logt_inond_zx_q101.json',
+  url: '../layers/data_s31h_logt_inond_zx_q100.json',
   options: {
     titre: "Nombre de bâtiments d'habitation en zone inondable",
-    sousTitre: "Communes exposées au ruissellement",
-    champValeur: 's31h_logt_inond_zx_q101',
-    unite: 'bâtiments',
-    pas: 50,
-    seuilInitial: 80
+    sousTitre: "Communes exposées à la crue centennale",
+    champValeur: 's31h_logt_inond_zx_q100',
+    unite: 'bâtiments'
   }
 };
 </script>
@@ -564,7 +578,7 @@ window.GRAPHIQUE = {
       titre: "Nombre de bâtiments d'habitation en zone inondable",
       sousTitre: "Nombre de bâtiments d'habitation",
       champNom: 'nom',
-      champValeur: 's31h_logt_inond_zx_q101',
+      champValeur: 's31h_logt_inond_zx_q100',
       unite: 'bâtiments',
       pas: 10,
       seuilInitial: 50,
@@ -575,11 +589,11 @@ window.GRAPHIQUE = {
         { label: 'Non concerné', special: 'na',      couleur: '#eef2f6' },
         { label: 'Aucun',        special: 'zero',    couleur: '#eef2f6' },
         { label: '1 à 19',       special: 'moins20', couleur: '#fde6c4' },
-        { label: '1 à 38',       max: 38,            couleur: '#fde6c4' },
-        { label: '39 à 65',      max: 65,            couleur: '#fbbf77' },
-        { label: '66 à 161',     max: 161,           couleur: '#f38443' },
-        { label: '162 à 330',    max: 330,           couleur: '#d4491f' },
-        { label: '331 et plus',  max: Infinity,      couleur: '#7f1d1d' }
+        { label: '1 à 15',       max: 15,            couleur: '#fde6c4' },
+        { label: '16 à 46',      max: 46,            couleur: '#fbbf77' },
+        { label: '47 à 104',     max: 104,           couleur: '#f38443' },
+        { label: '105 à 364',    max: 364,           couleur: '#d4491f' },
+        { label: '365 et plus',  max: Infinity,      couleur: '#7f1d1d' }
       ],
       ...opts
     };
@@ -846,31 +860,105 @@ map = {
       layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2'
     };
 
-    const CHAMP_INDICATEUR = 's31h_logt_inond_zx_q101';
     const NOM_INDICATEUR = "Bâtiments d'habitation en zone inondable";
 
-    const CLASSES_INDICATEUR = [
-      { id: 'zero', label: 'Aucun',       color: '#eef2f6', border: true, match: v => v === null || v <= 0, filter: ['<=', ['coalesce', ['to-number', ['get', CHAMP_INDICATEUR], 0], 0], 0] },
-      { id: 'c1',   label: '1 à 38',      color: '#fde6c4', match: v => v >= 1 && v < 39,   filter: ['all', ['>=', ['to-number', ['get', CHAMP_INDICATEUR], -1], 1],   ['<', ['to-number', ['get', CHAMP_INDICATEUR], -1], 39]] },
-      { id: 'c2',   label: '39 à 65',     color: '#fbbf77', match: v => v >= 39 && v < 66,  filter: ['all', ['>=', ['to-number', ['get', CHAMP_INDICATEUR], -1], 39],  ['<', ['to-number', ['get', CHAMP_INDICATEUR], -1], 66]] },
-      { id: 'c3',   label: '66 à 161',    color: '#f38443', match: v => v >= 66 && v < 162, filter: ['all', ['>=', ['to-number', ['get', CHAMP_INDICATEUR], -1], 66],  ['<', ['to-number', ['get', CHAMP_INDICATEUR], -1], 162]] },
-      { id: 'c4',   label: '162 à 330',   color: '#d4491f', match: v => v >= 162 && v < 331,filter: ['all', ['>=', ['to-number', ['get', CHAMP_INDICATEUR], -1], 162], ['<', ['to-number', ['get', CHAMP_INDICATEUR], -1], 331]] },
-      { id: 'c5',   label: '331 et plus', color: '#7f1d1d', match: v => v >= 331,           filter: ['>=', ['to-number', ['get', CHAMP_INDICATEUR], -1], 331] }
-    ];
+    function construireClasses(champ, seuils, labels) {
+      const [s1, s2, s3, s4] = seuils;
+      const vNum = ['to-number', ['get', champ], -1];
+      return [
+        { id: 'zero', label: 'Aucun',   color: '#eef2f6', border: true, match: v => v === null || v <= 0, filter: ['<=', ['coalesce', ['to-number', ['get', champ], 0], 0], 0] },
+        { id: 'c1',   label: labels[0], color: '#fde6c4', match: v => v >= 1  && v < s1, filter: ['all', ['>=', vNum, 1],  ['<', vNum, s1]] },
+        { id: 'c2',   label: labels[1], color: '#fbbf77', match: v => v >= s1 && v < s2, filter: ['all', ['>=', vNum, s1], ['<', vNum, s2]] },
+        { id: 'c3',   label: labels[2], color: '#f38443', match: v => v >= s2 && v < s3, filter: ['all', ['>=', vNum, s2], ['<', vNum, s3]] },
+        { id: 'c4',   label: labels[3], color: '#d4491f', match: v => v >= s3 && v < s4, filter: ['all', ['>=', vNum, s3], ['<', vNum, s4]] },
+        { id: 'c5',   label: labels[4], color: '#7f1d1d', match: v => v >= s4,           filter: ['>=', vNum, s4] }
+      ];
+    }
 
-    // Statistiques globales calculées une seule fois à partir des communes
-    const statsIndicateur = (() => {
+    const CONFIG_MODES = {
+      debordement: {
+        kicker: 'Crue centennale',
+        champ: 's31h_logt_inond_zx_q100',
+        indicateursUrl: '../layers/indicateurs_debce.geojson',
+        batimentsAleaUrl: '../layers/s31h_bat_hab_zi_debce.geojson',
+        aleaHydroLayerId: 'zoneinondableLayer',
+        tableauUrl: 'tableaux/debordement_s31h.html',
+        seuilsCouleur: [16, 47, 105, 365],
+        labelsClasses: ['1 à 15', '16 à 46', '47 à 104', '105 à 364', '365 et plus'],
+        graphique: {
+          url: '../layers/data_s31h_logt_inond_zx_q100.json',
+          options: {
+            titre: "Nombre de bâtiments d'habitation en zone inondable",
+            sousTitre: "Communes exposées à la crue centennale",
+            champValeur: 's31h_logt_inond_zx_q100',
+            unite: 'bâtiments',
+            pas: 10,
+            seuilInitial: 80,
+            classes: [
+              { label: 'Non concerné', special: 'na',      couleur: '#eef2f6' },
+              { label: 'Aucun',        special: 'zero',    couleur: '#eef2f6' },
+              { label: '1 à 19',       special: 'moins20', couleur: '#fde6c4' },
+              { label: '1 à 15',       max: 15,            couleur: '#fde6c4' },
+              { label: '16 à 46',      max: 46,            couleur: '#fbbf77' },
+              { label: '47 à 104',     max: 104,           couleur: '#f38443' },
+              { label: '105 à 364',    max: 364,           couleur: '#d4491f' },
+              { label: '365 et plus',  max: Infinity,      couleur: '#7f1d1d' }
+            ]
+          }
+        }
+      },
+      ruissellement: {
+        kicker: 'Ruissellement',
+        champ: 's31h_logt_inond_zx_q101',
+        indicateursUrl: '../layers/indicateurs_ruissel.geojson',
+        batimentsAleaUrl: '../layers/s31h_bat_hab_zi_ruissel.geojson',
+        aleaHydroLayerId: 'ruissellementexzecoLayer',
+        tableauUrl: 'tableaux/ruissellement_s31h.html',
+        seuilsCouleur: [39, 66, 162, 331],
+        labelsClasses: ['1 à 38', '39 à 65', '66 à 161', '162 à 330', '331 et plus'],
+        graphique: {
+          url: '../layers/data_s31h_logt_inond_zx_q101.json',
+          options: {
+            titre: "Nombre de bâtiments d'habitation en zone inondable",
+            sousTitre: "Communes exposées au ruissellement",
+            champValeur: 's31h_logt_inond_zx_q101',
+            unite: 'bâtiments',
+            pas: 50,
+            seuilInitial: 80,
+            classes: [
+              { label: 'Non concerné', special: 'na',      couleur: '#eef2f6' },
+              { label: 'Aucun',        special: 'zero',    couleur: '#eef2f6' },
+              { label: '1 à 19',       special: 'moins20', couleur: '#fde6c4' },
+              { label: '1 à 38',       max: 38,            couleur: '#fde6c4' },
+              { label: '39 à 65',      max: 65,            couleur: '#fbbf77' },
+              { label: '66 à 161',     max: 161,           couleur: '#f38443' },
+              { label: '162 à 330',    max: 330,           couleur: '#d4491f' },
+              { label: '331 et plus',  max: Infinity,      couleur: '#7f1d1d' }
+            ]
+          }
+        }
+      }
+    };
+
+    let modeCourant = location.pathname.includes('/ruissellement/') ? 'ruissellement' : 'debordement';
+    let cfgCourante = CONFIG_MODES[modeCourant];
+    let CHAMP_INDICATEUR = cfgCourante.champ;
+    let CLASSES_INDICATEUR = construireClasses(CHAMP_INDICATEUR, cfgCourante.seuilsCouleur, cfgCourante.labelsClasses);
+    window.TABLEAU_URL = cfgCourante.tableauUrl;
+    window.GRAPHIQUE = cfgCourante.graphique;
+
+    function calculerStatsIndicateur(champ, classes) {
       let totalBatiments = 0;
       let communesExposees = 0;
-      const parClasse = Object.fromEntries(CLASSES_INDICATEUR.map(c => [c.id, 0]));
+      const parClasse = Object.fromEntries(classes.map(c => [c.id, 0]));
       for (const f of indicateursGeojson.features) {
-        const raw = f.properties?.[CHAMP_INDICATEUR];
+        const raw = f.properties?.[champ];
         const n = raw === null || raw === undefined ? null : Number(raw);
         if (n !== null && isFinite(n) && n > 0) {
           totalBatiments += n;
           communesExposees += 1;
         }
-        const cls = CLASSES_INDICATEUR.find(c => c.match(n));
+        const cls = classes.find(c => c.match(n));
         if (cls) parClasse[cls.id] += 1;
       }
       return {
@@ -879,7 +967,14 @@ map = {
         totalBatiments,
         parClasse
       };
-    })();
+    }
+
+    let statsIndicateur = calculerStatsIndicateur(CHAMP_INDICATEUR, CLASSES_INDICATEUR);
+
+    function texteResumeDefaut() {
+      return `<strong>${statsIndicateur.totalBatiments.toLocaleString('fr-FR')}</strong> bât. · ` +
+        `<strong>${statsIndicateur.communesExposees}</strong>/${statsIndicateur.totalCommunes} com. exposées`;
+    }
 
     function couleurPourValeur(raw) {
       const n = raw === null || raw === undefined ? null : Number(raw);
@@ -914,9 +1009,7 @@ map = {
     });
 
       // ==================== SYNTHÈSE + SYNCHRONISATION INDICATEUR ====================
-        const resumeDefautHtml =
-          `<strong>${statsIndicateur.totalBatiments.toLocaleString('fr-FR')}</strong> bât. · ` +
-          `<strong>${statsIndicateur.communesExposees}</strong>/${statsIndicateur.totalCommunes} com. exposées`;
+        let resumeDefautHtml = texteResumeDefaut();
 
         let titreSwatch = null;
         let titreLiveText = null;
@@ -1298,16 +1391,17 @@ map = {
           layout: { visibility: 'visible' }
         }, avantEtiquettes);
 
-        function couleurHabitation(prop) {
+        function couleurHabitation(prop, seuils = cfgCourante.seuilsCouleur) {
+          const [s1, s2, s3, s4] = seuils;
           const v = ['to-number', ['get', prop], -999];
           return [
             'case',
             ['==', ['typeof', ['get', prop]], 'null'], '#eef2f6',
             ['<=', v, 0],   '#eef2f6',
-            ['<',  v, 39],  '#fde6c4',
-            ['<',  v, 66],  '#fbbf77',
-            ['<',  v, 162], '#f38443',
-            ['<',  v, 331], '#d4491f',
+            ['<',  v, s1],  '#fde6c4',
+            ['<',  v, s2],  '#fbbf77',
+            ['<',  v, s3],  '#f38443',
+            ['<',  v, s4],  '#d4491f',
             '#7f1d1d'
           ];
         }
@@ -1351,6 +1445,21 @@ map = {
           },
           {
             group: 'Hydrographie & aléas',
+            aleaMode: 'debordement',
+            pmtiles: true,
+            source: 'zoneinondable',
+            url: '../layers/zi_perimetre_papi_vc.pmtiles',
+            sourceLayer: 'zi_perimetre_papi_vc',
+            type: 'fill',
+            id: 'zoneinondableLayer',
+            color: '#0284c7',
+            outlineColor: '#0369a1',
+            opacity: 0.36,
+            layout: { visibility: 'none' }
+          },
+          {
+            group: 'Hydrographie & aléas',
+            aleaMode: 'ruissellement',
             pmtiles: true,
             source: 'ruissellementexzeco',
             url: '../layers/ruissellement_exzeco5.pmtiles',
@@ -1413,7 +1522,7 @@ map = {
         legend.id = "legend";
         legend.className = "map-legend";
         legend.innerHTML = `
-          <div class="legend-kicker">Ruissellement</div>
+          <div class="legend-kicker">${cfgCourante.kicker}</div>
           <div class="legend-head">
             <span class="legend-title">${NOM_INDICATEUR}</span>
             <button type="button" class="legend-toggle-btn" title="Replier ou déplier la légende" aria-label="Replier la légende">
@@ -1534,9 +1643,20 @@ map = {
           legend.style.display = (visibility === "none") ? "none" : "block";
         }
 
-        let geojsonAlea = null;
-        let idsBatimentsAlea = [];
-        let chargementAlea = null;
+        // Les couches de bâtiments d'aléa sont gardées en mémoire par mode
+        // pour éviter tout rechargement lors d'une bascule débordement ↔ ruissellement.
+        const etatAleaBatiments = {
+          debordement: {
+            gj: null, ids: [], promesse: null,
+            sourceId: 'batimentsAlea_debordement',
+            layerId: 'batimentsAleaLayer_debordement'
+          },
+          ruissellement: {
+            gj: null, ids: [], promesse: null,
+            sourceId: 'batimentsAlea_ruissellement',
+            layerId: 'batimentsAleaLayer_ruissellement'
+          }
+        };
 
         function indicateurVisible() {
           if (!map.getLayer('indicateurs31hLayer')) return true;
@@ -1548,35 +1668,37 @@ map = {
             && map.getLayoutProperty('batimentsLayer', 'visibility') !== 'none';
         }
 
-        function chargerAlea() {
-          if (geojsonAlea) return Promise.resolve(geojsonAlea);
-          if (chargementAlea) return chargementAlea;
-          chargementAlea = fetch('../layers/s31h_bat_hab_zi_ruissel.geojson')
+        function chargerAleaMode(mode) {
+          const etat = etatAleaBatiments[mode];
+          if (etat.gj) return Promise.resolve(etat.gj);
+          if (etat.promesse) return etat.promesse;
+          etat.promesse = fetch(CONFIG_MODES[mode].batimentsAleaUrl)
             .then(r => {
               if (!r.ok) throw new Error('Couche des bâtiments en zone inondable introuvable');
               return r.json();
             })
             .then(gj => {
-              geojsonAlea = gj;
-              idsBatimentsAlea = [...new Set(
+              etat.gj = gj;
+              etat.ids = [...new Set(
                 (gj.features || []).map(f => f.properties?.id_bat).filter(Boolean)
               )];
               return gj;
             });
-          return chargementAlea;
+          return etat.promesse;
         }
 
-        async function assurerCoucheAlea() {
-          if (map.getLayer('batimentsAleaLayer')) return;
-          const gj = await chargerAlea();
-          if (!map.getSource('batimentsAlea')) {
-            map.addSource('batimentsAlea', { type: 'geojson', data: gj });
+        async function assurerCoucheAleaMode(mode) {
+          const etat = etatAleaBatiments[mode];
+          if (map.getLayer(etat.layerId)) return etat;
+          const gj = await chargerAleaMode(mode);
+          if (!map.getSource(etat.sourceId)) {
+            map.addSource(etat.sourceId, { type: 'geojson', data: gj, maxzoom: 16 });
           }
-          if (!map.getLayer('batimentsAleaLayer')) {
+          if (!map.getLayer(etat.layerId)) {
             map.addLayer({
-              id: 'batimentsAleaLayer',
+              id: etat.layerId,
               type: 'fill-extrusion',
-              source: 'batimentsAlea',
+              source: etat.sourceId,
               layout: { visibility: 'none' },
               paint: {
                 'fill-extrusion-color': ['match', ['get', 'usage1'],
@@ -1587,8 +1709,14 @@ map = {
                 'fill-extrusion-opacity': 0.92
               }
             });
-            brancherPopupBatiment();
+            brancherPopupBatiment(etat.layerId);
           }
+          // Précharge en tâche de fond l'autre mode pour que le switch soit immédiat
+          const autreMode = mode === 'debordement' ? 'ruissellement' : 'debordement';
+          if (!etatAleaBatiments[autreMode].promesse) {
+            setTimeout(() => { chargerAleaMode(autreMode).catch(() => {}); }, 1200);
+          }
+          return etat;
         }
 
         let modeAleaApplique = null;
@@ -1596,20 +1724,26 @@ map = {
         async function synchroniserBatimentsAlea() {
           const actifs = batimentsVisibles();
           const avecIndicateur = actifs && indicateurVisible();
-          const mode = !actifs ? 'off' : (avecIndicateur ? 'alea' : 'general');
+          const cleEtat = !actifs ? 'off' : (avecIndicateur ? `alea:${modeCourant}` : 'general');
           batimentLegend.style.display = actifs ? 'block' : 'none';
           if (!map.getLayer('batimentsLayer')) return;
-          if (mode === modeAleaApplique && (mode !== 'alea' || map.getLayer('batimentsAleaLayer'))) return;
+          const etatActif = etatAleaBatiments[modeCourant];
+          if (cleEtat === modeAleaApplique && (!avecIndicateur || map.getLayer(etatActif.layerId))) return;
 
           if (avecIndicateur) {
-            try { await assurerCoucheAlea(); }
+            const modeDemande = modeCourant;
+            try { await assurerCoucheAleaMode(modeDemande); }
             catch (e) { console.error(e); }
-            if (map.getLayer('batimentsAleaLayer')) {
-              map.setLayoutProperty('batimentsAleaLayer', 'visibility', 'visible');
-            }
+            if (modeDemande !== modeCourant) return;
+            Object.entries(etatAleaBatiments).forEach(([m, et]) => {
+              if (map.getLayer(et.layerId)) {
+                map.setLayoutProperty(et.layerId, 'visibility', m === modeCourant ? 'visible' : 'none');
+              }
+            });
             try {
-              map.setFilter('batimentsLayer', idsBatimentsAlea.length
-                ? ['!', ['in', ['get', 'id_bdt'], ['literal', idsBatimentsAlea]]]
+              // 'match' compile une table de hachage O(1) dans MapLibre (contrairement à 'in' linéaire)
+              map.setFilter('batimentsLayer', etatActif.ids.length
+                ? ['match', ['get', 'id_bdt'], etatActif.ids, false, true]
                 : null);
             } catch (e) { console.error(e); }
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
@@ -1619,12 +1753,14 @@ map = {
             map.setFilter('batimentsLayer', null);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', COULEURS_BATIMENTS);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.88);
-            if (map.getLayer('batimentsAleaLayer')) {
-              map.setLayoutProperty('batimentsAleaLayer', 'visibility', 'none');
-            }
+            Object.values(etatAleaBatiments).forEach(et => {
+              if (map.getLayer(et.layerId)) {
+                map.setLayoutProperty(et.layerId, 'visibility', 'none');
+              }
+            });
             if (actifs) ecrireLegendeBatiments('general');
           }
-          modeAleaApplique = mode;
+          modeAleaApplique = cleEtat;
         }
         window.synchroniserBatimentsAlea = synchroniserBatimentsAlea;
 
@@ -1853,9 +1989,10 @@ map = {
 
         map.on('click', 'indicateurs31hLayer', (e) => {
           if (vueBatimentsProche()) return;
-          if (map.getLayer('batimentsAleaLayer')
-              && map.getLayoutProperty('batimentsAleaLayer', 'visibility') !== 'none'
-              && map.queryRenderedFeatures(e.point, { layers: ['batimentsAleaLayer'] }).length) {
+          const coucheBatAlea = etatAleaBatiments[modeCourant].layerId;
+          if (map.getLayer(coucheBatAlea)
+              && map.getLayoutProperty(coucheBatAlea, 'visibility') !== 'none'
+              && map.queryRenderedFeatures(e.point, { layers: [coucheBatAlea] }).length) {
             return;
           }
           const feature = e.features[0];
@@ -1912,7 +2049,7 @@ map = {
         });
 
         let popupBatiment = null;
-        function brancherPopupBatiment() {
+        function brancherPopupBatiment(layerId) {
           const ligne = (libelle, valeur) => `
             <div class="popup-bat-row">
               <span>${libelle}</span><strong>${valeur}</strong>
@@ -1929,9 +2066,9 @@ map = {
             return s ? String(v) : '—';
           };
 
-          map.on('mouseenter', 'batimentsAleaLayer', () => { map.getCanvas().style.cursor = 'pointer'; });
-          map.on('mouseleave', 'batimentsAleaLayer', () => { map.getCanvas().style.cursor = ''; });
-          map.on('click', 'batimentsAleaLayer', (e) => {
+          map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
+          map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = ''; });
+          map.on('click', layerId, (e) => {
             const p = e.features[0].properties;
             const couleur = (COULEURS_USAGE.find(([u]) => u === p.usage1) || [, '#64748b'])[1];
             hoverTip.remove();
@@ -2111,6 +2248,7 @@ map = {
           departementLayer: 'Départements',
           epciLayer: 'Intercommunalités (EPCI)',
           perimetrepapiLayer: 'Périmètre du PAPI',
+          zoneinondableLayer: 'Zone inondable centennale (débordement)',
           ruissellementexzecoLayer: 'Axe de ruissellement (Exzeco)',
           coursdeauLayer: "Réseau hydrographique",
           batimentsLayer: 'Bâtiments en 3D (hauteur & usage)'
@@ -2141,7 +2279,7 @@ map = {
           }
 
           if (id === 'batimentsLayer' && visible) {
-            const alea = layersListDiv.querySelector('#ruissellementexzecoLayer');
+            const alea = layersListDiv.querySelector('#' + cfgCourante.aleaHydroLayerId);
             if (alea && !alea.checked) {
               alea.checked = true;
               alea.dispatchEvent(new Event('change'));
@@ -2162,10 +2300,13 @@ map = {
         const hiddenFromList = ['indicateurs31hLayer', 'parcellesLayer'];
         const couchesAffichables = layersData.filter(l => !hiddenFromList.includes(l.id));
         const groupes = [...new Set(couchesAffichables.map(l => l.group || 'Autres couches'))];
+        const fonctionsMajGroupes = [];
 
         groupes.forEach(nomGroupe => {
           const duGroupe = couchesAffichables.filter(l => (l.group || 'Autres couches') === nomGroupe);
           const casesDuGroupe = [];
+          const casesVisiblesDuGroupe = () =>
+            casesDuGroupe.filter(c => !c.dataset.aleaMode || c.dataset.aleaMode === modeCourant);
 
           const titreGroupe = document.createElement('label');
           titreGroupe.className = 'layers-group-title';
@@ -2180,10 +2321,12 @@ map = {
           layersListDiv.appendChild(titreGroupe);
 
           function majCaseGroupe() {
-            const cochees = casesDuGroupe.filter(c => c.checked).length;
-            caseGroupe.checked = cochees === casesDuGroupe.length && cochees > 0;
-            caseGroupe.indeterminate = cochees > 0 && cochees < casesDuGroupe.length;
+            const visibles = casesVisiblesDuGroupe();
+            const cochees = visibles.filter(c => c.checked).length;
+            caseGroupe.checked = cochees === visibles.length && cochees > 0;
+            caseGroupe.indeterminate = cochees > 0 && cochees < visibles.length;
           }
+          fonctionsMajGroupes.push(majCaseGroupe);
 
           duGroupe.forEach(layer => {
             const id = layer.id;
@@ -2195,6 +2338,7 @@ map = {
             checkbox.id = id;
             checkbox.className = 'form-check-input';
             checkbox.checked = cocheInitiale;
+            if (layer.aleaMode) checkbox.dataset.aleaMode = layer.aleaMode;
 
             const pastille = document.createElement('span');
             pastille.className = 'layer-swatch-dot';
@@ -2207,6 +2351,10 @@ map = {
 
             const wrapper = document.createElement('div');
             wrapper.className = 'form-check' + (cocheInitiale ? ' actif' : '');
+            if (layer.aleaMode) {
+              wrapper.dataset.aleaMode = layer.aleaMode;
+              wrapper.style.display = (layer.aleaMode === modeCourant) ? '' : 'none';
+            }
             wrapper.append(checkbox, pastille, label);
 
             checkbox.addEventListener('change', async () => {
@@ -2236,7 +2384,7 @@ map = {
             caseGroupe.indeterminate = false;
             caseGroupe.disabled = true;
             try {
-              for (const cb of casesDuGroupe) {
+              for (const cb of casesVisiblesDuGroupe()) {
                 if (cb.checked === voulu) continue;
                 cb.checked = voulu;
                 cb.dispatchEvent(new Event('change'));
@@ -2252,6 +2400,127 @@ map = {
             }
           });
         });
+
+        /* ============================================================
+               BASCULE À CHAUD DÉBORDEMENT ↔ RUISSELLEMENT
+               Toutes les couches communes (fonds de plan, bâtiments 3D,
+               cours d'eau, découpages, parcelles) restent en mémoire.
+            ============================================================ */
+        let promesseValeursSecours = {};
+        async function assurerValeursMode(mode) {
+          const cfg = CONFIG_MODES[mode];
+          const f0 = indicateursGeojson.features[0]?.properties;
+          if (f0 && (cfg.champ in f0)) return;
+          if (!promesseValeursSecours[mode]) {
+            promesseValeursSecours[mode] = fetch(cfg.indicateursUrl)
+              .then(r => r.json())
+              .then(autreGj => {
+                const parInsee = new Map(
+                  (autreGj.features || []).map(f => [f.properties?.insee_com, f.properties?.[cfg.champ]])
+                );
+                indicateursGeojson.features.forEach(f => {
+                  const code = f.properties?.insee_com;
+                  if (parInsee.has(code)) f.properties[cfg.champ] = parInsee.get(code);
+                });
+                map.getSource('indicateurs31hLayer')?.setData(indicateursGeojson);
+              });
+          }
+          await promesseValeursSecours[mode];
+        }
+
+        window.basculerAleaCarte = async function(nouveauMode) {
+          if (!CONFIG_MODES[nouveauMode] || nouveauMode === modeCourant) return;
+          const ancienCfg = cfgCourante;
+          modeCourant = nouveauMode;
+          cfgCourante = CONFIG_MODES[nouveauMode];
+
+          hoverTip.remove();
+          if (popupCommuneOuverte) { popupCommuneOuverte.remove(); popupCommuneOuverte = null; }
+          if (popupBatiment) { popupBatiment.remove(); popupBatiment = null; }
+
+          window.TABLEAU_URL = cfgCourante.tableauUrl;
+          window.GRAPHIQUE = cfgCourante.graphique;
+          const dlgDonnees = document.getElementById('donneesDialog');
+          if (dlgDonnees && dlgDonnees.open) {
+            dlgDonnees.querySelector('.donnees-SwitchBtn.active')?.click();
+          }
+
+          await assurerValeursMode(nouveauMode);
+
+          CHAMP_INDICATEUR = cfgCourante.champ;
+          CLASSES_INDICATEUR = construireClasses(CHAMP_INDICATEUR, cfgCourante.seuilsCouleur, cfgCourante.labelsClasses);
+          statsIndicateur = calculerStatsIndicateur(CHAMP_INDICATEUR, CLASSES_INDICATEUR);
+          resumeDefautHtml = texteResumeDefaut();
+          classeActiveId = null;
+
+          if (map.getLayer('indicateurs31hLayer')) {
+            map.setPaintProperty('indicateurs31hLayer', 'fill-color', couleurHabitation(CHAMP_INDICATEUR, cfgCourante.seuilsCouleur));
+            map.setPaintProperty('indicateurs31hLayer', 'fill-opacity', expressionOpaciteIndicateur());
+          }
+          if (map.getLayer('indicateurs31h-contour')) {
+            map.setPaintProperty('indicateurs31h-contour', 'line-color', [
+              'case',
+              ['<=', ['coalesce', ['to-number', ['get', CHAMP_INDICATEUR], 0], 0], 0],
+              'rgba(148, 163, 184, 0.52)',
+              'rgba(255, 255, 255, 0.88)'
+            ]);
+          }
+          if (map.getLayer('indicateurs31hLabels')) {
+            map.setLayoutProperty('indicateurs31hLabels', 'symbol-sort-key',
+              ['*', -1, ['coalesce', ['to-number', ['get', CHAMP_INDICATEUR], 0], 0]]);
+          }
+
+          // Mise à jour de la légende de l'indicateur
+          const kickerEl = legend.querySelector('.legend-kicker');
+          if (kickerEl) kickerEl.textContent = cfgCourante.kicker;
+          legendResetBtn.style.display = 'none';
+          legendRowBtns.forEach(btn => {
+            btn.classList.remove('is-active', 'is-dimmed');
+            const cls = CLASSES_INDICATEUR.find(c => c.id === btn.dataset.classe);
+            if (cls) {
+              const lbl = btn.querySelector('.legend-row-label');
+              const cnt = btn.querySelector('.legend-row-count');
+              if (lbl) lbl.textContent = cls.label;
+              if (cnt) cnt.textContent = String(statsIndicateur.parClasse[cls.id] ?? 0);
+            }
+          });
+          majBandeauCommune(null);
+
+          // Permutation de la couche d'aléa hydrographique (zone inondable ↔ Exzeco)
+          const cbAncienAlea = layersListDiv.querySelector('#' + ancienCfg.aleaHydroLayerId);
+          const cbNouvelAlea = layersListDiv.querySelector('#' + cfgCourante.aleaHydroLayerId);
+          const aleaEtaitActif = Boolean((cbAncienAlea && cbAncienAlea.checked) || batimentsVisibles());
+
+          if (cbAncienAlea && cbAncienAlea.checked) {
+            cbAncienAlea.checked = false;
+            cbAncienAlea.parentElement?.classList.remove('actif');
+            if (map.getLayer(ancienCfg.aleaHydroLayerId)) {
+              map.setLayoutProperty(ancienCfg.aleaHydroLayerId, 'visibility', 'none');
+            }
+          }
+
+          layersListDiv.querySelectorAll('[data-alea-mode]').forEach(el => {
+            if (el.tagName === 'DIV') {
+              el.style.display = (el.dataset.aleaMode === modeCourant) ? '' : 'none';
+            }
+          });
+
+          if (aleaEtaitActif && cbNouvelAlea && !cbNouvelAlea.checked) {
+            cbNouvelAlea.checked = true;
+            cbNouvelAlea.parentElement?.classList.add('actif');
+            await toggleLayerVisibility(cfgCourante.aleaHydroLayerId, true);
+          }
+          fonctionsMajGroupes.forEach(fn => fn());
+
+          modeAleaApplique = null;
+          await synchroniserBatimentsAlea();
+        };
+
+        if (window._modeAleaEnAttente) {
+          const mAtt = window._modeAleaEnAttente;
+          window._modeAleaEnAttente = null;
+          window.basculerAleaCarte(mAtt);
+        }
 
         /* ============================================================
                Fonds de Plan (OpenStreetMap, Plan IGN, Photos aériennes, Aucun)
@@ -2689,7 +2958,7 @@ creer_tableau(
 #   distinct(cle, .keep_all = TRUE)     # si une commune a deux fichiers, on garde le premier
 # 
 # # 2) Association par nom de commune
-# indicateurs_ruissel <- st_read("../Layers/indicateurs_ruissel.geojson", quiet = TRUE) |>
+# indicateurs_debce <- st_read("../Layers/indicateurs_debce.geojson", quiet = TRUE) |>
 #   mutate(cle = normaliser(nom)) |>
 #   left_join(logos, by = "cle") |>
 #   mutate(
@@ -2702,25 +2971,25 @@ creer_tableau(
 #   select(-cle, -fichier)
 # 
 # # 3) Contrôle : communes sans logo
-# indicateurs_ruissel |>
+# indicateurs_debce |>
 #   st_drop_geometry() |>
 #   filter(image == "../Images/logo/defaut.png") |>
 #   pull(nom)
 # 
 # st_write(
-#   indicateurs_ruissel,
-#   "../layers/indicateurs_ruissel.geojson",
+#   indicateurs_debce,
+#   "../layers/indicateurs_debce.geojson",
 #   delete_dsn = TRUE,                                       # écrase le fichier existant
 #   layer_options = c("RFC7946=YES", "COORDINATE_PRECISION=6")
 # )
 # 
  # Charger le GeoJSON
-#    indicateurs <- st_read("../layers/indicateurs_ruissel.geojson", quiet = TRUE) %>%
+#    indicateurs <- st_read("../layers/indicateurs_debce.geojson", quiet = TRUE) %>%
 #      st_drop_geometry() %>%
-#      select(nom, s31h_logt_inond_zx_q101)%>%
-#   mutate(s31h_logt_inond_zx_q101 = replace_na(s31h_logt_inond_zx_q101, 0))
+#      select(nom, s31h_logt_inond_zx_q100)%>%
+#   mutate(s31h_logt_inond_zx_q100 = replace_na(s31h_logt_inond_zx_q100, 0))
 # # # # 
-#    write_json(indicateurs, "../layers/data_s31h_logt_inond_zx_q101.json",
+#    write_json(indicateurs, "../layers/data_s31h_logt_inond_zx_q100.json",
 #               auto_unbox = TRUE, na = "null")
 ```
 ::::::::
