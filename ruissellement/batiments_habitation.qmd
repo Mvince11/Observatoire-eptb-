@@ -14,7 +14,7 @@ resources:
   - layers/valeurs_s31h.json
   - layers/batiments_perim_papi.pmtiles
   # - layers/zi_cartino2d.pmtiles
-  - layers/zi_perimetre_papi_vc.pmtiles
+  - layers/zx_ppri_azi_cartino2d.pmtiles
   - layers/zx_ruissellement_exzeco_2m.pmtiles
   - layers/parcelles.pmtiles
   - layers/coursdeau_perimetre_papi_vc.pmtiles
@@ -1459,8 +1459,8 @@ map = {
             aleaMode: 'debordement',
             pmtiles: true,
             source: 'zoneinondable',
-            url: '../layers/zi_perimetre_papi_vc.pmtiles',
-            sourceLayer: 'zi_perimetre_papi_vc',
+            url: '../layers/zx_ppri_azi_cartino2d.pmtiles',
+            sourceLayer: 'data.zx_ppri_azi_cartino2d',
             type: 'fill',
             id: 'zoneinondableLayer',
             color: '#0284c7',
