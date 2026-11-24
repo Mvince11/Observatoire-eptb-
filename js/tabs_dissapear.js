@@ -437,7 +437,11 @@ function initRightTabs() {
       // OUTILS AFFICHÉS DANS UNE MODALE
       // -------------------------------------------------
       const MODALES = {
-        infoindicateur: ouvrirModalIndicateur,
+        infoindicateur: (btn) => (
+          typeof window.ouvrirModalIndicateurPersonnalise === "function"
+            ? window.ouvrirModalIndicateurPersonnalise(btn)
+            : ouvrirModalIndicateur(btn)
+        ),
         donneesgraphique: ouvrirModalDonnees,
         layers: ouvrirModalCouches
       };
