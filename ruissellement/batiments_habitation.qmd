@@ -114,6 +114,8 @@ include-in-header:
         left: 12px;
         gap: 8px;
         max-height: calc(100% - 96px);
+        overflow-y: auto;
+        pointer-events: auto;
       }
       html.page-carte .map-legend {
         background: rgba(255, 255, 255, .95);
@@ -166,6 +168,20 @@ include-in-header:
         color: #0f172a;
       }
       .map-legend.is-collapsed .legend-CollapseBody {
+        display: none;
+      }
+      .legend-layer {
+        border-top: 1px solid #e2e8f0;
+        margin-top: 6px;
+        padding-top: 6px;
+      }
+      .legend-layer-title {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .legend-layer.is-collapsed .legend-layer-body {
         display: none;
       }
       .legend-live {
@@ -277,15 +293,74 @@ include-in-header:
         color: #475569;
       }
       .legend-opacity input[type="range"] {
-        flex: 1;
-        height: 4px;
+        flex: 0 0 62px;
+        width: 62px;
+        height: 3px;
         accent-color: #c2410c;
         cursor: pointer;
       }
       .legend-opacity span {
-        min-width: 30px;
+        min-width: 28px;
         text-align: right;
         font-variant-numeric: tabular-nums;
+      }
+
+      @media (max-width: 1200px), (max-height: 860px) {
+        html.page-carte .legend-stack {
+          gap: 6px;
+          max-height: calc(100% - 72px);
+        }
+        html.page-carte .map-legend {
+          width: min(200px, calc(100vw - 78px));
+          padding: 7px 8px;
+        }
+        .legend-title { font-size: 11.5px; }
+        .legend-layer-title { font-size: 10.5px; }
+        .legend-row {
+          font-size: 10.5px;
+          padding: 2px 3px;
+          gap: 5px;
+        }
+        .legend-live {
+          margin: 4px 0;
+          padding: 3px 6px;
+          font-size: 10.5px;
+        }
+        .legend-opacity {
+          gap: 6px;
+          margin-top: 4px;
+          padding-top: 4px;
+        }
+        .legend-opacity input[type="range"] {
+          flex-basis: 48px;
+          width: 48px;
+        }
+      }
+
+      @media (max-width: 760px), (max-height: 680px) {
+        html.page-carte .legend-stack {
+          left: 8px;
+          bottom: 28px;
+          max-height: calc(100% - 56px);
+        }
+        html.page-carte .map-legend {
+          width: min(168px, calc(100vw - 56px));
+          padding: 6px 7px;
+          border-radius: 10px;
+        }
+        .legend-kicker { font-size: 9px; }
+        .legend-title,
+        .legend-layer-title { font-size: 10.5px; }
+        .legend-row { font-size: 10px; }
+        .legend-live { display: none; }
+        html.page-carte .map-legend .legend-swatch {
+          width: 10px;
+          height: 10px;
+        }
+        .legend-toggle-btn {
+          width: 18px;
+          height: 18px;
+        }
       }
 
       /* Info-bulle légère au survol + popup compacte au clic */
@@ -589,11 +664,11 @@ window.GRAPHIQUE = {
         { label: 'Non concerné', special: 'na',      couleur: '#eef2f6' },
         { label: 'Aucun',        special: 'zero',    couleur: '#eef2f6' },
         { label: '1 à 19',       special: 'moins20', couleur: '#fde6c4' },
-        { label: '1 à 15',       max: 15,            couleur: '#fde6c4' },
-        { label: '16 à 46',      max: 46,            couleur: '#fbbf77' },
-        { label: '47 à 104',     max: 104,           couleur: '#f38443' },
-        { label: '105 à 364',    max: 364,           couleur: '#d4491f' },
-        { label: '365 et plus',  max: Infinity,      couleur: '#7f1d1d' }
+        { label: '1 à 39',       max: 39,            couleur: '#fde6c4' },
+        { label: '40 à 109',     max: 109,           couleur: '#fbbf77' },
+        { label: '110 à 199',    max: 199,           couleur: '#f38443' },
+        { label: '200 à 389',    max: 389,           couleur: '#d4491f' },
+        { label: '390 et plus',  max: Infinity,      couleur: '#7f1d1d' }
       ],
       ...opts
     };
@@ -883,8 +958,8 @@ map = {
         batimentsAleaUrl: '../layers/s31h_bat_hab_zi_debce.geojson',
         aleaHydroLayerId: 'zoneinondableLayer',
         tableauUrl: 'tableaux/debordement_s31h.html',
-        seuilsCouleur: [16, 47, 105, 365],
-        labelsClasses: ['1 à 15', '16 à 46', '47 à 104', '105 à 364', '365 et plus'],
+        seuilsCouleur: [40, 110, 200, 390],
+        labelsClasses: ['1 à 39', '40 à 109', '110 à 199', '200 à 389', '390 et plus'],
         graphique: {
           url: '../layers/data_s31h_logt_inond_zx_q100.json',
           options: {
@@ -898,11 +973,11 @@ map = {
               { label: 'Non concerné', special: 'na',      couleur: '#eef2f6' },
               { label: 'Aucun',        special: 'zero',    couleur: '#eef2f6' },
               { label: '1 à 19',       special: 'moins20', couleur: '#fde6c4' },
-              { label: '1 à 15',       max: 15,            couleur: '#fde6c4' },
-              { label: '16 à 46',      max: 46,            couleur: '#fbbf77' },
-              { label: '47 à 104',     max: 104,           couleur: '#f38443' },
-              { label: '105 à 364',    max: 364,           couleur: '#d4491f' },
-              { label: '365 et plus',  max: Infinity,      couleur: '#7f1d1d' }
+              { label: '1 à 39',       max: 39,            couleur: '#fde6c4' },
+              { label: '40 à 109',     max: 109,           couleur: '#fbbf77' },
+              { label: '110 à 199',    max: 199,           couleur: '#f38443' },
+              { label: '200 à 389',    max: 389,           couleur: '#d4491f' },
+              { label: '390 et plus',  max: Infinity,      couleur: '#7f1d1d' }
             ]
           }
         }
@@ -914,8 +989,8 @@ map = {
         batimentsAleaUrl: '../layers/s31h_bat_hab_zi_ruissel.geojson',
         aleaHydroLayerId: 'ruissellementexzecoLayer',
         tableauUrl: 'tableaux/ruissellement_s31h.html',
-        seuilsCouleur: [39, 66, 162, 331],
-        labelsClasses: ['1 à 38', '39 à 65', '66 à 161', '162 à 330', '331 et plus'],
+        seuilsCouleur: [80, 220, 450, 2150],
+        labelsClasses: ['1 à 79', '80 à 219', '220 à 449', '450 à 2149', '2150 et plus'],
         graphique: {
           url: '../layers/data_s31h_logt_inond_zx_q101.json',
           options: {
@@ -929,11 +1004,11 @@ map = {
               { label: 'Non concerné', special: 'na',      couleur: '#eef2f6' },
               { label: 'Aucun',        special: 'zero',    couleur: '#eef2f6' },
               { label: '1 à 19',       special: 'moins20', couleur: '#fde6c4' },
-              { label: '1 à 38',       max: 38,            couleur: '#fde6c4' },
-              { label: '39 à 65',      max: 65,            couleur: '#fbbf77' },
-              { label: '66 à 161',     max: 161,           couleur: '#f38443' },
-              { label: '162 à 330',    max: 330,           couleur: '#d4491f' },
-              { label: '331 et plus',  max: Infinity,      couleur: '#7f1d1d' }
+              { label: '1 à 79',       max: 79,            couleur: '#fde6c4' },
+              { label: '80 à 219',     max: 219,           couleur: '#fbbf77' },
+              { label: '220 à 449',    max: 449,           couleur: '#f38443' },
+              { label: '450 à 2149',   max: 2149,          couleur: '#d4491f' },
+              { label: '2150 et plus', max: Infinity,      couleur: '#7f1d1d' }
             ]
           }
         }
@@ -1443,8 +1518,8 @@ map = {
           { group: 'Découpages administratifs', lazyGeojson: '../layers/region.geojson',         type: 'line', id: 'regionLayer',        color: '#dc2626', width: 1.8, layout: { visibility: 'none' } },
           { group: 'Découpages administratifs', lazyGeojson: '../layers/departement.geojson',    type: 'line', id: 'departementLayer',   color: '#7c3aed', width: 1.8, layout: { visibility: 'none' } },
           { group: 'Découpages administratifs', lazyGeojson: '../layers/epci.geojson',           type: 'line', id: 'epciLayer',          color: '#2563eb', width: 1.4, layout: { visibility: 'none' } },
-          { group: 'Périmètres de gestion',     lazyGeojson: '../layers/bassin_vienne.geojson',  type: 'line', id: 'bassinvienneLayer',  color: '#15803d', width: 1.8, layout: { visibility: 'none' } },
-          { group: 'Périmètres de gestion',     lazyGeojson: '../layers/perimetre_papi.geojson', type: 'line', id: 'perimetrepapiLayer', color: '#0f172a', width: 2,   layout: { visibility: 'none' } },
+          { group: 'Périmètres de gestion',     lazyGeojson: '../layers/bassin_vienne.geojson',  type: 'fill', remplirContour: true, id: 'bassinvienneLayer',  color: '#15803d', outlineColor: '#166534', opacity: 0.28, layout: { visibility: 'none' } },
+          { group: 'Périmètres de gestion',     lazyGeojson: '../layers/perimetre_papi.geojson', type: 'fill', id: 'perimetrepapiLayer', color: '#0f172a', outlineColor: '#0f172a', opacity: 0.16, layout: { visibility: 'none' } },
           {
             data: indicateursGeojson,
             type: 'fill',
@@ -1634,17 +1709,73 @@ map = {
         batimentLegend.style.display = "none";
         legendStack.appendChild(batimentLegend);
 
+        function blocCouche(id, titre, couleur) {
+          return `
+            <section class="legend-layer" data-legende="${id}">
+              <div class="legend-head">
+                <span class="legend-layer-title"><span class="legend-swatch" style="background:${couleur};display:inline-block;vertical-align:-2px;margin-right:6px"></span>${titre}</span>
+                <button type="button" class="legend-toggle-btn" data-replier="${id}" title="Replier ou déplier" aria-label="Replier ${titre}">
+                  <i class="bi bi-chevron-down"></i>
+                </button>
+              </div>
+              <div class="legend-layer-body">
+                <div class="legend-opacity">
+                  <label for="opacite-${id}">Opacité</label>
+                  <input id="opacite-${id}" type="range" min="5" max="80" step="5" value="28" data-opacite="${id}">
+                  <span class="legend-opacity-val" data-opacite-val="${id}">28 %</span>
+                </div>
+              </div>
+            </section>`;
+        }
+
+        batimentLegend.innerHTML = `
+          <div class="legend-CollapseBody">
+            <section class="legend-layer" data-legende="batiments" style="border-top:0;margin-top:0;padding-top:2px">
+              <div class="legend-head">
+                <span class="legend-layer-title">Bâtiments BD TOPO &copy; IGN</span>
+                <button type="button" class="legend-toggle-btn" data-replier="batiments" title="Replier ou déplier" aria-label="Replier les bâtiments">
+                  <i class="bi bi-chevron-down"></i>
+                </button>
+              </div>
+              <div class="legend-layer-body">
+                <div class="legend-rows" data-usages="couleurs">${lignesLegende(COULEURS_USAGE.map(([l, c]) => [c, l]))}</div>
+                <div class="legend-rows" data-usages="gris" style="display:none">${lignesLegende([[GRIS_BATIMENTS, 'Autres bâtiments']])}</div>
+              </div>
+            </section>
+            ${blocCouche('bassinvienneLayer', 'Bassin de la Vienne', '#15803d')}
+            ${blocCouche('perimetrepapiLayer', 'Périmètre du PAPI', '#0f172a')}
+          </div>`;
+
+        batimentLegend.querySelector('[data-opacite="perimetrepapiLayer"]').value = '16';
+        batimentLegend.querySelector('[data-opacite-val="perimetrepapiLayer"]').textContent = '16 %';
+
+        batimentLegend.querySelectorAll('[data-replier]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const cible = btn.dataset.replier === 'ensemble'
+              ? batimentLegend
+              : batimentLegend.querySelector(`[data-legende="${btn.dataset.replier}"]`);
+            const repli = cible.classList.toggle('is-collapsed');
+            btn.innerHTML = repli ? '<i class="bi bi-chevron-up"></i>' : '<i class="bi bi-chevron-down"></i>';
+          });
+        });
+
+        function appliquerOpacitePerimetre(id, valeur) {
+          const couche = layersData.find(l => l.id === id);
+          if (couche) couche.opacity = valeur;
+          if (map.getLayer(id)) map.setPaintProperty(id, 'fill-opacity', valeur);
+        }
+
+        batimentLegend.querySelectorAll('[data-opacite]').forEach(range => {
+          range.addEventListener('input', () => {
+            const valeur = Number(range.value) / 100;
+            batimentLegend.querySelector(`[data-opacite-val="${range.dataset.opacite}"]`).textContent = `${range.value} %`;
+            appliquerOpacitePerimetre(range.dataset.opacite, valeur);
+          });
+        });
+
         function ecrireLegendeBatiments(mode) {
-          if (mode === 'alea') {
-            batimentLegend.innerHTML = `
-              <div class="legend-head"><span class="legend-title">Bâtiments en zone inondable</span></div>
-              <div class="legend-rows">${lignesLegende(COULEURS_USAGE.map(([l, c]) => [c, l]))}</div>
-              <div class="legend-rows">${lignesLegende([[GRIS_BATIMENTS, 'Autres bâtiments']])}</div>`;
-          } else {
-            batimentLegend.innerHTML = `
-              <div class="legend-head"><span class="legend-title">Usage des bâtiments</span></div>
-              <div class="legend-rows">${lignesLegende(COULEURS_USAGE.map(([l, c]) => [c, l]))}</div>`;
-          }
+          const gris = batimentLegend.querySelector('[data-usages="gris"]');
+          if (gris) gris.style.display = mode === 'alea' ? '' : 'none';
         }
         ecrireLegendeBatiments('general');
 
@@ -1753,7 +1884,7 @@ map = {
           const actifs = batimentsVisibles();
           const avecIndicateur = actifs && indicateurVisible();
           const cleEtat = !actifs ? 'off' : (avecIndicateur ? `alea:${modeCourant}` : 'general');
-          batimentLegend.style.display = actifs ? 'block' : 'none';
+          majPanneauEnjeux();
           if (!map.getLayer('batimentsLayer')) return;
           const etatActif = etatAleaBatiments[modeCourant];
           if (cleEtat === modeAleaApplique && (!avecIndicateur || map.getLayer(etatActif.layerId))) return;
@@ -1794,7 +1925,25 @@ map = {
         }
         window.synchroniserBatimentsAlea = synchroniserBatimentsAlea;
 
+        function coucheAffichee(id) {
+          return !!map.getLayer(id) && map.getLayoutProperty(id, 'visibility') !== 'none';
+        }
+
+        function majPanneauEnjeux() {
+          const bat = batimentsVisibles();
+          const bassin = coucheAffichee('bassinvienneLayer');
+          const papi = coucheAffichee('perimetrepapiLayer');
+          batimentLegend.style.display = (bat || bassin || papi) ? 'block' : 'none';
+          const sectionBat = batimentLegend.querySelector('[data-legende="batiments"]');
+          const sectionBassin = batimentLegend.querySelector('[data-legende="bassinvienneLayer"]');
+          const sectionPapi = batimentLegend.querySelector('[data-legende="perimetrepapiLayer"]');
+          if (sectionBat) sectionBat.style.display = bat ? '' : 'none';
+          if (sectionBassin) sectionBassin.style.display = bassin ? '' : 'none';
+          if (sectionPapi) sectionPapi.style.display = papi ? '' : 'none';
+        }
+
         function updateBatimentLegendVisibility() {
+          majPanneauEnjeux();
           synchroniserBatimentsAlea();
         }
 
@@ -1813,6 +1962,24 @@ map = {
             type: 'vector',
             url: `pmtiles://${abs}`
           });
+        }
+
+        function contourEnSurface(data) {
+          if (!data || !data.features) return data;
+          return {
+            ...data,
+            features: data.features.map(ft => {
+              const g = ft.geometry;
+              if (!g) return ft;
+              if (g.type === 'LineString') {
+                return { ...ft, geometry: { type: 'Polygon', coordinates: [g.coordinates] } };
+              }
+              if (g.type === 'MultiLineString') {
+                return { ...ft, geometry: { type: 'Polygon', coordinates: g.coordinates } };
+              }
+              return ft;
+            })
+          };
         }
 
         function creerCoucheVectorielle(layer, beforeId) {
@@ -1869,9 +2036,10 @@ map = {
           }
 
           if (!map.getSource(layer.id)) {
+            const data = layer.remplirContour ? contourEnSurface(layer.data) : layer.data;
             map.addSource(layer.id, {
               type: 'geojson',
-              data: layer.data
+              data
             });
           }
 
@@ -2135,10 +2303,6 @@ map = {
                 ${ligne('Hauteur', nb(p.hauteur, ' m'))}
                 ${ligne('Nombre d’étages', nb(p.nb_etages))}
                 ${ligne('Plain-pied', ouiNon(p.plainpied))}
-                ${ligne('Population habitante', nb(p.pop_hab))}
-                ${ligne('Personnes âgées', nb(p.pop_agee))}
-                ${ligne('Personnes sensibles', nb(p.pop_sens))}
-                ${ligne('Emploi en étage', nb(p.pop_emp_haut))}
               </div>`;
 
             popupBatiment = new maplibregl.Popup({
