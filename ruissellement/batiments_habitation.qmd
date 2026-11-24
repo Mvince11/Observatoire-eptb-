@@ -1591,6 +1591,7 @@ map = {
             type: 'fill-extrusion',
             id: 'batimentsLayer',
             opacity: 0.88,
+            minzoom: 14,
             heightProperty: 'hauteur',
             colorByType: 'usage1',
             layout: { visibility: 'none' }
@@ -1890,10 +1891,12 @@ map = {
           if (cleEtat === modeAleaApplique && (!avecIndicateur || map.getLayer(etatActif.layerId))) return;
 
           if (avecIndicateur) {
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.78);
             const modeDemande = modeCourant;
             try { await assurerCoucheAleaMode(modeDemande); }
             catch (e) { console.error(e); }
-            if (modeDemande !== modeCourant) return;
+            if (modeDemande !== modeCourant || !batimentsVisibles()) return;
             Object.entries(etatAleaBatiments).forEach(([m, et]) => {
               const vis = m === modeCourant ? 'visible' : 'none';
               if (map.getLayer(et.baseLayerId)) map.setLayoutProperty(et.baseLayerId, 'visibility', vis);
@@ -1903,12 +1906,9 @@ map = {
               const filtreExcl = etatActif.ids.length
                 ? ['match', ['get', 'id_bdt'], etatActif.ids, false, true]
                 : null;
-              // 'match' compile une table de hachage O(1) dans MapLibre (contrairement à 'in' linéaire)
               map.setFilter('batimentsLayer', filtreExcl);
               if (map.getLayer('batimentsLayer-base')) map.setFilter('batimentsLayer-base', filtreExcl);
             } catch (e) { console.error(e); }
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.78);
             ecrireLegendeBatiments('alea');
           } else {
             map.setFilter('batimentsLayer', null);
@@ -2023,10 +2023,11 @@ map = {
                   }
                 });
               }
+              layerConfig.minzoom = layer.minzoom ?? 14;
               layerConfig.paint['fill-extrusion-color'] = layer.colorByType === 'usage1'
                 ? COULEURS_BATIMENTS
                 : (layer.color || '#94a3b8');
-              layerConfig.paint['fill-extrusion-height'] = ['coalesce', ['get', layer.heightProperty || 'hauteur'], 5];
+              layerConfig.paint['fill-extrusion-height'] = ['coalesce', ['to-number', ['get', layer.heightProperty || 'hauteur']], 6];
               layerConfig.paint['fill-extrusion-base'] = 0;
               layerConfig.paint['fill-extrusion-opacity'] = layer.opacity ?? 0.92;
               layerConfig.paint['fill-extrusion-vertical-gradient'] = true;
