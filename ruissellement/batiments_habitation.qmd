@@ -12,12 +12,12 @@ resources:
   - layers/data_s31h_logt_inond_zx_q100.json
   - layers/data_s31h_logt_inond_zx_q101.json
   - layers/valeurs_s31h.json
-  - layers/batiments_perim_papi.pmtiles
-  # - layers/zi_cartino2d.pmtiles
-  - layers/zx_ppri_azi_cartino2d.pmtiles
-  - layers/zx_ruissellement_cartino2d.pmtiles
-  - layers/parcelles.pmtiles
-  - layers/coursdeau_perimetre_papi_vc.pmtiles
+  - layers/batiments_perim_papi.pmtiles.gz
+  # - layers/zi_cartino2d.pmtiles.gz
+  - layers/zx_ppri_azi_cartino2d.pmtiles.gz
+  - layers/zx_ruissellement_cartino2d.pmtiles.gz
+  - layers/parcelles.pmtiles.gz
+  - layers/coursdeau_perimetre_papi_vc.pmtiles.gz
   - layers/indicateurs_debce.geojson
   - layers/indicateurs_ruissel.geojson
   - layers/logos_index.json
@@ -1671,7 +1671,7 @@ map = {
             aleaMode: 'debordement',
             pmtiles: true,
             source: 'zoneinondable',
-            url: '../layers/zx_ppri_azi_cartino2d.pmtiles',
+            url: '../layers/zx_ppri_azi_cartino2d.pmtiles.gz',
             sourceLayer: 'data.zx_ppri_azi_cartino2d',
             type: 'fill',
             id: 'zoneinondableLayer',
@@ -1685,7 +1685,7 @@ map = {
             aleaMode: 'ruissellement',
             pmtiles: true,
             source: 'ruissellementexzeco',
-            url: '../layers/zx_ruissellement_cartino2d.pmtiles',
+            url: '../layers/zx_ruissellement_cartino2d.pmtiles.gz',
             sourceLayer: 'data.zx_ruissellement_cartino2d',
             type: 'fill',
             id: 'ruissellementexzecoLayer',
@@ -1698,7 +1698,7 @@ map = {
             group: 'Hydrographie & aléas',
             pmtiles: true,
             source: 'coursdeau',
-            url: '../layers/coursdeau_perimetre_papi_vc.pmtiles',
+            url: '../layers/coursdeau_perimetre_papi_vc.pmtiles.gz',
             sourceLayer: 'coursdeau_perimetre_papi_vc',
             type: 'line',
             id: 'coursdeauLayer',
@@ -1711,7 +1711,7 @@ map = {
           {
             pmtiles: true,
             source: 'parcelles',
-            url: '../layers/parcelles.pmtiles',
+            url: '../layers/parcelles.pmtiles.gz',
             sourceLayer: 'parcelles',
             type: 'fill',
             id: 'parcellesLayer',
@@ -1723,7 +1723,7 @@ map = {
             group: 'Enjeux bâtis',
             pmtiles: true,
             source: 'batiments',
-            url: '../layers/batiments_perim_papi.pmtiles',
+            url: '../layers/batiments_perim_papi.pmtiles.gz',
             sourceLayer: 'data.batiments_perim_papi',
             type: 'fill-extrusion',
             id: 'batimentsLayer',
@@ -2458,7 +2458,7 @@ map = {
 
         // ==================== PARCELLES (montées seulement à la recherche cadastrale) ====================
         function ensureParcellesHighlightLayers() {
-          ensurePmtilesSource('parcelles', '../layers/parcelles.pmtiles');
+          ensurePmtilesSource('parcelles', '../layers/parcelles.pmtiles.gz');
           const none = ['==', ['get', 'idpar'], ''];
           if (!map.getLayer('parcelle-fill')) {
             map.addLayer({

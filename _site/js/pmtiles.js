@@ -1128,6 +1128,13 @@ var pmtiles = (() => {
       this.url = url;
       this.customHeaders = customHeaders;
       this.mustReload = false;
+      let userAgent = "";
+      if ("navigator" in globalThis) {
+        userAgent = globalThis.navigator && globalThis.navigator.userAgent || "";
+      }
+      const isWindows = userAgent.indexOf("Windows") > -1;
+      const isChromiumBased = /Chrome|Chromium|Edg|OPR|Brave/.test(userAgent);
+      this.chromeWindowsNoCache = isWindows && isChromiumBased;
     }
     getKey() {
       return this.url;
@@ -1150,6 +1157,8 @@ var pmtiles = (() => {
         let cache;
         if (this.mustReload) {
           cache = "reload";
+        } else if (this.chromeWindowsNoCache) {
+          cache = "no-store";
         }
         let resp = yield fetch(this.url, {
           signal,
@@ -1163,10 +1172,11 @@ var pmtiles = (() => {
             throw Error("Missing content-length on 416 response");
           }
           const actualLength = +contentRange.substr(8);
+          requestHeaders.set("range", `bytes=0-${actualLength - 1}`);
           resp = yield fetch(this.url, {
             signal,
             cache: "reload",
-            headers: { range: `bytes=0-${actualLength - 1}` }
+            headers: requestHeaders
             //biome-ignore lint: "cache" is incompatible between cloudflare workers and browser
           });
         }

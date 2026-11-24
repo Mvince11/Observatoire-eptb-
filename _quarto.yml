@@ -11,7 +11,7 @@ project:
     - Images/logo/*.svg
     - layers/*.json
     - layers/*.geojson
-    - layers/*.pmtiles
+    - layers/*.pmtiles.gz
     - tableaux/**
     - js/*.js
     - js/*.css
