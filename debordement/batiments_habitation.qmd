@@ -79,7 +79,7 @@ include-in-header:
         ["Description", corps(".callout.ind-description"), true],
         ["Modalité de calcul", corps(".callout.ind-calcul"), true],
         ["Point de vigilance", corps(".callout.ind-vigilance"), false],
-        ["Données sources", corps(".callout.ind-sources"), false]
+        ["Données source", corps(".callout.ind-sources"), false]
       ].filter(([, html]) => html);
 
       const dlg = document.createElement("dialog");
@@ -3263,10 +3263,12 @@ L'indicateur consiste à compter les bâtiments d'habitation qui sont dans la zo
 :::
 
 ::: {.callout-warning .info_indicateur .ind-vigilance title="Point de vigilance" collapse="true"}
-Aucun\
+La nature des bâtiments est issue de la sémantique présente dans la base des bâtiments de la BDTOPO. Cependant, il y a un croisement effectué avec les fichiers fonciers du CEREMA pour déterminer si le bâtiment contient des logements. Ceci peut expliquer que certains bâtiments autres que « Résidentiel » sont reconnus comme logements.
 :::
 
-::: {.callout-warning .info_indicateur .ind-sources title="Données sources" collapse="true"}
+::: {.callout-warning .info_indicateur .ind-sources title="Données source" collapse="true"}
+© IGN BD TOPO — Bâtiments (2026)\
+© CEREMA Fichiers fonciers (2025)
 :::
 
 <!-- /* ============================================================ -->
