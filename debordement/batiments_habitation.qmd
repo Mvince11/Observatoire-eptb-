@@ -443,6 +443,19 @@ include-in-header:
         text-align: right;
         font-variant-numeric: tabular-nums;
       }
+      .legend-eye {
+        margin-left: auto;
+        border: 0;
+        background: transparent;
+        color: #16a34a;
+        padding: 0 0 0 4px;
+        line-height: 1;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .legend-eye.is-off {
+        color: #b6bec8;
+      }
 
       @media (max-width: 1200px), (max-height: 860px) {
         html.page-carte .legend-stack {
@@ -1723,7 +1736,7 @@ map = {
             sourceLayer: 'data.batiments_perim_papi',
             type: 'fill-extrusion',
             id: 'batimentsLayer',
-            opacity: 0.88,
+            opacity: 0.92,
             minzoom: 14,
             heightProperty: 'hauteur',
             colorByType: 'usage1',
@@ -1857,6 +1870,9 @@ map = {
                   <label for="opacite-${id}">Opacité</label>
                   <input id="opacite-${id}" type="range" min="5" max="95" step="5" value="${pourcent}" data-opacite="${id}">
                   <span class="legend-opacity-val" data-opacite-val="${id}">${pourcent} %</span>
+                  <button type="button" class="legend-eye" data-oeil="${id}" title="Masquer la couche" aria-label="Afficher ou masquer ${titre}">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
               </div>
             </section>`;
@@ -1874,6 +1890,11 @@ map = {
               <div class="legend-layer-body">
                 <div class="legend-rows" data-usages="couleurs">${lignesLegende(COULEURS_USAGE.map(([l, c]) => [c, l]))}</div>
                 <div class="legend-rows" data-usages="gris" style="display:none">${lignesLegende([[GRIS_BATIMENTS, 'Autres bâtiments']])}</div>
+                <div class="legend-opacity">
+                  <label for="opacite-batiments">Opacité</label>
+                  <input id="opacite-batiments" type="range" min="5" max="95" step="5" value="92" data-opacite="batiments">
+                  <span class="legend-opacity-val" data-opacite-val="batiments">92 %</span>
+                </div>
               </div>
             </section>
             ${blocCouche('bassinvienneLayer', 'Bassin de la Vienne', '#15803d', 28)}
@@ -1905,7 +1926,27 @@ map = {
           range.addEventListener('input', () => {
             const valeur = Number(range.value) / 100;
             batimentLegend.querySelector(`[data-opacite-val="${range.dataset.opacite}"]`).textContent = `${range.value} %`;
-            appliquerOpacitePerimetre(range.dataset.opacite, valeur);
+            if (range.dataset.opacite === 'batiments') appliquerOpaciteBatiments(valeur);
+            else appliquerOpacitePerimetre(range.dataset.opacite, valeur);
+          });
+        });
+
+        const legendesConservees = new Set();
+        let conserverLegendeMasquee = null;
+
+        batimentLegend.querySelectorAll('[data-oeil]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.oeil;
+            const visible = !coucheAffichee(id);
+            if (!visible) conserverLegendeMasquee = id;
+            legendesConservees.add(id);
+            const checkbox = layersListDiv.querySelector('#' + id);
+            if (checkbox && !checkbox.disabled) {
+              checkbox.checked = visible;
+              checkbox.dispatchEvent(new Event('change'));
+              return;
+            }
+            toggleLayerVisibility(id, visible);
           });
         });
 
@@ -2010,7 +2051,7 @@ map = {
                   '#64748b'],
                 'fill-extrusion-height': ['coalesce', ['to-number', ['get', 'hauteur']], 5],
                 'fill-extrusion-base': 0,
-                'fill-extrusion-opacity': 0.95,
+                'fill-extrusion-opacity': opaciteBatiments,
                 'fill-extrusion-vertical-gradient': true
               }
             });
@@ -2022,6 +2063,20 @@ map = {
             setTimeout(() => { chargerAleaMode(autreMode).catch(() => {}); }, 1200);
           }
           return etat;
+        }
+
+        let opaciteBatiments = 0.92;
+
+        function appliquerOpaciteBatiments(valeur) {
+          opaciteBatiments = valeur;
+          const couche = layersData.find(l => l.id === 'batimentsLayer');
+          if (couche) couche.opacity = valeur;
+          const ids = ['batimentsLayer', ...Object.values(etatAleaBatiments).map(e => e.layerId)];
+          ids.forEach(id => {
+            if (map.getLayer(id) && map.getLayer(id).type === 'fill-extrusion') {
+              map.setPaintProperty(id, 'fill-extrusion-opacity', valeur);
+            }
+          });
         }
 
         let modeAleaApplique = null;
@@ -2037,7 +2092,7 @@ map = {
 
           if (avecIndicateur) {
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', GRIS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.78);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', opaciteBatiments);
             const modeDemande = modeCourant;
             try { await assurerCoucheAleaMode(modeDemande); }
             catch (e) { console.error(e); }
@@ -2059,7 +2114,7 @@ map = {
             map.setFilter('batimentsLayer', null);
             if (map.getLayer('batimentsLayer-base')) map.setFilter('batimentsLayer-base', null);
             map.setPaintProperty('batimentsLayer', 'fill-extrusion-color', COULEURS_BATIMENTS);
-            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', 0.92);
+            map.setPaintProperty('batimentsLayer', 'fill-extrusion-opacity', opaciteBatiments);
             Object.values(etatAleaBatiments).forEach(et => {
               if (map.getLayer(et.baseLayerId)) map.setLayoutProperty(et.baseLayerId, 'visibility', 'none');
               if (map.getLayer(et.layerId)) map.setLayoutProperty(et.layerId, 'visibility', 'none');
@@ -2074,20 +2129,30 @@ map = {
           return !!map.getLayer(id) && map.getLayoutProperty(id, 'visibility') !== 'none';
         }
 
+        function majOeilLegende(id) {
+          const btn = batimentLegend.querySelector(`[data-oeil="${id}"]`);
+          if (!btn) return;
+          const visible = coucheAffichee(id);
+          btn.classList.toggle('is-off', !visible);
+          btn.innerHTML = visible ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+          btn.title = visible ? 'Masquer la couche' : 'Afficher la couche';
+        }
+
         function majPanneauEnjeux() {
-          const ids = ['batiments', 'bassinvienneLayer', 'perimetrepapiLayer', 'zoneinondableLayer', 'ruissellementexzecoLayer', 'coursdeauLayer'];
-          const visible = {
-            batiments: batimentsVisibles(),
-            bassinvienneLayer: coucheAffichee('bassinvienneLayer'),
-            perimetrepapiLayer: coucheAffichee('perimetrepapiLayer'),
-            zoneinondableLayer: coucheAffichee('zoneinondableLayer'),
-            ruissellementexzecoLayer: coucheAffichee('ruissellementexzecoLayer'),
-            coursdeauLayer: coucheAffichee('coursdeauLayer')
+          const ids = ['bassinvienneLayer', 'perimetrepapiLayer', 'zoneinondableLayer', 'ruissellementexzecoLayer', 'coursdeauLayer'];
+          ids.forEach(id => { if (coucheAffichee(id)) legendesConservees.add(id); });
+          const montrer = id => {
+            const def = layersData.find(l => l.id === id);
+            if (def && def.aleaMode && def.aleaMode !== modeCourant) return false;
+            return legendesConservees.has(id);
           };
+          const visible = { batiments: batimentsVisibles() };
+          ids.forEach(id => { visible[id] = montrer(id); });
           batimentLegend.style.display = Object.values(visible).some(Boolean) ? 'block' : 'none';
-          ids.forEach(id => {
+          Object.keys(visible).forEach(id => {
             const section = batimentLegend.querySelector(`[data-legende="${id}"]`);
             if (section) section.style.display = visible[id] ? '' : 'none';
+            if (id !== 'batiments') majOeilLegende(id);
           });
         }
 
@@ -2718,6 +2783,8 @@ map = {
             wrapper.append(checkbox, pastille, label);
 
             checkbox.addEventListener('change', async () => {
+              if (!checkbox.checked && conserverLegendeMasquee !== id) legendesConservees.delete(id);
+              if (conserverLegendeMasquee === id) conserverLegendeMasquee = null;
               checkbox.disabled = true;
               try {
                 await toggleLayerVisibility(id, checkbox.checked);
