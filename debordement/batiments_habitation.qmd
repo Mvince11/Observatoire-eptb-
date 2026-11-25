@@ -1650,11 +1650,7 @@ map = {
           return ['case', cls.filter, Math.min(0.95, opciteIndicateur + 0.12), 0.10];
         }
 
-        // Catalogue des couches : les GeoJSON lourds (région, département, EPCI…) ne sont téléchargés qu'à l'activation
         const layersData = [
-          { group: 'Découpages administratifs', lazyGeojson: '../layers/region.geojson',         type: 'line', id: 'regionLayer',        color: '#dc2626', width: 1.8, layout: { visibility: 'none' } },
-          { group: 'Découpages administratifs', lazyGeojson: '../layers/departement.geojson',    type: 'line', id: 'departementLayer',   color: '#7c3aed', width: 1.8, layout: { visibility: 'none' } },
-          { group: 'Découpages administratifs', lazyGeojson: '../layers/epci.geojson',           type: 'line', id: 'epciLayer',          color: '#2563eb', width: 1.4, layout: { visibility: 'none' } },
           { group: 'Périmètres de gestion',     lazyGeojson: '../layers/bassin_vienne.geojson',  type: 'fill', remplirContour: true, id: 'bassinvienneLayer',  color: '#15803d', outlineColor: '#166534', opacity: 0.28, layout: { visibility: 'none' } },
           { group: 'Périmètres de gestion',     lazyGeojson: '../layers/perimetre_papi.geojson', type: 'fill', id: 'perimetrepapiLayer', color: '#0f172a', outlineColor: '#0f172a', opacity: 0.16, layout: { visibility: 'none' } },
           {
@@ -1847,7 +1843,7 @@ map = {
         batimentLegend.style.display = "none";
         legendStack.appendChild(batimentLegend);
 
-        function blocCouche(id, titre, couleur) {
+        function blocCouche(id, titre, couleur, pourcent) {
           return `
             <section class="legend-layer" data-legende="${id}">
               <div class="legend-head">
@@ -1859,8 +1855,8 @@ map = {
               <div class="legend-layer-body">
                 <div class="legend-opacity">
                   <label for="opacite-${id}">Opacité</label>
-                  <input id="opacite-${id}" type="range" min="5" max="80" step="5" value="28" data-opacite="${id}">
-                  <span class="legend-opacity-val" data-opacite-val="${id}">28 %</span>
+                  <input id="opacite-${id}" type="range" min="5" max="95" step="5" value="${pourcent}" data-opacite="${id}">
+                  <span class="legend-opacity-val" data-opacite-val="${id}">${pourcent} %</span>
                 </div>
               </div>
             </section>`;
@@ -1880,12 +1876,12 @@ map = {
                 <div class="legend-rows" data-usages="gris" style="display:none">${lignesLegende([[GRIS_BATIMENTS, 'Autres bâtiments']])}</div>
               </div>
             </section>
-            ${blocCouche('bassinvienneLayer', 'Bassin de la Vienne', '#15803d')}
-            ${blocCouche('perimetrepapiLayer', 'Périmètre du PAPI', '#0f172a')}
+            ${blocCouche('bassinvienneLayer', 'Bassin de la Vienne', '#15803d', 28)}
+            ${blocCouche('perimetrepapiLayer', 'Périmètre du PAPI', '#0f172a', 16)}
+            ${blocCouche('zoneinondableLayer', 'Zone inondable centennale', '#0284c7', 36)}
+            ${blocCouche('ruissellementexzecoLayer', 'Axe de ruissellement', '#06b6d4', 40)}
+            ${blocCouche('coursdeauLayer', 'Réseau hydrographique', '#2b7bb9', 80)}
           </div>`;
-
-        batimentLegend.querySelector('[data-opacite="perimetrepapiLayer"]').value = '16';
-        batimentLegend.querySelector('[data-opacite-val="perimetrepapiLayer"]').textContent = '16 %';
 
         batimentLegend.querySelectorAll('[data-replier]').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -1900,7 +1896,9 @@ map = {
         function appliquerOpacitePerimetre(id, valeur) {
           const couche = layersData.find(l => l.id === id);
           if (couche) couche.opacity = valeur;
-          if (map.getLayer(id)) map.setPaintProperty(id, 'fill-opacity', valeur);
+          if (!map.getLayer(id)) return;
+          const prop = map.getLayer(id).type === 'line' ? 'line-opacity' : 'fill-opacity';
+          map.setPaintProperty(id, prop, valeur);
         }
 
         batimentLegend.querySelectorAll('[data-opacite]').forEach(range => {
@@ -1910,6 +1908,16 @@ map = {
             appliquerOpacitePerimetre(range.dataset.opacite, valeur);
           });
         });
+
+        if (window.matchMedia('(max-width: 1200px), (max-height: 860px)').matches) {
+          legend.classList.add('is-collapsed');
+          legendToggleBtn.innerHTML = '<i class="bi bi-chevron-up"></i>';
+          batimentLegend.querySelectorAll('.legend-layer').forEach(section => {
+            section.classList.add('is-collapsed');
+            const btn = section.querySelector('.legend-toggle-btn');
+            if (btn) btn.innerHTML = '<i class="bi bi-chevron-up"></i>';
+          });
+        }
 
         function ecrireLegendeBatiments(mode) {
           const gris = batimentLegend.querySelector('[data-usages="gris"]');
@@ -2067,16 +2075,20 @@ map = {
         }
 
         function majPanneauEnjeux() {
-          const bat = batimentsVisibles();
-          const bassin = coucheAffichee('bassinvienneLayer');
-          const papi = coucheAffichee('perimetrepapiLayer');
-          batimentLegend.style.display = (bat || bassin || papi) ? 'block' : 'none';
-          const sectionBat = batimentLegend.querySelector('[data-legende="batiments"]');
-          const sectionBassin = batimentLegend.querySelector('[data-legende="bassinvienneLayer"]');
-          const sectionPapi = batimentLegend.querySelector('[data-legende="perimetrepapiLayer"]');
-          if (sectionBat) sectionBat.style.display = bat ? '' : 'none';
-          if (sectionBassin) sectionBassin.style.display = bassin ? '' : 'none';
-          if (sectionPapi) sectionPapi.style.display = papi ? '' : 'none';
+          const ids = ['batiments', 'bassinvienneLayer', 'perimetrepapiLayer', 'zoneinondableLayer', 'ruissellementexzecoLayer', 'coursdeauLayer'];
+          const visible = {
+            batiments: batimentsVisibles(),
+            bassinvienneLayer: coucheAffichee('bassinvienneLayer'),
+            perimetrepapiLayer: coucheAffichee('perimetrepapiLayer'),
+            zoneinondableLayer: coucheAffichee('zoneinondableLayer'),
+            ruissellementexzecoLayer: coucheAffichee('ruissellementexzecoLayer'),
+            coursdeauLayer: coucheAffichee('coursdeauLayer')
+          };
+          batimentLegend.style.display = Object.values(visible).some(Boolean) ? 'block' : 'none';
+          ids.forEach(id => {
+            const section = batimentLegend.querySelector(`[data-legende="${id}"]`);
+            if (section) section.style.display = visible[id] ? '' : 'none';
+          });
         }
 
         function updateBatimentLegendVisibility() {
@@ -2592,9 +2604,6 @@ map = {
 
         const aliasLayerIds = {
           bassinvienneLayer: 'Bassin de la Vienne',
-          regionLayer: 'Région Nouvelle-Aquitaine',
-          departementLayer: 'Départements',
-          epciLayer: 'Intercommunalités (EPCI)',
           perimetrepapiLayer: 'Périmètre du PAPI',
           zoneinondableLayer: 'Zone inondable centennale (débordement)',
           ruissellementexzecoLayer: 'Axe de ruissellement (Exzeco)',
