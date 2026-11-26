@@ -18,7 +18,9 @@ format:
   /* ===================== RÉGLAGES ===================== */
   const CIBLE = "accueil.html";
   const TITRE_A = 4;                 // secondes : le titre apparaît
-  const ENTRER_AUTO_APRES = 0;       // secondes après la fin de la vidéo (0 = reste sur l'image finale)
+  const BOUCLE = true;               // true : la vidéo tourne en boucle jusqu'au clic sur « Entrer »
+  const FONDU = 0.8;                 // secondes : fondu au noir au raccord fin/début de la boucle
+  const ENTRER_AUTO_APRES = 0;       // seulement si BOUCLE = false : secondes après la fin de la vidéo (0 = jamais)
   const CLE = "intro_vue";
   /* ==================================================== */
 
@@ -62,8 +64,17 @@ format:
       return;
     }
 
+    video.loop = BOUCLE;
+
+    // Une fois la lecture lancée, le fond devient uni : le fondu de raccord passe par le noir, pas par la photo
+    video.addEventListener("playing", () => intro.classList.add("lecture"));
+
     video.addEventListener("timeupdate", () => {
-      if (video.currentTime >= TITRE_A) afficherTitre();
+      if (video.currentTime >= TITRE_A) afficherTitre();       // le titre reste ensuite affiché pendant toute la boucle
+      if (BOUCLE && video.duration) {
+        // Fondu au noir juste avant le retour au début : l'image sèche ne surgit pas brutalement
+        video.classList.toggle("coupure", video.duration - video.currentTime < FONDU);
+      }
     });
 
     video.addEventListener("ended", () => {
@@ -139,6 +150,10 @@ format:
   object-fit: cover;
   object-position: 55% 50%;     /* sur téléphone vertical, recadre un peu à droite du centre */
 }
+
+.intro.lecture { background: #0b1a30; }
+.intro-video { transition: opacity .8s ease; }
+.intro-video.coupure { opacity: 0; }
 
 /* Voile sombre : s'accentue à la fin pour la lisibilité du titre */
 .intro-voile {
