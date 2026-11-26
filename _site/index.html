@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.38">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,10 +36,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-b663525e4b92bb903b2199e2d401bf36.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-67bf86bc6bfa3b758eb180a50ed708f2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e55257969e79e1b23715b75ca28f8bbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -995,7 +995,6 @@ if (document.readyState === "loading") {
 
 </script>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -1021,7 +1020,7 @@ if (document.readyState === "loading") {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> <i class="bi bi-house" role="img">
+    <a class="nav-link" href="./accueil.html"> <i class="bi bi-house" role="img">
 </i> 
 <span class="menu-text">Accueil</span></a>
   </li>  
@@ -1276,240 +1275,249 @@ if (document.readyState === "loading") {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-layout-custom page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
 
-<!-- ============ BANDEAU ============ -->
-<section class="hero">
-  <i class="bi bi-droplet-fill goutte"></i>
-  <i class="bi bi-droplet-fill goutte"></i>
-  <i class="bi bi-droplet-fill goutte"></i>
-  <i class="bi bi-droplet-fill goutte"></i>
+<script>document.documentElement.classList.add('page-intro');</script>
 
-  <h1>Observatoire de la vulnérabilité<br>aux inondations</h1>
-  <p class="sous-titre">Bassins de la Vienne et du Clain : mieux savoir pour mieux agir.</p>
-  <div class="badge-cle">
-    <i class="bi bi-water"></i>
-    Crue centennale : <strong>1 chance sur 100</strong> de se produire chaque année
+<script>
+(function () {
+
+  /* ===================== RÉGLAGES ===================== */
+  const CIBLE = "accueil.html";
+  const TITRE_A = 4;                 // secondes : le titre apparaît
+  const ENTRER_AUTO_APRES = 0;       // secondes après la fin de la vidéo (0 = reste sur l'image finale)
+  const CLE = "intro_vue";
+  /* ==================================================== */
+
+  // Sécurité anti-boucle : ce script n'agit que sur index.html, jamais sur accueil.html ni ailleurs
+  const fichier = location.pathname.split("/").pop();
+  if (fichier !== "" && fichier !== "index.html") return;
+
+  // Pour revoir l'intro : index.html?intro
+  try { if (location.search.indexOf("intro") !== -1) sessionStorage.removeItem(CLE); } catch (e) {}
+
+  // Déjà vue pendant cette visite : direction l'accueil, avant même de charger la vidéo
+  try {
+    if (sessionStorage.getItem(CLE)) {
+      document.documentElement.classList.add("intro-passee");
+      location.replace(CIBLE);
+      return;
+    }
+    // Marquée dès le début : un clic sur « Accueil » ne la rejoue jamais
+    sessionStorage.setItem(CLE, "1");
+  } catch (e) {}
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const intro = document.getElementById("intro");
+    const video = document.getElementById("introVideo");
+
+    // replace() : l'intro ne reste pas dans l'historique, le bouton Retour ne la rejoue pas
+    const entrer = () => location.replace(CIBLE);
+
+    intro.querySelectorAll("[data-entrer]").forEach(a => a.addEventListener("click", e => {
+      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      entrer();
+    }));
+
+    const afficherTitre = () => intro.classList.add("fin");
+
+    // Mouvement réduit : pas de vidéo, titre et bouton tout de suite
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      video.remove();
+      afficherTitre();
+      return;
+    }
+
+    video.addEventListener("timeupdate", () => {
+      if (video.currentTime >= TITRE_A) afficherTitre();
+    });
+
+    video.addEventListener("ended", () => {
+      afficherTitre();
+      if (ENTRER_AUTO_APRES > 0) setTimeout(entrer, ENTRER_AUTO_APRES * 1000);
+    });
+
+    // Fichier introuvable ou lecture refusée : titre et bouton immédiats
+    video.addEventListener("error", afficherTitre);
+    const source = video.querySelector("source");
+    if (source) source.addEventListener("error", afficherTitre);
+
+    const lecture = video.play();
+    if (lecture && lecture.catch) lecture.catch(afficherTitre);
+  });
+
+})();
+</script>
+
+<div class="intro" id="intro">
+
+  <video class="intro-video" id="introVideo" autoplay="" muted="" playsinline="" preload="auto" disablepictureinpicture="" poster="Images/intro_poster.jpg">
+    <source src="video_intro.mp4" type="video/mp4">
+  </video>
+
+  <div class="intro-voile"></div>
+
+  <!-- Titre : apparaît dans les dernières secondes, quand le centre de l'image est dégagé -->
+  <div class="intro-centre">
+    <h1 class="intro-titre">Observatoire de la vulnérabilité aux inondations Vienne - Clain</h1>
+    <p class="intro-sous">Comprendre les risques, anticiper les vulnérabilités</p>
+    <a class="intro-btn" href="accueil.html" data-entrer="">Entrer dans l'observatoire</a>
   </div>
 
-  <div class="vagues">
-    <svg viewbox="0 0 1200 90" preserveaspectratio="none">
-      <path fill="#fff" d="M0 45 Q150 0 300 45 T600 45 T900 45 T1200 45 V90 H0Z"></path>
-    </svg>
-    <svg viewbox="0 0 1200 90" preserveaspectratio="none">
-      <path fill="#fff" d="M0 55 Q150 15 300 55 T600 55 T900 55 T1200 55 V90 H0Z"></path>
-    </svg>
-  </div>
-</section>
-
-<style>
-:root {
-  --acc-bleu: #0a6ebd;
-  --acc-bleu-fonce: #08406e;
-  --acc-cyan: #38bdf8;
-  --acc-texte: #1e293b;
-  --acc-doux: #f1f5f9;
-}
-
-/* ---------- Bandeau ---------- */
-.hero {
-  position: relative; overflow: hidden;
-  margin: 10px 0 40px; padding: 70px 40px 110px;
-  border-radius: 24px; color: #fff; text-align: center;
-  background: linear-gradient(135deg, var(--acc-bleu-fonce), var(--acc-bleu) 60%, #1b8fd6);
-  box-shadow: 0 20px 50px rgba(8, 64, 110, .3);
-}
-.hero h1 {
-  margin: 0 0 12px; font: 800 clamp(1.8rem, 4vw, 3rem)/1.15 system-ui, "Segoe UI", sans-serif;
-  color: #fff; border: 0;
-}
-.hero p.sous-titre {
-  max-width: 640px; margin: 0 auto 28px;
-  font-size: clamp(1rem, 2vw, 1.2rem); opacity: .92;
-}
-.hero .badge-cle {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 10px 20px; border-radius: 999px;
-  background: rgba(255,255,255,.15); backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,.35); font-weight: 600;
-}
-.hero .badge-cle strong { font-size: 1.3em; color: #fde68a; }
-
-/* Vagues */
-.vagues { position: absolute; left: 0; bottom: 0; width: 100%; height: 90px; overflow: hidden; }
-.vagues svg {
-  position: absolute; bottom: 0; left: 0; width: 200%; height: 100%;
-  animation: houle 12s linear infinite;
-}
-.vagues svg:nth-child(2) { opacity: .5; animation-duration: 20s; animation-direction: reverse; }
-@keyframes houle { to { transform: translateX(-50%); } }
-
-/* Gouttes flottantes */
-.goutte {
-  position: absolute; color: rgba(255,255,255,.22);
-  animation: flotte 6s ease-in-out infinite;
-}
-.goutte:nth-of-type(1) { top: 18%; left: 8%;  font-size: 2.2rem; }
-.goutte:nth-of-type(2) { top: 55%; left: 16%; font-size: 1.4rem; animation-delay: -2s; }
-.goutte:nth-of-type(3) { top: 22%; right: 10%; font-size: 2.6rem; animation-delay: -4s; }
-.goutte:nth-of-type(4) { top: 60%; right: 18%; font-size: 1.6rem; animation-delay: -1s; }
-@keyframes flotte { 50% { transform: translateY(-14px); } }
-
-/* ---------- Sections ---------- */
-.section-titre {
-  display: flex; align-items: center; gap: 14px; margin: 50px 0 18px;
-  font: 700 1.7rem system-ui, "Segoe UI", sans-serif; color: var(--acc-bleu-fonce);
-}
-.section-titre i {
-  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px;
-  background: linear-gradient(135deg, var(--acc-cyan), var(--acc-bleu)); color: #fff; font-size: 1.3rem;
-}
-.texte { font-size: 1.1rem; line-height: 1.7; color: var(--acc-texte); text-align: justify; }
-</style>
-<style>
-.style-h2{
-font-family: 'Lora', 'Georgia', serif;
-}
-
-.avec-icone > h2::before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f059";        /* code de l'icône */
-  margin-right: .6rem;
-  color: var(--mode-main); /* suit la couleur du switch */
-}
-</style>
-<section id="pourquoi-un-observatoire" class="level2 style-h2 avec-icone">
-<h2 class="style-h2 avec-icone anchored" data-anchor-id="pourquoi-un-observatoire">Pourquoi un observatoire ?</h2>
-<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-L’inondation est le premier risque naturel en France, il menace des vies, des habitations, des emplois. Bien qu’épargnés ces dernières années, les bassins de la Vienne et du Clain ont connu des inondations par le passé et les évènements récents sur des territoires voisins incitent à une prise de conscience de la population.<br> La gestion du risque inondation dépend de la vulnérabilité du territoire qui se traduit ici comme la propension pour des personnes, des biens et des activités à être affectés par ce phénomène. Appréhender les différentes vulnérabilités est une composante essentielle du défi «Mieux savoir pour mieux agir» identifié au niveau national.
-<br>
-Partager cette connaissance avec le plus grand nombre est le principal objectif de cet observatoire.
-<br><br> 
-</div>
-<div>
-  <div id="photos_crues">
-    <img src="Images/crue_poitiers.jpg" alt="Crue Poitiers">
-    <img src="Images/crue_chatellerault.jpg" alt="Crue Châtellerault">
-  </div>
-</div>
-<br><br>
-<style>
-.avec-icone2 > h2::before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f201";        /* code de l'icône */
-  margin-right: .6rem;
-  color: var(--mode-main); /* suit la couleur du switch */
-}
-</style>
-</section>
-<section id="des-indicateurs-pour-connaître-la-vulnérabilité" class="level2 style-h2 avec-icone2">
-<h2 class="style-h2 avec-icone2 anchored" data-anchor-id="des-indicateurs-pour-connaître-la-vulnérabilité">Des indicateurs pour connaître la vulnérabilité</h2>
-<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-
-L’observatoire permet la visualisation de plusieurs indicateurs, calculés à partir d’une méthode nationale. Ils s’appuient tous sur une crue dite centennale c’est-à-dire qui a «une chance» sur 100 de se produire tous les ans.<br> Ces indicateurs permettent de décrire la vulnérabilité mais ils peuvent également être utilisés pour évaluer l'efficacité des actions menées sur le terrain qui visent à réduire le risque.<br><br> Ils sont répartis selon 3 objectifs : <br> • Objectif 1 : Augmenter la sécurité des populations exposées, <br> • Objectif 2 : Stabiliser à court terme et réduire à moyen terme le coût des dommages, <br> • Objectif 3 : Raccourcir fortement le délai de retour à la normale des territoires sinistrés. <br> 
-</div>
-
-<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-<br>
-Les indicateurs ont été actuellement calculés sur le territoire de Grand Poitiers et quelques communes qui jalonnent la Vienne dont Châtellerault. Dans le futur, ils ont vocation à être étendus au périmètre de la stratégie locale de gestion du risque inondation Vienne – Clain.<br> Cet observatoire vous permet de consulter pour chaque indicateur de vulnérabilité un onglet dédié comprenant une carte dynamique, des graphiques et des résultats bruts et une fiche téléchargeable et imprimable avec les éléments de construction de l'indicateur et la carte de vulnérabilité.
-
-</div>
-<p><br></p>
-<style>
-.avec-icone3 > h2::before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f0c0";        /* code de l'icône */
-  margin-right: .6rem;
-  color: var(--mode-main); /* suit la couleur du switch */
-}
-</style>
-</section>
-<section id="les-auteurs-de-lobservatoire" class="level2 style-h2 avec-icone3">
-<h2 class="style-h2 avec-icone3 anchored" data-anchor-id="les-auteurs-de-lobservatoire">Les auteurs de l’observatoire</h2>
-<div style="text-align:justify; font-size:18px; font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-
- L’observatoire est le fruit d’une collaboration entre l’Etablissement Public Territorial du Bassin (EPTB) de la Vienne et le CEREMA. Plusieurs collectivités et services de l’Etat ont contribué également à son élaboration (Grand Poitiers, Grand Châtellerault, CC. Vienne et Gartempe, Département de la Vienne, DDT de la Vienne, DREAL Nouvelle Aquitaine). Le financement de ce projet s’insère dans un Programme d’Action de Prévention des Inondations (PAPI) financé par l’Etat (Fonds Barnier) et l’Europe (Plan Loire). <br>
-
-</div>
-
-<br> 
-
-<div class="header-flex">
-  
-  <!-- Contact à gauche -->
-  <div class="contact-left">
-    <a href="mailto:contact@eptb-vienne.fr" target="_blank">
-      <i class="bi bi-envelope" style="color:black;"></i> Nous contacter
-    </a>
-    <span>(contact@eptb-vienne.fr)</span>
-  </div>
-
-  <!-- Logo à droite -->
-  <img src="Images/logo_financeurs.png" height="70" width="350" alt="Financeurs">
+  <!-- Disponible dès le début de la vidéo -->
+  <a class="intro-passer" href="accueil.html" data-entrer="">Passer l'introduction</a>
 
 </div>
 
 <style>
-.header-flex {
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@600&display=swap');
+
+/* La page d'intro remplace tout l'écran : pas de navbar, pas de pied de page, pas de défilement */
+.intro-passee .intro { display: none !important; }
+.page-intro,
+.page-intro body { overflow: hidden; }
+.page-intro #quarto-header,
+.page-intro footer.footer,
+.page-intro .nav-footer { display: none !important; }
+.page-intro #quarto-content,
+.page-intro main.content { margin: 0 !important; padding: 0 !important; }
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  overflow: hidden;
+  color: #fff;
+  /* Visible pendant le chargement de la vidéo, ou si elle est absente ou bloquée */
+  background:
+    linear-gradient(180deg, rgba(20, 32, 64, .80), rgba(67, 84, 129, .90)),
+    url("Images/crue_poitiers.jpg") center / cover no-repeat;
+  font-family: Avenir, "Segoe UI", system-ui, sans-serif;
+}
+
+/* ----- Vidéo plein écran ----- */
+.intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 55% 50%;     /* sur téléphone vertical, recadre un peu à droite du centre */
+}
+
+/* Voile sombre : s'accentue à la fin pour la lisibilité du titre */
+.intro-voile {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 20, 40, .22);
+  transition: background 1.2s ease;
+}
+.intro.fin .intro-voile { background: rgba(8, 20, 40, .50); }
+
+/* ----- Titre central ----- */
+.intro-centre {
+  position: absolute;
+  inset: 0;
   display: flex;
-  justify-content: space-between; /* Contact à gauche, logo à droite */
+  flex-direction: column;
   align-items: center;
-  margin: 20px 0;
-  border: 2px solid cadetblue;
-  padding: 10px;
-  border-radius: 30px;
-  background-color: aliceblue;
-}
-
-.contact-left {
-  text-align: left;
-  font-size: 1.05rem;
-}
-
-.contact-left a {
-  font-weight: 600;
-  color: #0a6ebd;
-  text-decoration: none;
-  margin-right: 6px;
-}
-
-.contact-left a:hover {
-  text-decoration: underline;
-}
-
-
-/*#quarto-content{
-  margin-left:10vw;
-  margin-right:10vw;
-}*/
-
-@media (max-width:873px){
-.header-flex {
- display:block;
- text-align:center;
-}
-
-.contact-left {
+  justify-content: center;
+  padding: 0 clamp(20px, 8vw, 120px);
   text-align: center;
+  opacity: 0;
+  visibility: hidden;                       /* le bouton n'est pas focalisable tant qu'il est caché */
+  transition: opacity .9s ease, visibility 0s linear .9s;
 }
+.intro.fin .intro-centre {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .9s ease;
+}
+
+.intro-titre {
+  max-width: 20ch;
+  margin: 0 0 .45em;
+  font-family: "Lora", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 5.4vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+  color: #fff;
+  border: 0;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .45);
+}
+
+.intro-sous {
+  max-width: 32em;
+  margin: 0 0 clamp(20px, 4vh, 36px);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, .95);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .45);
+}
+
+.intro-btn {
+  display: inline-block;
+  padding: .85em 1.7em;
+  border-radius: 999px;
+  background: #fff;
+  color: #0b2540 !important;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .3);
+  transition: background .2s ease, transform .2s ease;
+}
+.intro-btn:hover { background: #e6f4fb; transform: translateY(-2px); }
+.intro-btn:focus-visible,
+.intro-passer:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* ----- Lien pour passer l'introduction ----- */
+.intro-passer {
+  position: absolute;
+  right: clamp(16px, 3vw, 36px);
+  bottom: clamp(16px, 3vh, 32px);
+  padding: .55em 1.1em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .18);
+  border: 1px solid rgba(255, 255, 255, .55);
+  backdrop-filter: blur(6px);
+  color: #fff !important;
+  font-size: .95rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  opacity: 0;
+  animation: apparaitre .6s ease 1.5s forwards;
+  transition: background .2s ease;
+}
+.intro-passer:hover { background: rgba(255, 255, 255, .32); }
+.intro.fin .intro-passer { opacity: 0 !important; pointer-events: none; animation: none; }
+
+@keyframes apparaitre { to { opacity: 1; } }
+
+@media (max-height: 460px) {
+  .intro-titre { font-size: 1.6rem; }
+  .intro-sous { margin-bottom: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-video { display: none; }
+  .intro-passer { animation: none; opacity: 1; }
 }
 </style>
 
 
-</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Retour au sommet</a></main> <!-- /main -->
+
+
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

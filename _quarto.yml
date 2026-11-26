@@ -28,7 +28,7 @@ website:
      tools-collapse: true
      right:
      
-        - href: index.qmd
+        - href: accueil.qmd
           text: Accueil
           icon: house
           
