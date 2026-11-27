@@ -256,7 +256,7 @@ function initRightTabs() {
       iframe.onload = () => {
         const doc = iframe.contentDocument;
         const script = doc.createElement("script");
-        script.src = "https://cdn.plot.ly/plotly-2.35.2.min.js";
+        script.src = "../js/plotly-2.35.2.min.js";
         script.onload = () => {
           fetch(cfg.url)
             .then(r => {
